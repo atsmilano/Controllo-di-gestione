@@ -1,3 +1,13 @@
+#	Titolo del repository e descrizione del contesto d’uso e delle finalità, eventuali screenshot, riferimenti al contesto d’uso di ATS; 
+#	Descrizione della organizzazione del repository;
+#	Descrizione delle dipendenze da altri software;
+#	Comandi per deployment;
+#	Amministrazione committente e nomi dei soggetti incaricati del mantenimento del progetto open source (è richiesto il nome dell’azienda e facoltativamente si possono aggiungere nomi delle persone incaricate);
+#	Indirizzo e-mail a cui inviare segnalazioni di sicurezza;
+
+
+
+
 # Introduction 
 TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
