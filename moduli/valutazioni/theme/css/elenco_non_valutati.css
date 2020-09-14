@@ -1,0 +1,161 @@
+#apri_scheda_valutazione,
+#container_txt_sel_desel{
+    float: right;
+}
+
+#apri_scheda_valutazione.actionbt,
+#container_txt_sel_desel.actionbt {
+    border: solid 1px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    border-color: #666;
+    background-color: #e1e5ea;
+    color: #2888E5;
+    width: 235px;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: -8px;
+}
+#container_txt_sel_desel.actionbt {
+    width: 135px;
+}
+
+
+#apri_scheda_valutazione.actionbt i,
+#container_txt_sel_desel.actionbt i{
+    float: left;
+    line-height: normal;
+}
+
+#apri_scheda_valutazione.actionbt:hover,
+#container_txt_sel_desel.actionbt:hover{
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#conferma_apertura{
+    z-index: 9999;
+    padding: 3%;
+    background-color: #F0EEE3;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 50%;
+    position: fixed;
+    left: 25%;
+    color: #184A1E;
+    text-align: center;
+    display: none;
+    font-size: 15px;
+}
+
+#conferma_apertura h3 {
+    font-weight: bold;
+    color: #184A1E;
+    margin-bottom: 15px;
+}
+
+#conferma_apertura .confirm_link {
+    background-color: white;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 6px;
+    font-weight: bold;
+    color: #2D8215;
+    margin: 9px;
+    width: 90px;
+    display: inline-block;
+}
+
+#conferma_apertura .confirm_link:hover {
+    cursor: pointer;
+    background-color: #E6FB82;
+    border: solid 1px #81bb00;
+    text-decoration: none;
+}
+
+.warning{
+    font-weight: bold;
+    background-color: #fccf6f;
+    color: #a56e00;
+    border: 1px solid #a56e00;
+    text-align: center;
+    margin-left: 15px;
+    width: 50%;
+    padding: 15px;
+    margin: auto;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#personale_non_valutato > table > tbody > tr:hover {
+    cursor: pointer;
+}
+
+#conferma_apri_scheda {
+    z-index: 9999;
+    padding: 3%;
+    background-color: #F0EEE3;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 50%;
+    position: fixed;
+    left: 25%;
+    color: #184A1E;
+    text-align: center;
+    display: none;
+    font-size: 15px;
+}
+
+#conferma_apri_scheda h3 {
+    font-weight: bold;
+    color: #184A1E;
+    margin-bottom: 15px;
+}
+
+#conferma_apri_scheda .confirm_link {
+    background-color: white;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 6px;
+    font-weight: bold;
+    color: #2D8215;
+    margin: 9px;
+    width: 90px;
+    display: inline-block;
+}
+
+#conferma_apri_scheda .confirm_link:hover {
+    cursor: pointer;
+    background-color: #E6FB82;
+    border: solid 1px #81bb00;
+    text-decoration: none;
+}
+
+#elenco_non_valutati #personale_non_valutato #loading_image{
+    display: none;
+    width: 100%;
+    text-align: center;
+}
+
+#elenco_non_valutati #personale_non_valutato #loading_image img{
+    height: 18px;
+    width: 30%;
+}
+
+#apertura_valutazioni_loading {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}

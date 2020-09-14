@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>	
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/area_riservata/settings(.*)</source>
+		<destination>
+			<module>restricted</module>
+			<url>/settings$1</url>
+		</destination>
+	</rule>
+	<rule id="restricted">
+		<priority>HIGH</priority>
+		<source>^/area_riservata(.*)</source>
+		<destination>
+			<module>restricted</module>
+			<url>/layout$0</url>
+		</destination>
+		<process_next />
+		<accept_path_info />
+		<reverse>/</reverse>
+	</rule>
+</configdata>

@@ -1,0 +1,31 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.listgroup", function () {
+		<!--BeginSectBinding-->
+		ff.ffField.listgroup.addValue({
+			"id"			: "{container}{id}",
+			"separator"		: "{separator}"
+		});
+		<!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+<!--BeginSectControl-->
+<input type="hidden" id="{container}{id}" name="{container}{id}" value="{value}" />
+<div class="listgroup">
+  <input id="new_{container}{id}" name="new_{container}{id}" class="typetext" type="text" value="" />
+	<a href="javascript:ff.ffField.listgroup.move('new_{container}{id}','list_{container}{id}', '{container}{id}')" class="{add_class}"></a>
+	<fieldset>
+		<label>{_listgroup_label}</label>
+		<select class="list" id="list_{container}{id}" name="list_{container}{id}[]" multiple="multiple">
+		  <!--BeginSectRow-->
+		  <option>{listgroup_value}</option>
+		  <!--EndSectRow-->
+		</select>
+	  </fieldset>
+	  <a href="javascript:ff.ffField.listgroup.removeMe('list_{container}{id}', '{container}{id}')" class="{remove_class}"></a>
+</div>
+<!--EndSectControl-->
+

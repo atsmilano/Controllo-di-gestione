@@ -1,0 +1,26 @@
+<div id="config_crud">
+    <div id="tabs">
+        <ul>
+            <li><a id="a_obiet_indiv" href="elenchi_no_associazione/obiettivi_individuali?{globals}">Obiettivi individuali</a></li>
+            <li><a id="a_resp_cessati" href="elenchi_no_associazione/responsabili_cessati?{globals}">Responsabili cessati</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

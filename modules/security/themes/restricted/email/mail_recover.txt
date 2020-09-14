@@ -1,0 +1,7 @@
+La tua nuova password temporanea è {password}
+Al primo login ti verrà chiesto di modificarla.
+
+Ti ricordiamo che non potrai richiedere una nuova password temporanea prima di {minuti} minuti
+e che il tuo username è {username}.
+
+Vai all'indirizzo {login_url} per effettuare il login.

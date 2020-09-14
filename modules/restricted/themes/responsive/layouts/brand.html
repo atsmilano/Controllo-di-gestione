@@ -1,0 +1,61 @@
+<!--BeginSectBrandNoPanel-->
+<img  class="{logo_class}" src="{logo_url}" alt="{host_name}" />
+{domain_switch}
+<!--EndSectBrandNoPanel-->
+<!--BeginSectBrandPanel-->
+<span class="panel-container">
+    <!--BeginSectBrandName-->
+    <!--BeginSectLogo-->
+    <a href="{site_path}/restricted"> <img  class="{logo_class}" src="{logo_url}" alt="{logo_name}" /></a>
+    <!--EndSectLogo-->
+    <a class="{nav_left_class}" href="#panel-brand" {toggle_properties}>
+    {host_name}{more_icon}
+    </a>
+    <!--EndSectBrandName-->
+
+    <!--BeginSectBrandInfo-->
+    <div id="panel-brand" class="dropdown-menu {panel_class}">
+        <!--BeginSectHeader-->
+        <div class="{panel_header_class}">
+            <!--BeginSectMultiDomain-->
+            <span>{domain_switch}</span>
+            <!--EndSectMultiDomain-->
+
+            <ul class="{list_group_horizontal_class}">
+            <!--BeginSectElementHeader-->
+            <li class="{list_group_item_class}"><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></span>
+            <!--EndSectElementHeader-->
+            </ul>
+        </div>
+        <!--EndSectHeader-->
+        <ul class="{list_group_class}">
+            <!--BeginSectElement-->
+            <li class="{list_group_item_class}"><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></li>
+            <!--EndSectElement-->
+        </ul>
+        <!--BeginSectBody-->
+        <div class="{panel_body_class}">
+            <ul class="{list_group_class}">
+                <!--BeginSectElementBody-->
+                <li class="{list_group_item_class}"><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></li>
+                <!--EndSectElementBody-->
+                <!--BeginSectElement-->
+                <li class="{list_group_item_class}"><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></li>
+                <!--EndSectElement-->
+            </ul>
+        </div>
+        <!--EndSectBody-->
+        {admin}
+        <!--BeginSectFooter-->
+        <div class="{panel_footer_class}">
+            <ul class="{list_group_horizontal_class}">
+                <!--BeginSectElementFooter-->
+                <li class="{list_group_item_class}"><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></span>
+                <!--EndSectElementFooter-->
+            </ul>
+        </div>
+        <!--EndSectFooter-->
+    </div>
+    <!--EndSectBrandInfo-->
+</span>
+<!--EndSectBrandPanel-->

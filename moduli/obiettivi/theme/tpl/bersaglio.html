@@ -1,0 +1,209 @@
+<div id='bersaglio'>	
+    <span id="hide_filters"><i class="fa-angle-double-up fa"></i><span>Nascondere/mostrare filtri</span></span>
+	<div id='filtri'>
+                <select name='filter_cdr' id='filter_cdr'>
+			<!--BeginSectOptionCdr-->
+				<option value="{filter_cdr_codice}" {filter_cdr_selected}>CDR: {filter_cdr_descrizione}</option>
+			<!--EndSectOptionCdr-->
+		</select>
+                <select name='filter_origine' id='origine' >
+			<!--BeginSectOptionOrigini-->
+				<option value="{origine_id}" {origine_selected}>Origine: {origine_descrizione}</option>
+			<!--EndSectOptionOrigini-->
+		</select>
+		<select name='filter_area_obiettivo' id='area_obiettivo' >
+			<!--BeginSectOptionAreeObiettivo-->
+				<option value="{area_obiettivo_id}" {area_obiettivo_selected}>Area obiettivo: {area_obiettivo_descrizione}</option>
+			<!--EndSectOptionAreeObiettivo-->
+		</select>
+                <select name='filter_area_risultato' id='area_risultato' >
+			<!--BeginSectOptionAreeRisultato-->
+				<option value="{area_risultato_id}" {area_risultato_selected}>Area risultato: {area_risultato_descrizione}</option>
+			<!--EndSectOptionAreeRisultato-->
+		</select>
+                <select name='filter_tipo_obiettivo' id='tipo_select' >
+			<!--BeginSectOptionTipiObiettivo-->
+				<option value="{tipo_obiettivo_id}" {tipo_obiettivo_selected}>Tipo obiettivo: {tipo_obiettivo_descrizione}</option>
+			<!--EndSectOptionTipiObiettivo-->
+		</select>
+                <select name='filter_fasce' id='perc_ragg' >
+			<!--BeginSectOptionFascia-->
+				<option value="{fascia_id}" {fascia_selected}>Fascia raggiungimento: {fascia_descrizione}</option>
+			<!--EndSectOptionFascia-->
+		</select>                                                				
+		<span class="filtri_checkbox">
+			<input id="non_raggiungibile" name="filter_non_raggiungibile" value="1" {filter_non_raggiungibile_checked} type="checkbox" >
+			<span>Ritenuti non raggiungibili al 31/12</span>
+		</span>
+                <input id="applica_filtri" type="button" value="Applica">
+                
+	</div>
+        <script>
+            $("#applica_filtri").click(function (){                                                                                                                                 
+                url_parts = $("#ui-id-3").attr('href').split("?");               
+                url = url_parts[0]+"?{globals}periodo_select={id_periodo}";
+                //accodamento parametri selezionati               
+                $("#filtri select").each(function(){                    
+                    url += "&"+$(this).attr("name")+"="+$(this).val();                    
+                });
+                url += "&filter_non_raggiungibile="+$("#non_raggiungibile").is(':checked');
+                //aggiornamento dell'indirizzo del tab e ricaricamento                                 
+                $("#ui-id-3").attr('href', url);
+                $("#tabs").tabs( 'load' , $("#tabs").tabs('option', 'active'));
+            });
+            
+            $("#hide_filters").click(function(){
+                $("#filtri").toggle("blind");
+                if($("#hide_filters i").hasClass("fa-angle-double-up")) {
+                    $("#hide_filters i").removeClass("fa-angle-double-up");
+                    $("#hide_filters i").addClass("fa-angle-double-down");
+                }
+                else {
+                    $("#hide_filters i").removeClass("fa-angle-double-down");
+                    $("#hide_filters i").addClass("fa-angle-double-up");
+                }
+            });
+        </script>
+        <!--BeginNoSelection-->
+        <h2 id="no_selection">Selezionare almeno un filtro sugli obiettivi...</h2>
+        <!--EndNoSelection-->
+        <!--BeginBersaglio-->
+	<div id='left'>
+		<div id='target'>
+			<script>					
+				$('#left').css('width', {target_diameter});						
+				$('#left').css('min-width', {target_diameter});
+				$('#target').height("{target_diameter}");
+				$('#target').width("{target_diameter}");
+                                $('#elenco_obiettivi').css('max-height', '{target_diameter}px');
+				var left_perc_width = $('#left').width() / $('#left').parent().width() * 100;				
+				right_perc_width = 100 - left_perc_width;	
+                                
+                                $('.shot').click(function(){
+                                        id_parts = $(this).attr('id').split("_");               
+                                        id = id_parts[1];                                                
+                                        expandRendicontazione(id);
+                                });  
+			</script>	                                
+				<img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\target.png'>
+				<!--BeginSectShot-->			
+				<span id='rendicontazione_{id}' title='{codice_obiettivo}' class='shot'>
+                                        <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\{shot_image}'>
+				</span>
+				<script>			
+					$('#rendicontazione_{id}').css({left: {y_offset}, top: {x_offset}});	
+					$('.shot img').height("{shot_diameter}");
+					$('.shot img').width("{shot_diameter}");					                                                   						                                        
+				</script>			
+				<!--EndSectShot-->
+		</div>
+	</div>        
+	<div id="right">		
+                <script>
+			//accordion per dettagli obiettivo
+			$(function() {
+                            $( "#elenco_obiettivi" ).accordion({
+                                collapsible: true,
+                                autoHeight: true, 
+                                active: false
+                            });  
+                        })
+                        
+                        function evidenzia(id) {
+                            $(".evidenza").removeClass("evidenza");
+                            $("#rendicontazione_"+id+" img").addClass("evidenza");
+                        }
+
+
+						function expandRendicontazione(id){
+                            $( ".elenco_obiettivi" ).accordion({active: false});                         
+                            $( "#elenco_obiettivi" ).accordion({
+								active:($("#voceelenco_"+id).index('h3')),
+								activate: function (event, ui) {
+									$( ui.newHeader ).ScrollTo();
+								}
+							});
+                            evidenzia(id);
+                        }              
+                        
+                        $('.voceelenco').click(function(){
+                                id_parts = $(this).attr('id').split("_");  
+                                id = id_parts[1];                                                
+                                evidenzia(id);                                            
+                        });
+		</script>
+		<div id='elenco_obiettivi' class='elenco_obiettivi'>                
+			<!--BeginSectObiettivo-->                        
+                        <h3 id="voceelenco_{id}" class="voceelenco accordion_header">
+                                {codice_obiettivo} ({raggiungimento_nucleo}%) - {codice_cdr} 
+                                <br>{descrizione_obiettivo}
+                        </h3>
+			<div>					
+				<label>Descrizione</label><br>{descrizione_obiettivo}<br>
+                                <br>
+				<label>Raggiungimento</label><br>
+					Referente:&nbsp;{raggiungimento_referente}%<br>
+					Nucleo:&nbsp;{raggiungimento_nucleo}%<br>
+                                <br>
+				<a id="link_rendicontazione_{id}" href="javascript:void(0);">Dettagli</a>
+                        	<script>
+					$( "#link_rendicontazione_{id}" ).click(function() {
+                                            id_parts = $(this).attr('id').split("_");  
+                                            id = id_parts[2];                                            
+                                            $( "#dettagli_dialog" ).dialog( "open" );
+                                            
+                                            var request = $.ajax({
+                                                                    url: './rendicontazione.php?{globals}keys[ID_periodo]={id_periodo}&keys[ID_rendicontazione]='+id+'&no_actions=1',                                                                    
+                                                                    async: false,										
+                                                                    cache: false,
+                                                                    contentType: false
+
+                                                            });
+                                                            request.done(function(data) {										
+                                                                    $.each(data, function(index, element) {												
+                                                                                    if (index == 'html'){
+                                                                                            $('#dettagli_dialog').html(element);
+                                                                                    }											
+                                                                            });																		
+                                                            });
+					});	
+				</script>
+			</div>
+			<!--EndSectObiettivo-->		
+		</div>	
+
+	</div>
+	<div id="dettagli_dialog"></div>
+	<script>				
+		//gestione del dialog dei dettagli della valutazione
+		$(function() {		
+			$( "#dettagli_dialog" ).dialog({
+				autoOpen: false,
+				modal: true,
+				width: 800,
+				height: 600,
+				show: {
+					effect: "scale",
+					duration: 200
+				},
+				hide: {
+					effect: "scale",
+					duration: 200
+				},                                
+                        });                        
+		});	
+				
+		$(function() {
+			$( document ).tooltip({
+				items: '*:not(.ui-dialog-titlebar-close)'
+			});
+		});
+		
+		
+	</script>
+        <div id="legenda">
+            <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\circle.png'><span>%raggiungimento cdr = %raggiungimento nucleo</span><br>
+            <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\shot.png'><span>%raggiungimento cdr &ne; %raggiungimento nucleo</span>
+        </div>
+        <!--EndBersaglio-->
+</div>

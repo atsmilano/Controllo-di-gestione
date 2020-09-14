@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configdata>
+
+	<rule>
+
+		<priority>TOP</priority>
+
+		<source>.*</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/session$0</url>
+
+		</destination>
+
+		<process_next />
+
+		<accept_path_info />
+
+	</rule>
+
+	<rule id="mod_sec_login">
+
+		<priority>VERY_HIGH</priority>
+
+		<source>^/area_riservata/login(/[^/]*){0,1}$</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/login$1</url>
+
+		</destination>
+
+		<reverse>/area_riservata/login</reverse>
+
+	</rule>
+
+	<rule id="mod_sec_profile">
+
+		<priority>NORMAL</priority>
+
+		<source>^/area_riservata/profilo(.*)</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/profile$1</url>
+
+		</destination>
+
+		<reverse>/area_riservata/profilo</reverse>
+
+	</rule>
+
+    <rule id="mod_sec_recover">
+
+        <priority>NORMAL</priority>
+
+        <source>/recover(.*)</source>
+
+        <destination>
+
+            <module>security</module>
+
+            <url>/recover$1</url>
+
+        </destination>
+
+        <reverse>/recover</reverse>
+
+    </rule>
+
+	<rule id="mod_sec_register">
+
+		<priority>NORMAL</priority>
+
+		<source>^/registrati(.*)</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/register$1</url>
+
+		</destination>
+
+		<reverse>/registrati</reverse>
+
+	</rule>
+
+	<rule id="mod_sec_recover">
+
+		<priority>NORMAL</priority>
+
+		<source>/recover(.*)</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/recover$1</url>
+
+		</destination>
+
+		<reverse>/recover</reverse>
+
+	</rule>
+
+	<rule id="mod_sec_change_password">
+
+		<priority>NORMAL</priority>
+
+		<source>/change_password(.*)</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/change_password$1</url>
+
+		</destination>
+
+		<reverse>/change_password</reverse>
+
+	</rule>	
+
+	<rule>
+
+		<priority>NORMAL</priority>
+
+		<source>^/area_riservata/security/users(.*)</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/users$1</url>
+
+		</destination>
+
+	</rule>
+
+	<rule>
+
+		<priority>VERY_HIGH</priority>
+
+		<source>^/login(/[^/]*){0,1}$</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/login$1</url>
+
+		</destination>
+
+	</rule>
+
+	<rule>
+
+		<priority>VERY_HIGH</priority>
+
+		<source>^/area_riservata(.*)</source>
+
+		<destination>
+
+			<module>security</module>
+
+			<url>/auth$0</url>
+
+		</destination>
+
+		<options>
+
+			<minlevel>1</minlevel>
+
+		</options>
+
+		<process_next />
+
+		<accept_path_info />
+
+	</rule>
+
+</configdata>

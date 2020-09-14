@@ -1,0 +1,126 @@
+<div>
+    <h1>Elenco schede aperte</h1>	  		
+    <div class="selezione_parametri">		
+        <!--BeginSectSelezionePeriodi-->
+        <h2>Selezione del periodo di valutazione</h2>		
+        <div>		
+            <label>Periodo: </label>
+            <select name='periodo_schede_select' id='periodo_schede_select'>					
+                <!--BeginSectOptionPeriodi-->
+                <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                <!--EndSectOptionPeriodi-->
+            </select>
+            <div id="ricalcola_ambiti" class="actionbt">
+                <i class="fa-calculator fa-lg fa"></i>&nbsp;Ricalcola ambiti
+            </div>
+            <div id="ricalcola_totali" class="actionbt" style="margin-right: 9px">
+                <i class="fa-calculator fa-lg fa"></i>&nbsp;Ricalcola totali
+            </div>
+
+            <div id='conferma_ricalcolo' style="display: none">
+                <h3>Confermare il ricalcolo dei punteggi <span id="ricalcolo_text"></span>?</h3>
+                <a id='conferma_si_ricalcolo' class='conferma_si confirm_link'>Conferma</a>
+                <a id='conferma_no_ricalcolo' class='conferma_no confirm_link'>Annulla</a>
+            </div>
+            <script>
+                function popolateRicalcoloText(txt) {
+                    $("#ricalcolo_text").empty();
+                    $("#ricalcolo_text").text(txt);
+                }
+
+                function deleteScheda(url) {
+                    ff.ffPage.dialog.doOpen('delete_valutazione_action_dialog', url);
+                }
+                
+                $("#periodo_schede_select").change(function () {
+                    var current_index = $("#tabs").tabs("option", "active");
+                    selected_value = $(this).children(":selected").attr("value");
+                    url = $("#a_elenco_schede").attr("href");
+                    if (url.search("periodo_schede_select") > 0) {
+                        url = url.replace(/(periodo_schede_select=).*?(&|$)/, '$1' + selected_value + '$2');
+                    } else {
+                        url = url + "periodo_schede_select=" + selected_value;
+                    }
+                    $("#a_elenco_schede").attr("href", url);
+                    $("#tabs").tabs('load', current_index);
+                });
+
+                $("#ricalcola_ambiti").click(function () {
+                    popolateRicalcoloText("degli ambiti");
+                    $("#conferma_ricalcolo").show();
+                });
+                
+                $("#ricalcola_totali").click(function () {
+                    popolateRicalcoloText("dei totali");            
+                    $("#conferma_ricalcolo").show();
+                });
+
+                $('.conferma_si').click(function () {
+                    if ($('#conferma_ricalcolo').is(':visible')) {
+                        $("#conferma_ricalcolo").hide();
+                        const periodo_schede_select = $("#periodo_schede_select option:selected").val();
+                        let url;
+                        if ($("#ricalcolo_text").text() == "degli ambiti") {
+                            url = window.location.pathname + '/elenco_schede/script_ricalcola_ambiti.php?{globals}&ID_periodo=' + periodo_schede_select;
+                        }
+                        else if ($("#ricalcolo_text").text() == "dei totali") {
+                            url = window.location.pathname + '/elenco_schede/script_ricalcola_totali.php?{globals}&ID_periodo=' + periodo_schede_select;
+                        }
+                        window.open(url, "_blank");
+                    }
+                });
+
+                $('.conferma_no').click(function () {
+                    if ($('#conferma_ricalcolo').is(':visible')) {
+                        $("#conferma_ricalcolo").hide();
+                    }
+                });
+
+            </script>
+        </div>
+        <!--EndSectSelezionePeriodi-->
+        <!--BeginSectNoPeriodi-->
+        <p class='error'>Nessun periodo definito per l'anno selezionato</p>
+        <!--EndSectNoPeriodi-->
+    </div>		
+    <div id="personale_valutato">
+        <!--BeginSectValutazioniAttive-->
+        <table>		
+            <caption>Schede di valutazione attive per il periodo ({n_schede_attive})</caption>			
+            <thead>
+                <tr>
+                    <th>Valutato</th>
+                    <th>Cdr</th>
+                    <th>Valutatore</th>
+                    <th>Tipologia scheda valutazione</th>
+                    <th>Stato d'avanzamento valutazione</th>
+                    <th>Link alla valutazione</th>
+                    <th>Stampa valutazione</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>		
+            <tbody>
+                <!--BeginSectSchedaValutazione-->											
+                <tr>
+                    <td>{valutato}</td>	
+                    <td>
+                        <!--BeginSectCdrAssociati-->											
+                        {cdr} - {perc_testa}%<br>
+                        <!--EndSectCdrAssociati-->
+                    </td>	
+                    <td>{valutatore}</td>
+                    <td>{categoria_valutazione}</td>
+                    <td>{stato_avanzamento}</td>
+                    <td><a href="{link_valutazione}">Scheda di valutazione</a></td>
+                    <td><a href="{link_stampa}" target="_blank">Stampa valutazione</a></td>
+                    <td><a id='btn_elimina_{id_scheda}' onclick="deleteScheda('{url_delete}')" class="btn btn-danger activebuttons fa-trash-o fa btn-elimina"><span id="btn_elimina_text">Elimina</span></a></td>
+                </tr>
+                <!--EndSectSchedaValutazione-->					
+            </tbody>
+        </table>		
+        <!--EndSectValutazioniAttive-->
+        <!--BeginSectNoValutazioniAttive-->
+        <p class='warning'>Nessuna valutazione attiva per il periodo</p>
+        <!--EndSectNoValutazioniAttive-->
+    </div>
+</div>

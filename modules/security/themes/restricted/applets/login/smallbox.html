@@ -1,0 +1,12 @@
+<!--BeginLogin-->
+<label>utente:
+<input type="text" name="username" value="{username}" class="typetext" />
+</label>
+<label>password:
+<input type="password" name="password" value="{password}" class="typetext" />
+</label>
+<label><input type="submit" value="Entra" onclick="document.getElementById('frmMain').method = 'post'; document.getElementById('frmAction').value = 'login'; document.getElementById('frmMain').action = '{site_path}/login/?ret_url={ret_url}';" class="login" /></label>
+<!--EndLogin-->
+<!--BeginLogout-->
+<p>Benvenuto <strong>{firstname} {lastname}</strong> | <a href="#" onclick="document.getElementById('frmMain').method = 'post'; document.getElementById('frmAction').value = 'logout'; document.getElementById('frmMain').action = '{site_path}/login/?ret_url={ret_url}'; document.getElementById('frmMain').submit();">Esci da {CM_LOCAL_APP_NAME}</a> </p>
+<!--EndLogout-->

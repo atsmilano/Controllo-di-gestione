@@ -1,0 +1,20 @@
+Gent. {firstname} {lastname},
+ti ringraziamo per esserti registrato su {hostname}.
+Di seguito trovi una copia dei dati inseriti in fase di registrazione, ti consigliamo di verificarli e tenerli costantemente aggiornati sul sito.
+
+nome utente: {username}
+password: {password}
+nome: {firstname}
+cognome: {lastname}
+società: {company}
+p.iva: {piva}
+C.F: {cf}
+Indirizzo: {address}
+Città: {city}
+Provincia: {prov}
+CAP: {cap}
+Telefono: {tel}
+FAX: {fax}
+Cellulare: {cell}
+
+{hostname}

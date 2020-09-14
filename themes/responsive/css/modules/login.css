@@ -1,0 +1,50 @@
+BODY {
+	background-color: white;
+}
+
+.login-field label{
+	text-align:left;
+}
+
+.loginBox .actions, .standard-login .actions, .logout-field .actions{
+	width:250px;
+	background:none;
+	clear: both;
+	height: 46px;
+	line-height: 37px;
+	text-align: center;
+}
+
+.loginBox .actions input{
+	-moz-border-radius: 3px; /* Firefox */
+	-webkit-border-radius: 3px; /* Safari and Chrome */
+	border-radius: 3px; /* Opera 10.50, IE and CSS3 */
+	margin-top:6px;
+	width:auto;
+	/*background:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e5e5e5'); /* for IE */
+	background:-webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e5e5e5)); /* for webkit browsers */
+	background:-moz-linear-gradient(top,  #ffffff,  #e5e5e5); /* for firefox 3.6+ */;
+	padding:6px 9px;
+}
+
+.loginBox .actions input:active{
+	border:1px solid #81bb00;
+	/*background:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e5e5', endColorstr='#ffffff'); /* for IE */
+	background:-webkit-gradient(linear, left top, left bottom, from(#e5e5e5), to(#ffffff)); /* for webkit browsers */
+	background:-moz-linear-gradient(top,  #e5e5e5,  #ffffff); /* for firefox 3.6+ */;
+	padding:6px 9px;
+}
+
+.loginBox .actions input:hover{
+	border:1px solid #81bb00;
+	padding:6px 9px;
+}
+
+.loginBox p{
+	text-align:center;
+	width:250px;
+}
+
+.loginBox .error{
+	width:230px;
+}

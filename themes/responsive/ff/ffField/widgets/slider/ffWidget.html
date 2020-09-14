@@ -1,0 +1,56 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	<!--BeginSectBinding-->
+	ff.pluginAddInit("jquery-ui", function() {
+		var description = [<!--BeginSectElement-->'{element}',<!--EndSectElement-->];
+		jQuery.fn.escapeGet("{container}{id}_slider").slider({
+			animate: true
+			,min: {min}
+			,max: {max}
+			,step: {step}
+			,value: {value}			
+			,slide: function(event, ui) {
+				jQuery.fn.escapeGet("{container}{id}").val(ui.value);
+				jQuery.fn.escapeGet("{container}{id}_amount").val(ui.value);
+				<!--BeginSectDesc-->
+					var label = description[jQuery.fn.escapeGet("{container}{id}_amount").get(0).value];
+					jQuery.fn.escapeGet("{container}{id}_label").val(label);
+				<!--EndSectDesc-->
+			}
+		});
+		jQuery.fn.escapeGet("{container}{id}_amount").keyup(function(event) {
+			if (/\D/g.test(this.value))
+			{
+			    this.value = this.value.replace(/\D/g, '');
+			}
+			else
+			{
+				jQuery.fn.escapeGet("{container}{id}_slider").slider( "value", jQuery(this).val());
+				jQuery.fn.escapeGet("{container}{id}").val(jQuery(this).val());
+			}
+	    });
+		
+		jQuery.fn.escapeGet("{container}{id}_amount").val(jQuery.fn.escapeGet("{container}{id}_slider").slider("value"));
+		<!--BeginSectDefault-->
+		jQuery.fn.escapeGet("{container}{id}_label").val(description[0]);
+		<!--EndSectDefault-->
+	});
+	<!--EndSectBinding-->
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<div class="slider-box">
+	{fixed_pre_content}
+	<input type="text" class="slider {class}" id="{container}{id}_amount" {properties} />
+	<!--BeginSectText-->
+		<input type="text" class="slider-label" id="{container}{id}_label" {properties} readonly="readonly" />
+	<!--EndSectText-->
+	<input type="hidden" id="{container}{id}" name="{container}{id}" value="{value_format}" />
+	{fixed_post_content}
+	<div id="{container}{id}_slider"></div>
+</div>
+<!--EndSectControl-->

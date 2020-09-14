@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configdata>
+	<menu>
+		<default path="/area_riservata" hide="true" acl="1,2,3"/>
+                <admin path="/area_riservata" hide="true" acl="2,3"/>
+                
+		<home path="/area_riservata" label="Home" icon="home" acl="1,2,3"/>
+		
+		<!--menu generati in maniera procedurale in contents/common.php-->														   						
+																			                                                
+		<security path="/area_riservata/security" label="Utenti" location="admin" redir="/area_riservata/security/users" acl="2,3">
+			<users label="Utenti" acl="2,3"/>
+			<!--<domains label="Domains" />
+			<packages label="Packages" acl="3" />
+			<profiling label="Profili" acl="3" />-->
+		</security>
+
+		<!--<settings path="/area_riservata/settings" label="Settings" location="brand" acl="3" />-->
+
+		<ffcm path="/area_riservata/ffcm" label="CM" redir="/area_riservata/ffcm/layout" location="brand">
+			<h label="Layout" />
+			<layout label="Layout" />
+			<!--<h label="Showfiles" />
+			<showfiles label="Items" />
+			<showfiles-modes label="Modes" />-->
+			<h label="Others" />
+		</ffcm>
+
+		<!--<ds path="/area_riservata/ds" label="Data Storage" location="brand" acl="3" />-->
+	</menu>
+
+	<layout path="/area_riservata/layout" label="Layout" icon="object-group" location="brand" acl="3">
+		<layer path="/area_riservata/ds" name="twocols" />
+		<nolayout path="/area_riservata/login" />
+		<!--<nolayout path="/area_riservata/recover" />
+		<nolayout path="/area_riservata/change_password" />-->
+	</layout>
+
+	<sections>
+		<topbar default="true" submenu="true" icons="submenu" />
+		<navbar />
+		<sidebar icons="true" default="true" />
+		<account />
+		<accountpanel />
+		<admin />
+		<favorite />
+		<brand />
+		<breadcrumb />
+		<rightcol />
+	</sections>
+
+	<!--<settings>
+		<nomegruppo label="NOME GRUPPO">
+			<NOMECAMPO label="nome campo" parametri del field />
+		</nomegruppo>
+		<packages label="Alterazione Package">
+			<nomecampo label="NOME CAMPO" allow_undefined="true" undefined_label="illimitati" />
+		</packages>
+	</settings>-->
+
+</configdata>

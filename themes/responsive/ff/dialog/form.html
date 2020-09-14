@@ -1,0 +1,18 @@
+<center class="{center_class}">
+  <h3 class="message">
+  	{message_icon}
+  	<span>{message}</span>
+  </h3>
+  <div class="actions">
+  	<!--BeginCancelOnly-->
+    <a href="javascript:void(0);" onClick="window.location.href = '{cancelurl}';" class="{cancel_class}">{_close}</a>
+  	<!--EndCancelOnly-->
+  	<!--BeginOKOnly-->
+    <a href="javascript:void(0);" onClick="window.location.href = '{confirmurl}';" class="{confirm_class}">OK</a>
+    <!--EndOKOnly-->
+    <!--BeginYesNo-->
+    <a href="javascript:void(0);" onClick="window.location.href = '{confirmurl}';" class="{confirm_class}">{_yes}</a>
+    <a href="javascript:void(0);" onClick="window.location.href = '{cancelurl}';" class="{cancel_class}">{_no}</a>
+    <!--EndYesNo-->
+  </div> 
+</center>

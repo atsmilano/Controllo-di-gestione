@@ -1,0 +1,71 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript">
+	<!--BeginSectCss-->
+	ff.injectCSS("{css_tag}", "{css_path}", undefined, {lib_media}, {css_async});
+	<!--EndSectCss-->
+	<!--BeginSectJs-->
+		<!--BeginSectJsSrc-->
+		ff.pluginLoad("{js_tag}", "{js_path}", undefined, {js_async}, {js_deps});
+		<!--EndSectJsSrc-->
+		<!--BeginSectJsEmbed-->
+		{js_embed}
+		<!--EndSectJsEmbed-->
+	<!--EndSectJs-->
+	<!--BeginSectFFStruct-->
+	ff.struct.merge(
+		ff.hash([
+			{'id': 'fields', 'value' : ff.hash([
+				<!--BeginSectFFFld-->
+				{
+					'id' : '{fieldid}',
+					'value' : {
+						"type"		: undefined
+						, "widget"		: "{widget}"
+						, "resources"	: [<!--BeginSectFFFldResource-->{resource}<!--EndSectFFFldResource-->]
+					}
+				},
+				<!--EndSectFFFld-->
+			])},
+			{'id': 'comps', 'value' : ff.hash([
+				<!--BeginSectFFObj-->
+				{'id': '{objid}', 'value' : {
+					"ctx"		: "{ctx}"
+					, "type"		: "{type}"
+					, "resources"	: [<!--BeginSectFFObjResource-->{resource}<!--EndSectFFObjResource-->]
+					, "fields"		: ff.hash([
+						<!--BeginSectFFObjFld-->
+						{
+							'id' : '{fieldid}',
+							'value' : {
+								"type"		: "{fldtype}"
+								, "widget"		: "{widget}"
+								, "resources"	: [<!--BeginSectFFFldResource-->{resource}<!--EndSectFFFldResource-->]
+							}
+						},
+						<!--EndSectFFObjFld-->
+					])
+					<!--BeginSectFFObjProperty-->
+					, "{prop_name}"	: {prop_value}
+					<!--EndSectFFObjProperty-->
+				}},
+				<!--EndSectFFObj-->
+			])}
+		])
+	);
+	<!--EndSectFFStruct-->
+</script>
+<!--BeginSectWidgetsHeaders-->
+{WidgetsContent}
+<!--EndSectWidgetsHeaders-->
+<!--EndSectHeaders-->
+{content}
+<!--BeginSectFooters-->
+<script type="text/javascript">
+<!--BeginSectJsEmbedFooter-->
+{js_embed}
+<!--EndSectJsEmbedFooter-->
+</script>
+<!--BeginSectWidgetsFooters-->
+{WidgetsContent}
+<!--EndSectWidgetsFooters-->
+<!--EndSectFooters-->

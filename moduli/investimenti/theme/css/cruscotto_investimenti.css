@@ -1,0 +1,52 @@
+#cruscotto_investimenti table{
+    border: 1px solid #263238;    
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#cruscotto_investimenti table caption{
+    background-color: #263238;
+    color: white;
+    padding: 6px;
+    font-weight: bold;
+}
+
+#cruscotto_investimenti table thead tr th{
+    background-color: #1e88e5;
+    color: white;
+    padding: 6px;
+    text-align: center;
+    font-weight: normal;
+}
+
+#cruscotto_investimenti table tbody tr td{
+    padding: 6px;
+    border: 1px solid #263238; 
+}
+    
+#cruscotto_investimenti table tbody tr td.descrizione_conto{
+    text-align: left;
+}   
+
+#cruscotto_investimenti table tbody tr td.totale{
+    padding: 6px;
+    border: 1px solid #263238; 
+    font-weight: bold;    
+}
+
+#cruscotto_investimenti .warning{
+    font-weight: bold;
+    background-color: #fccf6f;
+    color: #a56e00;
+    border: 1px solid #a56e00;
+    text-align: center;
+    margin-left: 15px;
+    width: 50%;
+    padding: 15px;
+    margin: auto;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}

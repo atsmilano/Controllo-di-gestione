@@ -1,0 +1,67 @@
+.loginBox{
+	position:fixed;
+	top:40%;
+	left:50%;
+	margin-left:-330px;
+	margin-top:-165px;
+	width:300px;
+	height:230px;
+	padding-left:360px;
+	padding-top:100px;
+	background:url(../images/logo-login.gif) top left no-repeat;
+	background-color: white;
+}
+
+#container .loginBox {
+	border: 1px solid black;
+}
+
+.ui-dialog-content .loginBox{
+	position:relative;
+}
+
+.loginBox input{
+	width:250px;
+}
+
+.loginBox p{
+	padding-bottom:12px;
+}
+
+.loginBox a:link,.loginBox a:visited{
+	font-size:11px;
+	color:#0e73d5;
+}
+
+.loginBox a:hover{
+	text-decoration:underline;
+}
+
+a#modsec_googlelogin {
+	background-image: url(../images/social/google.png);
+	box-sizing: border-box;
+	ms-box-sizing: border-box;
+	webkit-box-sizing: border-box;
+	moz-box-sizing: border-box;
+	width: 410px;
+	height: 51px;
+	display: block;
+	padding-left: 64px;
+	padding-top: 14px;
+	color: white;
+}
+
+a#modsec_facebooklogin {
+	background-image: url(../images/social/facebook.png);
+	box-sizing: border-box;
+	ms-box-sizing: border-box;
+	webkit-box-sizing: border-box;
+	moz-box-sizing: border-box;
+	width: 410px;
+	height: 51px;
+	display: block;
+	padding-left: 64px;
+	padding-top: 14px;
+	color: white;
+	margin-top: 10px;
+}

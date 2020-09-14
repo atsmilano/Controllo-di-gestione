@@ -1,0 +1,28 @@
+<div id="tabs_indicatori">
+	<div id="tabs">
+		<ul>
+			<li><a id="a_indicatori" href="indicatori/indicatori?{globals}">Indicatori</a></li>
+                        <li><a id="a_parametri" href="indicatori/parametri?{globals}">Parametri</a></li>
+		</ul>
+	</div>
+</div>
+		
+<script>
+$( function() {
+	$('#tabs').tabs({
+		beforeLoad: function( event, ui ) {						            			
+                    ui.panel.html('<div class="loading">Loading...</div>');
+
+                    ui.ajaxSettings.dataFilter = function(data) {					
+                            contents_to_load = $.parseJSON(data);
+                            ui.panel.html(contents_to_load.footers);
+                            ui.panel.html(contents_to_load.headers);
+                            ui.panel.html(contents_to_load.html);
+                     };
+		}
+		
+		,load: function( event, ui ) {                    
+		}
+	});
+});
+</script>

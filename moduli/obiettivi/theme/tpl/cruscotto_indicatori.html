@@ -1,0 +1,56 @@
+<div id='bersaglio'>	    
+        <!--BeginBersaglio-->
+	<div id='bersaglio_indicatori'>
+		<div id='target'>
+			<script>					
+				$('#bersaglio_indicatori').css('width', {target_diameter});						
+				$('#bersaglio_indicatori').css('min-width', {target_diameter});
+				$('#target').height("{target_diameter}");
+				$('#target').width("{target_diameter}");
+                                $('#elenco_obiettivi').css('max-height', '{target_diameter}px');
+				var left_perc_width = $('#bersaglio_indicatori').width() / $('#bersaglio_indicatori').parent().width() * 100;				
+				right_perc_width = 100 - left_perc_width;	                                                                  
+			</script>	                                
+				<img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\target.png'>
+				<!--BeginSectShot-->			
+				<span id='indicatore_{id}' title='{nome_indicatore}' class='shot'>
+                                    <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\{shot_image}'>
+				</span>
+				<script>			
+					$('#indicatore_{id}').css({left: {y_offset}, top: {x_offset}});	
+					$('.shot img').height("{shot_diameter}");
+					$('.shot img').width("{shot_diameter}");					                                                   						                                        
+				</script>			
+				<!--EndSectShot-->
+		</div>
+	</div>        			
+        <script>
+                function evidenzia_bersaglio(id) {    
+                    if ($("#indicatore_"+id+" img").hasClass("evidenza")) {
+                        $("#indicatore_"+id+" img").removeClass("evidenza");
+                    }
+                    else {
+                        $("#target .evidenza").removeClass("evidenza"); 
+                        $("#indicatore_"+id+" img").addClass("evidenza");
+                    }
+                }
+                
+                function evidenzia_record(id) {
+                    if ($("#indicatori_GridData .ID_"+id).hasClass("evidenza")) {
+                        $("#indicatori_GridData .ID_"+id).removeClass("evidenza");
+                    }
+                    else {
+                        $("#indicatori_GridData .evidenza").removeClass("evidenza"); 
+                        $("#indicatori_GridData .ID_"+id).addClass("evidenza");
+                    }                    
+                }
+                
+                $('.shot').click(function(){
+                    id_parts = $(this).attr('id').split("_");  
+                    id = id_parts[1];
+                    evidenzia_bersaglio(id);
+                    evidenzia_record(id);
+                });
+        </script>
+        <!--EndBersaglio-->
+</div>

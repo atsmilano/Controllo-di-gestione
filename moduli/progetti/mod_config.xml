@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config_data>		
+	<id>8</id>
+	<ordine_caricamento>80</ordine_caricamento>
+	<prefisso_tabella_db></prefisso_tabella_db>
+	<attivazione>
+            <anno_inizio>2018</anno_inizio>
+            <anno_fine>0</anno_fine>	
+        </attivazione>	
+</config_data>

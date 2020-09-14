@@ -1,0 +1,361 @@
+<div id="punteggi_valutazione">
+    <script>var graph_dati = new Array();</script>
+    <div id="notifiche"></div>
+    <div id="filters">
+        <div id="filter_tipo_cdr">
+            <h2>Centri di Responsabilit&agrave; - CdR</h2>
+            <!--BeginSectFiltroTipoCdr-->
+                <input id="item_{filter_tipo_cdr_id}" type="checkbox" name="filter_tipo_cdr" value="{filter_tipo_cdr_id}" checked="checked" /> 
+                <label for="item_{filter_tipo_cdr_id}">{filter_tipo_cdr_value}</label> <br />
+            <!--EndSectFiltroTipoCdr-->
+        </div>
+        <div id="filter_valutazione_qualifica">
+            <h2>Qualifica</h2>
+            <select id="select_valutazione_qualifica">
+                <!--BeginSectValutazioneQualificaOption-->
+                    <option value="{filter_valutazione_qualifica_id}">{filter_valutazione_qualifica_value}</option>
+                <!--EndSectValutazioneQualificaOption-->
+            </select>
+            <div id="spinner_categoria" class="spinner-icon" style="display: none;">
+                <i id="loading_categoria" class="fa-spinner fa fa-lg fa-spin" ></i>
+            </div>
+        </div>
+        <div id="filter_valutazione_categoria">
+            <h2>Tipologia scheda</h2>
+            <select id="select_valutazione_categoria" class="ajax-input">
+                <option value>Tutto</option>
+                <!--BeginSectValutazioneCategoriaOption-->
+                <option value="{filter_valutazione_categoria_id}">{filter_valutazione_categoria_value}</option>
+                <!--EndSectValutazioneCategoriaOption-->
+            </select>
+            <div id="spinner_qualifica" class="spinner-icon" style="display: none">
+                <i id="loading_qualifica" class="fa-spinner fa fa-lg fa-spin" ></i>
+            </div>
+        </div>
+        <div id="filter_area">
+            <h2>Area</h2>
+            <select id="select_area">
+                <option value="-1">Tutte le aree</option>
+                <!--BeginSectAreaOption-->
+                    <option value="{filter_area_id}">{filter_area_value}</option>
+                <!--EndSectAreaOption-->
+            </select>
+        </div>
+        <!--BeginSectTotali-->
+        <div id="filter_valutazione_totale">
+            <h2>Totale</h2>
+            <select id="select_totale">
+                <!--BeginSectTotaliOption-->
+                <option value="{filter_totale_id}">{filter_totale_value}</option>
+                <!--EndSectTotaliOption-->
+            </select>
+        </div>
+        <!--EndSectTotali-->
+        <div id="filter_applay">
+            <div id="filter_applay_button" class="actionbt">
+                <i class="fa-filter fa-lg fa"></i>&nbsp;Applica filtri
+                <div class="spinner-icon" style="vertical-align:middle; float:right; display:none">
+                    <i class="fa-spinner fa fa-lg fa-spin" ></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br /><br />
+    <hr />
+    <!--BeginNoPeriodo-->
+    <div id="no_periodo" class="warning">{msg_no_periodo}</div>
+    <!--EndNoPeriodo-->
+    <div id="report">
+        <!--BeginMsgReport-->
+        <div id="msg_report" class="warning">
+            Nessuna valutazione coerente con i filtri selezionati.
+        </div>
+        <!--EndMsgReport-->
+        <!--BeginDataReport-->
+        <div id="table_report_container" class="left">
+            <h2 align="center">Tabella di riepilogo</h2>
+            <table style="width: 100%">
+                <thead>
+                    <!--BeginTableReportHead-->
+                        <tr>
+                            <th>Valutazione % raggiungimento<br />{descrizione_filtro_area}</th>
+                            <th id="#th_categoria">Numero valutazioni per punteggio<br />{descrizione_tipologia_scheda}</th>
+                            <th>V%</th>
+                        </tr>
+                    <!--EndTableReportHead-->
+                </thead>
+                <tbody>
+                    <!--BeginTableReportBody-->
+                        <tr>
+                            <td>{table_report_valutazione}</td>
+                            <td>{table_report_numero_valutati}</td>
+                            <td>{table_report_percentuale}%</td>
+                        </tr>
+                        <script>
+                            graph_dati.push({x:{table_report_valutazione}, y:{table_report_numero_valutati}});
+                        </script>
+                    <!--EndTableReportBody-->
+                    <!--BeginTotaleTableReportBody-->
+                        <tr>
+                            <td></td>
+                            <td><strong><i>{table_report_totale_numero_valutati}</i></strong></td>
+                            <td><strong><i>{table_report_totale_percentuale}%</i></strong></td>
+                        </tr>
+                    <!--EndTotaleTableReportBody-->
+                <tbody>
+            </table>
+        </div>
+        <div id="graph_report_container" class="right">
+            <h2 align="center">Numero valutazioni per punteggio {descrizione_valutazione_categoria}</h2>
+            <canvas id="canvas_graph_report"></canvas>
+            <div id="graph_report">
+                <script>
+                    $(document).ready(function () {
+                        var ctx = document.getElementById('canvas_graph_report').getContext('2d');
+                        var myBubbleChart = new Chart(ctx, {
+                            type: 'scatter',
+                            data: {
+                                datasets: [{
+                                    label: 'Valutazioni',
+                                    data: graph_dati,
+                                    backgroundColor: '#7cb5ec',
+                                    pointRadius: 5,
+                                    pointHoverRadius: 7
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    yAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Numero valutati',
+                                        },
+                                        ticks: {
+                                            stepSize: 50
+                                        }
+
+                                    }],
+                                    xAxes: [{
+                                        scaleLabel: {
+                                            display: true,
+                                            labelString: 'Valutazione % raggiungimento'
+                                        },
+                                        gridLines: {
+                                            display:false
+                                        },
+
+                                    }]
+                                },
+                                legend: {
+                                    display: true,
+                                    position: "bottom",
+                                    align: "center",
+                                    labels: {
+                                        fontColor: '#000',
+                                        fontStyle: "bold",
+                                        usePointStyle: true,
+                                        boxWidth: 7
+                                    }
+                                },
+                                tooltips: {
+                                    titleFontSize: 11,
+                                    titleFontStyle: '400',
+                                    titleFontColor: '#000',
+                                    bodyFontColor: '#000',
+                                    bodyFontStyle:'500',
+                                    bodyFontSize: 13,
+                                    mode: 'index',
+                                    intersect: false,
+                                    yPadding: 10,
+                                    xPadding: 10,
+                                    caretSize: 8,
+                                    backgroundColor: 'rgba(245, 245, 245, 0.8)',
+                                    borderColor: '#7cb5ec',
+                                    borderWidth: 1,
+                                    position:'nearest',
+                                    mode: 'index',
+                                    callbacks: {
+                                        title: function (tooltipItem, data) {
+                                            return data['datasets'][0]['label'];
+                                        },
+                                        label: function(tooltipItem, data) {
+                                            return tooltipItem['xLabel']+" %, "+tooltipItem['yLabel']+" plp";
+                                        },
+                                    },
+                                },
+                            }
+
+                        });
+
+                    });
+                </script>
+            </div>
+        </div>
+        <!--EndDataReport-->
+    </div>
+</div>
+
+<!--BeginScript-->
+<script>
+
+    function hideSpinnersPv() {
+        //Vengono nascosti gli spinner
+        $(".spinner-icon").each(function() {
+            $(this).hide();
+        });
+    }
+
+    function getActiveOptionFilters(item_id) {
+        $(item_id + " option:selected").each(function (index) {
+            result = $(this).val();
+        });
+        return result;
+    }
+        
+    function getActiveFilters() {
+        tipo_cdr = new Array();
+        $("div#filter_tipo_cdr input[name='filter_tipo_cdr']").each(function (index) {
+            if ($(this).is(":checked")) {
+                tipo_cdr.push($(this).val());
+            }
+        });
+
+        valutazione_qualifica = getActiveOptionFilters("select#select_valutazione_qualifica");
+        valutazione_categoria = getActiveOptionFilters("select#select_valutazione_categoria");
+        
+        area = getActiveOptionFilters("select#select_area");
+
+        totale = getActiveOptionFilters("select#select_totale");
+                
+        result = {
+            "tipo_cdr" : tipo_cdr,
+            "valutazione_categoria": valutazione_categoria,
+            "valutazione_qualifica": valutazione_qualifica,
+            "area" : area,
+            "totale": totale
+        };
+        
+        return result;
+    }
+    
+    function checkActiveFilters() {
+        // Al momento vengono verificate solo le checkbox
+        if ($("div#filter_tipo_cdr input[name='filter_tipo_cdr']:checked").length == 0) {
+            return {
+                "status": false, 
+                "msg": "Selezionare almeno un valore per il filtro '<strong>Centri di Responsabilità - CdR</strong>'"
+            };
+        }
+        
+        return {
+            "status": true
+        };
+    }
+
+    $("#select_valutazione_qualifica").change(function() {
+        $(this).siblings("div.spinner-icon").show();
+        var filters = getActiveFilters();
+        var data = {
+            valutazione_qualifica: filters.valutazione_qualifica,
+            die: true
+        };
+
+        var request = $.ajax({
+            url: window.location.pathname + '/punteggi_valut/report.php?{globals}',
+            type: 'GET',
+            data: data,
+            cache: false,
+            contentType: false
+        });
+
+        request.done(function(data) {
+            hideSpinnersPv();
+            $("#select_valutazione_categoria").empty();
+            $("#select_valutazione_categoria").html($(data).find("#select_valutazione_categoria").html());
+
+            //Il filtro sul totale non viene renderizzato nel caso in cui esista solo un totale
+            if($("#filter_valutazione_totale").length) {
+                $("#select_totale").empty();
+                $("#select_totale").html($(data).find("#select_totale").html());
+            }
+        });
+
+        request.fail(function() {
+            hideSpinnersPv();
+            setError("Impossibile applicare i filtri selezionati");
+        });
+    });
+
+    $("#select_valutazione_categoria").change(function() {
+        //Il filtro sul totale non viene renderizzato nel caso in cui esista solo un totale
+        if($("#filter_valutazione_totale").length) {
+            $(this).siblings("div.spinner-icon").show();
+            var filters = getActiveFilters();
+            var data = {
+                valutazione_qualifica: filters.valutazione_qualifica,
+                valutazione_categoria: filters.valutazione_categoria,
+                die: true
+            };
+
+            var request = $.ajax({
+                url: window.location.pathname + '/punteggi_valut/report.php?{globals}',
+                type: 'GET',
+                data: data,
+                cache: false,
+                contentType: false
+            });
+
+            request.done(function(data) {
+                hideSpinnersPv();
+                $("#select_totale").empty();
+                $("#select_totale").html($(data).find("#select_totale").html());
+            });
+
+            request.fail(function() {
+                hideSpinnersPv();
+                setError("Impossibile applicare i filtri selezionati");
+            });
+        }
+    });
+    
+    $("#filter_applay_button").click(function (){
+        $(this).children("div.spinner-icon").show();
+        var check = checkActiveFilters();
+        
+        $("#notifiche").removeClass("success");
+        $("#notifiche").removeClass("error");
+        $("#notifiche").empty();
+        
+        if (!check.status) {
+            $("#notifiche").removeClass("success");
+            $("#notifiche").addClass("error");
+            $("#notifiche").html(check.msg);
+            return;
+        }
+        
+        var filters = getActiveFilters();
+                       
+        var request = $.ajax({
+            url: window.location.pathname + '/punteggi_valut/report.php?{globals}',
+            type: 'GET',
+            data: filters,
+            cache: false,
+            contentType: false
+        });
+        
+        request.done(function(data) {
+            hideSpinnersPv();
+            graph_dati = [];
+            $("#report").empty();
+            $("#report").html($(data).find("#report").html());
+        });
+
+        request.fail(function() {
+            hideSpinnersPv();
+            $("#notifiche").removeClass("success");
+            $("#notifiche").addClass("error");
+            $("#notifiche").html("Si è verificato un errore");
+        });
+    });
+</script>
+<!--EndScript-->

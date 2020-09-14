@@ -1,0 +1,74 @@
+<div id="stampa_valutazione">
+    <div id="logo">
+        <img src="{logo_stampa_filename}">
+    </div>
+    <!--BeginSectLogoQualita-->
+    <div id="logo_qualita">
+        <img src="{logo_stampa_qualita_filename}">
+    </div>
+    <!--EndSectLogoQualita-->
+    <div id="titolo">
+        <h1>{titolo}</h1>
+    </div>   
+    <div id="intestazione">
+        <table>
+            <tr><td class="label">Valutato:</td><td class="val">{valutato}</td></tr>
+            <tr><td class="label">Tipologia scheda:</td><td class="val">{tipologia_scheda}</td></tr>
+        </table>
+    </div>
+    <!--BeginSectAmbito-->
+    <h2>{sezione}</h2>
+    <h3>{ambito}</h3>
+        <!--BeginSectMetodo1-->
+        <div class="metodo_1">
+            <table>
+                <tr><td class="label">Raggiungimento ambito:</td><td>{punteggio_ambito}%</td></tr>
+            </table>
+        </div>
+        <!--EndSectMetodo1-->
+        <!--BeginSectMetodo2-->   
+        <div class="metodo_2">
+            <table>
+            <!--BeginSectAreaItem-->           
+                <!--BeginSectTitoloAreaItem-->
+                <tr><td colspan="2" class="area_item">{area_item}</td><tr>
+                <!--EndSectTitoloAreaItem-->         
+                <!--BeginSectItem-->            
+                    <tr><td class="label">{item}:</td><td class="punteggio">{punteggio}</td></tr>            
+                <!--EndSectItem-->            
+            <!--EndSectAreaItem-->
+            </table>
+        </div>
+        <!--EndSectMetodo2-->
+    <!--EndSectAmbito-->
+    <!--BeginSectTotali-->
+    <div id="totali">
+        <h2>Totali valutazione</h2>
+        <table>
+        <!--BeginSectTotale-->
+            <tr><td class="label">{totale_desc}</td><td> = {totale_punteggio}</td></tr>     
+        <!--EndSectTotale-->
+        </table>
+    </div>
+    <!--EndSectTotali-->
+    <!--BeginSectValutatore-->
+    <div class="note">
+        <h2>Valutatore: {valutatore}</h2>
+        <!--<span class="label">Data ultimo colloquio</span>
+        <p>{data_ultimo_colloquio}</p>-->
+        <span class="label">Note</span>
+        <p>{note_valutatore}</p>
+        <span class="label">Data e ora firma</span>
+        <p>{data_firma_valutatore}</p>
+    </div>
+    <!--EndSectValutatore-->
+    <div class="note">
+        <h2>Valutato: {valutato}</h2>
+        <span class="label">Note {titolo_note_valutato}valutazione</span>
+        <p>{note_valutato}</p>
+        <!--BeginSectValutato-->
+        <span class="label">Data e ora firma per presa visione</span>
+        <p>{data_firma_valutato}</p>
+        <!--EndSectValutato-->
+    </div>
+</div>

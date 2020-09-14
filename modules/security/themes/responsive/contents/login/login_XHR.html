@@ -1,0 +1,162 @@
+<div id="ffLoginBox" class="{container_class}">
+    <div class="{inner_wrap_class}">
+        <div class="inner-box">
+            <!--BeginSectLogoPre-->
+            <div class="{logo_class}"><!--BeginSectLogoImgPre--><img src="{logo_login}" /><!--EndSectLogoImgPre--></div>
+            <!--EndSectLogoPre-->  
+            <!--BeginSectLogin-->
+            <div class="{login_class}">
+                <!--BeginSectLoginTitle-->
+                <h2>{_login_title}</h2>
+                <!--EndSectLoginTitle-->                
+                <!--BeginSectError-->
+                <div class="error-container">{sError}</div>
+                <!--EndSectError-->
+                <!--BeginSectSocialLoginPre-->  
+                <div class="{login_social_class}">
+                    <!--BeginSectSocialLoginFacebookPre-->
+                    <a class="{social_class}" id ="modsec_facebooklogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_facebook_login_window_title}', '{social_url_facebook}');">{social_icon} Facebook</a>
+                    <!--EndSectSocialLoginFacebookPre-->
+                    <!--BeginSectSocialLoginGooglePre--> 
+                    <a class="{social_class}" id ="modsec_googlelogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_google_login_window_title}', '{social_url_google}');">{social_icon} Google+</a>
+                    <!--EndSectSocialLoginGooglePre-->
+                    <!--BeginSectJanRainLoginPre-->
+                    <div class="{social_class}" id="janrainEngageEmbed"><a class="janrainEngage" href="javascript:void(0);">{_janrain_sign_in}</a></div>
+                    <!--EndSectJanRainLoginPre-->
+                </div>
+                <!--EndSectSocialLoginPre-->
+				<!--BeginSectStandardLogin-->  
+                <div class="{login_standard_class}">
+                    <!--BeginSectDomain-->
+                    <div class="{row_class}">
+                        <!--BeginSectDomainLabel-->
+                        <label for="domain">{_login_domain}</label>
+                        <!--EndSectDomainLabel-->
+                        <input type="text" id="domain" name="domain" value="{domain}" placeholder="{_login_domain}" />
+                    </div>
+                    <!--EndSectDomain-->
+                    <div class="{row_class}">
+                        <!--BeginSectUsernameLabel-->
+                        <label for="username">{_login_username}</label>
+                        <!--EndSectUsernameLabel-->
+                        <input type="text" id="username" name="username" value="{username}" placeholder="{_login_username}"/>
+                        <!--BeginSectRecoverUsername-->
+                        <a class="{recover_class}" href="{site_path}{recover}">{_recover_password_username}</a>
+                        <!--EndSectRecoverUsername-->
+                    </div>
+                    <div class="{row_class}">
+                        <!--BeginSectPasswordLabel-->
+                        <label for="password">{_login_password}</label>
+                        <!--EndSectPasswordLabel-->
+                        <input onkeydown="return ff.submitProcessKey(event, 'btLogin')" type="password" id="password" name="password" value="{password}" autocomplete="off" placeholder="{_login_password}" />
+                        <!--BeginSectRecoverPassword-->
+                        <a class="{recover_class}" href="{site_path}{recover}">{_recover_password}</a>
+                        <!--EndSectRecoverPassword-->
+                    </div>
+                    <!--BeginSectStayConnected-->
+                    <div class="{stayconnect_class}">
+                        <input type="checkbox" name="stayconnected" id="stayconnected" /><label for="stayconnected">{_stay_connected}</label>
+                    </div>
+                    <!--EndSectStayConnected-->
+                    <div class="{actions_class}">
+                        <a class="{login_button_class}" href="javascript:void(0);" id="btLogin" onclick="{login_bt_confirm}">{_login_confirm}</a>
+                    </div>
+                </div>
+                <!--EndSectStandardLogin--> 
+                <!--BeginSectSocialLoginPost-->  
+                <div class="{login_social_class}">
+                    <!--BeginSectSocialLoginFacebookPost-->
+                    <a class="{social_class}" id ="modsec_facebooklogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_facebook_login_window_title}', '{social_url_facebook}');">{social_icon} Facebook</a>
+                    <!--EndSectSocialLoginFacebookPost-->
+                    <!--BeginSectSocialLoginGooglePost--> 
+                    <a class="{social_class}" id ="modsec_googlelogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_google_login_window_title}', '{social_url_google}');">{social_icon} Google+</a>
+                    <!--EndSectSocialLoginGooglePost-->
+                    <!--BeginSectJanRainLoginPost-->
+                    <div class="{social_class}" id="janrainEngageEmbed"><a class="janrainEngage" href="javascript:void(0);">{_janrain_sign_in}</a></div>
+                    <!--EndSectJanRainLoginPost-->
+                </div>
+                <!--EndSectSocialLoginPost-->
+                <!--BeginSectLoginLinks-->
+                <div class="{link_class}"> 
+                    <!--BeginSectRegister-->
+                    <a class="{register_class}" href="{site_path}{register}">{_register_link}</a>
+                    <!--EndSectRegister-->
+                    <!--BeginSectLoginBack-->
+                    <a class="{back_class}" href="{back_url}">{_back_to_site}</a>
+                    <!--EndSectLoginBack-->
+                </div>
+                <!--EndSectLoginLinks-->
+            </div>
+			<script type="text/javascript">
+			    jQuery('#{focus_target}').focus();
+			</script>             
+            <!--EndSectLogin-->
+            <!--BeginSectLogout-->
+            <div class="{logout_class}">
+                <!--BeginSectLogoutTitle-->
+                <h2>{_logout_title}</h2>
+                <!--EndSectLogoutTitle--> 
+                <div class="{account_class}">
+               		<!--BeginSectAvatar-->
+               		<img class="{avatar_class}" src="{avatar}" alt="{username}" width="150" height="150"> 
+               		<!--EndSectAvatar-->
+               		<!--BeginSectUsername-->
+               		<h4>{username}</h4>
+               		<!--EndSectUsername-->
+               		<!--BeginSectEmail-->
+               		<h5>{email}</h5>
+               		<!--EndSectEmail-->
+                </div>
+                <!--BeginSectSocialLogout-->
+                <div class="{login_social_class}">
+                    <p>Desidero anche revocare l'accesso dai seguenti Social Network</p>
+                    <!--BeginSectSocialLogout_google-->
+                    <input type="checkbox" value="1" name="social_logout_check[google]" /> Google
+                    <!--EndSectSocialLogout_google-->
+                </div>
+                <!--EndSectSocialLogout-->
+                <div class="{actions_class}">
+                    <a class="{logout_button_class}" href="javascript:void(0);" onclick="{logout_bt_confirm}">{_logout_confirm}</a>
+                </div>
+                <!--BeginSectLogoutLinks-->
+                <div class="{link_class}"> 
+                    <!--BeginSectLogoutBack-->
+                    <a class="{back_class}" href="{back_url}">{_back_to_site}</a>
+                    <!--EndSectLogoutBack-->
+                </div>        
+                <!--EndSectLogoutLinks-->
+            </div>
+            <!--EndSectLogout-->
+            <!--BeginSectLogoPost-->
+            <div class="{logo_class}"><!--BeginSectLogoImgPost--><img src="{logo_login}" /><!--EndSectLogoImgPost--></div>
+            <!--EndSectLogoPost-->
+        </div>  
+    </div>
+</div>
+
+<!--BeginSectJanrainJS-->
+<script type="text/javascript"> 
+    jQuery(function () {
+        //if (typeof window.janrain !== 'object') 
+        window.janrain = {};
+        window.janrain.settings = {};
+
+        window.janrain.settings.tokenUrl = 'http://{domain}{site_path}/services/janrain_auth?frmAction=login&ret_url={encoded_ret_url}&err_url={encoded_this_url}';
+
+        var e = document.createElement('script');
+        e.type = 'text/javascript';
+        e.id = 'janrainAuthWidget';
+
+        if (document.location.protocol === 'https:') {
+            e.src = 'https://rpxnow.com/js/lib/{janrain_appname}/engage.js';
+        } else {
+            e.src = 'http://widget-cdn.rpxnow.com/js/lib/{janrain_appname}/engage.js';
+        }
+
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(e, s);
+
+        window.janrain.ready = true;
+    });
+</script>
+<!--EndSectJanrainJS-->

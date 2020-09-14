@@ -1,0 +1,62 @@
+<!--BeginCdrTree-->
+<div id="tree_element_{id_cdr_figlio}" class="tree_element">	
+    <span class="tree_actions">
+        <!--BeginExpandTree-->
+                <i id="expand_image_{id_cdr_figlio}" class="fa-caret-square-o-right fa-lg fa action expandable" title="Visualizza figli" onclick="treeAction({id_cdr_figlio});"></i>				
+        <!--EndExpandTree-->	
+        <!--BeginNoExpandTree-->
+                <i id="expand_image_{id_cdr_figlio}" class="fa-square-o fa-lg fa no_expandable" title="Nessun Figlio"></i>				
+        <!--EndNoExpandTree-->			
+        </span>
+        <i class="fa-reorder fa action" title="Sposta"></i>
+        <span class="tree_actions">
+        <i id="add_image_{id_cdr_figlio}" class="fa-plus-square-o fa action" title="Nuovo figlio" onclick="cdrEdit({id_cdr_figlio});"></i>
+        <i id="edit_icon_{id_cdr_figlio}" class="fa-edit fa-lg fa action" title="Modifica Cdr" onclick="cdrEdit({id_cdr_padre},{id_cdr_figlio});"></i>				
+    </span>
+    <span id="tree_element_description_{id_cdr_figlio}" class="tree_element_description" title="{descrizione_completa}">																										
+        {descrizione}			
+    </span>			
+    <span class="tree_element_cdc">				
+        <i id="cdc_icon_{id_cdr_figlio}" class="fa-sitemap fa-lg fa action" title="Cdc Associati" onclick="cdcEdit({id_cdr_padre},{id_cdr_figlio});"></i>({n_cdc})
+    </span>	
+    <span class="tree_element_responsabile">
+        <!--BeginRespDiretta-->
+                <i id="resp_diretto_image_{id_cdr_figlio}" class="fa-street-view fa-lg fa" title="Responsabilit&agrave; diretta"></i>
+        <!--EndRespDiretta-->
+        <!--BeginRespGerarchica-->
+                <i id="resp_gerarchico_image_{id_cdr_figlio}" class="fa-square-o fa-lg fa" title="Responsabilit&agrave; gerarchica"></i>
+        <!--EndRespGerarchica-->
+        {responsabile}
+    </span>
+</div>
+<div id="tree_element_loading_image_{id_cdr_figlio}" class="tree_element_loading_image"><i class="fa fa-spinner fa-spin " title="Caricamento..."></i> Caricamento...</div>
+<div id="figli_{id_cdr_figlio}" class="figli">	</div>
+<!--EndCdrTree-->
+
+<!--BeginNoCdr-->
+<span class="notifiche">    
+    Non ci sono cdr disponibili.
+</span>
+<!--EndNoCdr-->
+
+<script>	
+    $(".tree_element").draggable({ 
+        axis: "y",
+        opacity: 0.5, 
+        helper: "clone",
+        cancel: "span",
+        cursor: "move",
+    });
+								
+    $( ".tree_element" ).droppable({
+        accept: ".tree_element",
+        classes: {
+            "ui-droppable-hover": "dropping"},
+        drop: function( event, ui ) {															
+            id_figlio = ui.draggable.prop('id').substr(13);
+            id_nuovo_padre = $(this).attr('id').substr(13);
+
+            moveCdr(id_figlio, {id_cdr_padre}, id_nuovo_padre);						
+        }
+    });							
+</script>

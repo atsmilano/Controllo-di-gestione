@@ -1,0 +1,11 @@
+<div class="loginBox">
+	<!--BeginSectError-->
+	<div class="warning"> {sError} </div>
+	<!--EndSectError-->
+	<p>Username<br /><input type="text" id="username" name="username" value="{username}"/></p>
+	<p>E-mail<br /><input onkeydown="return ff.submitProcessKey(event, 'btRecover')" id="email" name="email" value="{email}"/></p>
+	<p><input id="btRecover" type="submit" value="Recupera" onclick="document.getElementById('frmAction').value = 'recover';"/></p>
+	<p></p>
+	<p><a href="{site_path}/">{_back_to_site}</a></p>
+	<script type="text/javascript">document.getElementById('{focus_target}').focus();</script>
+</div>

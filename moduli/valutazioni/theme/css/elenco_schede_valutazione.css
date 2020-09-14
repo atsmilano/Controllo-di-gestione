@@ -1,0 +1,143 @@
+#elenco_non_valutati .error {
+    background-color: #d87f7f;
+    border-color: #a04545;
+    color: #a04545;
+}
+
+#elenco_valutazioni_periodo .warning{
+    font-weight: bold;
+    background-color: #fccf6f;
+    color: #a56e00;
+    border: 1px solid #a56e00;
+    text-align: center;
+    margin-left: 15px;
+    width: 50%;
+    padding: 15px;
+    margin: auto;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#personale_valutato table, #personale_non_valutato table {
+    border: solid 1px #263238;
+}
+
+#personale_valutato table caption, #personale_non_valutato table caption {
+    background-color: #263238;
+    color: white;
+    padding: 6px;
+    margin-top: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#personale_valutato table th, #personale_non_valutato table th {  
+    padding: 3px;
+    text-align: center;
+    
+}
+
+#personale_valutato table th {
+    width: 15%;
+} 
+
+#personale_non_valutato table th {
+    width: 25%;
+}
+
+#personale_valutato table td, #personale_non_valutato table td {
+    border: solid 1px #263238;
+    padding: 3px;
+    text-align: center;
+}
+
+#personale_valutato table td a {
+    color: #1e88e5;
+} 
+
+#ricalcola_totali,
+#ricalcola_ambiti {
+    float: right;
+}
+
+#ricalcola_totali.actionbt,
+#ricalcola_ambiti.actionbt {
+    border: solid 1px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    border-color: #666;
+    background-color: #e1e5ea;
+    color: #2888E5;
+    width: 150px;
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    margin-top: -8px;
+}
+
+#ricalcola_totali.actionbt i,
+#ricalcola_ambiti.actionbt i{
+    float: left;
+    line-height: normal;
+}
+
+#ricalcola_totali.actionbt:hover,
+#ricalcola_ambiti.actionbt:hover{
+    background-color: #fff;
+    cursor: pointer;
+}
+
+#conferma_ricalcolo{
+    z-index: 9999;
+    padding: 3%;
+    background-color: #F0EEE3;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 50%;
+    position: fixed;
+    left: 25%;
+    color: #184A1E;
+    text-align: center;
+    display: none;
+    font-size: 15px;
+}
+
+#conferma_ricalcolo h3 {
+    font-weight: bold;
+    color: #184A1E;
+    margin-bottom: 15px;
+}
+
+#conferma_ricalcolo .confirm_link {
+    background-color: white;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 6px;
+    font-weight: bold;
+    color: #2D8215;
+    margin: 9px;
+    width: 90px;
+    display: inline-block;
+}
+
+#conferma_ricalcolo .confirm_link:hover {
+    cursor: pointer;
+    background-color: #E6FB82;
+    border: solid 1px #81bb00;
+    text-decoration: none;
+}
+
+.btn-elimina {
+    color: white!important;
+}
+
+#btn_elimina_text {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"!important;
+}

@@ -1,0 +1,30 @@
+<div id="tbl_supporto_tabs">
+    <div id="tabs">
+        <ul>
+            <li><a id="a_qualifica_interna" href="qualifica_interna/index?{globals}">Qualifica interna</a></li>
+            <li><a id="a_rapporto_lavoro" href="rapporto_lavoro/index?{globals}">Rapporto di lavoro</a></li>
+            <li><a id="a_ruolo" href="ruolo/index?{globals}">Ruolo</a></li>
+            <li><a id="a_tipologia_contratto" href="tipologia_contratto/index?{globals}">Tipologia di contratto</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

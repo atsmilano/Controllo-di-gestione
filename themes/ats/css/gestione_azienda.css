@@ -1,0 +1,228 @@
+/**********************/
+/*Piano cdr************/
+#piani_cdr {
+	color: #21282F;
+}
+
+#piani_cdr a {
+	color: #354147;
+}
+
+#piani_cdr a:hover {
+	color: black;
+}
+
+#selezione_piano_cdr {
+	margin-bottom: 15px;
+}
+
+#piano_cdr_selezionato {
+	margin-bottom: 15px;
+}
+
+#piano_cdr_selezionato h4 {
+	border: 1px solid;
+	-webkit-border-top-right-radius: 9px;
+	-webkit-border-bottom-right-radius: 9px;
+	-moz-border-radius-topright: 9px;
+	-moz-border-radius-bottomright: 9px;
+	border-top-right-radius: 9px;
+	border-bottom-right-radius: 9px;
+	padding: 3px;
+	background-color: #BCCFBC;
+	margin-bottom: -1px;
+}
+
+#piano_cdr_selezionato h4 span {
+	margin-left: 15px;
+}
+
+#piano_cdr_selezionato h4:hover {	
+	background-color: #a6b5a6;
+	cursor: pointer;
+}
+
+#piano_cdr_selezionato #info {
+	width: 90%;	
+	border: 1px solid;
+	-webkit-border-bottom-right-radius: 9px;
+	-moz-border-radius-bottomright: 9px;
+	border-bottom-right-radius: 9px;
+	padding: 15px;
+	display: none;
+	background-color: #e3ede3;
+}
+
+/**********************/
+/*Tree*****************/
+#piani_cdr .tree_element {
+	width: 100%;
+	position: relative;
+	float: left;
+	border-left: solid 1px;
+}
+
+.figli {
+	float: left;
+	position: relative;
+	padding-left: 21px;
+	border-left: solid 1px;
+}
+
+#piani_cdr .tree_element:hover{
+	background-color: #e3ede3;
+}
+
+.tree_element .tree_element_description{
+	margin-left: 9px;
+}
+
+.tree_element .tree_element_responsabile{
+	float: right;
+	margin-right: 30px;
+}
+
+.tree_element .fa{
+	width: 18px;
+}
+
+.tree_element .tree_element_cdc {
+	float: right;
+}
+
+.tree_element .action:hover{
+	color: #8bc5d6;
+	cursor: pointer;
+}
+
+.tree_element .actions {
+	display: none;
+	width: 100%;
+	background-color: #BCCFBC;
+	border: solid 1px;
+	padding: 9px;
+}
+
+.tree_element_loading_image {
+	display: none;
+	margin-left: 21px;
+}
+
+/*drag & drop*****************/
+.dropping {
+    background-color: #A6B5A6;
+}
+
+#azienda_loading_image {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+
+ #conferma_introduzione{
+    z-index: 9999;
+    padding: 3%;
+    background-color: #F0EEE3;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 50%;
+    position: fixed;
+    left: 25%;
+    color: #184A1E;
+    text-align: center;
+    display: none;
+    font-size: 15px;
+}
+
+#conferma_introduzione h3 {
+    font-weight: bold;
+    color: #184A1E;
+    margin-bottom: 15px;
+}
+
+#conferma_introduzione .confirm_link {
+    background-color: white;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 6px;
+    font-weight: bold;
+    color: #2D8215;
+    margin: 9px;
+    width: 90px;
+    display: inline-block;
+}
+
+#conferma_introduzione .confirm_link:hover {
+    cursor: pointer;
+    background-color: #E6FB82;
+    border: solid 1px #81bb00;
+    text-decoration: none;
+}
+
+#personale tr.anomalia {
+    background-color: rgba(170, 65, 145, 0.4);
+
+}
+#personale tr.anomalia:hover {
+    background-color: rgba(141, 41, 118, 0.6);
+}
+
+/* Dialog */
+#conferma_delete_allegato {
+    z-index: 9999;
+    padding: 3%;
+    background-color: #F0EEE3;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 50%;
+    position: fixed !important;
+    top: 8%;
+    left: 25%;
+    color: #184A1E;
+    text-align: center;
+    display: none;
+    font-size: 15px;
+}
+
+#conferma_delete_allegato h3 {
+    font-weight: bold;
+    color: #184A1E;
+    margin-bottom: 15px;
+}
+
+#conferma_delete_allegato .confirm_link{
+    background-color: white;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 6px;
+    font-weight: bold;
+    color: #2D8215;
+    margin: 9px;
+    width: 90px;
+    display: inline-block;
+}
+
+#conferma_delete_allegato .confirm_link:hover {
+    cursor: pointer;
+    background-color: #E6FB82;
+    border: solid 1px #81bb00;
+    text-decoration: none;
+}
+
+/* Form input */
+#file_input_obj {
+    display: inline;
+    width: 80%;
+}
+
+#allegati-ajax-form {
+    border: 1px solid #c7d4e2;
+    border-radius: 9px;
+}

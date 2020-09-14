@@ -1,0 +1,166 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	<!--BeginSectBinding-->
+	ff.pluginAddInit("jquery-ui", function() {
+		var startDate;
+		var endDate;
+		
+		var baseAttachHandler = jQuery.datepicker._attachHandlers;
+		jQuery.datepicker._attachHandlers = function(inst) {
+				baseAttachHandler.apply(this, [inst]);
+				
+				var element_data = jQuery._data(inst.dpDiv.get(0));
+				var ori_handler_mouseover = element_data.events.mouseover[0].handler;
+				var ori_handler_mouseout = element_data.events.mouseout[0].handler;
+				
+				// remove handlers
+				inst.dpDiv.undelegate("button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a", 'mouseover');
+				inst.dpDiv.undelegate("button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a", 'mouseout');
+				inst.dpDiv.undelegate("button, .ui-datepicker-prev, .ui-datepicker-next", 'mouseover');
+				inst.dpDiv.undelegate("button, .ui-datepicker-prev, .ui-datepicker-next", 'mouseout');
+				inst.dpDiv.find(".ui-datepicker-calendar tr").unbind('mouseover');
+				inst.dpDiv.find(".ui-datepicker-calendar tr").unbind('mouseout');
+				
+				// attach proper ones
+				if (this._get(inst, "weekSelector")) {
+					inst.dpDiv.delegate("button, .ui-datepicker-prev, .ui-datepicker-next", 'mouseover', ori_handler_mouseover);
+					inst.dpDiv.delegate("button, .ui-datepicker-prev, .ui-datepicker-next", 'mouseout', ori_handler_mouseout);
+					inst.dpDiv.find(".ui-datepicker-calendar tr").bind('mouseover', function() { 
+						jQuery(this).find('td a').addClass('ui-state-hover');
+					});
+					inst.dpDiv.find(".ui-datepicker-calendar tr").bind('mouseout', function() { 
+						jQuery(this).find('td a').removeClass('ui-state-hover');
+					});
+				} else {
+					inst.dpDiv.delegate("button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a", 'mouseover', ori_handler_mouseover);
+					inst.dpDiv.delegate("button, .ui-datepicker-prev, .ui-datepicker-next, .ui-datepicker-calendar td a", 'mouseout', ori_handler_mouseout);
+				}
+			};
+			
+		jQuery.datepicker.calcWeekBoundaries = function () {
+			var date = jQuery(this).datepicker('getDate');
+			if (date) {
+				var tmp = date.getDay();
+				if (tmp == 0) { // starting with monday
+					endDate = date;
+					startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 6);
+				} else {
+					startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - tmp + 1);
+					endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - tmp + 7);
+				}
+			}
+		};	
+		var zIndex = parseInt(jQuery(".ff-modal:last").css("z-index")) + 1;
+        if(zIndex > 100) {
+			jQuery.fn.escapeGet("{container}{id}").css({
+				"position" 	: "relative",
+				"z-index"	: zIndex
+			});
+		}
+        <!--BeginSectDate-->
+        jQuery.fn.escapeGet("{container}{id}").datepicker(
+        	jQuery.extend({}, jQuery.datepicker.regional["{lang}"], {
+	            showOtherMonths: true
+				, selectOtherMonths: true
+				, changeMonth: true
+				, changeYear: true
+				, yearRange: "-{min_year}:+{max_year}"
+				, onSelect: function(dateText, inst) { 
+					if (jQuery.datepicker._get(inst, "weekSelector")) {
+						jQuery.datepicker.calcWeekBoundaries.apply(this, []);
+						jQuery(this).datepicker('setDate', startDate);
+						//var dateFormat = inst.settings.dateFormat || jQuery.datepicker._defaults.dateFormat;
+						//jQuery('#startDate').text(jQuery.datepicker.formatDate( dateFormat, startDate, inst.settings ));
+						//jQuery('#endDate').text(jQuery.datepicker.formatDate( dateFormat, endDate, inst.settings ));
+					}
+					inst.input.trigger("change");
+				}
+				, beforeShowDay: function(date) {
+					var inst = jQuery.data(this, "datepicker");
+					var cssClass = '';
+					if (jQuery.datepicker._get(inst, "weekSelector") && date) {
+						if(date >= startDate && date <= endDate) {
+							cssClass = 'ui-state-active';
+						}
+					}
+					return [true, cssClass];
+				}
+				, beforeShow: function(input, inst) {
+					jQuery.datepicker.calcWeekBoundaries.apply(this, []);
+					
+				/*
+	                var zIndex = parseInt(jQuery("#ui-datepicker-div").prev().css("z-index"));
+					if(isNaN(zIndex))
+						zIndex = 100;
+	                if(zIndex > parseInt(jQuery("#ui-datepicker-div").css("z-index")))
+	                    setTimeout(function(){ jQuery('#ui-datepicker-div').css("z-index", zIndex + 10); }, 0);
+	             */ 					
+				}
+				<!--BeginSectWeek-->
+				, weekSelector: true
+			    <!--EndSectWeek-->
+			})
+        );
+        <!--EndSectDate-->
+        <!--BeginSectDateTime-->
+        ff.pluginAddInit("jquery-ui.timepicker", function() {
+			jQuery.fn.escapeGet("{container}{id}").datetimepicker(
+				jQuery.extend({}, jQuery.datepicker.regional["{lang}"], {
+	                changeMonth: true
+	                , changeYear: true
+	                , yearRange: "-{min_year}:+{max_year}"
+	                , timeFormat: 'HH:mm:ss'
+	                , timeOnlyTitle: '{_datepicker_choose}'
+	                , timeText: '{_datepicker_time}'
+	                , hourText: '{_datepicker_hour}'
+	                , minuteText: '{_datepicker_minute}'
+	                , secondText: '{_datepicker_second}'
+	                , currentText: '{_datepicker_current}'
+	                , closeText: '{_datepicker_close}'
+	                , showButtonPanel: false
+	                , onSelect: function(dateText, inst) { 
+						if (jQuery.datepicker._get(inst, "weekSelector")) {
+							jQuery.datepicker.calcWeekBoundaries.apply(this, []);
+							jQuery(this).datepicker('setDate', startDate);
+							//var dateFormat = inst.settings.dateFormat || jQuery.datepicker._defaults.dateFormat;
+							//jQuery('#startDate').text(jQuery.datepicker.formatDate( dateFormat, startDate, inst.settings ));
+							//jQuery('#endDate').text(jQuery.datepicker.formatDate( dateFormat, endDate, inst.settings ));
+						}
+						inst.input.trigger("change");
+					}
+					, beforeShowDay: function(date) {
+						var inst = jQuery.data(this, "datepicker");
+						var cssClass = '';
+						if (jQuery.datepicker._get(inst, "weekSelector") && date) {
+							if(date >= startDate && date <= endDate) {
+								cssClass = 'ui-state-active';
+							}
+						}
+						return [true, cssClass];
+					}
+					, beforeShow: function(input, inst) {
+						jQuery.datepicker.calcWeekBoundaries.apply(this, []);
+					/*
+	                    var zIndex = parseInt(jQuery("#ui-datepicker-div").prev().css("z-index"));
+						if(isNaN(zIndex))
+							zIndex = 100;
+		                if(zIndex > parseInt(jQuery("#ui-datepicker-div").css("z-index")))
+	                        setTimeout(function(){ jQuery('#ui-datepicker-div').css("z-index", zIndex + 10); }, 0);
+					*/
+					}
+				})
+	        ); 
+        });
+        <!--EndSectDateTime-->
+		/*ff.doEvent({
+			"event_name" : "initIFElement"
+			, "event_params" : ["{container}{id}", "datepicker"]
+		});*/
+	});
+	<!--EndSectBinding-->
+</script>
+<!--EndSectFooters-->
+

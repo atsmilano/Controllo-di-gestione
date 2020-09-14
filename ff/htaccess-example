@@ -1,0 +1,29 @@
+RewriteEngine On
+
+#AddDefaultCharset UTF-8
+
+#php_flag magic_quotes_gpc off
+#php_value request_order "EGPCS"
+#php_value session.save_path /tmp
+#php_flag session.use_only_cookies "0"
+#php_flag session.bug_compat_42 "1"
+#php_flag session.bug_compat_warn "1"
+
+# ----------------------------------------------
+#                 Development
+
+#If you use symlink only in local stage you need set DOCUMENT_ROOT with env var
+#SetEnvIf Host "localhost" "FF_TOP_DIR=[DOCUMENT_ROOT]"
+
+# modules rewrite in order to expose themes dir  (you can pass through showfiles.php with /modules subpath)
+RewriteCond   %{HTTP_HOST}  	localhost$
+RewriteCond   %{REQUEST_URI} ^/modules
+RewriteCond   %{REQUEST_URI} !^/modules/([^/]+)/themes(.+)
+RewriteRule   ^modules/([^/]+)(.+) /modules/$1/themes$2 [L,QSA]
+
+RewriteCond   %{HTTP_HOST}  	localhost$
+RewriteCond   %{REQUEST_URI}  	!^/cm/main\.php
+RewriteCond   %{REQUEST_URI}  	!^/cm/showfiles\.php
+RewriteCond   %{REQUEST_URI}  	!^/themes
+RewriteCond   %{REQUEST_URI}  	!^/modules/([^/]+)/themes(.+)
+RewriteRule   ^(.*)    /cm/main\.php?q=/$0 [L,QSA]

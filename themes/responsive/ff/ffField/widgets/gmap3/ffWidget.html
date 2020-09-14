@@ -1,0 +1,60 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.gmap3", function () {
+		<!--BeginSectBinding-->
+		ff.ffField.gmap3.addData({
+			"id"							: "{container}{id}", 
+			"zoom"							: {zoom} ,
+			"lat"							: {lat} ,
+			"lng"							: {lng} ,
+			"mapTypeId"						: "ROADMAP" ,
+			"map_type_control"				: {map_type_control} ,								// true or false
+			"map_type_control_options"		: {
+												style		: "{map_type_control_options}"		//google.maps.ZoomControlStyle.		(LARGE or SMALL)
+											} ,
+			"zoom_control"					: {zoom_control} ,								// true or false
+			"zoom_control_options"			: {
+												position	: "{zoom_control_position}" ,	//google.maps.ZoomControlStyle.		(RIGHT_TOP ...)
+												style		: "{zoom_control_style}"		//google.maps.ZoomControlStyle.		(LARGE or SMALL)
+											} ,
+			"pan_control"					: {pan_control} ,
+			"pan_control_options"			: {
+												position	: "{pan_control_position}"		//google.maps.ControlPosition.		(TOP_RIGHT ..)
+											} ,
+			"scale_control"					: {scale_control} ,
+			"scale_control_options"			: {
+												position: "{scale_control_position}"		//google.maps.ControlPosition.		(TOP_LEFT ..)
+											},
+			"street_view_control"			: {streetview_control} ,
+			"street_view_control_options"	: {
+												position: "{streetview_control_position}"	//google.maps.ControlPosition.		(LEFT_TOP ..)
+											},
+			"updateClass"					: "{update_class}" ,
+			"prefixClass"					: "{update_class_prefix}"
+		});
+		<!--EndSectBinding-->
+		ff.ffField.gmap3.init("{key}", {sensor}, "{region}");
+
+		
+/*		$("input").blur(function() {
+			ff.ffField.gmap3.codeAddress();
+		});
+*/		
+		
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<div class="{container_class}">  
+	{wrap_start}
+	<input class="{search_class}" type="text" {style_search} id="{container}{id}[search]" name="{container}{id}[search]" value="{title}" onkeydown="return ff.submitProcessKey(event, '{container}{id}[search_bt]');" />
+	{wrap_middle}
+	<a class="{search_bt_class}" id="{container}{id}[search_bt]" href="javascript:ff.ffField.gmap3.codeAddress(document.getElementById('{container}{id}[search]').value, '{container}{id}[map]', true)" ></a>
+	{wrap_end}
+</div>
+<div id="{container}{id}[map]" class="{map_class}" {properties} ></div>
+<!--EndSectControl-->

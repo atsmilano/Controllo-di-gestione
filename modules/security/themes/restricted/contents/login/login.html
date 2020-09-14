@@ -1,0 +1,87 @@
+<div id="ffLoginBox" class="loginBox{class_social}">
+<!--BeginSectError-->
+	<div class="std-error">{sError}</div>
+<!--EndSectError-->
+	<!--BeginSectStandardLogin-->
+	<div class="standard-login">
+		<!--BeginSectDomain-->
+		<div class="login-field">
+			<label>{_login_domain}</label>
+            <input type="text" id="domain" name="domain" value="{domain}"/>
+        </div>
+		<!--EndSectDomain-->
+		
+		<div class="login-field">
+			<label>{_login_username}</label>
+			<input type="text" id="username" name="username" value="{username}"/>
+			<!--BeginSectRecoverUsername-->
+			<a class="{recover_class}" href="{site_path}{recover}?ret_url={encoded_this_url}&{globals}">{_recover_username}</a>
+			<!--EndSectRecoverUsername-->
+		</div>
+		<div class="login-field">
+			<label>{_login_password}</label>
+			<input onkeydown="return ff.submitProcessKey(event, 'btLogin')" type="password" id="password" name="password" value="{password}"/>
+			<!--BeginSectRecoverPassword-->
+			<a class="{recover_class}" href="{site_path}{recover}?ret_url={encoded_this_url}&{globals}">{_recover_password}</a>
+			<!--EndSectRecoverPassword-->
+		</div>
+    	<div class="actions">
+            <input id="btLogin" type="button" value="{_login_confirm}" onclick="{login_bt_confirm}" />
+		</div>
+		
+        <div class="links"> 
+			<!--BeginSectRegister-->
+			<a class="{register_class}" href="{site_path}{register}?ret_url={encoded_this_url}&{globals}">{_register_link}</a>
+			<!--EndSectRegister-->
+        </div>
+	</div>
+	<!--EndSectStandardLogin-->
+	<!--BeginSectSocialLogin-->
+	<div class="social-login">
+		<!--BeginSectSocialLoginGoogle-->
+		<a id ="modsec_googlelogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_google_login_window_title}', '{social_url_google}');">{_social_google_login_bt_title}</a>
+		<!--EndSectSocialLoginGoogle-->
+		<!--BeginSectSocialLoginFacebook-->
+		<a id ="modsec_facebooklogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_facebook_login_window_title}', '{social_url_facebook}');">{_social_facebook_login_bt_title}</a>
+		<!--EndSectSocialLoginFacebook-->
+        <!--BeginSectJanRainLogin-->
+        <div id="janrainEngageEmbed"><a class="janrainEngage" href="#">{_janrain_sign_in}</a></div>
+        <!--EndSectJanRainLogin-->
+    </div>
+	<!--EndSectSocialLogin-->
+	
+	<script type="text/javascript">
+		jQuery('#{focus_target}').focus();
+	</script>	
+	
+	<!--BeginSectBack-->
+	<p class="back-to"><a href="{back_url}">{_back_to_site}</a></p>
+	<!--EndSectBack-->
+</div>
+
+<!--BeginSectJanrain-->
+<script type="text/javascript"> 
+    jQuery(function () {
+		//if (typeof window.janrain !== 'object') 
+		window.janrain = {};
+		window.janrain.settings = {};
+
+		window.janrain.settings.tokenUrl = 'http://{http_domain}{site_path}/services/janrain_auth?frmAction=login&ret_url={encoded_ret_url}&err_url={encoded_this_url}';
+		
+		var e = document.createElement('script');
+		e.type = 'text/javascript';
+		e.id = 'janrainAuthWidget';
+
+		if (document.location.protocol === 'https:') {
+		  e.src = 'https://rpxnow.com/js/lib/{janrain_appname}/engage.js';
+		} else {
+		  e.src = 'http://widget-cdn.rpxnow.com/js/lib/{janrain_appname}/engage.js';
+		}
+
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(e, s);
+
+		window.janrain.ready = true;
+	});
+</script>
+<!--EndSectJanrain-->

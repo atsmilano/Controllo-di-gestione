@@ -1,0 +1,85 @@
+#punteggi_valutazione{
+    width: 100%;
+}
+
+#punteggi_valutazione .actionbt{
+    border: solid 1px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    border-color: #2888E5;
+    background-color: #e1e5ea;
+    color: #2888E5;
+    width: 150px;
+    text-align: center;
+    font-weight: bold;
+    padding: 6px;
+    margin: 9px 9px 9px 0;
+}
+
+#punteggi_valutazione .actionbt i {
+    float: left;
+    line-height: normal;
+}
+
+#punteggi_valutazione .actionbt{	
+    float: left;
+}
+
+#punteggi_valutazione .actionbt:hover{	
+    background-color: #c7d4e2;
+    cursor: pointer;
+}
+
+#punteggi_valutazione #report #table_report_container {
+    width: 39.5%;
+    float: left;
+}
+
+#punteggi_valutazione #report #graph_report_container {
+    width: 59.5%;
+    float: right;
+}
+
+#punteggi_valutazione .error{
+    font-weight: bold;
+    background-color: #d87f7f;
+    color: #a04545;
+    border: 1px solid #a04545;
+    text-align: center;
+    margin-left: 15px;
+    width: 50%;
+    padding: 15px;
+    margin: auto;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#punteggi_valutazione .warning {
+    font-weight: bold;
+    background-color: #fccf6f;
+    color: #a56e00;
+    border: 1px solid #a56e00;
+    text-align: center;
+    margin-left: 15px;
+    width: 50%;
+    padding: 15px;
+    margin: auto;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#punteggi_valutazione thead > tr > th,
+#punteggi_valutazione tbody tr td {
+    text-align: center;
+}
+
+#punteggi_valutazione #filters select {
+    width: 20%;
+}

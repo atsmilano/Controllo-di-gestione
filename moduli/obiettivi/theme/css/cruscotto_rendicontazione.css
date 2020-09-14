@@ -1,0 +1,7 @@
+#cruscotto_rendicontazione .ui-tabs-panel {
+	overflow: hidden;
+}
+
+#cruscotto_rendicontazione #grafico_raggiungimento_medio_totale {
+    width: 100%;
+}

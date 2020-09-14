@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+	<rule id="mod_restricted_settings">
+		<priority>NORMAL</priority>
+		<source>^/restricted/settings(.*)</source>
+		<destination>
+			<module>restricted</module>
+			<url>/settings$1</url>
+		</destination>
+		<reverse>/restricted/settings</reverse>
+	</rule>
+	<rule id="restricted">
+		<priority>HIGH</priority>
+		<source>^/restricted(.*)</source>
+		<destination>
+			<module>restricted</module>
+			<url>/layout$1</url>
+		</destination>
+		<process_next />
+		<accept_path_info />
+		<reverse>/restricted</reverse>
+	</rule>
+</configdata>

@@ -1,0 +1,213 @@
+<div id='situazione_aziendale_obiettivi'>	                	
+	<!--BeginSectRendicontazioni-->
+	<div id='left'>
+		<div id='raggiungimento_medio_aree'>
+			<h2>Stato Rendicontazioni ATS</h2>
+			<div id='grafico_raggiungimento_medio_aree'></div>
+			<script>
+				$(document).ready(function(){
+					$("#grafico_raggiungimento_medio_aree").height({grafico_medio_aree_height});                                        
+										
+					var perc_ragg_nucleo = [{perc_ragg_nucleo}];
+					var point_label_ragg_nucleo = [{point_label_ragg_nucleo}];
+                                        var perc_ragg_cdr = [{perc_ragg_cdr}];
+					var point_label_ragg_cdr = [{point_label_ragg_cdr}];
+					var completamento_rendicontazione = [{completamento_rendicontazione}];
+					var point_label_n_ob = [{point_label_n_ob}];
+					var ticks = [{cdr_label}];
+
+					grafico_medio_aree = $.jqplot('grafico_raggiungimento_medio_aree', [perc_ragg_nucleo, perc_ragg_cdr, completamento_rendicontazione], {
+						animate: !$.jqplot.use_excanvas,
+						seriesColors:['#2D8215', '#C1DD81', '#CC6666'],
+						seriesDefaults: {
+							renderer:$.jqplot.BarRenderer,
+							pointLabels: { 
+								show: true,								
+							},
+							shadow: false,
+							rendererOptions: {
+								barDirection: 'horizontal',	
+								barPadding: 0,
+								rendererOptions: {
+									barMargin: 10,
+								},
+							}
+						},
+						series: [
+							{pointLabels:{
+								labels:point_label_ragg_nucleo}
+							},
+							{pointLabels:{
+								labels:point_label_ragg_cdr}
+							},
+							{pointLabels:{
+								labels:point_label_n_ob}
+							}
+						],
+						axes: {
+							xaxis: {
+								renderer: $.jqplot.CanvasAxisTickRenderer,						
+								min: 0,
+								max: 120,
+								tickInterval: 10,
+								label: "% Raggiungimento",
+								tickOptions: {
+									fontSize: '9pt'
+								}
+							},
+							yaxis: {
+								renderer: $.jqplot.CategoryAxisRenderer,						
+								ticks: ticks,
+								tickOptions: {
+									fontSize: '9pt'
+								  }
+							}
+						},
+						legend: {
+							show: true,
+							location: 's',
+							placement: 'outsideGrid',
+							labels: ['% Raggiungimento nucleo', '% Raggiungimento referente', '% Completamento valutazione']
+						},
+					});		
+				});
+				
+				/*sul ridimensionamento della finestra il grafico viene rivisualizzato per adattarne la dimensione*/
+				$( window ).resize(function() {
+					grafico_medio_aree.replot();
+				});
+			</script>
+		</div>		
+	</div>
+	<div id='right'>
+		<div id='progressione_definizione_azioni'>
+			<h2>Stato d'avanzamento della compilazione delle azioni attuative</h2>
+			<div id="progressbar_azioni"><div class='avanzamento_azioni_label'></div></div>
+			<script>
+				$(function() {								
+					$(function() {
+					  var progressbar_azioni = $( "#progressbar_azioni" );
+
+					  progressbar_azioni.progressbar({
+						value: false,
+						change: function() {						 
+						  $( ".avanzamento_azioni_label" ).text( progressbar_azioni.progressbar( "value" ) + "% (" + {n_azioni_definite} + "/" + {n_obiettivi} + ")" );
+						},
+						complete: function() {						  
+						  $( ".avanzamento_azioni_label" ).text( "Completata (" + {n_obiettivi} + " val.)");
+						}
+					  });
+
+					  function progress_azioni() {
+						var val = progressbar_azioni.progressbar( "value" ) || 0;							
+						
+                                                if ({avanzamento_azioni} == 0) {
+						  progressbar.progressbar( "value", 0 );
+						}
+                                                
+						if ( val < {avanzamento_azioni} ) {						  
+						  setTimeout( progress_azioni, 20 );
+						  progressbar_azioni.progressbar( "value", val+1 );
+						}
+					  }
+
+					  setTimeout( progress_azioni, 500 );
+					});				
+				});
+			</script>
+		</div>
+		<div id='progressione_periodo'>
+			<h2>Stato d'avanzamento della rendicontazione</h2>
+			<div id="progressbar"><div class='avanzamento_label'></div></div>
+			<script>
+				$(function() {								
+					$(function() {
+					  var progressbar = $( "#progressbar" );
+
+					  progressbar.progressbar({
+						value: false,
+						change: function() {						
+						  $( ".avanzamento_label" ).text( progressbar.progressbar( "value" ) + "% (" + {n_rendicontazioni} + "/" + {n_obiettivi} + ")" );
+						},
+						complete: function() {
+						  $( ".avanzamento_label" ).text( "Completata (" + {n_obiettivi} + " val.)");
+						}
+					  });
+
+					  function progress() {
+						var val = progressbar.progressbar( "value" ) || 0;						
+						
+                                                if ({avanzamento_rendicontazioni} == 0) {
+						  progressbar.progressbar( "value", 0 );
+						}
+        
+						if ( val < {avanzamento_rendicontazioni} ) {
+						  setTimeout( progress, 20 );
+						  progressbar.progressbar( "value", val+1 );
+						}
+					  }
+
+					  setTimeout( progress, 500 );
+					});				
+				});
+			</script>
+		</div>
+		<div id='raggiungimento_medio_totale'>
+			<h2>Raggiungimento medio aziendale</h2>
+			<div id='grafico_raggiungimento_medio_totale'></div>
+			<div id='media_aziendale_label'>0%</div>
+			<div id='non_raggiungibili'>{n_non_raggiungibili}</div>			
+			<script>
+
+			$(document).ready(function(){
+				$( window ).resize(function() {
+					$('#grafico_raggiungimento_medio_totale').width($('#raggiungimento_medio_totale').width()*0.96);
+					grafico_raggiungimento_medio_totale.replot( { resetAxes:true, resize: 'Resize'} );
+					progress();
+				});
+				s1 = [0];
+				grafico_raggiungimento_medio_totale = $.jqplot('grafico_raggiungimento_medio_totale',[s1],{
+					seriesDefaults: {
+						renderer: $.jqplot.MeterGaugeRenderer,
+						rendererOptions: {
+							min: 0,
+							max: 100,
+							intervals:[25, 50, 75, 100],
+							ticks: [0, 25, 50, 75, 100],
+							intervalColors:['#cc6666', '#E7E658', '#93b75f', '#66cc66'],
+							animation: {
+								show: true
+							}
+						}
+					}
+				});
+
+
+				
+				function progress() {					
+					var val = grafico_raggiungimento_medio_totale.series[0].data[0][1] || 0;
+					
+					$( "#media_aziendale_label" ).text(val + "%");
+										
+					grafico_raggiungimento_medio_totale.series[0].data[0] = [1,val+1]; //here is the fix to your code
+					grafico_raggiungimento_medio_totale.replot();
+					
+					if ( val < {media_aziendale_cdr}) {
+					  setTimeout( progress, 5 );
+					}
+					else{
+						$( "#media_aziendale_label" ).text({media_aziendale_cdr} + "%");
+					}
+				}
+				setTimeout( progress, 500 );
+
+
+			});				
+			</script>
+		</div>
+	</div>
+	<!--EndSectRendicontazioni-->
+	<!--BeginSectNessunaRendicontazione-->
+	<h2>Nessuna rendicontazione effettuata per il periodo selezionato</h2>
+	<!--EndSectNessunaRendicontazione-->
+</div>

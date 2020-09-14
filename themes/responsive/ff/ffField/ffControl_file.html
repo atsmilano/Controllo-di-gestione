@@ -1,0 +1,52 @@
+<!--BeginSectControl-->
+<input type="file" id="{container}{id}{suffix_file}" name="{container}{id}{suffix_file}" class="{class}" {properties} />
+<!--EndSectControl-->
+
+<input type="hidden" id="{container}{id}{suffix_name}" 		name="{container}{id}{suffix_name}" 	value="{filename}" />
+<input type="hidden" id="{container}{id}{suffix_tmpname}" 	name="{container}{id}{suffix_tmpname}" 	value="{tmpname}" />
+<input type="hidden" id="{container}{id}{suffix_delete}" 	name="{container}{id}{suffix_delete}" 	value="" /> 
+<!--BeginSectAddon--> 
+<div class="{preview_class}">
+	<!--BeginShowPreview-->
+	<div class="uploaded-thumb {filename_base}" data-url="{filename_full}">
+		<div class="icons-abs">
+			<!--BeginSezEditAviary-->
+			<a href="javascript:void(0);" alt="modify" class="{butt_edit_class}" onclick="
+			    ff.load('ff.ffField.aviary', function() {
+    				ff.ffField.aviary.launch('{filename_base}', '{aviary_url}', '{aviary_hash_img}', '{aviary_key}', '{aviary_tools}', '{aviary_theme}', '{aviary_version}', '{aviary_post_url}');  
+			    });
+		    "></a>
+			<!--EndSezEditAviary-->
+
+			<!--BeginShowDelete-->
+		    <a href="javascript:void(0);" alt="delete" class="{butt_del_class}" onclick="<!--BeginSectBaseDel-->
+    			if(document.getElementById('{container}{id}{suffix_delete}').value == 'delete') {
+    				document.getElementById('{container}{id}{suffix_delete}').value = '';
+    				jQuery(this).closest('.uploaded-thumb').fadeIn();
+    			} else {
+    				document.getElementById('{container}{id}{suffix_delete}').value = 'delete';
+
+    				var tmpElem = jQuery('#{container}{id}{suffix_name}').val().split(',');
+    				tmpElem.splice(tmpElem.indexOf('{filevalue}'), 1);
+    				jQuery('#{container}{id}{suffix_name}').val(tmpElem.join(','));
+		            jQuery(this).closest('.uploaded-thumb').hide();
+    			}<!--EndSectBaseDel--><!--BeginSectWidgetDel-->javascript:ff.ffField.{widget_name}.del('{container}{id}', '{filename_base}');<!--EndSectWidgetDel-->
+		    "></a>
+		    <!--EndShowDelete-->	
+		</div>
+		<!--BeginShowPreviewImg-->	
+		<a href="{view_url}{view_query_string}" target="_blank" class="{showfile_plugin}" title="{show_name}<!--BeginShowFilesize--> ({show_size})<!--EndShowFilesize-->" {ajax_view_url}>
+			<img id="{filename_base}" class="image" src="{preview_url}{preview_query_string}" />
+		</a>
+		<!--EndShowPreviewImg-->
+        <!--BeginShowPreviewNoImg-->    
+        <span class="noimage{noimg_class}" title="{show_name}<!--BeginShowFilesize--> ({show_size})<!--EndShowFilesize-->"></span>
+        <!--EndShowPreviewNoImg-->
+		<!--BeginSectWritable-->
+		<input type="text" name="{container}{id}{suffix_name}_filename" value="{filevalue}" />
+		<!--EndSectWritable-->
+	</div>
+	<!--EndShowPreview-->
+ </div> 
+<!--EndSectAddon-->
+ 

@@ -1,0 +1,16 @@
+#configurazione_valutazioni #introduzione ol li {
+	margin-top: 9px;
+	margin-left: 12px;
+}
+
+#configurazione_valutazioni #introduzione ul {
+	list-style-type: disc;
+}
+
+#configurazione_valutazioni #introduzione ul li{
+	margin-left: 24px;
+}
+
+.ui-tooltip {
+        opacity: 1;
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config_data>		
+	<id>7</id>	
+	<ordine_caricamento>70</ordine_caricamento>
+	<attivazione>
+            <anno_inizio>2017</anno_inizio>
+            <anno_fine>0</anno_fine>	    
+        </attivazione>	
+</config_data>

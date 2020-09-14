@@ -1,0 +1,37 @@
+<span class="panel-container">
+	<a {toggle_properties} href="#panel-account">
+		<!--BeginSectUserAvatar-->
+		<img  class="{img_class}" width="40" height="40" src="{avatar}" alt="{account}" />
+		<!--EndSectUserAvatar-->
+		{user_account}
+	</a>
+	<div id="panel-account" class="{panel_class}">
+		<div class="{panel_body_class}">
+			<!--BeginSectAvatar-->
+			<div class="{panel_img_class}">
+				<img  class="{img_class}" width="80" height="80" src="{avatar}" alt="{account}" />
+			</div>
+			<!--EndSectAvatar-->
+			<div class="{panel_desc_class}">
+				<strong>{account}</strong>
+				<br />
+				{info}
+				<!--BeginSectElement--><!--BeginSectSeparator--> &nbsp; <!--EndSectSeparator--><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}><!--EndSectElement-->
+				<br /> 
+				<!--BeginSectProfile-->
+				<a class="{profile_class}" href="{user_profile}">{_edit_profile}</a>
+				<!--EndSectProfile-->				
+
+			</div>
+			<div class="{panel_links_class}">
+			
+			</div>
+		</div>
+		<div class="{panel_footer_class}">
+			<!--BeginSectUsers-->
+			<a class="{users_class}" href="{manage_users}">{_manage_users}</a>
+			<!--EndSectUsers-->
+			<a class="{logout_class}" href="{site_path}/restricted/login?frmAction=logout&ret_url={encoded_this_url}"> {_logout}</a>
+		</div>		
+	</div>
+</span>

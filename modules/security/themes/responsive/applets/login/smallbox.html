@@ -1,0 +1,12 @@
+<!--BeginLogin-->
+<label>utente:
+<input type="text" name="username" value="{username}" class="typetext" />
+</label>
+<label>password:
+<input type="password" name="password" value="{password}" class="typetext" />
+</label>
+<label><input type="submit" value="Entra" onclick="jQuery(this).closest('form').method = 'post'; document.getElementById('frmAction').value = 'login'; jQuery(this).closest('form').action = '{site_path}/login/?ret_url={ret_url}';" class="login" /></label>
+<!--EndLogin-->
+<!--BeginLogout-->
+<p>Benvenuto <strong>{firstname} {lastname}</strong> | <a href="#" onclick="jQuery(this).closest('form').method = 'post'; document.getElementById('frmAction').value = 'logout'; jQuery(this).closest('form').action = '{site_path}/login/?ret_url={ret_url}'; jQuery(this).closest('form').submit();">Esci da {CM_LOCAL_APP_NAME}</a> </p>
+<!--EndLogout-->

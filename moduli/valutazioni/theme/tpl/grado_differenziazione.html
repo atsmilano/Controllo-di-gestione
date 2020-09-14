@@ -1,0 +1,501 @@
+<div id="grado_differenziazione">
+    <!--BeginGradoDifferenziazione-->
+    <script>var chart; var dati_conteggi = new Array(); var colore_fasce = new Array();</script>
+    <div id="notifiche"></div>
+    <fieldset id="filtri">
+        <legend>Filtri</legend>
+        <div id="filter_valutazione_qualifica_gd">
+            <h4>Qualifica</h4>
+            <select id="select_valutazione_qualifica_gd" class="ajax-input">
+                <!--BeginSectValutazioneQualificaOption-->
+                <option value="{filter_valutazione_qualifica_gd_id}">{filter_valutazione_qualifica_gd_value}</option>
+                <!--EndSectValutazioneQualificaOption-->
+            </select>
+            <div id="spinner_qualifica" class="spinner-icon" style="display: none">
+                <i id="loading_qualifica" class="fa-spinner fa fa-lg fa-spin" ></i>
+            </div>
+        </div>
+        <div id="filter_valutazione_categoria_gd">
+            <h4>Tipologia scheda</h4>
+            <select id="select_valutazione_categoria_gd" class="ajax-input">
+                <option value>Tutto</option>
+                <!--BeginSectValutazioneCategoriaOption-->
+                <option value="{filter_valutazione_categoria_gd_id}">{filter_valutazione_categoria_gd_value}</option>
+                <!--EndSectValutazioneCategoriaOption-->
+            </select>
+            <div id="spinner_categoria" class="spinner-icon" style="display: none">
+                <i id="loading_categoria" class="fa-spinner fa fa-lg fa-spin" ></i>
+            </div>
+        </div>
+        <!--BeginSectTotali-->
+        <div id="filter_valutazione_totale_gd" >
+            <h4>Totale</h4>
+            <select id="select_totale_gd">
+                <!--BeginSectTotaliOption-->
+                <option value="{filter_totale_id}">{filter_totale_value}</option>
+                <!--EndSectTotaliOption-->
+            </select>
+        </div>
+        <!--EndSectTotali-->
+        <div id="filter_apply" style="float: right">
+            <div id="filter_apply_button" class="actionbt">
+                <i class="fa-filter fa-lg fa"></i>&nbsp;Applica filtri
+                <div class="spinner-icon" style="vertical-align:middle; float:right; display:none">
+                    <i class="fa-spinner fa fa-lg fa-spin" ></i>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <hr />
+    <fieldset id="report_fieldset">
+        <legend>Report</legend>
+        <div id="export_button" class="actionbt" style="float:right">
+            <i class="fa-download fa-lg fa"></i>Scarica pdf
+            <div id="spinner_export" class="spinner-icon" style="vertical-align:middle; float:right;display: none">
+                <i id="loading_export" class="fa-spinner fa fa-lg fa-spin" ></i>
+            </div>
+        </div>
+
+        <h2 id="titolo_grafico" class="titolo_grafico">Grado di differenziazione nell'utilizzo<br />della premialità <br />ANNO {anno}</h2>
+    <div id="report_grado_differenziazione">
+        <!--BeginReportGradoDifferenziazione-->
+            <div id="left_gd">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Qualifica</th>
+                        <th colspan="2" id="th_categoria_gd" style="vertical-align: middle"></th>
+                    </tr>
+                    <tr style="border: none"><th style="border: none">&nbsp;</th></tr>
+                    <tr>
+                        <th>Fascia</th>
+                        <th>Totale</th>
+                        <th>Totale %</th>
+                    </tr>
+                    </thead>
+
+                    <tbody style="border:1px solid black">
+                    <!--BeginFascePunteggi-->
+                    <tr class="bordo">
+                        <td>{fascia}</td>
+                        <td>{conteggio_fascia}</td>
+                        <td>{perc_fascia}</td>
+                    </tr>
+                    <script>
+                        dati_conteggi.push({name: '{fascia}', y: {conteggio_fascia}});
+                        colore_fasce.push("#{colore}");
+                    </script>
+                    <!--EndFascePunteggi-->
+                    <tr class="bordo">
+                        <td>Altro</td>
+                        <td>{conteggio_altro}</td>
+                        <td>{perc_altro}</td>
+                    </tr>
+                    <tr >
+                        <td class="totale-td"><strong>Totale<br />complessivo</strong></td>
+                        <td class="totale-td"><strong>{totale_fasce}</strong></td>
+                        <td class="totale-td"><strong>{totale_fasce_perc}</strong></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div style="height:0px; width:0px; overflow:hidden;" id="hidden-div">
+                <canvas id="print-canvas"  width="550" height="500"></canvas>
+            </div>
+
+            <div id="right_gd">
+                <div id="grafico_grado_differenziazione"  style="/*min-width: 500px; height: 400px; */ margin: 0 auto;max-width: 800px;">
+                    <h5 id="titolo-piechart"></h5>
+                    <canvas id="canvas" width="550" height="400"></canvas>
+                    <script>
+                        var myPieChart;
+                        var myHiddenPieChart;
+
+                        $("#export_button").show();
+                        $("#titolo_grafico").show();
+                        $(document).ready(function() {
+                            var qualifica_selected = $("#select_valutazione_qualifica_gd").find("option:selected").text();
+                            var categoria_selected = $("#select_valutazione_categoria_gd").find("option:selected").text();
+
+                            dati_conteggi.push({name: "Altro", y: {conteggio_altro}});
+                            colore_fasce.push("#3DFFD2");
+
+                            //array di dati per il grafico
+                            var dati_conteggi_y = new Array();
+                            dati_conteggi.forEach(function (data) {
+                                dati_conteggi_y.push(data.y);
+                            });
+
+                            //array label dati del grafico
+                            var dati_conteggi_name = new Array();
+                            dati_conteggi.forEach(function (data) {
+                                dati_conteggi_name.push(data.name);
+                            });
+
+                            var ctx = document.getElementById('canvas').getContext('2d');
+                            var container_stampa = document.getElementById('print-canvas').getContext('2d');
+
+                            document.getElementById('titolo-piechart').innerHTML = "Qualifica: " + qualifica_selected + "<br><small>Tipologia scheda: " + categoria_selected +"</small>";
+
+                            function creaGrafico(chart,isresponsive) {
+
+                            if(isresponsive == false){
+                                var titolo_grafico_pie = ["Qualifica: " + qualifica_selected, "Tipologia scheda: " + categoria_selected];
+
+                            }else{
+                                var titolo_grafico_pie = [];
+                            }
+
+                            var temp = new Chart(chart, {
+                                    type: 'outlabeledPie',
+                                    data: {
+                                        labels: dati_conteggi_name,
+                                        datasets: [{
+                                            backgroundColor: colore_fasce,
+                                            data: dati_conteggi_y,
+                                            borderWidth: 0.5,
+                                        }]
+                                    },
+                                    options: {
+                                        title: {
+                                            text:titolo_grafico_pie,
+                                            display: true,
+                                            fontColor: "#000",
+                                            fontStyle: "normal",
+                                            fontSize: 13,
+                                        },
+                                        devicePixelRatio:2,
+                                        aspectRatio:2,
+                                        responsive:isresponsive,
+                                        maintainAspectRatio:true,
+                                        tooltips: {
+                                            callbacks: {
+                                                title: function (tooltipItem, data) {
+                                                    return data['labels'][tooltipItem[0]['index']];
+                                                },
+                                                label: function (tooltipItem, data) {
+                                                    return "Totale: " + data['datasets'][0]['data'][tooltipItem['index']];
+                                                },
+                                                afterLabel: function (tooltipItem, data) {
+                                                    var dataset = data.datasets[tooltipItem.datasetIndex];
+                                                    var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                                                        return previousValue + currentValue;
+                                                    });
+                                                    var currentValue = dataset.data[tooltipItem.index];
+                                                    var percentage = Math.$round((currentValue / total) * 100, 2);
+                                                    return percentage + "%";
+                                                },
+
+                                            },
+                                            backgroundColor: 'rgba(245, 245, 245, 0.8)',
+                                            titleFontSize: 11,
+                                            titleFontStyle: '400',
+                                            titleFontColor: '#000',
+                                            bodyFontColor: '#000',
+                                            bodyFontStyle: '500',
+                                            outerRadius: 150,
+                                            bodyFontSize: 13,
+                                            displayColors: false,
+                                            position: 'nearest',
+                                        },
+                                        zoomOutPercentage: 50,
+                                        legend: {
+                                            display: true,
+                                            position: "right",
+                                            align: "center",
+                                            labels: {
+                                                fontColor: '#000',
+                                                fontStyle: "bold",
+                                                usePointStyle: true,
+                                            },
+                                        },
+                                        plugins: {
+                                            outlabels: {
+                                                text: '%p.2 (%v)', //il 2 sta per la cifra decimale
+                                                color: 'black',
+                                                stretch: 20,
+                                                lineWidth:1,
+                                                font: {
+                                                    resizable: false,
+                                                    minSize: 13,
+                                                    maxSize: 18,
+                                                    fontStyle: "bold",
+                                                },
+                                                backgroundColor: "rgba(245, 245, 245, 1)",
+                                                borderWidth:1,
+                                            }
+                                        },
+
+                                    },
+
+                                });
+                                if(isresponsive == true){
+                                    myPieChart = temp;
+                                    return myPieChart;
+                                }else{
+                                    myHiddenPieChart = temp;
+                                    return myHiddenPieChart;
+                                }
+
+                            }
+
+                           creaGrafico(ctx,true);
+                           creaGrafico(container_stampa,false);
+                        });
+                    </script>
+                </div>
+            </div>
+            <br />
+        <!--EndReportGradoDifferenziazione-->
+        <!--BeginErrorMsg-->
+            <div id="msg_report" class="warning">
+               {error_msg}
+            </div>
+            <script>
+                $("#export_button").hide();
+                $("#titolo_grafico").hide();
+            </script>
+        <!--EndErrorMsg-->
+
+    </div>
+    </fieldset>
+    <!--EndGradoDifferenziazione-->
+</div>
+<!--BeginScriptGd-->
+<script>
+    $(document).ready(function(){
+        setCategoriaThHtml();        
+    });
+
+    function setCategoriaThHtml() {
+        $("#th_categoria_gd").html($("#select_valutazione_qualifica_gd").find("option:selected").text());
+    }
+
+    function getActiveFiltersGd() {        
+        var valutazione_qualifica = $("#select_valutazione_qualifica_gd").find("option:selected").val();
+        var valutazione_categoria = $("#select_valutazione_categoria_gd").find("option:selected").val();
+        var totale = $("select#select_totale_gd").find("option:selected").val();
+        return {qualifica: valutazione_qualifica, categoria: valutazione_categoria, totale: totale /*, output: output*/};
+    }
+
+    function hideSpinners() {
+        //Vengono nascosti gli spinner
+        $(".spinner-icon").each(function() {
+            $(this).hide();
+        });
+    }
+
+    function applyFiltersGd() {
+        var filters = getActiveFiltersGd();
+        var data = {
+            qualifica: filters.qualifica,
+            categoria: filters.categoria,
+            totale: filters.totale
+        };
+
+        var request = $.ajax({
+            url: window.location.pathname + '/grado_diff/report.php?{globals}',
+            type: 'GET',
+            data: data,
+            cache: false,
+            contentType: false
+        });
+
+        request.done(function (data) {
+            hideSpinners();
+            //Vengono svuotati gli array contenenti i colori e punteggi delle fasce, viene ricostruito con il parsing del tpl
+            dati_conteggi = [];
+            colore_fasce = [];
+
+            $("#report_grado_differenziazione").empty();
+            $("#report_grado_differenziazione").html($(data).find("#report_grado_differenziazione").html());
+
+            $("#th_categoria_gd").empty();
+            setCategoriaThHtml();
+        });
+
+        request.fail(function () {
+            hideSpinners();
+            setError("Impossibile applicare i filtri selezionati");
+        });
+    }
+
+    $("#select_valutazione_qualifica_gd").change(function() {
+        $(this).siblings("div.spinner-icon").show();
+        var filters = getActiveFiltersGd();
+        var data = {
+            qualifica: filters.qualifica,
+            die: true
+        };
+
+        var request = $.ajax({
+            url: window.location.pathname + '/grado_diff/report.php?{globals}',
+            type: 'GET',
+            data: data,
+            cache: false,
+            contentType: false
+        });
+
+        request.done(function(data) {
+            hideSpinners();
+            $("#select_valutazione_categoria_gd").empty();
+            $("#select_valutazione_categoria_gd").html($(data).find("#select_valutazione_categoria_gd").html());
+
+            //Il filtro sul totale non viene renderizzato nel caso in cui esista solo un totale
+            if($("#filter_valutazione_totale_gd").length) {
+                $("#select_totale_gd").empty();
+                $("#select_totale_gd").html($(data).find("#select_totale_gd").html());
+            }
+        });
+
+        request.fail(function() {
+            hideSpinners();
+            setError("Impossibile applicare i filtri selezionati");
+        });
+    });
+
+    $("#select_valutazione_categoria_gd").change(function() {
+        //Il filtro sul totale non viene renderizzato nel caso in cui esista solo un totale
+        if($("#filter_valutazione_totale_gd").length) {
+            $(this).siblings("div.spinner-icon").show();
+            var filters = getActiveFiltersGd();
+            var data = {
+                qualifica: filters.qualifica,
+                categoria: filters.categoria,
+                die: true
+            };
+
+            var request = $.ajax({
+                url: window.location.pathname + '/grado_diff/report.php?{globals}',
+                type: 'GET',
+                data: data,
+                cache: false,
+                contentType: false
+            });
+
+            request.done(function(data) {
+                hideSpinners();
+                $("#select_totale_gd").empty();
+                $("#select_totale_gd").html($(data).find("#select_totale_gd").html());
+            });
+
+            request.fail(function() {
+                hideSpinners();
+                setError("Impossibile applicare i filtri selezionati");
+            });
+        }
+    });
+
+    $("#filter_apply_button").click(function() {
+        $(this).children("div.spinner-icon").show();
+        applyFiltersGd();
+    });
+  
+    $("#export_button").click(function() {
+
+        function toDataURL(chart){
+            //costruzione della payload da inviare al servizio di esportazione pdf
+            var right_gd = '<img src="' + chart.toBase64Image() + '" width="550px" height="500px"; />';
+            var exportData = {
+                titolo_grafico: $("#titolo_grafico").html(),
+                left: $("#left_gd").html(),
+                right: right_gd
+            }
+            return exportData;
+        }
+
+        var exportData = toDataURL(myHiddenPieChart);
+
+        $("#export_button").children("div.spinner-icon").show();
+
+        //Fetch dell'immagine del grafico in formato base64
+        //POST alla pagina per l'esportazione del pdf
+        $.post( window.location.pathname + '/grado_diff/export.php?{globals}', exportData)
+            .done(function(response) {
+                $("#export_button").children("div.spinner-icon").hide();
+                response = JSON.parse(response);
+                if(!response.err) {
+                    scaricaFile(response.pdf, response.filename); //Download del pdf
+                } else {
+                    setError(response.msg);
+                }
+                $("#export_button").children("div.spinner-icon").hide();
+            })
+
+            .fail(function(xhr) {
+                $("#export_button").children("div.spinner-icon").hide();
+                setError("Impossibile generare il pdf");
+                $("#export_button").children("div.spinner-icon").hide();
+            });
+        });
+
+    function setError(msg) {
+        $("#notifiche").removeClass("success");
+        $("#notifiche").addClass("error");
+        $("#notifiche").html(msg);
+    }
+    
+    function isIEBrowser() {
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf("MSIE ");
+
+        if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Converte una stringa base64 (COMPLETA) in un array
+     * @param data : stringa base64 completa
+     * @returns {Uint8Array} : array convertito corrispondente al base64
+     */
+    function base64ToArrayBuffer(data) {
+        data = data.replace(/^[^,]+,/, '');
+        data = data.replace(/\s/g, '');
+
+        var binaryString = atob(data);
+        var binaryLen = binaryString.length;
+        var bytes = new Uint8Array(binaryLen);
+
+
+        for (var i = 0; i < binaryLen; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        return bytes;
+    }
+
+    function scaricaFile(dataurl, filename) {
+        var contentType = 'application/pdf';
+
+        // Viene convertito in array il mio base64 così da poter creare un blob
+        var arrBuffer = base64ToArrayBuffer(dataurl);
+
+        // Viene creato il blob
+        var file = new Blob([arrBuffer], {type: contentType});
+
+        // Viene creato il link fittizio per il download del PDF
+        var a = document.createElement("a");
+        a.setAttribute("id", "downloadFilePDF");
+        a.download = filename;
+        a.dataset.downloadurl = [contentType, a.download, a.href].join(':');
+        a.href = window.URL.createObjectURL(file);
+
+        // Necessario per Firefox
+        document.body.appendChild(a);
+
+        if (!isIEBrowser()) {
+            // Browser differenti da Internet Explorer
+            a.click();
+        }
+        else {
+            // Internet Explorer
+            window.navigator.msSaveBlob(file, filename);
+        }
+    }
+
+</script>
+<!--EndScriptGd-->

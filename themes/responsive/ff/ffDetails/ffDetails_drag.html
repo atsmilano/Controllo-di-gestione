@@ -1,0 +1,82 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript">
+	$(function() {
+		$("#{component_id}_avaiable, #{component_id}_selected").sortable({
+			connectWith: 	["#{component_id}_avaiable, #{component_id}_selected"]
+			, items: 		"li:not(.not-draggable)"
+			, stop:		function (ev, ui) {}
+			, receive: 		function (ev, ui) {
+				var inputs = $(ui.item).children("input");
+				if (inputs.length) {
+					if (ev.target.id == "{component_id}_selected") {
+						inputs.replaceAttr("id", /^{component_id}_recordset_avl(.*)/, "{component_id}_recordset$1");
+						inputs.replaceAttr("name", /^{component_id}_recordset_avl(.*)/, "{component_id}_recordset$1");
+					} else {
+						inputs.replaceAttr("id", /^{component_id}_recordset(.*)/, "{component_id}_recordset_avl$1");
+						inputs.replaceAttr("name", /^{component_id}_recordset(.*)/, "{component_id}_recordset_avl$1");
+					}
+				}
+			}
+		});
+	});
+</script>
+<!--EndSectHeaders-->
+{outer_wrap_start}
+<div id="{component_id}" class="{component_class}">
+    <div id="{component_id}_hidden" class="hidden">
+        <input type="hidden" id="{component_id}_rows" name="{component_id}_rows" value="{rows}" />
+        <input type="hidden" id="{component_id}_delete_row" name="{component_id}_delete_row" value="" />
+        <!--BeginSectHidden-->
+        <input type="hidden" id="{component_id}_{hidden_name}" name="{component_id}_{hidden_name}" value="{hidden_value}" />
+        <!--EndSectHidden-->
+    </div>
+    
+    {inner_wrap_start}
+
+    {fixed_pre_content}
+
+	<!--BeginSectError-->
+	<div class="warning">{strError}</div>
+	<!--EndSectError-->
+
+	
+	<!--BeginSectTitle-->
+	<h3>{title}</h3>
+	{fixed_title_content}
+	<!--EndSectTitle-->
+
+	{fixed_heading_content}
+	<ul id="{component_id}_avaiable" class="sortable">
+		<li class="not-draggable">
+			Avaiable Elements
+		</li>
+		<!--BeginSectAvaiableRow-->
+		<li class="draggable{container_class}">
+			<!--BeginSectFormField-->
+			<!--BeginSectFieldHidden-->
+			<input type="hidden" name="{component_id}_{hidden_name}" value="{hidden_value}" /><!--EndSectFieldHidden-->
+			{label} {control}
+			<!--EndSectFormField-->
+		</li>
+		<!--EndSectAvaiableRow-->
+	</ul>
+	<ul id="{component_id}_selected" class="sortable">
+		<li class="not-draggable">
+			Selected Elements
+		</li>
+		<!--BeginSectSelectedRow-->
+		<li class="draggable">
+			<!--BeginSectSelFormField-->
+			<!--BeginSectSelFieldHidden-->
+			<input type="hidden" name="{component_id}_{hidden_name}" value="{hidden_value}" /><!--EndSectSelFieldHidden-->
+			{label} {control}
+			<!--EndSectSelFormField-->
+		</li>
+		<!--EndSectSelectedRow-->
+	</ul>
+	{fixed_post_content}
+    {inner_wrap_end}
+</div>
+{outer_wrap_end}
+<!--BeginSectFooters-->
+<!--EndSectFooters-->

@@ -1,0 +1,183 @@
+<div id="apertura_valutazioni_loading"><i class="fa fa-spinner fa-spin fa-5x" title="Caricamento..."></i></div>
+<div id="elenco_non_valutati">
+    <h1>Elenco non valutati periodo</h1>
+    <div class="selezione_parametri">		
+        <!--BeginSectSelezionePeriodi-->
+        <h2>Selezione del periodo di valutazione</h2>		
+        <div>		
+            <label>Periodo: </label>
+            <select name='periodo_non_valutati_select' id='periodo_non_valutati_select'>					
+                <!--BeginSectOptionPeriodi-->
+                <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                <!--EndSectOptionPeriodi-->
+            </select>
+            <div id="apri_scheda_valutazione" class="actionbt">
+                <i class="fa-calculator fa-lg fa"></i>Apertura schede valutazioni
+            </div>
+            <div id="container_txt_sel_desel" onclick="changeStatus()" class="actionbt" style="margin-right: 9px">
+                <span id="txt_sel_desel">Des</span>eleziona tutto
+            </div>
+            <div id='conferma_apertura' style="display: none">
+                <h3>Confermare l'apertura delle schede di valutazione selezionate?</h3>
+                <a id='conferma_si' class='conferma_si confirm_link'>Conferma</a>
+                <a id='conferma_no' class='conferma_no confirm_link'>Annulla</a>
+            </div>
+            <script>
+                function changeStatus() {
+                    const current_txt = changeButtonText();
+                    changeCheckboxStatus(current_txt);
+                }
+                
+                function changeButtonText() {
+                    const current_txt = $("#txt_sel_desel").text();
+                    $("#txt_sel_desel").empty();
+                    switch (current_txt) {
+                        case "Des":
+                            $("#txt_sel_desel").text("S");
+                            break;
+                        case "S":
+                            $("#txt_sel_desel").text("Des");
+                            break;
+                    }
+                    return current_txt;
+                }
+                
+                function changeCheckboxStatus(current_txt) {
+                    $("input[type='checkbox'].aprimatricola:checkbox").each(function (index, item) {
+                        switch (current_txt) {
+                            case "Des":
+                                $(item).prop("checked", false);
+                                break;
+                            case "S":
+                                $(item).prop("checked", true);
+                                break;
+                        }
+                    });
+                }
+                
+                $("#periodo_non_valutati_select").change(function () {
+                    var current_index = $("#tabs").tabs("option", "active");
+                    selected_value = $(this).children(":selected").attr("value");
+                    url = $("#a_elenco_non_valutati").attr("href");
+                    if (url.search("periodo_non_valutati_select") > 0) {
+                        url = url.replace(/(periodo_non_valutati_select=).*?(&|$)/, '$1' + selected_value + '$2');
+                    } else {
+                        url = url + "periodo_non_valutati_select=" + selected_value;
+                    }
+                    $("#a_elenco_non_valutati").attr("href", url);
+                    $("#tabs").tabs('load', current_index);
+                });
+                
+                $("#apri_scheda_valutazione").click(function () {
+                    $("#conferma_apertura").show();
+                });
+
+                $('.conferma_si').click(function () {
+                    if ($('#conferma_apertura').is(':visible')) {
+                        $("#conferma_apertura").hide();
+                        $("#apertura_valutazioni_loading").modal("show");
+                        if (!$("#no_personale").is(":visible")) {
+                            matricola_list = {matricola_list: JSON.stringify(getMatricolaListChecked())};
+                            $.ajax({
+                                url: window.location.pathname + "/elenco_schede/apertura_valutazioni.php?periodo="+$("#periodo_non_valutati_select option:selected").val(),
+                                contentType: 'application/json',
+                                data: JSON.stringify(matricola_list),
+                                dataType: "json",
+                                type: "POST",
+                            })
+                            .success(function (data) {
+                                $("#txt_esito_operazione").empty();
+                                $("#txt_esito_operazione").html(data);
+                                $("#txt_esito_operazione").show();
+                            })
+                            .fail(function (error){
+                                $("#txt_esito_operazione").empty();
+                                $("#txt_esito_operazione").html("Errore durante l'apertura delle schede");
+                                console.log(error);
+                                $("#txt_esito_operazione").show();
+                            })
+                            .always(function() {
+                                $("#apertura_valutazioni_loading").modal("hide");
+                                setTimeout(function(){ $("#txt_esito_operazione").hide(); }, 5000);
+                                setTimeout(function(){ $("#periodo_non_valutati_select").change(); }, 5001);
+                            });
+                        }
+                        else {
+                            // Non risulta esserci personale senza scheda di valutazione
+                            alert("Tutte le schede di valutazione risultano aperte per il periodo selezionato");
+                        }
+                    }
+                });
+
+                $('.conferma_no').click(function () {
+                    if ($('#conferma_apertura').is(':visible')) {
+                        $("#conferma_apertura").hide();
+                    }
+                });
+                
+                function getMatricolaListChecked() {
+                    let matricola_list = Array();
+                    $("input[type='checkbox'].aprimatricola:checkbox:checked").each(function (index, item) {
+                        let matricola = item.value;
+                        matricola_list.push(matricola);                        
+                    });                    
+                    return matricola_list;
+                }
+                
+                function openDetail(matricola) {
+                    const url = window.location.pathname + 
+                            "/elenco_non_valutati/dettaglio_elenco_non_valutati.php?"+
+                            "periodo="+$("#periodo_non_valutati_select option:selected").val()+
+                            "&matricola="+matricola+"&{globals}";
+                    
+                    ff.ffPage.dialog.doOpen('open_detail_matricola_dialog', url);
+                }
+            </script>
+        </div>
+        <!--EndSectSelezionePeriodi-->
+        <!--BeginSectNoPeriodi-->
+        <p class='error'>Nessun periodo definito per l'anno selezionato</p>
+        <!--EndSectNoPeriodi-->
+    </div>
+    <div id="txt_esito_operazione" class="warning" style="display: none"></div>
+    <div id="personale_non_valutato">
+        <!--BeginSectPersonaleNonValutato-->
+        <table>		
+            <caption>Personale senza scheda di valutazione nel periodo ({n_non_valutati})</caption>			
+            <thead>
+                <tr>
+                    <th>Dipendente</th>
+                    <th>CDR</th>
+                    <th>CDR riferimento<br>valutazione</th>
+                    <th>Valutatore<br>suggerito</th>
+                    <th>Tipologia<br>scheda dipendente</th>
+                    <th>Anomalie</th>
+                    <th>Apri scheda di valutazione</th>
+                </tr>
+            </thead>		
+            <tbody>
+                <!--BeginSectDettagliPersonaleNonValutato-->											
+                <tr class="{personale_class}">
+                    <td onclick="openDetail({matricola})">{dipendente}</td>									
+                    <td onclick="openDetail({matricola})">
+                        <!--BeginSectCdrAssociati-->											
+                        {cdr} - {perc_testa}%<br>
+                        <!--EndSectCdrAssociati-->
+                    </td>	
+                    <td onclick="openDetail({matricola})">{cdr_riferimento}</td>
+                    <td onclick="openDetail({matricola})">{valutatore_suggerito}</td>
+                    <td onclick="openDetail({matricola})">{categoria_dipendente}</td>					                                                
+                    <td>{anomalie}</td>
+                    <td>
+                        <input type="checkbox" class="aprimatricola" value="{matricola}" id="open_{matricola}" checked />
+                    </td>
+                </tr>																																														
+                <!--EndSectDettagliPersonaleNonValutato-->					
+            </tbody>
+        </table>
+        <!--EndSectPersonaleNonValutato-->
+        <!--BeginSectNoPersonaleNonValutato-->
+        <p id="no_personale" class='warning'>Non esiste personale non valutato per il periodo selezionato</p>
+        <!--EndSectNoPersonaleNonValutato-->
+    </div>	
+</div>

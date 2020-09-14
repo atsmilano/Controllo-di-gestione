@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+	<rule>
+		<priority>TOP</priority>
+		<source>.*</source>
+		<destination>
+			<module>security</module>
+			<url>/session$0</url>
+		</destination>
+		<process_next />
+		<accept_path_info />
+	</rule>
+	<rule>
+		<priority>VERY_HIGH</priority>
+		<source>^/restricted(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/auth$0</url>
+		</destination>
+		<process_next />
+		<accept_path_info />
+		<reverse>/</reverse>
+		<index>999</index>
+	</rule>
+	<rule id="mod_sec_login">
+		<priority>VERY_HIGH</priority>
+		<source>^/restricted/login(/[^/]*){0,1}$</source>
+		<destination>
+			<module>security</module>
+			<url>/login$1</url>
+		</destination>
+		<reverse>/restricted/login</reverse>
+	</rule>
+    <rule id="mod_sec_social">
+        <priority>VERY_HIGH</priority>
+		<source>^/restricted/login/social(/[^/]*)?(/[^/]*)?$</source>
+        <destination>
+            <module>security</module>
+            <url>/social$1$2</url>
+        </destination>
+        <reverse>/restricted/login/social</reverse>
+    </rule>  
+    <rule id="mod_sec_check_session">
+        <priority>HIGH</priority>
+        <source>/services/mod_security/check_session</source>
+		<destination>
+			<module>security</module>
+			<url>/services/check_session</url>
+		</destination>
+        <index>999</index>
+		<reverse>/services/mod_security/check_session</reverse>
+    </rule>
+	<rule id="mod_sec_recover">
+		<priority>NORMAL</priority>
+		<source>^/restricted/recover(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/recover$1</url>
+		</destination>
+		<reverse>/restricted/recover</reverse>
+	</rule>
+	<rule id="mod_sec_recover_success">
+		<reverse>/restricted/recover/success</reverse>
+	</rule>
+	<rule id="mod_sec_change_password">
+		<priority>NORMAL</priority>
+		<source>^/restricted/change_password(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/change_password$1</url>
+		</destination>
+		<reverse>/restricted/change_password</reverse>
+	</rule>
+
+	<rule id="mod_sec_profile">
+		<priority>NORMAL</priority>
+		<source>^/restricted/profile(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/profile$1</url>
+		</destination>
+		<reverse>/restricted/profile</reverse>
+	</rule>
+	<!--<rule id="mod_sec_register">
+		<priority>NORMAL</priority>
+		<source>^/registrati(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/register$1</url>
+		</destination>
+		<reverse>/registrati</reverse>
+	</rule>
+	-->
+	<rule id="mod_sec_users">
+		<priority>NORMAL</priority>
+		<source>^/restricted/users(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/users$1</url>
+		</destination>
+		<reverse>/restricted/users</reverse>
+	</rule>
+	<rule id="mod_sec_profiling">
+		<priority>NORMAL</priority>
+		<source>^/restricted/profiling(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/profiling$1</url>
+		</destination>
+		<reverse>/restricted/profiling</reverse>
+	</rule>
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/restricted/crypt(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/crypt$1</url>
+		</destination>
+		<reverse>/restricted/crypt</reverse>
+	</rule>
+	<rule id="mod_sec_domains">
+		<priority>NORMAL</priority>
+		<source>^/restricted/domains(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/domains$1</url>
+		</destination>
+		<reverse>/restricted/domains</reverse>
+	</rule>
+	<!--<rule id="mod_sec_setparams">
+		<priority>NORMAL</priority>
+		<source>^/services/security/setparams(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/services/set_params</url>
+		</destination>
+	</rule>-->
+	<!--<rule>
+		<priority>NORMAL</priority>
+		<source>^/services/security/checkaccounts</source>
+		<destination>
+			<module>security</module>
+			<url>/services/checkaccounts</url>
+		</destination>
+	</rule>
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/services/resources-json/mod-security(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/services/resources</url>
+		</destination>
+	</rule>
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/services/fb_auth(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/services/fb_auth</url>
+		</destination>
+	</rule>
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/services/janrain_auth(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/services/janrain_auth</url>
+		</destination>
+	</rule>-->
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/oauth2/(.+)</source>
+		<destination>
+			<module>security</module>
+			<url>/oauth2/$1</url>
+		</destination>
+	</rule>
+	<rule>
+		<priority>NORMAL</priority>
+		<source>^/apiserver/(.*)</source>
+		<destination>
+			<module>security</module>
+			<url>/apiserver/$1</url>
+		</destination>
+	</rule>
+	<rule id="mod_sec_oauth2_service">
+		<priority>NORMAL</priority>
+		<source>^/services/oauth2/(.+)</source>
+		<destination>
+			<module>security</module>
+			<url>/services/oauth2/$1</url>
+		</destination>
+		<reverse>/services/oauth2</reverse>
+	</rule>
+</configdata>

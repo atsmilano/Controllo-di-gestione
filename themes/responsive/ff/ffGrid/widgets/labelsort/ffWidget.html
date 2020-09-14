@@ -1,0 +1,16 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffGrid.labelsort", function () {
+		<!--BeginSectIstance-->
+		jQuery("#{component}").jTableSort({
+			"resource_id"		: "{resource_id}",
+			"service_path"		: "{service_path}",
+			"onHeadGetOrdered"	: ff.ffGrid.labelsort.onHeadGetOrdered
+		});
+		<!--EndSectIstance-->
+	});
+</script>
+<!--EndSectFooters-->

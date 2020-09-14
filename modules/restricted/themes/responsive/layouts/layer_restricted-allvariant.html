@@ -1,0 +1,84 @@
+<!--
+  ~ VGallery: CMS based on FormsFramework
+  ~ Copyright (C) 2004-2015 Alessandro Stucchi <wolfgan@gmail.com>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~  @package VGallery
+  ~  @subpackage core
+  ~  @author Alessandro Stucchi <wolfgan@gmail.com>
+  ~  @copyright Copyright (c) 2004, Alessandro Stucchi
+  ~  @license http://opensource.org/licenses/gpl-3.0.html
+  ~  @link https://github.com/wolfgan43/vgallery
+  -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.3/jquery.nicescroll.min.js" ></script>
+<script>
+    $(document).ready(function () {
+        $("#mainmenu").niceScroll({
+            cursorcolor:"#1976d2",
+            cursorborder:"0",
+            cursorwidth:"5px"
+        });
+        $('.mainmenu_toggle').on('click', function () {
+            $('#mainmenu, #content').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+        $('#mainmenu a').on('click', function () {
+            $("#mainmenu").getNiceScroll().resize();
+        });
+    });
+</script>
+<div class="wrapper">
+    <nav id="mainmenu" class="sidemenu -closed -noicon -inverse">
+        <div class="sidemenu__head">
+            <div class="text-center"> {brand} </div>
+            <div class="adminmenu"> {admin} </div>
+            {account}
+            {search}
+        </div>
+            {sidebar}
+    </nav>
+    <section id="content">
+        <header class="header">
+            <div class="row header__top -fixed">
+                {topbar}
+                <div class="col-xs-8 col-sm-10 header__left">
+                    <a href="javascript:void(0);" class="mainmenu_toggle header__menutoggler navbar-btn" >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                    <h1>{page-title}</h1>
+                    {navbar}
+                </div>
+                <div class="col-xs-4 col-sm-2 header__right"> {favorite} {lang}{accountpanel}
+                </div>
+            </div>
+            <div class="row header__bar">
+                <div class="col-sm-6"> {tab-header} </div>
+                <div class="col-sm-6">{breadcrumb}</div>
+            </div>
+        </header>
+        <section class="pagecontent"> {content} </section>
+        <!--BeginSectFooter-->
+        <footer class="row footer">
+            <div class="footer__copy -fixed">
+                <p>{_developer_label} <a href="{_developer_url}">{_developer_name}</a></p>
+            </div>
+        </footer>
+        <!--EndSectFooter-->
+    </section>
+    <div class="cmppanel">{rightcol}</div>
+</div>

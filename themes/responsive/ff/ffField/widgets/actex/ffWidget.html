@@ -1,0 +1,135 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript">
+	ff.pluginAddInitLoad("ff.ffField.actex", function () {
+		ff.ffField.actex.init({
+			<!--BeginSectInnerUrl-->innerURL			: "{innerURL}",<!--EndSectInnerUrl-->
+			"icons"                   		: {
+	                	"caret"                 : "{icon_caret_down}"
+	                	, "delete"              : '{icon_delete}'
+	                    , "plus"                : '{icon_plus}'
+	                    , "minus"               : '{icon_minus}'
+	                    , "loader"				: '{icon_loader}'
+	                }
+	                , "frameworkCSS"        : {
+	                	"item"                  : "{actex_multi_item}"
+	                	, "badge"               : '{actex_multi_badge}'
+	                }
+		});	
+	});
+</script>
+<!--EndSectHeaders-->
+
+<!--BeginSectControl-->
+<div class="{actex_container}"> 
+	{dialogaddlink}
+	<span id="actex_{container}{id}" class="{data_class}" {data_properties}></span>
+	<span class="{actions_class}">
+		<!--BeginSectDebug-->
+			<a class="{icon_debug}" href="#" onclick="window.open('{innerURL}&data_src={data_src}', '_blank')"></a>
+		<!--EndSectDebug-->
+		{dialogeditlink}
+		{dialogdeletelink}
+		<!--BeginSectCombo-->
+			<a class="{icon_caret_down}" id="actex_{container}{id}_combo"></a>
+		<!--EndSectCombo-->
+	</span>
+</div>
+<!--BeginSectMulti-->
+<ul class="{actex_multi_container}">
+	<!--BeginSectMultiElem-->
+	<li class="{actex_multi_item}" data-id="{value}">{desc}<a class="{actex_multi_badge}" href="javascript:ff.ffField.actex.del('{container}{id}', '{value}');"><i class="{icon_delete}"></i></a></li>
+	<!--EndSectMultiElem-->
+</ul>
+<!--EndSectMulti-->
+<!--EndSectControl-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+jQuery(function() {
+ff.pluginAddInit("ff.ffField.actex", function () {
+	<!--BeginSectBinding-->
+	var tmp = ff.ffField.actex.factory({
+		"id"			: "{container}{id}"
+		, "component"	: "{component}"
+		, "father"		: {father}
+		, "childs"		: [
+			<!--BeginSectChild-->
+			{child}
+			<!--EndSectChild-->
+		]
+		<!--BeginSectData-->
+		, "data" : [
+			<!--BeginSectDataEl-->
+			{data_comma} [
+				{father_value}
+				, "{value}"
+				, "{desc}"
+			]
+			<!--EndSectDataEl-->
+		]
+		<!--EndSectData-->
+		, "selected_value" : {selected_value}
+		, "selected_label" : "{selected_label}"
+		, "multi" : {multi}		
+		, "options"		: {
+			"name"					: "{name}"
+			, "service"				: {service}
+			, "properties"			: '{properties}'
+			, "select_one"			: {select_one}
+			, "select_one_val"		: "{select_one_val}"
+			, "select_one_label"	: "{select_one_label}"
+			, "select_noone"		: {select_noone}
+			, "select_noone_val"	: "{select_noone_val}"
+			, "select_noone_label"	: "{select_noone_label}"
+			, "data_src"			: "{data_src}"
+			, "class"				: "{class}"
+			, "limit_select"		: {limit_select}
+			, "disabled"			: {disabled}
+			, "control_type"		: "{control_type}"
+            , "separator"			: "{separator}"
+            , "addPlus"				: {add_plus}
+            , "hideEmpty"			: {hide_empty}
+            , "reset_childs"		: {reset_childs}
+            , "use_cache"			: {use_cache}
+			, "autocomplete"		: {
+				"enable"			: {autocomp_enable}
+				, "ajax"			: {autocomp_ajax}
+				, "limit"			: "{autocomp_limit}"
+			}
+            <!--BeginSezPlugin-->
+            , "plugin" : {
+				"name"		: "{plugin_name}",
+				"path"		: "{plugin_path}",
+				"css"		: "{plugin_css}",
+				"js"		: "{plugin_js}",
+				"params"	: {plugin_params}
+            }
+            <!--EndSezPlugin-->
+		}
+	});
+	<!--BeginSectEventChange-->
+	tmp.addEvent({
+		"event_name"		: "change"
+		, "func_name"		: {on_change}
+	});
+	<!--EndSectEventChange-->
+	<!--BeginSectEventUpdateBt-->
+	tmp.addEvent({
+		"event_name"		: "updatebt"
+		, "func_name"		: {on_update_bt}
+	});
+	<!--EndSectEventUpdateBt-->
+	<!--BeginSectEventRefill-->
+	tmp.addEvent({
+		"event_name"		: "refill"
+		, "func_name"		: {on_refill}
+	});
+	<!--EndSectEventRefill-->
+	<!--EndSectBinding-->
+	<!--BeginSectBindingFoot-->
+		ff.ffField.actex.refill("{container}{id}");
+	<!--EndSectBindingFoot-->
+});
+});
+</script>
+<!--EndSectFooters-->

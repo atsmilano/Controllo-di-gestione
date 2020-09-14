@@ -1,0 +1,51 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.3/jquery.nicescroll.min.js" ></script>
+<script>
+    $(document).ready(function () {
+        $("#mainmenu").niceScroll({
+            cursorcolor:"#1976d2",
+            cursorborder:"0",
+            cursorwidth:"5px"
+        });
+        $('.mainmenu_toggle').on('click', function () {
+            $('#mainmenu, #content').toggleClass('active');
+            $(this).toggleClass('active');
+        });
+        $('#mainmenu a').on('click', function () {
+            $("#mainmenu").getNiceScroll().resize();
+        });
+    });
+</script>
+<div class="wrapper -fixedtop">
+    <div class="col-xs-12 header__fixed-top"><div class="col-xs-12">{brand} <a href="javascript:void(0);" class="mainmenu_toggle header__menutoggler navbar-btn" >
+        <span></span>
+        <span></span>
+        <span></span>
+    </a> <div class="col-xs-4 div-right" align="right">{favorite}</div> <div class="col-xs-4 div-right" align="right">{lang}</div>
+        <div class="col-xs-4 div-right panel-account" align="right">{accountpanel}</div></div>
+    </div>
+    <nav id="mainmenu" class="sidemenu -inverse">
+
+        {topbar} </nav>
+    <section id="content">
+        <header class="header {fullbar_class}">
+            <div class="row header__top">
+                <div class="col-xs-12 col-sm-12 header__left">
+                    <h1>{page-title}</h1>
+                </div>
+            </div>
+            <div class="row header__bar">
+                <div class="col-sm-6"> {tab-header} </div>
+                <div class="col-sm-6">{breadcrumb}</div>
+            </div>
+        </header>
+        <section class="pagecontent"> {content} </section>
+        <!--BeginSectFooter-->
+        <footer class="row footer">
+            <div class="footer__copy">
+                <p>{_developer_label} <a href="{_developer_url}">{_developer_name}</a></p>
+            </div>
+        </footer>
+        <!--EndSectFooter-->
+    </section>
+    <div class="overlay"><div>
+    </div></div></div>

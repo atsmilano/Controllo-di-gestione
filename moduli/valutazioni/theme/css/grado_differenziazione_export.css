@@ -1,0 +1,43 @@
+#grado_differenziazione_pdf #left_gd thead tr th{
+    width: 100px;
+    border: 1px solid black;
+}
+
+#grado_differenziazione_pdf #left_gd table tr td, #grado_differenziazione #left_gd table tr th{
+    text-align:center;
+}
+
+#grado_differenziazione_pdf #left_gd table{
+    border-collapse: collapse;
+    border-bottom: 1px solid black;
+}
+
+#grado_differenziazione_pdf tr.bordo{
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+#grado_differenziazione_pdf .totale-td {
+    border: 1px solid black;
+    vertical-align: middle
+}
+
+#grado_differenziazione_pdf #left_gd{
+    margin-top:1%;
+    width: 25%;
+    float: left;
+    margin-left: 25px;
+}
+
+#grado_differenziazione_pdf #right_gd{
+    width: 60%;
+    float: right;
+    border: 1px solid black;
+    margin-right: 30px;
+}
+
+#grado_differenziazione_pdf #report_grado_differenziazione {
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 50px;
+}

@@ -1,0 +1,274 @@
+<div id="matrice_pesi">	
+	<h2>Distribuzione obiettivi - cdr / assegnazione pesi</h2>	
+	<div id="notifiche_pesi_cdr" class="notifiche"></div>
+	<div id="loading_image"><img src="{module_theme_path}\images\matrice_loader.gif"></div>        
+	<!--BeginMatricePesiCdr-->
+            <!--BeginLinkEstrazione-->
+                <a id='estrazione_link' class='link_estrazione' href='./estrazioni/assegnazioni_cdr.php?{globals}'>
+                <div id='estrazione' class='estrazione'>Estrazione .xls</div></a>            
+                <br>
+            <!--EndLinkEstrazione-->
+		<div id="legenda">
+			Legenda:&nbsp;
+			<span class="azioni_definite">Azioni definite</span>
+			<span class="azioni_non_definite">Azioni non definite</span>
+                        <span class="obiettivo_non_assegnato_da_cdr">Già assegnato (NA - Non assegnabile dal CdR)</span>
+		</div>
+		<!--BeginAzioniMatrice-->
+		<div id="edit_pesi_cdr" class="actionbt"><i class="fa-edit fa-lg fa"></i>&nbsp;Modifica pesi</div>
+		<div id="salvataggio_edit_pesi_cdr" class="actionbt"><i class="fa-check-square fa-lg fa"></i>&nbsp;Salva</div>
+		<div id="chiusura_edit_pesi_cdr" class="actionbt"><i class="fa-undo fa-lg fa"></i>&nbsp;Annulla</div>
+		<!--EndAzioniMatrice-->                
+                <table>
+                        <script>
+                            var obiettivi_cdr = new Array();
+                        </script>
+			<thead>
+				<tr>
+					<th id="obcdr_0_0" class="intestazione">Cdr / Obiettivo</th>	
+					<!--BeginObiettivi-->		
+					<th id="obcdr_{riga}_{colonna}" class="rotated_text colonna_{colonna}" title="{desc_obiettivo}">{codice_obiettivo}</th>					                                        
+                                        <!--EndObiettivi-->
+					<th>T<br>o<br>t<br>a<br>l<br>e</th>
+				</tr>
+			</thead>
+			<tbody>                           
+                                <!--BeginCdr-->                                    
+                                    <tr>					
+                                        <td id="obcdr_{riga}_{colonna}" class="peso_obiettivo_cdr intestazione riga_{riga}" title="{desc_cdr}">{codice_cdr}</td>
+                                        <!--BeginObiettivoCdr-->
+                                        <script>
+                                            obiettivi_cdr.push(["obcdr_{riga}_{colonna}", "{id_obiettivo}", "{codice_cdr}"]);
+                                        </script>
+                                        <td id="obcdr_{riga}_{colonna}" class="peso_obiettivo_cdr {azioni_class} {modificabile_class} riga_{riga} colonna_{colonna}">
+                                                <!--BeginPesoObiettivoCdr-->
+                                                <a id="{id_obiettivo_cdr}"><div>{peso_obiettivo_cdr}</div></a>
+                                                <input id="input_{id_obiettivo_cdr}" name="input_{id_obiettivo_cdr}" type="text" value="">
+                                                <!--EndPesoObiettivoCdr-->								
+                                        </td>					
+                                        <!--EndObiettivoCdr-->	
+                                        <td id="tot_{riga}" class="tot_obiettivi_cdr riga_{riga}">{totale_obiettivi_cdr}</td>
+                                    </tr>					
+                                <!--EndCdr-->
+                                <!--BeginNoCdr-->
+                                    <td colspan="{obiettivi_colspan}">Nessun CDR afferente.</td>
+                                <!--EndNoCdr-->
+			</tbody>
+		</table>
+	<!--EndMatricePesiCdr-->
+	<!--BeginNoObiettivi-->
+		<p>
+			Nessun obiettivo definito per il CDR nell'anno selezionato.
+		</p>
+	<!--EndNoObiettivi-->
+</div>
+<div id="obiettivo_cdr_dialog"></div>
+<script>	
+	//riga e colonna evidenziate
+	$(".peso_obiettivo_cdr")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+			$(".colonna_"+id_parts[2]).addClass("highlighted");
+			$(this).removeClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");
+			$(".colonna_"+id_parts[2]).removeClass("highlighted");
+		})
+	;	
+	
+	$(".tot_obiettivi_cdr")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");			
+		})
+	;	
+	
+	$(".intestazione")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");			
+		})
+	;
+	
+	$(".rotated_text")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".colonna_"+id_parts[2]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".colonna_"+id_parts[2]).removeClass("highlighted");			
+		})
+	;
+	
+	//edit dati
+	$("#edit_pesi_cdr").click(function(){
+		$("#edit_pesi_cdr").hide();
+		$(".peso_obiettivo_cdr.modificabile").each(function(){
+			id = $(this).attr("id");
+			$(this).children("a").hide();
+			$(this).children("input").show();
+			$(this).children("input").val($(this).children("a").children("div").html());
+		});
+		$("#chiusura_edit_pesi_cdr").show();
+		$("#salvataggio_edit_pesi_cdr").show();
+	});
+	
+	$("#chiusura_edit_pesi_cdr").click(function(){
+		$("#chiusura_edit_pesi_cdr").hide();
+		$(".peso_obiettivo_cdr.modificabile").each(function(){
+			id = $(this).attr("id");
+			$(this).children("a").show();
+			$(this).children("input").hide();						
+		});
+		$("#edit_pesi_cdr").show();
+		$("#salvataggio_edit_pesi_cdr").hide();
+	});
+	
+	$("#salvataggio_edit_pesi_cdr").click(function(){		
+		//vengono recuperati tutti i punteggi variati
+		var punteggi_variati = [];
+		$(".peso_obiettivo_cdr.modificabile").each(function(){
+			id = $(this).attr("id");                        
+			if($(this).children("a").children("div").html() !== $(this).children("input").val()){				
+				id_ob_cdr = $(this).children("a").attr("id");     
+                                //viene recuperato l'array con le informazioni dell'obiettivo_cdr                               
+                                var i;  
+                                for (i=0; i<obiettivi_cdr.length; i++) {
+                                    //vengono accodate all'array le informazioni della relazione eventualmente esistente e punteggio variato
+                                    if (obiettivi_cdr[i][0] === id) {
+                                        punteggi_variati.push(obiettivi_cdr[i].concat([id_ob_cdr, $(this).children("input").val()]));       
+                                        i = obiettivi_cdr.length;
+                                    }
+                                }                                                                                                										
+			}			
+		});	 
+		// nel caso sia variato almeno un punteggio si procede con il salvataggio su db (chiamata ajax)
+		if (punteggi_variati.length > 0){
+			$("#loading_image").modal("show");
+		
+			var data = {
+				a: punteggi_variati
+			};
+
+			var request = $.ajax({
+                                        url: window.location.pathname + '/save_peso_ob_cdr.php?{globals}',
+                                        type: 'GET',
+                                        data: data,									
+                                        cache: false,
+                                        contentType: false,
+			});
+			request.done(function(data) {				
+				response = JSON.parse(data);						
+				if (response.esito === "success"){					
+					$("#edit_pesi_cdr").show();
+					$("#chiusura_edit_pesi_cdr").hide();
+					$("#salvataggio_edit_pesi_cdr").hide();
+					$(".peso_obiettivo_cdr.modificabile").each(function(){
+						$(this).children("a").children("div").html($(this).children("input").val());						
+						$(this).children("a").show();
+						$(this).children("input").hide();
+					});
+				}
+				$("#notifiche_pesi_cdr").removeClass("error");
+				$("#notifiche_pesi_cdr").removeClass("success");
+				$("#notifiche_pesi_cdr").addClass(response.esito);
+				$("#notifiche_pesi_cdr").html(response.messaggio);                                	
+				$("#notifiche_pesi_cdr").show("blind");		
+                                
+                                if(response.esito === "success") {                                    
+                                    var current_index = $("#tabs").tabs("option","active");                                    
+                                    setTimeout(function(){
+                                        $("#loading_image").modal("hide");
+                                        $("#tabs").tabs('load',current_index);
+                                   }, 3000); 
+                                }
+                                else {       
+                                    $("#loading_image").modal("hide");
+                                    $("#notifiche_pesi_cdr").delay(5000).hide("blind");
+                                }
+			})
+			request.fail(function() {						
+				$("#notifiche_pesi_cdr").removeClass("success");
+				$("#notifiche_pesi_cdr").addClass("error");
+				$("#notifiche_pesi_cdr").html("Errore durante l'aggiornamento dei pesi");					
+				$("#loading_image").modal("hide");	
+				$("#notifiche_pesi_cdr").show("blind");
+				$("#notifiche_pesi_cdr").delay(5000).hide("blind");											
+			});	
+		}
+		else {
+			$("#edit_pesi_cdr").show();
+			$("#salvataggio_edit_pesi_cdr").hide();
+                        $("#chiusura_edit_pesi_cdr").hide();
+			$(".peso_obiettivo_cdr.modificabile").each(function(){
+				$(this).children("a").children("div").html($(this).children("input").val());						
+				$(this).children("a").show();
+				$(this).children("input").hide();
+			});
+		}		
+	});
+        
+        //gestione del dialog dei dettagli dell'obiettivo_cdr  
+        $(function() {		
+                $( "#obiettivo_cdr_dialog" ).dialog({
+                        autoOpen: false,
+                        modal: true,
+                        width: 1000,
+                        height: 600,						
+                        show: {
+                                effect: "scale",
+                                duration: 200
+                        },
+                        hide: {
+                                effect: "scale",
+                                duration: 200
+                        }
+                        });
+        });               
+        
+        $(".peso_obiettivo_cdr a").click(function (){ 
+            id_obiettivo_cdr = $(this).attr("id"); 
+            
+            if (id_obiettivo_cdr.length > 0) {                
+                $( "#obiettivo_cdr_dialog" ).dialog( "open" );
+                for (i=0; i<obiettivi_cdr.length; i++) {
+                    //vengono accodate all'array le informazioni della relazione eventualmente esistente e punteggio variato
+                    var id_obiettivo;
+                    if (obiettivi_cdr[i][0] === id) {
+                        id_obiettivo = obiettivi_cdr[i][1];                        
+                    }
+                }
+
+                var request = $.ajax({
+                        url: './dettagli_obiettivo?{globals}keys[ID_obiettivo_cdr]='+id_obiettivo_cdr+'&no_actions=1',
+                        async: false,										
+                        cache: false,
+                        contentType: false
+
+                });
+                request.done(function(data) {									
+                    $.each(data, function(index, element) {												
+                                    if (index == 'html'){
+                                            $('#obiettivo_cdr_dialog').html(element);
+                                    }											
+                            });																		
+                });
+            }
+        });
+</script>

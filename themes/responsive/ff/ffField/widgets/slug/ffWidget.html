@@ -1,0 +1,16 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.slug", function () {
+		<!--BeginSectBinding-->
+		jQuery.fn.escapeGet("{container}{title_field}").keyup(function() {
+			ff.ffField.slug(this, "{container}{slug_field}"); 
+		});
+		<!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl--><!--EndSectControl-->

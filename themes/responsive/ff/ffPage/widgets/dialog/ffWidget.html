@@ -1,0 +1,24 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+<!--BeginSectControl-->
+<a href="javascript:void(0);" onclick="{addjs} ff.ffPage.dialog.doOpen('{id}');" class="{class}"{id_tag}>{name}</a>
+<!--EndSectControl-->
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffPage.dialog", function () {
+		<!--BeginSectIstance-->
+		ff.ffPage.dialog.addDialog({
+			"id" : "{id}"
+			<!--BeginSectParams-->
+			,"params" : {
+				<!--BeginSectParam-->
+				"{param_name}" : "{param_value}" {param_colon}
+				<!--EndSectParam-->
+			}
+			<!--EndSectParams-->
+			{parse_params}	
+		});
+		<!--EndSectIstance-->
+	});
+</script>
+<!--EndSectFooters-->

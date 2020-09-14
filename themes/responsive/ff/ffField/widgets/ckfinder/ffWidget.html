@@ -1,0 +1,25 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+
+<!--BeginSectFooters-->
+<script language="javascript" type="text/javascript">
+	ff.pluginAddInit("ff.ffField.ckfinder", function () {
+		ff.ffField.ckfinder.init({
+			basePath		: "{site_path}/themes/library/ckfinder/",
+			baseUrl			: "{site_base_url}", 
+			previewJs		: {preview_js}
+		});
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<a href="#{container}{id}" id="CkFinder_{container}{id}" title="File selector" class="{browse_class}" onclick="ff.ffField.ckfinder.browseServer('{resource_type}:{base_url}', '{container}{id}' );"></a>
+<!--BeginSectPreview-->
+<a href="{view_url}{view_query_string}" rel="{show_file}" target="_blank">
+	<img id="{container}{id}_img" src="{preview_url}{preview_query_string}" />
+</a>
+<!--EndSectPreview-->
+{control}
+<!--EndSectControl-->

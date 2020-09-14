@@ -1,0 +1,49 @@
+<div id="estrazioni">
+	<div class="selezione_parametri">
+                <h2>Selezione del periodo di valutazione</h2>		
+		<div>	
+                        <label>Periodo:&nbsp;</label>
+			<select id='periodo_select' name='periodo_select'>
+			<!--BeginSectOptionPeriodi-->
+				<option value="{periodo_id}">Periodo: {periodo_descrizione}&nbsp;(dal&nbsp;{periodo_data_inizio})</option>
+			<!--EndSectOptionPeriodi-->
+                        </select>			
+		</div>            		
+	</div>
+        <a id="link_avanzamento" class="link_estrazione" href="{site_path}configurazioni/estrazioni/avanzamento.php?{globals}">
+            <div id="avanzamento" class="estrazione">
+                <span>Estrazione Excel avanzamento valutazioni</span>
+            </div>
+        </a>
+        <a id="link_punteggi" class="link_estrazione" href="{site_path}configurazioni/estrazioni/punteggi.php?{globals}">
+            <div id="punteggi" class="estrazione">
+                <span>Estrazione Excel punteggi valutazioni</span>
+            </div>
+        </a>  
+        <a id="link_estrazione_schede_periodo" class="link_estrazione" target="_blank" href="{site_path}configurazioni/estrazioni/estrazione_schede_periodo.php?{globals}">
+            <div id="estrazione_schede_periodo" class="estrazione">
+                <span>Estrazione pdf di tutte le schede del periodo (scaricabili tramite .zip)</span>                
+            </div>
+        </a> 
+        <span>(&nbsp;<input id="delete_schede_presenti" type="checkbox"/>&nbsp;eliminare schede già estratte)</span>
+	<script>
+                $('#link_avanzamento').click(function(){
+                        url_parts = $('#link_avanzamento').attr('href').split("?");
+			$('#link_avanzamento').attr('href', url_parts[0]+"?periodo="+$('#periodo_select option:selected').val());		
+		});
+		$('#link_punteggi').click(function(){
+                        url_parts = $('#link_punteggi').attr('href').split("?");
+			$('#link_punteggi').attr('href', url_parts[0]+"?periodo="+$('#periodo_select option:selected').val());			 
+		});
+                $('#link_estrazione_schede_periodo').click(function(){
+                        url_parts = $('#link_estrazione_schede_periodo').attr('href').split("?");
+                        if ($('#delete_schede_presenti').is(":checked")) {
+                            checked = 1;
+                        }
+                        else {
+                            checked = 0;
+                        }
+			$('#link_estrazione_schede_periodo').attr('href', url_parts[0]+"?periodo="+$('#periodo_select option:selected').val()+"&del="+checked);			 
+		});
+	</script>	
+</div>

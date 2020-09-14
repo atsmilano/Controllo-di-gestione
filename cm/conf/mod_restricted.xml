@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+	<menu>
+		<ds path="/restricted/ds" label="Data Storage" location="brand" acl="3" />
+		<docs path="/restricted/docs" label="Docs (under development)">
+			<grid path="/restricted/docs/grid" label="Grid"></grid>
+			<grid_widget path="/restricted/docs/grid/widget.php" label="Grid - Widget"></grid_widget>
+			<record path="/restricted/docs/record" label="Record"></record>
+			<record_widget path="/restricted/docs/record/widget.php" label="Record - Widget"></record_widget>
+			<detail path="/restricted/docs/detail" label="Detail"></detail>
+			<detail_widget path="/restricted/docs/detail/widget.php" label="Detail - Widget"></detail_widget>
+			<fields path="/restricted/docs/fields" label="Fields"></fields>
+			<fields_upload path="/restricted/docs/fields/upload.php" label="Fields - Upload"></fields_upload>
+			<fields_widget path="/restricted/docs/fields/widget.php" label="Fields - Widget"></fields_widget>
+			<layout path="/restricted/docs/layouts" label="Layout"></layout>
+			<showfiles path="/restricted/docs/showfiles" label="Showfiles"></showfiles>
+		</docs>
+		<media path="/restricted/media" label="Media" location="brand" acl="3" />
+		<sqlgui path="/restricted/sqlgui" label="SQL GUI" icon="database" location="brand" redir="/restricted/sqlgui/sqldirect" acl="3">
+			<sqldirect label="SQL Direct"  />
+		</sqlgui>
+
+		<layout path="/restricted/layout" label="Layout" icon="object-group" location="brand" position="footer" acl="3" />
+		<showfiles path="/restricted/showfiles" label="Showfiles" icon="image" location="brand" acl="3" />
+
+	</menu>
+	<!--<layout>
+		<layer path="/restricted/ds" name="twocols" />
+	</layout>-->
+</configdata>

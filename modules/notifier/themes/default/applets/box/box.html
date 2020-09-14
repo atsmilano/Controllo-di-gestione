@@ -1,0 +1,41 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffPage.notifier", function () {
+
+<!--BeginSectMessage-->
+		ff.ffPage.notifier.addMessage("{queue}", {
+			"content"	: "{content}"
+			, "options"	: {
+				<!--BeginSectOption-->
+				{comma} "{name}" : {value}
+				<!--EndSectOption-->
+			}
+		});
+<!--EndSectMessage-->
+
+<!--BeginSectMessageAsync-->
+		<!--BeginSectDialog-->
+		ff.pluginAddInit("ff.ffPage.dialog", function () {
+			ff.ffPage.dialog.addEvent({
+				"event_name" : "onClose"
+				, "func_name" : function (id) {
+					if (id == "{queue}")
+						ff.ffPage.notifier.unsetListener("{queue}");
+				}
+			});
+		});
+		
+		<!--EndSectDialog-->
+		ff.ffPage.notifier.initListener("{queue}", "{mod-notifier-get-message}");
+<!--EndSectMessageAsync-->
+
+		jQuery(function() {
+			ff.ffPage.notifier.processQueue("{queue}");
+		});
+	});
+</script>
+
+<!--EndSectHeaders-->
+<!--BeginSectFooters-->
+<!--EndSectFooters-->
+<div class="{notifier_class}"></div>

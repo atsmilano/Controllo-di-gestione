@@ -1,0 +1,43 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.3/jquery.nicescroll.min.js" ></script>
+<div class="wrapper">
+    <nav id="mainmenu" class="sidemenu -inverse -scrollable">
+        <div class="sidemenu__head">
+            <div class="text-center"> {brand} </div>
+            {account}
+            {search}
+        </div>
+            {sidebar} 
+    </nav>
+    <section id="content">
+        <header class="header {fullbar_class}">
+            <div class="row header__top">  
+                <!--
+                <div class="col-xs-8 col-sm-10 header__left">                    
+                    <a href="javascript:void(0);" class="mainmenu_toggle header__menutoggler navbar-btn" >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </a>
+                    
+                    <h1>{CM_LOCAL_APP_NAME}</h1>
+                </div>                
+                <div class="col-xs-4 col-sm-2 header__right"> {favorite} {lang}
+                </div>
+                -->
+            </div>
+            <div class="row header__bar">
+                <div class="col-sm-6"> {tab-header} </div>
+                <!--<div class="col-sm-6">{breadcrumb}</div>-->
+            </div>
+        </header>
+        <section class="pagecontent"> {content} </section>
+        <!--BeginSectFooter-->
+        <footer class="row footer">
+            <div class="footer__copy">
+                <p>{_developer_label} <a href="{_developer_url}" target="_blank">{_developer_name}</a></p>
+            </div>
+        </footer>
+        <!--EndSectFooter-->
+    </section>
+    <div class="overlay"><div>
+    </div></div></div>

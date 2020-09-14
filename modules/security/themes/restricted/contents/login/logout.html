@@ -1,0 +1,29 @@
+<div id="ffLoginBox" class="loginBox{class_social}">
+<!--BeginSectError-->
+	<div class="std-error">{sError}</div>
+<!--EndSectError-->
+
+	<div class="logout-field">
+		<h2>{_logout_title}</h2>
+		<!--BeginSectSocialLogout-->
+		<div class="social-logout">
+			<p>Desidero anche revocare l'accesso dai seguenti Social Network</p>
+			<!--BeginSectSocialLogout_google-->
+			<input type="checkbox" value="1" name="social_logout_check[google]" /> Google
+			<!--EndSectSocialLogout_google-->
+			<!--BeginSectSocialLogout_facebook-->
+			<input type="checkbox" value="1" name="social_logout_check[facebook]" /> Facebook
+			<!--EndSectSocialLogout_facebook-->
+		</div>
+		<!--EndSectSocialLogout-->
+
+		<div class="actions">
+			<input type="button" value="{_logout_confirm}" onclick="{logout_bt_confirm}" />
+			<input type="button" value="{_logout_cancel}" onclick="{logout_bt_cancel}" />
+		</div>
+    </div>
+	
+	<!--BeginSectBack-->
+	<p class="back-to"><a href="{back_url}">{_back_to_site}</a></p>
+	<!--EndSectBack-->
+</div>

@@ -1,0 +1,63 @@
+#valutazione-modify .form-control.combobox{
+    margin-left: 66px;
+    margin-top: 3px;
+    width: 50%;    
+    height: auto;
+}
+
+#valutazione-modify input[type="radio"].form-control.combobox {
+    width: auto;
+    float: left;
+    clear: left;
+    height: 15px;
+    margin-left: 66px;
+}
+
+.pagecontent #valutazione-modify label {
+    line-height: 21px;
+    padding-left: 15px;
+    color: black;
+    width: 90%;
+}
+
+.pagecontent #valutazione-modify .combobox label {
+    vertical-align: middle;
+}
+            
+#valutazione-modify h2 { 
+    margin-bottom: 18px;
+}
+
+#valutazione-modify h3 {    
+    padding: 3px;
+    font-size: 18px;
+}
+
+#valutazione-modify h4 {
+    font-size: 15px;
+    font-style: italic;
+    color: #1e88e5;
+    padding-left: 6px;
+}
+
+#valutazione-modify .slider-box input {
+    border: none;
+    width: 50px;
+}
+
+#valutazione-modify .ui-slider-horizontal {
+    border: solid 1px #1e88e5;
+}
+
+#valutazione-modify .ui-slider-horizontal .ui-slider-handle {
+    border: solid 1px #1e88e5;
+    background-color: #bcc9b9;
+}
+
+#valutazione-modify .ui-slider-horizontal .ui-slider-handle.ui-state-active{
+    background-color: #1e88e5;
+}
+
+#valutazione-modify .ambito_item > label {
+    font-weight: bold;
+}

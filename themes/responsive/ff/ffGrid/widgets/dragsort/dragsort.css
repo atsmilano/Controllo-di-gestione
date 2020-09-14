@@ -1,0 +1,7 @@
+TABLE.draggable > TBODY > TR > TD:first-child
+, TABLE.draggable > TBODY > TR > TD.first  {
+	background-image:url(grippy.png);
+	background-position: 0;
+	background-repeat: no-repeat;
+	/*padding : 0 0 0 10px;*/
+}

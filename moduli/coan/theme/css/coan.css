@@ -1,0 +1,255 @@
+/*contabilità analitica*/
+#coan #filtri, #coan #ricerca{
+    background-color: #89b7db;
+    padding: 15px;
+    text-align: center;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#coan #filtri select, #coan #filtri button, #coan #ricerca input, #coan #ricerca button{
+    width: 80%;
+    clear: left;
+    margin: 3px;
+    float: left;
+    margin-left: 10%;
+}
+
+#coan #filtri #cdr_coan_select {
+    width: 60%;
+}
+
+#coan #filtri #cdr_ramo_div {
+    float: left;
+    width: 20%;
+}
+
+#coan #filtri button, #coan #ricerca button {
+    background-color: white;
+    border: solid 2px #1e88e5;
+    height: 30px;
+    color: #1e88e5;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+#coan #filtri button:hover, #coan #ricerca button:hover {
+    background-color: #1e88e5;
+    color: white;
+}
+
+#coan #filtri legend, #coan #ricerca legend {
+    text-align: left;
+    background-color: #263238;
+    color: white;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    width: 20%;
+    text-align: center;
+    font-size: 15px;
+}
+
+#coan #elenco_conti{
+        width: 100%;
+	margin-top: 15px;	
+	background: white; /* Old browsers */
+	background: -moz-linear-gradient(left,  #89b7db 0%, #F5F3E6 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left,  #89b7db 0%,#F5F3E6 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right,  #89b7db 0%,#F5F3E6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#89b7db', endColorstr='#F5F3E6',GradientType=1 ); /* IE6-9 */
+}
+
+#coan #elenco_conti #conti_thead th, 
+#coan #elenco_conti #conti_fixed_thead th{	
+	background: #263238; /* Old browsers */
+	background: -moz-linear-gradient(top,  #263238 0%, #263238 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #263238 0%,#263238 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #263238 0%,#263238 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263238', endColorstr='#263238',GradientType=0 ); /* IE6-9 */
+	border: solid 1px;
+	color: white;
+        padding: 6px;
+}
+
+#coan #elenco_conti #conti_fixed_thead {
+	position: fixed;
+	top: 0;
+	margin-left: -1px;	
+}
+
+#coan #elenco_conti #conti_thead th input, 
+#coan #elenco_conti #conti_fixed_thead th input{
+	margin: 0px;
+	vertical-align: middle;
+}
+
+#coan #elenco_conti .fp{
+	width: 5%;	
+}
+
+#coan #elenco_conti .conto_th{
+	width: 50%;
+}
+
+#coan #elenco_conti .tot{
+	width: 10%;
+}
+
+#coan #elenco_conti thead {
+    height: 15px;
+}
+
+#coan #elenco_conti tbody tr td, #coan_dettaglio_conto tbody tr td{
+    padding: 0 9px 0 9px;
+    border-bottom: 1px solid #BBB;
+    border-left: 1px solid #E5E5E5;
+    border-right: 1px solid #E5E5E5;
+    line-height: 30px;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#coan #elenco_conti tbody .tot{	
+	text-align: right;
+}
+
+#coan #elenco_conti tbody tr:hover{	
+	background: white; /* Old browsers */
+	background: -moz-linear-gradient(top,  #FFFFFF 0%, #FFFFFF 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #FFFFFF 0%,#FFFFFF 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #FFFFFF 0%,#FFFFFF 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#FFFFFF',GradientType=0 ); /* IE6-9 */
+}
+
+#coan #elenco_conti .fp1 .tot{
+	color: #F80000;
+}
+
+#coan #elenco_conti .fp2 .tot{
+	color: #C40001;
+}
+
+#coan #elenco_conti .fp3 .tot{
+	color: #920000;
+}
+
+#coan #elenco_conti .fp4 .tot{
+	color: #510606;
+}
+
+#coan #elenco_conti .conto{
+	cursor: pointer;
+	font-weight: bold;
+}
+
+#coan #elenco_conti .conto .tot{
+	color: #000000;
+}
+
+/*risultati ricerca*/
+#coan #elenco_conti .found{	
+	background-color: #FFFFA8;
+}
+
+/*dettaglio*/
+#coan_conto_dialog{	
+	overflow: scroll;
+}
+
+#coan_conto_dialog #loader{	
+	margin-top: 30px;
+        text-align: center;
+}
+
+#coan_dettaglio_conto{
+	width: 100%;	
+	text-align: center;	
+}
+
+#coan_dettaglio_conto h3{
+	color: #1e88e5;
+	font-weight: bold;
+        font-size: 18px;
+}
+
+#coan_dettaglio_conto table{
+	margin-top: 15px;
+	margin-bottom: 30px;
+	
+	background: white; /* Old browsers */
+	background: -moz-linear-gradient(left,  #89b7db 0%, #F5F3E6 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(left,  #89b7db 0%,#F5F3E6 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to right,  #89b7db 0%,#F5F3E6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#89b7db', endColorstr='#F5F3E6',GradientType=1 ); /* IE6-9 */
+}
+
+#coan_dettaglio_conto caption{
+	color: #263238;
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 9px;
+        text-align: center;
+}
+
+#coan_dettaglio_conto th{
+	background: #263238; /* Old browsers */
+	background: -moz-linear-gradient(top,  #263238 0%, #263238 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top,  #263238 0%,#263238 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom,  #263238 0%,#263238 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263238', endColorstr='#263238',GradientType=0 ); /* IE6-9 */
+	color: white;
+}
+
+#coan_dettaglio_conto .conto_cdc{
+	background: white;
+}
+
+#coan_dettaglio_conto thead .tot{
+	width: 10%;
+	text-align: center;
+}
+
+#coan_dettaglio_conto .tot{
+	text-align: right;	
+}
+
+#coan_dettaglio_conto .totali_cdr{
+	
+	font-weight: bold;
+}
+
+/*back to top*/
+#coan_back_to_top {
+	cursor: pointer;
+	display: none;
+	background-color: #1e88e5;
+	border: solid 1px #184A1E;
+	position: fixed;
+	bottom: 45px;
+	right: 15px;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	font-weight: bold;
+	color: white;	
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	border-radius: 18px;	
+}
+
+#coan_back_to_top:hover{
+	background-color: #C1DD81;
+	-webkit-box-shadow: 0px 0px 15px 10px rgba(45,130,21,0.6);
+	-moz-box-shadow: 0px 0px 15px 10px rgba(45,130,21,0.6);
+	box-shadow: 0px 0px 15px 10px rgba(45,130,21,0.6);
+}
+
+#coan_search_result{
+	font-weight: bold;
+	color: #D06377;
+	margin-left: 15px;
+}

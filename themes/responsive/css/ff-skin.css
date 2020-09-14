@@ -1,0 +1,140 @@
+/*
+* FF Components
+*/
+.ffGrid {
+  background: #FFF; }
+  .ffGrid h2 {
+    color: #1e88e5; }
+  .ffGrid .table th {
+    /*color: $text-color-light;
+    background: $primary-color; 
+    
+    a {
+       /*color: $text-color-light;
+    }
+    
+    &:last-child {
+      border-right: 1px solid $primary-color;
+    }
+    
+    /*&.active {
+      background: $secondary-color;
+    } MIRKO*/ }
+  .ffGrid .table td {
+  /*
+&:first-child {
+  border-left: 1px solid $border-color;
+}
+  
+&:last-child {
+  border-right: 1px solid $border-color;
+}
+  MIRKO*/ }
+  .ffGrid .table tr {
+    /*
+    &:last-child {
+      border-bottom: 1px solid $border-color;
+    }
+    MIRKO*/ }
+
+.ffRecord {
+  background: white; }
+  .ffRecord h2 {
+    color: #1e88e5; }
+  .ffRecord label {
+    color: #1976d2; }
+
+.pages {
+  float: right; }
+
+.pagenav .pagination {
+  float: right; }
+  .pagenav .pagination li.active span,
+  .pagenav .pagination li.active a {
+    background: #1976d2; }
+  .pagenav .pagination li a:focus,
+  .pagenav .pagination li span:focus {
+    background: #1976d2; }
+.pagenav__pages li a {
+  border: 1px solid #e7e7e7; }
+  .pagenav__pages li a:hover {
+    border: 1px solid #1e88e5;
+    background: #1976d2;
+    color: #FFF; }
+.pagenav__choice {
+  color: #1e88e5; }
+  .pagenav__choice input {
+    border-bottom: 2px solid #1e88e5; }
+    .pagenav__choice input:focus {
+      border-bottom: 2px solid #1976d2; }
+.pagenav__perPage a {
+  border: 1px solid #e7e7e7; }
+  .pagenav__perPage a:hover {
+    border: 1px solid #1e88e5;
+    background: #1976d2;
+    color: #FFF; }
+.pagenav__totEl {
+  border: 1px solid transparent; }
+  .pagenav__totEl span {
+    color: #1976d2; }
+
+/*
+* FF Overlay
+*/
+.modal {
+  /*===============content icon===============*/ }
+  .modal-header {
+    background: #1e88e5;
+    color: white; }
+  .modal-tabs {
+    background: #1e88e5; }
+    .modal-tabs .nav-tabs {
+      display: table;
+      width: 100%; }
+      .modal-tabs .nav-tabs li {
+        display: table-cell; }
+        .modal-tabs .nav-tabs li.active a {
+          color: #1e88e5;
+          background: #FFF;
+          border: 0; }
+          .modal-tabs .nav-tabs li.active a:hover, .modal-tabs .nav-tabs li.active a:focus {
+            color: #1e88e5;
+            background: #FFF; }
+        .modal-tabs .nav-tabs li a {
+          color: white; }
+          .modal-tabs .nav-tabs li a:hover {
+            background: none; }
+  .modal .vg-content {
+    color: #00bcd4; }
+  .modal .vg-widget {
+    color: #8bc34a; }
+  .modal .vg-menu {
+    color: #ff9800; }
+  .modal .vg-applet {
+    color: #ffc107; }
+  .modal .vg-addon {
+    color: #9c27b0; }
+
+.ff-modal {
+  background: rgba(0, 0, 0, 0.5); }
+  .ff-modal-highlight td {
+    color: white;
+    border: 1px solid rgba(0, 151, 167, 0.15);
+    background: rgba(0, 151, 167, 0.4); }
+    .ff-modal-highlight td a {
+      color: white; }
+
+/*
+* Widgets
+*/
+.token-input-dropdown {
+  border: 1px solid #e7e7e7;
+  background: white; }
+.token-input-token {
+  border: 1px solid #e7e7e7; }
+.token-input-delete-token {
+  color: #FFF;
+  background: #1e88e5; }
+
+.autocompletetoken .autocomplete-wrap {
+  border-bottom: 2px solid #1e88e5; }

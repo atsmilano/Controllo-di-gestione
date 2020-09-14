@@ -1,0 +1,37 @@
+<!--BeginSectBrandNoPanel-->
+<img  class="{logo_class}" src="{logo_url}" alt="{host_name}" />
+{domain_switch}
+<!--EndSectBrandNoPanel-->
+<!--BeginSectBrandPanel-->
+<span class="panel-container">
+    <!--BeginSectBrandName-->
+    <!--BeginSectLogo-->
+    <a href="{site_path}/restricted"> <img  class="{logo_class}" src="{logo_url}" alt="{logo_name}" /></a>
+    <!--EndSectLogo-->
+    <a class="{nav_left_class}" href="#panel-brand" {toggle_properties}>
+    {host_name}{more_icon}
+    </a>
+    {admin}
+    <!--EndSectBrandName-->
+
+    <!--BeginSectBrandInfo-->
+    <ul id="panel-brand" class="dropdown-menu {panel_class}">
+        <!--BeginSectMultiDomain-->
+        <li>{domain_switch}<li>
+        <!--EndSectMultiDomain-->
+        <!--BeginSectElementHeader-->
+        <li><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></span>
+<!--EndSectElementHeader-->
+<!--BeginSectElementBody-->
+<li><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></li>
+<!--EndSectElementBody-->
+<!--BeginSectElement-->
+<li><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></li>
+<!--EndSectElement-->
+<!--BeginSectElementFooter-->
+<li><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}></li>
+<!--EndSectElementFooter-->
+</ul>
+<!--EndSectBrandInfo-->
+</span>
+<!--EndSectBrandPanel-->

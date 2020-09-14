@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+	<auth>
+		<noauth path="/services/getlibs" />
+	</auth>
+</configdata>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ffxml>
+	<rule id="actexparse">
+
+        <priority>HIGH</priority>
+
+        <source>/actexparse$</source>
+
+        <destination>
+
+            <url>/themes/responsive/ff/ffField/widgets/actex/actexparse</url>
+
+        </destination>
+
+        <reverse>/actexparse</reverse>
+
+        <index>999</index>
+
+    </rule>
+
+    <rule id="parsedata">
+
+        <priority>HIGH</priority>
+
+        <source>/parsedata$</source>
+
+        <destination>
+
+            <url>/themes/responsive/ff/ffField/widgets/activecomboex/parsedata</url>
+
+        </destination>
+
+        <reverse>/parsedata</reverse>
+
+        <index>999</index>
+
+    </rule>
+
+	
+
+    <rule id="aparsedata">
+
+        <priority>HIGH</priority>
+
+        <source>/aparsedata$</source>
+
+        <destination>
+
+            <url>/themes/responsive/ff/ffField/widgets/autocomplete/parsedata</url>
+
+        </destination>
+
+        <reverse>/aparsedata</reverse>
+
+        <index>999</index>
+
+    </rule> 
+
+    <rule id="atparsedata">
+
+        <priority>HIGH</priority>
+
+        <source>/atparsedata$</source>
+
+        <destination>
+
+            <url>/themes/responsive/ff/ffField/widgets/autocompletetoken/parsedata</url>
+
+        </destination>
+
+        <reverse>/atparsedata</reverse>
+
+        <index>999</index>
+
+    </rule> 
+
+	
+
+	<rule id="dialog">
+
+		<priority>NORMAL</priority>
+
+		<source>/dialog(/[^/]*){0,1}$</source>
+
+		<destination>
+
+			<url>[MAIN_THEME]/ff/dialog</url>
+
+		</destination>
+
+		<index>999</index>
+
+		<reverse>/dialog</reverse>
+
+	</rule>
+
+	<rule>
+
+		<priority>NORMAL</priority>
+
+		<source>^/area_riservata/ffcm/layout(.*)</source>
+
+		<destination>
+
+			<url>/cm/contents/layout$1</url>
+
+		</destination>
+
+	</rule>
+
+	<rule>
+
+		<priority>NORMAL</priority>
+
+		<source>^/area_riservata/ffcm/showfiles(.*)</source>
+
+		<destination>
+
+			<url>/cm/contents/showfiles$1</url>
+
+		</destination>
+
+	</rule>
+
+	<rule id="ds">
+
+		<priority>NORMAL</priority>
+
+		<source>/area_riservata/ds(.*)</source>
+
+		<destination>
+
+			<url>/cm/contents/ds/$1</url>
+
+		</destination>
+
+		<accept_path_info />
+
+		<reverse>/area_riservata/ds</reverse>
+
+	</rule>
+
+	<!--<rule id="ds_services">
+
+		<priority>VERY_HIGH</priority>
+
+		<source>^/area_riservata/ffcm/services/ds(.*)</source>
+
+		<destination>
+
+			<url>/cm/contents/ds/services$1</url>
+
+		</destination>
+
+		<accept_path_info />
+
+		<reverse>/area_riservata/ffcm/services/ds</reverse>
+
+	</rule>-->
+
+	<rule id="getlibs">
+
+        <source>^/services/getlibs$</source>
+
+        <destination>
+
+            <url>/cm/contents/getlibs</url>
+
+        </destination>
+
+        <reverse>/services/getlibs</reverse>
+
+    </rule>	
+
+	<rule>
+
+		<index>100</index>
+
+		<priority>BOTTOM</priority>
+
+		<source>(.*)</source>
+
+		<destination>
+
+			<url>/contents$0</url>
+
+		</destination>
+
+	</rule>
+
+</ffxml>

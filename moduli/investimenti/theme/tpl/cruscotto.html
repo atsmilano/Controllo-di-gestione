@@ -1,0 +1,117 @@
+<div id="cruscotto_investimenti">
+    <div class='selezione_parametri'>
+        <!--BeginSectSelezioneCdr--> 
+        <h4>Selezione CDR</h4>
+        <div id='cdr_select'>	            
+            <label>CDR:&nbsp;</label>
+            <select name='cdr_select' onchange="submit();">	
+                    <option value="0">Tutti i CDR</option>
+                    <!--BeginSectOptionCdr-->
+                            <option value="{cdr_id}" {cdr_selected}>CDR: {cdr_descrizione}</option>
+                    <!--EndSectOptionCdr-->
+            </select>			
+        </div>
+        <!--EndSectSelezioneCdr-->
+        <!--BeginSectSelezioneUocCompetente--> 
+        <h4>Selezione UOC competente</h4>
+        <div id='uoc_competente_select'>	            
+            <label>UOC competente:&nbsp;</label>
+            <select name='uoc_competente_select' onchange="submit();">	
+                    <option value="0">Tutte le UOC competenti</option>
+                    <!--BeginSectOptionUocCompetente-->
+                            <option value="{uoc_competente_id}" {uoc_competente_selected}>UOC competente:: {uoc_competente_descrizione}</option>
+                    <!--EndSectOptionUocCompetente-->
+            </select>			
+        </div>
+        <!--EndSectSelezioneUocCompetente-->
+        <!--BeginSectNoCdr-->
+                <p class='warning'>Nessuna richiesta effettuata dai CDR</p>
+        <!--EndSectNoCdr-->
+    </div>
+    <!--BeginSectDati-->
+    <div id="tabs">
+        <ul>
+            <li><a id="a_introduzione" href="#stato_avanzamento_richieste">Stato avanzamento richieste</a></li>
+            <li><a id="a_elenco_schede" href="#istruttoria">Istruttoria</a></li>
+            <li><a id="a_elenco_schede" href="#verifica_copertura">Verifica copertura</a></li>
+            <li><a id="a_elenco_schede" href="#piano_investimenti">Piano Investimenti</a></li>
+        </ul>
+   
+        <script>
+            $( function() {
+                    $('#tabs').tabs();
+            });
+        </script>
+        <div id="stato_avanzamento_richieste">
+            <table id="stati_avanzamento">
+                <thead>
+                    <tr>
+                        <th>Stato avanzamento</th>
+                        <th>N° richieste</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--BeginSectStatoAvanzamento-->
+                        <tr>
+                            <td>{stato_avanzamento}</td>
+                            <td>{n_richieste}</td>
+                        </tr>
+                    <!--EndSectStatoAvanzamento-->
+                </tbody>  
+            </table>
+        </div>
+        <!--BeginSectReport-->
+        <div id ="{report_div_id}">
+            <table id="report">
+                <caption>{titolo_report}</caption>
+                <thead>
+                    <tr>
+                        <th rowspan="2">Conto / Categoria registro cespiti</th>                
+                        <th colspan="{n_fonti_finanziamento}">Fonti di finanziamento</th>                     
+                        <th>&nbsp;</th>
+                    </tr>
+                    <tr>
+                        <!--BeginSectFonteFinanziamentoIntestazione-->
+                        <th>{fonte_finanziamento}</th>                
+                        <!--EndSectFonteFinanziamentoIntestazione--> 
+                        <th>TOTALE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--BeginSectContoCategoriaCespiti-->
+                        <tr>
+                            <td class="descrizione_conto">{conto_categoria_registro_cespiti}</td>
+                            <!--BeginSectImporti-->
+                            <td>{importo}</td>                            
+                            <!--EndSectImporti-->
+                            <td class="totale">{totale_conto_categoria_registro_cespiti}</td>
+                        </tr>
+                    <!--EndSectContoCategoriaCespiti-->
+                    <tr>
+                        <td class="totale">Totale Fonte Finanziamento</td>
+                        <!--BeginSectTotale-->
+                        <td class="totale">{totale_fonte_finanziamento}</td>                            
+                        <!--EndSectTotale-->
+                        <td class="totale">{totale_complessivo}</td>
+                    </tr>   
+                    <tr>
+                        <td class="totale">Budget Fonte Finanziamento</td>
+                        <!--BeginSectBudget-->
+                        <td class="totale">{budget_fonte_finanziamento}</td>                            
+                        <!--EndSectBudget-->
+                        <td class="totale">{totale_budget}</td>
+                    </tr>
+                    <tr>
+                        <td class="totale">Erosione Fonte Finanziamento</td>
+                        <!--BeginSectErosione-->
+                        <td class="totale">{erosione_fonte_finanziamento}</td>                            
+                        <!--EndSectErosione-->
+                        <td class="totale">{totale_erosione}%</td>
+                    </tr>
+                </tbody>  
+            </table>
+        </div>
+        <!--EndSectReport-->
+    </div>
+    <!--EndSectDati-->
+</div>          

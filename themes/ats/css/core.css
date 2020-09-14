@@ -1,0 +1,358 @@
+/*******************************************************************************/
+.clickable {
+    cursor: pointer;
+}
+
+/*Inactive body*/
+#inactive_body {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: -moz-linear-gradient(top, rgba(63,76,107,0.2) 0%, rgba(63,76,107,0.2) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(63,76,107,0.2) 0%,rgba(63,76,107,0.2) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(63,76,107,0.2) 0%,rgba(63,76,107,0.2) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333f4c6b', endColorstr='#333f4c6b',GradientType=0 ); /* IE6-9 */
+    display: none;
+}
+
+/*******************************************************************************/
+/*Menu*/
+#mainmenu{
+    transition: none;
+}
+
+#content {
+    transition: none;
+}
+
+.brand-logo {
+    margin-right: 30px;
+}
+
+#app_name {
+    color: #1e88e5;
+}
+
+/*Selezione parametri globali*/
+#selettore_main{
+    position:fixed;
+    top:0px;
+    right:0px;
+    /*height: 60px;*/
+    z-index: 999;
+    background-color: white;
+    border-left: solid 1px #263238;
+    border-bottom: solid 1px #263238; 
+    -webkit-border-bottom-left-radius: 9px;
+    -moz-border-radius-bottomleft: 9px;
+    border-bottom-left-radius: 9px;
+    width: calc(100% - 280px);
+}
+
+#selettore_main label{
+    color: #263238;
+}
+
+#selettore_main span.caret{
+    display: inline-block;
+    float: left;
+    margin-top: 9px;
+    margin-right: 9px;
+}
+
+#selettore_main span#selettore_main_descr{
+    float: left;
+    margin-right: 9px;
+}
+
+#selettore_main span.caret{
+    color: #263238;
+}
+
+#selettore_main #dropdownMenuSelettoreMain{
+    text-align: left;
+}
+
+#selettore_main #dropdownMenuSelettoreMain:hover{
+    
+}
+
+#selettore_main .dropdown-menu{   
+    border: none;
+    padding: 0;
+    margin-top: 12px;
+}
+
+/*******************************************************************************/
+/*Contents*/
+.header h1 {
+    margin-top: 45px;
+    margin-bottom: 0;
+    color: #1e88e5;
+}
+
+.header__bar {
+    height: 18px;
+}
+ 
+.pagecontent {	
+    margin-bottom: 60px;
+    margin-top: 30px;
+}
+
+.pagecontent h1, .pagecontent h2 {
+    color: #1e88e5;
+}
+
+.pagecontent h1 .subtitle{
+    font-size: 12px;
+    font-style: italic;
+}
+
+.pagecontent h3 {
+    color: #1e88e5;
+}
+
+/*******************************************************************************/
+/*footer*/
+.row.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;	
+    /*z-index: 999;*/
+    z-index: 990;
+    background-color: white;
+    /*margin: 0 0 0 -15px;*/
+}
+
+.row.footer p{
+    padding: 3px;
+    /*padding-left: 30px;
+    margin: 0;	*/
+}
+
+/*******************************************************************************/
+/*Record and Grid*/
+
+/*field groups*/
+/*fields*/
+.ffRecord fieldset{
+    border: solid 1px #c7d4e2;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 0 9px 9px 9px;
+    margin: 6px;    
+}
+
+.ffRecord fieldset legend {
+    width: auto;
+    border: solid 1px #c7d4e2;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    margin-bottom: 12px;
+    padding: 3px 9px 3px 9px;
+    font-size: 14px;
+}
+
+.form-control{
+    height: auto;
+}
+
+input.radio {
+    display: inline-block;
+}
+
+/*actions*/
+.pagecontent .ffRecord .actions {
+    background-color: #ddd;
+    position: fixed;
+    bottom: 21px;
+    width: 83.3%;
+    right: 0;
+    z-index: 990;
+    width: calc(100% - 250px);
+}
+
+.pagecontent .ffRecord .ffGrid .actions {
+    position: static;
+    bottom: 0;
+    width: 100%;
+    right: 0;
+    z-index: 990;
+    background-color: white;
+}
+
+/*detail actions*/
+.pagecontent .ffRecord .ffDetails .actions {
+    position: relative;
+    width: auto;
+}
+
+.pagecontent .ffRecord .ffDetails .actions input{
+    position: relative;
+    float: left;
+    width: 60px;
+    margin:3px;
+}
+
+.pagecontent .ffRecord .ffDetails .actions a{
+    position: relative;
+    float: left;
+    width: auto;
+    border: solid 1px #c7d4e2;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+.pagecontent .ffRecord .ffDetails .ffGrp{
+    width: 100%;
+}
+
+.pagecontent .ffRecord .ffDetails .ffGrp h4 span{
+    margin-left: 21px;
+}
+
+/*Home*/
+#home_contents a {
+    display: inline-block;
+}
+
+.form-control.readonly {
+
+    border: none;
+    font-style: italic;
+
+}
+
+.checkbox input[type="checkbox"] {
+    margin-left: 0;
+}
+
+/*******************************************************************************/
+/*Dialog*/
+.resize {
+    display: none;
+}
+
+/*******************************************************************************/
+/*Dialog chiusura personalizzati*/
+.conferma_azione {
+	z-index: 9999;
+	padding: 3%;
+	background-color: #c7d4e2;
+	border: solid 1px #263238;	
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	width: 50%;
+	position: fixed;
+	left: 25%;
+	color: #263238;
+	text-align: center;
+	display: none;
+        font-size: 15px;
+}
+
+.conferma_azione h3{
+	font-weight: bold;
+	color: #263238;
+	margin-bottom: 15px;
+}
+
+.conferma_azione .confirm_link{
+	background-color: white;
+	border: solid 1px #263238;	
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	padding: 6px;
+	font-weight: bold;	
+	color: #1e88e5;
+	margin: 9px;
+	width: 90px;
+	display: inline-block;	
+}
+
+.conferma_azione .confirm_link:hover{
+	cursor: pointer;
+	background-color: #2888E5;
+        color: white;
+	border: solid 1px #1e88e5;
+        text-decoration: none;
+}
+
+/*******************************************************************************/
+/*Selezione dei parametri interna alla pagina*/
+.selezione_parametri {
+    border: solid 1px #263238;
+    background-color: #c7d4e2;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    margin-bottom: 9px;
+    padding: 0px 9px 9px 12px;
+}
+
+/*******************************************************************************/
+/*pulsanti estrazione*/
+.estrazione {
+    margin-top: 9px;
+    padding: 6px;
+    border: solid 1px #263238;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;   
+    background-color: #c7d4e2;
+    color: #1e88e5;
+    text-decoration: none;
+}
+
+.estrazione:hover {
+    background-color: #1e88e5;
+    color: white;
+    cursor: pointer;       
+}
+
+.link_estrazione {
+    text-align: center;
+    font-weight: bold;
+}
+
+.link_estrazione:hover {
+    text-decoration: none;
+}
+
+/*******************************************************************************/
+/*Table*/
+.ffGrid table {
+    text-align: center;
+}
+
+.ffGrid table thead {
+    background-color: #263238;    
+    color: white;
+}
+
+.ffGrid .table thead th {
+    text-align: center;  
+    color: white;
+}
+
+.ffGrid .table tr th a {
+    color: white;
+}
+
+.ffGrid .table tr.evidenza {
+    background-color: #c7d4e2;
+}
+
+/*******************************************************************************/
+/*Slider*/
+.pagecontent .slider-box input.slider {
+    position: relative;
+}

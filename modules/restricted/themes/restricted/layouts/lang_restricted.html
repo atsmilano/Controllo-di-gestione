@@ -1,0 +1,19 @@
+<span class="lang-container {flag_dim}"> 
+	<a href="javascript:void(0)" class="dropdown">
+		<span class="{flag_lang_active}"></span>
+	</a>
+	<div class="hidden">
+		<ul class="choose-lang-list"> 
+			<!--BeginSectCurrentLang-->
+			<li class="selected" id="lang-{code}"> 
+				<span class="{flag_lang}"></span>{description}
+			</li>
+			<!--EndSectCurrentLang-->
+			<!--BeginSectLang-->
+			<li id="lang-{code}">
+				<a href="{show_files}"><span class="{flag_lang}"></span>{description}</a> 
+			</li>
+			<!--EndSectLang-->
+		</ul>
+	</div>
+</span>

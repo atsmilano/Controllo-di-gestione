@@ -1,0 +1,215 @@
+<div id="matrice_pesi">		
+	<h2>Distribuzione obiettivi - personale / assegnazione pesi</h2>
+	<div id="notifiche_pesi_cdr_personale" class="notifiche"></div>
+	<div id="loading_image"><img src="{module_theme_path}\images\matrice_loader.gif"></div>	
+	<!--BeginMatricePesiCdrPersonale-->
+		<div id="legenda">
+			Legenda:&nbsp;
+			<span class="azioni_definite">Assegnati e confermati</span>
+			<span class="azioni_non_definite">Assegnati in attesa di presa visione</span>
+		</div>	
+		<!--BeginAzioniMatrice-->	
+		<div id="edit_pesi_cdr_personale" class="actionbt"><i class="fa-edit fa-lg fa"></i>&nbsp;Modifica pesi</div>
+		<div id="salvataggio_edit_pesi_cdr_personale" class="actionbt"><i class="fa-check-square fa-lg fa"></i>&nbsp;Salva</div>
+		<div id="chiusura_edit_pesi_cdr_personale" class="actionbt"><i class="fa-undo fa-lg fa"></i>&nbsp;Annulla</div>
+		<!--EndAzioniMatrice-->
+		<table>
+                        <script>
+                            var obiettivi_cdr_personale = new Array();
+                        </script>
+			<thead>
+				<tr>
+					<th id="obcdr_0_0" class="intestazione_personale">Personale / Obiettivo</th>	
+					<!--BeginObiettivi-->		
+					<th id="obcdr_{riga}_{colonna}" class="rotated_text colonna_{colonna}" title="{desc_obiettivo}">{codice_obiettivo}</th>					
+					<!--EndObiettivi-->
+					<th>T<br>o<br>t<br>a<br>l<br>e</th>
+				</tr>
+			</thead>
+			<tbody>								
+                            <!--BeginPersonale-->
+                                    <!--BeginIntestazioneCategoria-->
+                                    <tr class="intestazione_categoria">
+                                            <td>{categoria}</td>
+                                            <td colspan="{obiettivi_colspan}">&nbsp;</td>			
+                                    </tr>
+                                    <!--EndIntestazioneCategoria-->
+                                    <tr>					
+                                            <td id="obcdr_{riga}_{colonna}" class="peso_obiettivo_personale intestazione_personale riga_{riga}" title="{dettagli_dipendente}">{nome_dipendente}</td>
+                                            <!--BeginObiettivoCdrPersonale-->
+                                            <script>
+                                                obiettivi_cdr_personale.push(["obcdr_{riga}_{colonna}", "{id_obiettivo_cdr}", "{matricola_personale}"]);
+                                            </script>
+                                            <td id="obcdr_{riga}_{colonna}" class="peso_obiettivo_personale {presa_visione_class} {modificabile_class} riga_{riga} colonna_{colonna}">
+                                                    <!--BeginPesoObiettivoCdrPersonale-->
+                                                    <a id="{id_obiettivo_cdr_personale}"><div>{peso_obiettivo_personale}</div></a>
+                                                    <input id="input_{id_obiettivo_cdr_personale}" name="input_{id_obiettivo_cdr_personale}" type="text" value="">
+                                                    <!--EndPesoObiettivoCdrPersonale-->																
+                                            </td>					
+                                            <!--EndObiettivoCdrPersonale-->		
+                                            <td id="tot_{riga}" class="tot_obiettivi_cdr_personale riga_{riga}">{totale_obiettivi_cdr_personale}</td>
+                                    </tr>					
+                            <!--EndPersonale-->
+                            <!--BeginNoPersonale-->
+                                    <td colspan="{obiettivi_colspan}">Nessun dipendente direttamente assegnato al CDR.</td>
+                            <!--EndNoPersonale-->
+			</tbody>
+                </table>
+	<!--EndMatricePesiCdrPersonale-->
+	<!--BeginNoObiettivi-->
+		<p>
+			Nessun obiettivo definito per il CDR nell'anno selezionato.
+		</p>
+	<!--EndNoObiettivi-->
+</div>
+<script>	
+	//riga e colonna evidenziate
+	$(".peso_obiettivo_personale")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+			$(".colonna_"+id_parts[2]).addClass("highlighted");
+			$(this).removeClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");
+			$(".colonna_"+id_parts[2]).removeClass("highlighted");
+		})
+	;	
+	
+	$(".intestazione_personale")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");			
+		})
+	;
+	
+	$(".rotated_text")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".colonna_"+id_parts[2]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".colonna_"+id_parts[2]).removeClass("highlighted");			
+		})
+	;
+	
+	//edit dati
+	$("#edit_pesi_cdr_personale").click(function(){
+		$("#edit_pesi_cdr_personale").hide();
+		$(".peso_obiettivo_personale.modificabile").each(function(){
+			id = $(this).attr("id");
+			$(this).children("a").hide();
+			$(this).children("input").show();
+			$(this).children("input").val($(this).children("a").children("div").html());
+		});
+		$("#chiusura_edit_pesi_cdr_personale").show();
+		$("#salvataggio_edit_pesi_cdr_personale").show();
+	});
+	
+	$("#chiusura_edit_pesi_cdr_personale").click(function(){
+		$("#chiusura_edit_pesi_cdr_personale").hide();
+		$(".peso_obiettivo_personale.modificabile").each(function(){
+			id = $(this).attr("id");
+			$(this).children("a").show();
+			$(this).children("input").hide();						
+		});
+		$("#edit_pesi_cdr_personale").show();
+		$("#salvataggio_edit_pesi_cdr_personale").hide();
+	});
+	
+	$("#salvataggio_edit_pesi_cdr_personale").click(function(){		
+		//vengono recuperati tutti i punteggi variati
+		var punteggi_variati = [];
+		$(".peso_obiettivo_personale.modificabile").each(function(){
+			id = $(this).attr("id");	                        
+                        if($(this).children("a").children("div").html() !== $(this).children("input").val()){
+                            id_ob_cdr_personale = $(this).children("a").attr("id");
+                            //viene recuperato l'array con le informazioni dell'obiettivo_cdr_personale                            
+                            var i;  
+                            for (i=0; i<obiettivi_cdr_personale.length; i++) {
+                                //vengono accodate all'array le informazioni della relazione eventualmente esistente e punteggio variato
+                                if (obiettivi_cdr_personale[i][0] === id) {
+                                    punteggi_variati.push(obiettivi_cdr_personale[i].concat([id_ob_cdr_personale, $(this).children("input").val()]));       
+                                    i = obiettivi_cdr_personale.length;
+                                }
+                            }
+                        }
+		});
+                                
+		// nel caso sia variato almeno un punteggio si procede con il salvataggio su db (chiamata ajax)
+		if (punteggi_variati.length > 0){
+			$("#loading_image").modal("show");
+		
+			var data = {
+				b: punteggi_variati
+			};
+
+			var request = $.ajax({
+                                        url: window.location.pathname + '/save_peso_ob_cdr_personale.php?{globals}',
+                                        type: 'GET',
+                                        data: data,									
+                                        cache: false,
+                                        contentType: false,
+			});
+			request.done(function(data) {				
+				response = JSON.parse(data);						
+				if (response.esito === "success"){					
+					$("#edit_pesi_cdr_personale").show();
+					$("#chiusura_edit_pesi_cdr_personale").hide();
+					$("#salvataggio_edit_pesi_cdr_personale").hide();
+					$(".peso_obiettivo_personale.modificabile").each(function(){
+						$(this).children("a").children("div").html($(this).children("input").val());						
+						$(this).children("a").show();
+						$(this).children("input").hide();
+					});
+				}
+				$("#notifiche_pesi_cdr_personale").removeClass("error");
+				$("#notifiche_pesi_cdr_personale").removeClass("success");
+				$("#notifiche_pesi_cdr_personale").addClass(response.esito);
+				$("#notifiche_pesi_cdr_personale").html(response.messaggio);
+                                $("#notifiche_pesi_cdr_personale").show("blind");
+                                
+                                if(response.esito === "success") {                                    
+                                    var current_index = $("#tabs").tabs("option","active");                                    
+                                    setTimeout(function(){
+                                        $("#loading_image").modal("hide");
+                                        $("#tabs").tabs('load',current_index);
+                                   }, 3000); 
+                                }
+                                else {       
+                                    $("#loading_image").modal("hide");
+                                    $("#notifiche_pesi_cdr_personale").delay(5000).hide("blind");
+                                }                                                                
+			})
+			request.fail(function() {						
+				$("#notifiche_pesi_cdr_personale").removeClass("success");
+				$("#notifiche_pesi_cdr_personale").addClass("error");
+				$("#notifiche_pesi_cdr_personale").html("Errore durante l'aggiornamento dei pesi");
+                                $("#loading_image").modal("hide");	
+				$("#notifiche_pesi_cdr_personale").show("blind");
+				$("#notifiche_pesi_cdr_personale").delay(5000).hide("blind");
+			})	
+		}
+		else {
+			$("#edit_pesi_cdr_personale").show();
+			$("#salvataggio_edit_pesi_cdr_personale").hide();
+                        $("#chiusura_edit_pesi_cdr_personale").hide();                        
+			$(".peso_obiettivo_personale.modificabile").each(function(){
+				$(this).children("a").children("div").html($(this).children("input").val());						
+				$(this).children("a").show();
+				$(this).children("input").hide();
+			});
+		}
+		
+	});			
+</script>

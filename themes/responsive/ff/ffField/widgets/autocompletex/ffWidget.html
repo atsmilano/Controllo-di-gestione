@@ -1,0 +1,62 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript">
+	ff.pluginLoad("ff.ajax", "/themes/library/ff/ajax.js", function() {
+		ff.pluginLoad("ff.ffField",	"/themes/library/ff/ffField.js",	function() {
+			ff.pluginLoad("ff.ffField.autocompletex", "{widget_path}/autocompletex.js", function () {
+				ff.ffField.autocompletex.init({
+					<!--BeginSectInnerUrl-->innerURL			: "{innerURL}",<!--EndSectInnerUrl-->
+	                "icons"                   : {
+	                	"caret"                 : "{icon_caret_down}"
+	                    , "plus"                : '{icon_plus}'
+	                    , "minus"               : '{icon_minus}'
+	                    , "loader"				: '{icon_loader}'
+	                }
+				});
+			});
+		});
+	});
+</script>
+<!--EndSectHeaders-->
+
+<!--BeginSectControl-->
+<!--BeginSectControlLabel-->
+<label>{autocomple_label}</label>
+<!--EndSectControlLabel-->
+<!--BeginSectControlMulti-->
+<textarea id="{prefix}{container}{id}" name="{prefix}{container}{id}" class="autocompletex{class}" {properties}>{selected_value}</textarea>
+<!--EndSectControlMulti-->
+<!--BeginSectControlMono-->
+<input type="text" id="{prefix}{container}{id}" name="{prefix}{container}{id}" class="autocompletex{class}" value="{selected_value}" {properties} />
+<!--EndSectControlMono-->
+<!--BeginSectReadOnly-->
+<input type="hidden" id="{container}{id}" name="{container}{id}" value="{selected_id}" />
+<!--EndSectReadOnly-->
+<!--BeginSectCombo-->
+	<a class="{icon_caret_down}" href="javascript:void(0);"></a>
+<!--EndSectCombo-->
+<!--BeginSectDebug--><a href="#" onclick="window.open('{innerURL}&data_src={data_src}', '_blank')">[debug]</a><!--EndSectDebug-->
+<!--EndSectControl-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.autocompletex", function () {
+      jQuery(document).ready(function() {
+        <!--BeginSectBinding-->
+             ff.ffField.autocompletex.add({
+				"id" : "{container}{id_encoded}"
+                , "disabled" : {disabled}
+                , "minLength" : {minLength}
+                , "delay" : {delay}
+                , "multi": {multi}
+                , "cache": {cache}
+                , "readonly": {readonly}
+                , "combo": {combo}
+                , "data_src" : "{data_src}"
+                , "stripChar" : "{strip_char}"
+                , "service": {service}
+            });
+        <!--EndSectBinding-->
+         });
+	});
+</script>
+<!--EndSectFooters-->

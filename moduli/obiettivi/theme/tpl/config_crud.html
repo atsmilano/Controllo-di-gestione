@@ -1,0 +1,29 @@
+<div id="config_crud">
+    <div id="tabs">
+        <ul>
+            <li><a id="a_area" href="configurazioni/area?{globals}">Area</a></li>
+            <li><a id="a_area_risultato" href="configurazioni/area_risultato?{globals}">Area Risultato</a></li>
+            <li><a id="a_tipo" href="configurazioni/tipo?{globals}">Tipo</a></li>
+            <li><a id="a_origine" href="configurazioni/origine?{globals}">Origine</a></li>
+            <li><a id="a_parere_azioni" href="configurazioni/parere_azioni?{globals}">Parere azioni</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

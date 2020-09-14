@@ -1,0 +1,20 @@
+<div class="loginBox">
+	<!--BeginSectError-->
+	<div class="warning"> {sError} </div>
+	<!--EndSectError-->
+	<!--BeginSectUsername-->
+    <div class="login-field">
+	<label>Username</label>
+    <input type="text" id="username" name="username" value="{username}"/>
+    </div>
+	<!--EndSectUsername-->
+	<!--BeginSectEmail-->
+    <div class="login-field">
+	<label>E-mail</label>
+    <input onkeydown="return ff.submitProcessKey(event, 'btRecover')" id="email" name="email" value="{email}"/>
+    </div>
+	<!--EndSectEmail-->
+	<div class="actions"><input id="btRecover" type="submit" value="Recupera" onclick="document.getElementById('frmAction').value = 'recover';"/></div>
+	<p class="back-to"><a href="{site_path}/">{_back_to_site}</a></p>
+	<script type="text/javascript">document.getElementById('{focus_target}').focus();</script>
+</div>

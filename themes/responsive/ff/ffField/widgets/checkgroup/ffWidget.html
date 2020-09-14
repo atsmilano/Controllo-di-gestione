@@ -1,0 +1,26 @@
+<!--BeginSectHeaders-->	
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.checkgroup", function () {
+		<!--BeginSectBinding-->
+		ff.ffField.checkgroup.addValue({
+			"id"			: "{container}{id}",
+			"separator"			: "{separator}",
+			"length"			: "{length}"
+		});
+		<!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<input type="hidden" id="{container}{id}" name="{container}{id}" value="{value}" />
+<!--BeginSectRow-->
+<div class="{class}">
+	<input type="checkbox" id="{container}{id}_{index}" class="{control_class}" value="{element_value}" {checked} {properties} />
+    <label for="{container}{id}_{index}">{label}</label>
+</div>
+<!--EndSectRow-->
+<!--EndSectControl--> 

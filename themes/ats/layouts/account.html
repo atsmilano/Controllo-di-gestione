@@ -1,0 +1,13 @@
+<div class="col-lg-12 accountmenu">
+    <div class="text-center dropdown">
+        <span>Utente loggato: </span>{user_account}
+        <!--BeginSectProfile-->
+        <a href="{user_profile}"><strong> {account}</strong></a>
+        <!--EndSectProfile-->
+        <!--BeginSectProfileNoEdit-->
+        <strong> {account}</strong>
+        <!--EndSectProfileNoEdit-->
+        <br />
+        <a href="{site_path}/area_riservata/login?frmAction=logout&ret_url={encoded_this_url}"> {_logout}</a>           
+    </div>
+</div>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html <!--BeginSectHtmlAttr--> {attr_type}="{attr_content}"<!--EndSectHtmlAttr-->>
+<head>
+    <title>{title}</title>
+    <meta charset="UTF-8">
+    <!--BeginSectTags-->
+    <{tag_type}{tag_properties}/>
+    <!--EndSectTags-->
+    <!--BeginSectCss-->
+    <!--BeginSectCssLink-->
+    <link href="{css_path}"{link_properties}/>
+    <!--EndSectCssLink-->
+    <!--BeginSectCssEmbed-->
+    <style{link_properties}>{css_embed}</style>
+    <!--EndSectCssEmbed-->
+    <!--EndSectCss-->
+    <!--BeginSectJs-->
+        <script<!--BeginSectJsSrc--> src="{js_path}"<!--EndSectJsSrc--><!--BeginSectJSAsync--> async="async" defer="defer"<!--EndSectJSAsync-->>{js_embed}</script>
+    <!--EndSectJs-->
+    <!--BeginSectFFJS-->
+        ff.initFF({
+    "base_path"		: "{base_path}",
+    "site_path"		: "{site_path}",
+    "theme"			: "{theme}",
+    "theme_ui"		: "{theme_ui}",
+    "language"		: "{language}",
+    "locale"		: "{locale}",
+    "layer"			: "{layer}",
+    "frameworkCss"	: "{framework_css}",
+    "fontIcon"		: "{font_icon}",
+    <!--BeginSectGroup-->"group"         : "{group}",<!--EndSectGroup-->
+    "lazyImg"	: {lazy_img},
+    "showfiles"		: '{showfiles}',
+
+    <!--BeginSectFFProperty-->
+    "{prop_name}"	: {prop_value},
+    <!--EndSectFFProperty-->
+    <!--BeginSectGroup-->"group"         : "{group}",<!--EndSectGroup-->
+    "struct"		: ff.hash([
+                              {'id': 'fields', 'value' : ff.hash([
+    <!--BeginSectFFFld-->
+        {
+    'id' : '{fieldid}',
+    'value' : {
+    "type"		: undefined
+                  , "widget"		: "{widget}"
+    , "resources"	: [<!--BeginSectFFFldResource-->{resource}<!--EndSectFFFldResource-->]
+    }
+    },
+    <!--EndSectFFFld-->
+    ])},
+    {'id': 'comps', 'value' : ff.hash([
+    <!--BeginSectFFObj-->
+        {'id': '{objid}', 'value' : {
+    "type"			: "{type}"
+    , "resources"	: [<!--BeginSectFFObjResource-->{resource}<!--EndSectFFObjResource-->]
+    , "fields"		: ff.hash([
+    <!--BeginSectFFObjFld-->
+        {
+    'id' : '{fieldid}',
+    'value' : {
+    "type"		: "{fldtype}"
+    , "widget"		: "{widget}"
+    , "resources"	: [<!--BeginSectFFFldResource-->{resource}<!--EndSectFFFldResource-->]
+    }
+    },
+    <!--EndSectFFObjFld-->
+    ])
+    <!--BeginSectFFObjProperty-->
+        , "{prop_name}"	: {prop_value}
+    <!--EndSectFFObjProperty-->
+    }},
+    <!--EndSectFFObj-->
+    ])}
+    ])
+    <!--BeginSectLibs-->
+        , "libs"		: [
+    <!--BeginSectLib-->
+        {'type' : '{lib_type}', 'id' : '{lib_tag}', 'deps' : {lib_deps}, 'media' : {lib_media}} ,<!--EndSectLib-->
+    ]
+    <!--EndSectLibs-->
+    });
+
+    <!--BeginSectAsyncCssPlugin-->
+        ff.injectCSS("{css_tag}", "{css_path}", undefined, {lib_media}, {css_async});
+    <!--EndSectAsyncCssPlugin-->
+    <!--BeginSectAsyncJsPlugin-->
+        ff.pluginLoad("{js_tag}", "{js_path}", undefined, {js_async}, {js_deps});
+    <!--EndSectAsyncJsPlugin-->
+    <!--EndSectFFJS-->
+    <!--BeginSectWidgetsHeaders-->
+        {WidgetsContent}
+    <!--EndSectWidgetsHeaders-->
+        </head>
+          <body{properties_body}>
+    <!--BeginSectFormHeader-->
+        <form id="{form_id}" name="{form_name}" method="{form_method}"{form_action}{form_enctype}>
+    <!--BeginSectFormHidden-->
+        <input type="hidden" id="{varname}" name="{varname}" value="{varvalue}" />
+    <!--EndSectFormHidden-->
+    <!--EndSectFormHeader-->
+        {content}
+    <!--BeginSectWidgetsFooters-->
+        {WidgetsContent}
+    <!--EndSectWidgetsFooters-->
+    <!--BeginSectFormFooter-->
+        </form>
+    <!--EndSectFormFooter-->
+    <!--BeginSectJSDefer-->
+    <!--BeginSectCSSDefer-->
+        <noscript id="deferred-styles">
+    {defer_css}
+    </noscript>
+    <!--EndSectCSSDefer-->
+        <script async="async" defer="defer" type="text/javascript">
+    function ffDF() {
+    function js() {
+    var s = {defer_js};
+    for(var i = 0; i< s.length; i++) {
+        var e = document.createElement("script");
+        e.type = "text/javascript";
+        e.src = s[i];
+        document.head.appendChild(e);
+    }
+    setTimeout(function() {
+        if (typeof ff == "undefined")
+    window.location.href = window.location.pathname + "?" + (window.location.search ? window.location.search + "&" : "") + "__nocache__" + (window.location.hash ? "#" + window.location.hash : "");
+    }, 5000);
+    }
+
+    var addStylesNode = document.getElementById("deferred-styles");
+    if(addStylesNode) {
+        var replacement = document.createElement("div");
+        replacement.innerHTML = addStylesNode.textContent;
+        document.body.appendChild(replacement);
+        addStylesNode.parentElement.removeChild(addStylesNode);
+    }
+    js();
+    }
+
+    var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+			webkitRequestAnimationFrame || msRequestAnimationFrame;
+    if (raf) raf(function() { window.setTimeout(ffDF, 0); });
+    else window.addEventListener('load', ffDF);
+    </script>
+    <!--EndSectJSDefer-->
+        </body>
+          </html>

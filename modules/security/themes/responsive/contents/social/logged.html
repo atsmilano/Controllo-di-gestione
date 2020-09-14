@@ -1,0 +1,26 @@
+<div id="ffLoginBox" class="{container_class}">
+    <div class="{inner_wrap_class}">
+        <div class="inner-box">
+            <div class="{logout_class}">
+	            <h2>{_already_logged}</h2>
+                <div class="{account_class}">
+               		<!--BeginSectAvatar-->
+               		<img src="{avatar}" alt="{username}" width="200" height="200">
+               		<!--EndSectAvatar-->
+               		<!--BeginSectUsername-->
+               		<h2>{username}</h2>
+               		<!--EndSectUsername-->
+               		<!--BeginSectEmail-->
+               		<h3>{email}</h3>
+               		<!--EndSectEmail-->
+                </div>
+                <div class="{actions_class}">
+                    <a class="{login_button_class}" href="javascript:void(0);" onclick="ff.modules.security.reloadPageBySocialLogin('{login_url}');">{_back_to_site}</a>
+                </div>                
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+         setTimeout(function() {ff.modules.security.reloadPageBySocialLogin('{login_url}'); }, 2000);
+    </script>    
+</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ffxml>
+	<rule>
+		<priority>BOTTOM</priority>
+		<source>(.*)</source>
+		<control>DISABLED</control>
+		<max_age>86400</max_age>
+	</rule>
+</ffxml>

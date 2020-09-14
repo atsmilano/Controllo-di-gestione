@@ -1,0 +1,49 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	<!--BeginSectBinding-->
+	ff.pluginAddInit("ff.ffPage.tabs", function () {
+		ff.ffPage.tabs.addTab("tab-menu-{component_id}", "{framework_css_name}");
+	});
+	<!--EndSectBinding-->
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectInstance-->
+
+	<!--BeginSectHeaderTab-->
+	{tab_menu_wrap_start}
+	<ul id="tab-menu-{component_id}" {tab_menu_properties}>
+		<!--BeginSectHeaderRow-->
+		<li {tab_menu_item_properties}>
+	        <a href="#{tab_id}-{rrow}" {tab_menu_link_properties}>{tab_label}{tab_buttons}</a>
+		</li>
+		<!--EndSectHeaderRow-->
+	</ul>
+	{tab_menu_wrap_end}
+	<!--EndSectHeaderTab-->
+
+	{tab_pane_wrap_start}
+	<div {tab_pane_properties}>
+	<!--BeginSectBodyRow-->
+	<div id="{tab_id}-{rrow}" {tab_pane_item_properties}>
+		{content}
+	</div>
+	<!--EndSectBodyRow-->
+	</div>
+	{tab_pane_wrap_end}
+	<!--BeginSectHeaderTabBottom-->
+	{tab_menu_wrap_start}
+	<ul {tab_menu_properties}>
+		<!--BeginSectHeaderRowBottom-->
+		<li {tab_menu_item_properties}>
+	        <a href="#{tab_id}-{rrow}" {tab_menu_link_properties}>{tab_label}{tab_buttons}</a>
+		</li>
+		<!--EndSectHeaderRowBottom-->
+	</ul>
+	{tab_menu_wrap_end}
+	<!--EndSectHeaderTabBottom-->
+
+<!--EndSectInstance-->

@@ -1,0 +1,21 @@
+<span class="panel-container {flag_dim}"> 
+    <a {toggle_properties} href="#panel-lang">
+        <span class="{flag_lang_active}"></span>
+    </a>
+    <div id="panel-lang" class="{panel_class}">
+        <div class="{panel_body_class}">
+            <ul class="choose-lang-list"> 
+                <!--BeginSectCurrentLang-->
+                <li class="{current_class}" id="lang-{code}"> 
+                    <span class="{flag_lang}"></span>{description}
+                </li>
+                <!--EndSectCurrentLang-->
+                <!--BeginSectLang-->
+                <li id="lang-{code}">
+                    <a href="javascript:void(0);" onclick="{lang_url}"><span class="{flag_lang}"></span>{description}</a> 
+                </li>
+                <!--EndSectLang-->
+            </ul>
+        </div>
+    </div>
+</span>

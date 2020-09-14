@@ -1,0 +1,34 @@
+<div id="coan_dettaglio_conto">
+	<h3>{conto_codice}&nbsp;-&nbsp;{conto_desc}&nbsp;(Budget:&nbsp;{tot_budget}&nbsp;-&nbsp;Consuntivo:&nbsp;{tot_consuntivo}&nbsp;-&nbsp;Erosione:&nbsp;{tot_erosione})</h3>
+	<table>
+		<caption>Cdc associati</caption>
+		<thead id="conto_thead">
+			<tr>
+				<th>Codice</th>
+				<th>Descrizione</th>
+				<th>Cdr</th>
+				<th class="tot">Budget</th>
+				<th class="tot">Consuntivo</th>
+				<th class="tot">Erosione</th>
+			</tr>
+		</thead>
+		<!--BeginSectCdc-->
+                <!--BeginSectCdr-->
+                <tr class="totali_cdr">
+                        <td colspan="3">Totale {cdr}</td>
+                        <td class="tot">{budget_cdr}</td>
+                        <td class="tot">{consuntivo_cdr}</td>
+                        <td class="tot">{erosione_cdr}</td>
+                </tr>
+                <!--EndSectCdr-->		
+                <tr class="conto_cdc">
+                        <td>{cdc_codice}</td>
+                        <td>{cdc_desc}</td>			
+                        <td>{cdr}</td>
+                        <td class="tot">{budget}</td>
+                        <td class="tot">{consuntivo}</td>
+                        <td class="tot">{erosione}</td>
+                </tr>
+		<!--EndSectCdc-->
+	</table>
+</div>	

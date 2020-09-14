@@ -1,0 +1,31 @@
+<!--BeginSectSingleApp-->
+<h1>Do You Authorize 
+	<!--BeginSectSingleWithWWW--><a href="{url_site}" target="_blank">{client_description}</a><!--EndSectSingleWithWWW-->
+	<!--BeginSectSingleWithoutWWW-->{client_description}<!--EndSectSingleWithoutWWW-->
+	?
+	<!--BeginSectSinglePrivacy-->&nbsp;-&nbsp;<a href="{url_privacy}" target="_blank">Privacy</a><!--EndSectSinglePrivacy-->
+</h1>
+<!--EndSectSingleApp-->
+<!--BeginSectMultiApp-->
+<h1>Do You Authorize the following sites?</h1>
+<ul>
+	<!--BeginSectApp-->
+	<li>
+	<!--BeginSectMultiWithWWW--><a href="{url_site}" target="_blank">{client_description}</a><!--EndSectMultiWithWWW-->
+	<!--BeginSectMultiWithoutWWW-->{client_description}<!--EndSectMultiWithoutWWW-->
+	<!--BeginSectMultiPrivacy-->&nbsp;-&nbsp;<a href="{url_privacy}" target="_blank">Privacy</a><!--EndSectMultiPrivacy-->
+	</li>
+	<!--EndSectApp-->
+</ul>
+<!--EndSectMultiApp-->
+<br />
+	<!--BeginSectScopes-->
+		<h2>These data will be allowed:</h2>
+		<ul>
+		<!--BeginSectScope-->
+		<li>{scope_name} - {scope_description}</li>
+		<!--EndSectScope-->
+		</ul><br />
+	<!--EndSectScopes-->
+	<button onclick="jQuery('#frmAction').val('yes');jQuery('#frmMain').submit();">Yes</button>
+	<button onclick="jQuery('#frmAction').val('no');jQuery('#frmMain').submit();">No</button>

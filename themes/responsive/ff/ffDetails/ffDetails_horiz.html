@@ -1,0 +1,90 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+{outer_wrap_start}
+<div id="{component_id}" class="{component_class}"> 
+    <div id="{component_id}_hidden" class="hidden">
+        <input type="hidden" id="{component_id}_rows" name="{component_id}_rows" value="{rows}" />
+        <input type="hidden" id="{component_id}_delete_row" name="{component_id}_delete_row" value="" />
+        <!--BeginSectHidden-->
+        <input type="hidden" id="{component_id}_{hidden_name}" name="{component_id}_{hidden_name}" value="{hidden_value}" />
+        <!--EndSectHidden-->
+    </div>
+    
+    {inner_wrap_start}
+    
+    {fixed_pre_content}
+
+	<!--BeginSectError-->
+	<div class="warning">{strError}</div> 
+	<!--EndSectError-->
+
+	<div class="heading">
+		<!--BeginSectTitle-->
+		<h3 class="title">{discl_bt}{title}</h3>
+		<!--EndSectTitle-->
+		{fixed_title_content}
+        <!--BeginSectNewHeader-->
+		<div class="actions top text-right">
+			<!--BeginSectRowToAddHeaderDefault-->
+			<input type="text" onkeyup="ff.submitProcessKey(null, '{component_id}_addrow_header');" name="{component_id}_rowstoadd_header_default_{rowstoadd_default_field}" />
+			<!--EndSectRowToAddHeaderDefault-->
+            <a id="{component_id}_addrow_header" class="{addrow_class}" href="javascript:void(0);" onclick="<!--BeginSectHeaderTabUrl-->tabs_form_url('tabs_{tab_id}', {tab_number});<!--EndSectHeaderTabUrl--> {submit_action}">{addrow_icon}{addrow_label}</a>
+			<!--BeginSectNewHeaderQta-->
+			<input id="{component_id}_rowstoadd" name="{component_id}_rowstoadd" type="text" value="1" class="detailQTA"/>
+			<label>{_addrow_num_col}</label>
+			<!--EndSectNewHeaderQta-->
+		</div>
+		<!--EndSectNewHeader-->
+	</div>		
+
+	{fixed_heading_content}
+	{content_wrap_start}
+		<table border="0" cellpadding="0" cellspacing="0" class="ffDetails" {properties}>
+			<!--BeginSectFormHeader-->
+			<thead>
+				<tr class="head_details">
+					<!--BeginSectLabel-->             
+					<!--BeginSectDetailButtonLabel-->
+					<th class="ffButton">{DetailButtonLabel}</th>
+					<!--EndSectDetailButtonLabel-->
+					<!--BeginSectFormFieldLabel-->
+					<th {col_class} {col_properties}>{FormFieldLabel}<!--BeginSectRequiredSymbol-->&nbsp; <span class="required">*</span><!--EndSectRequiredSymbol--><!--BeginSectDescriptionLabel--><span class="description">{description}</span><!--EndSectDescriptionLabel--></th>
+					<!--EndSectFormFieldLabel-->
+					<!--EndSectLabel-->
+				</tr>
+			</thead>
+			<!--EndSectFormHeader-->
+			<tbody>
+				<!--BeginSectFormRow-->
+				<tr <!--BeginSectRowClass-->class="{row_class}"<!--EndSectRowClass-->>
+					<!--BeginSectCol-->
+					<!--BeginSectDetailButton-->
+					<td class="ffButton">{DetailButton}</td>
+					<!--EndSectDetailButton-->
+					<!--BeginSectFormField-->
+					<td {col_class} {col_properties}>{control}</td>
+					<!--EndSectFormField-->
+					<!--EndSectCol-->
+				</tr>
+				<!--EndSectFormRow-->
+			</tbody>
+		</table>
+	{content_wrap_end}
+    <!--BeginSectNewFooter-->
+    <div class="actions">
+		<!--BeginSectRowToAddFooterDefault-->
+		<input type="text" onkeyup="ff.submitProcessKey(null, '{component_id}_addrow_footer');" name="{component_id}_rowstoadd_footer_default_{rowstoadd_default_field}" />
+		<!--EndSectRowToAddFooterDefault-->
+        <a id="{component_id}_addrow_footer" class="{addrow_class}" href="javascript:void(0);" onclick="<!--BeginSectFooterTabUrl-->tabs_form_url('tabs_{tab_id}', {tab_number});<!--EndSectFooterTabUrl--> {submit_action}">{addrow_icon}{addrow_label}</a>
+        <!--BeginSectNewFooterQta-->
+        <input id="{component_id}_rowstoadd" name="{component_id}_rowstoadd" type="text" value="1" class="detailQTA"/>
+        <label>{_addrow_num_col}</label>
+        <!--EndSectNewFooterQta-->
+    </div>
+    <!--EndSectNewFooter-->
+	{fixed_post_content} 
+    {inner_wrap_end}
+</div>
+{outer_wrap_end}
+<!--BeginSectFooters-->
+<!--EndSectFooters-->

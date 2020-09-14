@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+	<menu>
+			<domains label="Domains" path="/restricted/domains" icon="globe" location="brand" position="header" acl="3" settings="MOD_SEC_MULTIDOMAIN" />
+			<packages label="Packages" path="/restricted/packages" icon="cubes" location="brand" position="header" acl="3" settings="MOD_SEC_MULTIDOMAIN" />
+			<profile label="Profilo" path="/restricted/profile" location="accountpanel"  />
+			<users label="Utenti" path="/restricted/users" icon="users" location="brand" position="footer" acl="2,3" />
+			<crypt label="Crypt" path="/restricted/crypt" icon="lock" location="brand" acl="3" redir="/restricted/crypt/init" settings="MOD_SEC_CRYPT">
+				<init path="/restricted/crypt/init" label="Crypt Init" settings="MOD_SEC_CRYPT"></init>
+				<view path="/restricted/crypt/view" label="Crypt View" settings="MOD_SEC_CRYPT"></view>
+			</crypt>
+			<oauth2 hide="true" profiling_skip="true" />
+			<api path="/apiserver" label="API" location="brand" acl="3" redir="/apiserver/apps" settings="MOD_SEC_OAUTH2_SERVER">
+				<apps path="/apiserver/apps" label="Applications" acl="3" settings="MOD_SEC_OAUTH2_SERVER"/>
+				<scopes path="/apiserver/scopes" label="Scopes" acl="3"  settings="MOD_SEC_OAUTH2_SERVER"/>
+			</api>
+
+	</menu>
+	<layout>
+		<nolayout path="/restricted/login" />
+		<nolayout path="/restricted/recover" />
+		<nolayout path="/restricted/change_password" />
+	</layout>
+</configdata>

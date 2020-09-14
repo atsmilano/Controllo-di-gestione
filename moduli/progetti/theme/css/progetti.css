@@ -1,0 +1,86 @@
+#riepilogo_indicatore {
+    border: solid 1px #bcc9b9;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 0 9px 9px 9px;
+    margin: 6px;
+}
+
+#riepilogo_indicatore h2 {
+    margin-bottom: 6px;
+}
+
+#riepilogo_indicatore h3 {
+    border-bottom: solid 1px #bcc9b9;
+    margin-top: 6px;
+}
+
+#riepilogo_indicatore p {
+    margin-left: 12px;
+}
+
+/* Dialog */
+#conferma_prj_approvare,
+#conferma_prj_non_approvare,
+#conferma_prj_nuova_revisione,
+#conferma_prj_validazione_finale {
+    z-index: 9999;
+    padding: 3%;
+    background-color: #F0EEE3;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 50%;
+    position: fixed;
+    left: 25%;
+    color: #184A1E;
+    text-align: center;
+    display: none;
+    font-size: 15px;
+}
+
+#conferma_prj_approvare h3,
+#conferma_prj_non_approvare h3,
+#conferma_prj_nuova_revisione h3,
+#conferma_prj_validazione_finale h3{
+    font-weight: bold;
+    color: #184A1E;
+    margin-bottom: 15px;
+}
+
+#conferma_prj_approvare .confirm_link,
+#conferma_prj_non_approvare .confirm_link,
+#conferma_prj_nuova_revisione .confirm_link,
+#conferma_prj_validazione_finale .confirm_link{
+    background-color: white;
+    border: solid 1px #184A1E;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 6px;
+    font-weight: bold;
+    color: #2D8215;
+    margin: 9px;
+    width: 90px;
+    display: inline-block;
+}
+
+#conferma_prj_approvare .confirm_link:hover,
+#conferma_prj_non_approvare .confirm_link:hover,
+#conferma_prj_nuova_revisione .confirm_link:hover,
+#conferma_prj_validazione_finale .confirm_link:hover {
+    cursor: pointer;
+    background-color: #E6FB82;
+    border: solid 1px #81bb00;
+    text-decoration: none;
+}
+
+#progetto-partner-interni {
+    height:100%;    
+    overflow: visible;
+}
+
+#progetto-partner-interni ul {
+    height: 100px;
+}

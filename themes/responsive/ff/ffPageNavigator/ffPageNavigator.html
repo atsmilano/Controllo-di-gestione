@@ -1,0 +1,99 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<div class="{component_class}" {component_properties}>
+  <!--BeginSectSelector-->
+  <ul class="{perpage_class}">
+    <div class="input-group">
+      {_frame_per_page}
+      <span class="input-group-addon" id="sizing-addon1">10</span>
+      <div class="input-group-btn">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <!--BeginSectSelectorPage-->
+    <li><a href="javascript:void(0);" class="rec-page" rel="{records_per_page}">{records_per_page}</a>
+    </li>
+    <!--EndSectSelectorPage-->
+          <!--BeginSectSelectorPageAll-->
+          <li role="separator" class="divider"></li>
+    <li><a href="javascript:void(0);" class="rec-all" rel="{totelem}">{_all}</a>
+    <!--EndSectSelectorPageAll-->
+        </ul>
+      </div>
+    </div>
+  </ul>
+  <!--EndSectSelector-->
+  <!--BeginSectChoice-->
+  <div class="{choice_class}">
+    <div class="{choice_box_class}"> {choice_label}
+      <!--BeginSectChoiceInputStart-->
+      <div class="{choice_input_box_class}">
+        <!--EndSectChoiceInputStart-->
+        <input type="text" value="{current_page}" size="1" class="{choice_input_class}" />
+        <!--BeginSectChoiceInputEnd-->
+      </div>
+      <!--EndSectChoiceInputEnd-->
+      {choice_tot_page} </div>
+  </div>
+  <!--EndSectChoice-->
+  <!--BeginSectTotElem-->
+  <div class="{totelem_class}">{_total} <span>{totelem}</span></div>
+  <!--EndSectTotElem-->
+  <!--BeginSectNav-->
+  <div class="{pagination_class}">
+  <ul class="{pagination_menu_class}">
+    <!--BeginSectFirstButton-->
+    <li><a href="{url}" class="{first_class}" rel="prev">{first_icon}</a>
+    </li>
+    <!--EndSectFirstButton-->
+    <!--BeginSectPrevFrameButton-->
+    <li><a href="javascript:void(0);" class="{prevframe_class}">{prevframe_icon}</a>
+    </li>
+    <!--EndSectPrevFrameButton-->
+    <!--BeginSectPrevButton-->
+    <li><a href="{url}" class="{prev_class}" rel="prev">{prev_icon}</a>
+    </li>
+    <!--EndSectPrevButton-->
+    <!--BeginSectPageButton-->
+    <li{page_class}><a href="{url}" class="page" data-page="{num_page}">{num_page}</a>
+    </li>
+    <!--EndSectPageButton-->
+    <!--BeginSectNextButton-->
+    <li><a href="{url}" class="{next_class}" rel="next">{next_icon}</a>
+    </li>
+    <!--EndSectNextButton-->
+    <!--BeginSectNextFrameButton-->
+    <li><a href="javascript:void(0);" class="{nextframe_class}">{nextframe_icon}</a>
+    </li>
+    <!--EndSectNextFrameButton-->
+    <!--BeginSectLastButton-->
+    <li><a href="{url}" class="{last_class}" rel="next">{last_icon}</a>
+    </li>
+    <!--EndSectLastButton-->
+  </ul>
+  </div>
+  <!--EndSectNav-->
+</div>
+<!--BeginSectFooters-->
+<script type="text/javascript"> 
+	jQuery(function() {
+		ff.pluginAddInit("ff.ffPageNavigator", function () {
+			ff.ffPageNavigator.addNavigator({
+				"id"							: "{XHRcomponent}"
+                , "prefix"                      : "{prefix}"
+				, "page_parname"				: "{page_parname}"
+				<!--BeginSectNoInfinite-->
+				, "rec_per_page_parname"		: "{records_per_page_parname}"
+				, "rec_per_page"				: {selected_records_per_page}
+				, "page_per_frame"				: {page_per_frame}
+				<!--EndSectNoInfinite-->
+				, "doAjax"						: {doAjax}
+				, "infinite"					: {infinite}
+				, "currentClass"				: "{current_class}"
+                , "callback"                    : {callback}
+                , "callbackParams"              : {callback_params}
+			});
+		});
+	});
+</script>
+<!--EndSectFooters-->

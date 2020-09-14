@@ -1,0 +1,76 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript">
+	ff.pluginLoad("ff.ffField.autocomplete", "{widget_path}/autocomplete.js", function () {
+		ff.ffField.autocomplete.init({
+			<!--BeginSectInnerUrl-->innerURL			: "{innerURL}",<!--EndSectInnerUrl-->
+	        "icons"                   : {
+	            "caret"                 : "{icon_caret_down}"
+	            , "plus"                : '{icon_plus}'
+	            , "minus"               : '{icon_minus}'
+	            , "loader"				: '{icon_loader}'
+	        }
+		});
+	});
+</script>
+<!--EndSectHeaders-->
+
+<!--BeginSectControl-->
+<div class="actex-container" style="position: relative; background: #fff;"> <!-- classi aggiunte di bootstrap da dinamicizzare-->
+	<!--BeginSectControlLabel-->
+	<label for="{prefix}{container}{id}">{autocomple_label}</label> 
+	<!--EndSectControlLabel-->
+	<!--BeginSectControlMulti-->
+	<textarea id="{prefix}{container}{id}" name="{prefix}{container}{id}" class="{class}" {properties}>{selected_value}</textarea>
+	<!--EndSectControlMulti--> 
+	<!--BeginSectControlMono--> 
+	<input type="text" id="{prefix}{container}{id}" class="{class}" value="{selected_value}" style=" position: absolute;top: 0; left: 0;  background: transparent; margin:0;" {properties} />
+	<input type="text" id="suggest_{container}{id}" class="{class}" disabled="disabled" value="{selected_value}" style="   background: transparent; margin:0; -webkit-text-fill-color: silver; color: silver;" />
+	<!--EndSectControlMono-->
+	<!--BeginSectReadOnly-->
+	<input type="hidden" id="{container}{id}" name="{container}{id}" value="{selected_id}" />
+	<!--EndSectReadOnly-->
+	<!--BeginSectMultiIcons-->
+	<div class="{combo_class}" style="pointer-events: auto; width:auto; padding-right: 10px;">
+		<!--BeginSectIcon-->
+			<a class="{icon_class}" href="javascript:void(0);"{icon_rel}></a>
+		<!--EndSectIcon-->
+	</div>
+	<!--EndSectMultiIcons-->
+
+	<!--BeginSectCombo-->
+		<a class="{combo_class}" href="javascript:void(0);" style="pointer-events: auto; bottom:0; top:auto;"></a>
+	<!--EndSectCombo-->
+	<!--BeginSectDebug--><a href="#" onclick="window.open('{innerURL}&data_src={data_src}', '_blank')">[debug]</a><!--EndSectDebug-->
+</div>
+<!--EndSectControl-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.autocomplete", function () {
+      jQuery(document).ready(function() {
+        <!--BeginSectBinding-->
+             ff.ffField.autocomplete.observe("{container}{id_encoded}", {
+                "disabled" : {disabled}
+                , "minLength" : {minLength}
+                , "delay" : {delay}
+                , "multi": {multi}
+                , "cache": {cache}
+                , "readonly": {readonly}
+                , "combo": {combo}
+                , "data_src" : "{data_src}"
+                , "compare" : "{compare}"
+                , "compareH" : "{compare_having}"
+                , "operation" : "{operation}"
+                , "stripChar" : "{strip_char}"
+                , "service": {service}
+                <!--BeginSectData-->
+                , "source" : [
+                    {data_comma} { value: "{value}", label: "{label}", category: "{cat}" } 
+                ] 
+                <!--EndSectData-->
+            });
+        <!--EndSectBinding-->
+         });
+	});
+</script>
+<!--EndSectFooters-->

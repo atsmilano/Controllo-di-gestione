@@ -1,0 +1,20 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	<!--BeginSectBinding-->
+	ff.pluginAddInit("jquery-ui", function() {
+		var id = "#{container}{id}_progressbar";
+		jQuery(id.replace(/[\[]/g,"\\[").replace(/[\]]/g,"\\]")).progressbar({
+			value: {value}
+		});
+	});
+	<!--EndSectBinding-->
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+	<input type="hidden" id="{container}{id}" name="{container}{id}" value="{value}" />
+	<div id="{container}{id}_progressbar"></div>
+<!--EndSectControl-->

@@ -1,0 +1,39 @@
+<div id="cruscotto_valutazioni">
+    <div id="selezione_periodi" class="selezione_parametri">
+        <h2>Selezione del periodo di valutazione</h2>
+        <!--BeginSectSelezionePeriodi-->
+        <div>	
+            <label>Periodo:&nbsp;</label>
+            <select name='periodo_select' id='periodo_select' onchange="this.form.submit()">					
+                <!--BeginSectOptionPeriodi-->
+                <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                <!--EndSectOptionPeriodi-->
+            </select>
+        </div>
+        <!--EndSectSelezionePeriodi-->
+        <!--BeginSectNoPeriodi-->
+        <p class='error'>Nessun periodo di valutazione definito per l'anno selezionato</p>
+        <!--EndSectNoPeriodi-->
+    </div>
+    <div id="tabs">
+        <ul>
+            <li><a href="cruscotto/grado_diff/report?{globals}">Grado di differenziazione</a></li>
+            <li><a href="cruscotto/punteggi_valut/report?{globals}">Punteggi valutazione</a></li>
+            <li><a href="cruscotto/situazione_aziendale?{globals}periodo_select={periodo_select}">Situazione aziendale valutazioni</a></li>
+        </ul>
+    </div>        
+</div>	
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+
+                ui.jqXHR.error(function () {
+                    ui.panel.html('<div align="center"><p>Errore durante il caricamento del report.</p></div>');
+                });
+            }
+            , load: function (event, ui) {}
+        });
+    });
+</script>

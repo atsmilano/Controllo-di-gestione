@@ -1,0 +1,180 @@
+<div id="azienda_loading_image"><i class="fa fa-spinner fa-spin fa-5x" title="Caricamento..."></i> Caricamento...</div>
+<!--BeginPianiCdr-->
+<div id="piani_cdr">
+    <h4>Selezione piano cdr</h4>
+    <div id="selezione_piano_cdr">
+        {tipo_piano_cdr_sel}
+        {piano_cdr_sel}  
+    </div>
+    <!--BeginNoPianiCdr-->
+    <div>Nessun Piano Dei cdr Definito per la tipologia selezionata</div>
+    <!--EndNoPianiCdr-->	    
+
+    <a style="color:white;" class="btn btn-primary addnew" onclick="pianoCdrModify(null);"> 
+        <i class="fa-plus fa-lg fa"></i>Nuovo piano</a>
+
+    <!--BeginPianoCdrInfo-->
+    <div id="piano_cdr_selezionato">		
+        <h4>    
+            <i id="info_piano_icon" class="fa-info-circle fa-lg fa" title="Informazioni sul piano dei cdr selezionato"></i>		
+            <a href="javascript:void(0);"><i class="fa-clone fa-lg fa" title="Clona piano selezionato" onclick="pianoCdrClone({id_piano_cdr});"></i></a>
+            <a href="javascript:void(0);" onclick="pianoCdrModify({id_piano_cdr});"><i class="fa-edit fa-lg fa" title="Modifica piano selezionato"></i></a>            
+            <span>Piano {descrizione_piano}</span>
+        </h4>
+        <div id="info">
+            <h5>Tipologia piano</h5>
+            <span>{tipo_piano_cdr}</span>
+            <h5>Data definizione</h5>
+            <span>{data_definizione_piano_cdr}</span>				
+            <h5>Numero di cdr Totali</h5>
+            <span>{tot_cdr}</span>
+            <h5>Numero di cdc Totali</h5>
+            <span>{tot_cdc}</span>	
+        </div>
+    </div>
+    <!--EndPianoCdrInfo-->
+    <div id="notifiche" class="notifica"></div>
+    <div id="tree_element_loading_image_0" class="tree_element_loading_image"><i class="fa fa-spinner fa-spin " title="Caricamento..."></i> Caricamento...</div>
+    <div id="figli_0"></div>	
+</div>
+<!--EndPianiCdr-->
+<script type="text/javascript">
+    //Gestione azione del piano cdr
+    $("#info_piano_icon").click(function () {
+        if ($("#piano_cdr_selezionato #info").is(":visible"))
+            $("#piano_cdr_selezionato #info").hide();
+        else
+            $("#piano_cdr_selezionato #info").show();
+    });
+
+    //modifica di un cdr		
+    cdrEdit = function (padre, id) {
+        id = typeof id !== 'undefined' ? id : null;
+        url = window.location.pathname + "/cdr_modify.php?id_piano_cdr={id_piano_cdr}&id_padre=" + padre;
+        if (id !== null)
+            url += "&keys[id_cdr]=" + id;
+        ff.ffPage.dialog.doOpen('cdr_action_dialog', url);
+    }
+
+    pianoCdrModify = function (id) {
+        id = typeof id !== 'undefined' ? id : null;
+        url = window.location.pathname + "/piano_cdr_modify.php";
+        if (id !== null) {
+            url += "?keys[id_piano_cdr]=" + id;
+        }
+        ff.ffPage.dialog.doOpen('piano_cdr_action_dialog', url);
+    }
+
+    pianoCdrClone = function (id) {
+        id = typeof id !== 'undefined' ? id : null;
+        url = window.location.pathname + "/piano_cdr_modify.php?clone=true";
+        //In teoria si potrebbero rimuovere i controlli sull'esistenda del parametro id
+        if (id !== null) {
+            url += "&keys[id_piano_cdr_old]=" + id;
+        }
+        ff.ffPage.dialog.doOpen('piano_cdr_action_dialog', url);
+    }
+
+    //parametri da url
+    getUrlParameter = function (param, url) {
+        var params = url.split('?')
+
+        var sPageURL = decodeURIComponent(params[1]),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === param) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
+    }
+
+    //aggiornamento del ramo
+    refreshTree = function (id, action) {
+        action = typeof action !== 'undefined' ? action : null;
+        if (action == null || action !== 'close') {
+            treeCollapse(id);
+            treeExpand(id);
+        }
+    }
+
+    //cdc associati
+    //modifica di un cdr		
+    cdcEdit = function (padre, id_cdr) {        
+        url = window.location.pathname + "/cdc_associati.php?id_cdr="+id_cdr+"&id_padre="+padre;
+        ff.ffPage.dialog.doOpen('cdr_action_dialog', url);
+    }
+
+    //caricamento figli
+    loadTree = function (id) {
+        $("#tree_element_loading_image_" + id).modal("show");
+        $("#figli_" + id).load(window.location.pathname + "/tree?id_padre=" + id + "&id_piano_cdr={id_piano_cdr}", function () {
+            $("#tree_element_loading_image_" + id).modal("hide");
+        });
+    }
+
+    treeExpand = function (id) {
+        loadTree(id);
+        $("#expand_image_" + id).removeClass("fa-caret-square-o-right");
+        $("#expand_image_" + id).addClass("fa-caret-square-o-down");
+        $("#figli_" + id).addClass("expanded");
+    }
+
+    treeCollapse = function (id) {
+        $("#expand_image_" + id).removeClass("fa-caret-square-o-down");
+        $("#expand_image_" + id).addClass("fa-caret-square-o-right");
+        $("#figli_" + id).empty();
+        $("#figli_" + id).removeClass("expanded");
+    }
+
+    treeAction = function (id) {
+        if ($("#figli_" + id).hasClass("expanded"))
+            treeCollapse(id);
+        else
+            treeExpand(id);
+    }
+
+    //spostamento di un elemento
+    moveCdr = function (id_figlio, id_cdr_padre, id_nuovo_padre) {
+        $("#azienda_loading_image").modal("show");
+        var request = $.ajax({
+            url: window.location.pathname + '/cdr_move.php?id_piano_cdr={id_piano_cdr}&id_nuovo_padre=' + id_nuovo_padre + '&id=' + id_figlio,
+            async: false,
+            cache: false,
+            contentType: false
+        });
+        request.done(function (data) {
+            response = JSON.parse(data);
+            $("#notifiche").removeClass("error");
+            $("#notifiche").removeClass("success");
+            $("#notifiche").addClass(response.esito);
+            $("#notifiche").html(response.messaggio);
+            if (response.esito == "success") {
+                //se non esiste un elemento con id #expand_image_id è perchè il ramo non era espandibile
+                if ($("#expand_image_" + id_nuovo_padre).hasClass("no_expandable")) {
+                    $("#notifiche").removeClass("no_expandable");
+                    $("#notifiche").addClass("expandable");
+                }
+                refreshTree(id_cdr_padre);
+                refreshTree(id_nuovo_padre);
+            }
+        })
+        request.fail(function () {
+            $("#notifiche").removeClass("success");
+            $("#notifiche").addClass("error");
+            $("#notifiche").html("Errore durante lo spostamento del cdr");
+        })
+        request.always(function () {
+            $("#azienda_loading_image").modal("hide");
+            $("#notifiche").show("blind");
+            $("#notifiche").delay(5000).hide("blind");
+        });
+    }
+
+    //inizializzazioni apertura pagina	
+    loadTree(0);
+</script>

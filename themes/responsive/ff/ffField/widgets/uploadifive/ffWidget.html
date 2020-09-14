@@ -1,0 +1,50 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+
+<!--BeginSectFooters-->
+<script language="javascript" type="text/javascript">
+	ff.pluginAddInit("ff.ffField.uploadifive", function () {
+        <!--BeginSectBinding-->
+		ff.ffField.uploadifive.init({
+			component 		: "{container}{id}",
+			start 			: "{suffix_start}",
+			target 			: "{suffix_target}",
+			tmpname 		: "{suffix_tmpname}",
+			sufdel	        : "{suffix_delete}",
+			previewJs		: {preview_js},
+            writable        : {writable},
+			sizeLimit		: {size_limit},
+			fileExt			: {file_ext},
+			fileNormalize	: {file_normalize},
+			multi			: {multi},
+			modelThumb		: '{thumb_model}',
+			showFile		: {show_file},
+			showFilePath	: {showfile_path},
+			showFileDialog	: {showfile_dialog},
+			showFilePlugin	: {showfile_plugin},
+			showFileSort	: {showfile_sort},
+            fullPath        : {full_path},
+            dataSrc			: "{data_src}", 
+            folder			: "{folder}", 
+            height			: "{height}", 
+            width			: "{width}",
+            aviary			: {aviary},
+            icons           : {
+                                "cancel" : '{cancel_class}',
+                                "aviary" : "{aviary_class}", 
+                                "upload" : "{upload_class}"
+                                
+                            }
+		});
+        <!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+<!--BeginSectControl-->
+{fixed_pre_content}
+
+{control}
+
+{fixed_post_content}
+<!--EndSectControl-->

@@ -1,0 +1,28 @@
+<div class="col-lg-12 accountmenu">
+    <div class="text-center dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+            <!--BeginSectUserAvatar-->
+            <img  class="{img_class}" width="64" height="64" src="{avatar}" alt="{account}" />
+            <!--EndSectUserAvatar-->
+
+            <div class="account-info hidden-sm">
+                {user_account} <strong>{account}</strong> <br />
+                {info}
+            </div>
+        </a>
+        <ul class="dropdown-menu">
+            <!--BeginSectProfile-->
+            <li class="rowdivider"><a href="{user_profile}">{_edit_profile}</a></li>
+            <!--EndSectProfile-->
+            <!--BeginSectElement-->
+            <!--BeginSectSeparator-->
+            <!--EndSectSeparator-->
+            <li class="rowdivider"><{item_tag} {item_properties}>{label}</{item_tag}></li>
+        <!--EndSectElement-->
+        <!--BeginSectUsers-->
+        <li class="rowdivider"><a href="{manage_users}">{_manage_users}</a></li>
+        <!--EndSectUsers-->
+        <li><a href="{site_path}/restricted/login?frmAction=logout&ret_url={encoded_this_url}"> {_logout}</a></li>
+        </ul>
+    </div>
+</div>

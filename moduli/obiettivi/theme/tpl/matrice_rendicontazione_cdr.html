@@ -1,0 +1,150 @@
+<div id="matrice_pesi">	
+	<h2>Rendicontazione obiettivi - cdr</h2>	
+	<div id="notifiche"></div>
+	<div id="loading_image"><img src="{module_theme_path}\images\matrice_loader.gif"></div>
+	<!--BeginMatricePesiCdr-->
+            <!--BeginLinkEstrazione-->
+                <a id='estrazione_link' class='link_estrazione' href='./estrazioni/rendicontazioni_cdr.php?periodo={id_periodo}&{globals}'>
+                <div id='estrazione' class='estrazione'>Estrazione .xls</div></a>            
+                <br>
+            <!--EndLinkEstrazione-->
+		<div id="legenda">
+			Legenda:&nbsp;
+                        <span>NR - Non rendicontato</span>
+			<span class="azioni_definite">Raggiungibile al 31/12</span>
+			<span class="azioni_non_definite">Non raggiungibile al 31/12</span>
+		</div>
+		<table>
+			<thead>
+				<tr>
+					<th id="obcdr_0_0" class="intestazione">Cdr / Obiettivo</th>	
+					<!--BeginObiettivi-->		
+					<th id="obcdr_{riga}_{colonna}" class="rotated_text colonna_{colonna}" title="{desc_obiettivo}">{codice_obiettivo}</th>					
+					<!--EndObiettivi-->
+				</tr>
+			</thead>
+			<tbody>
+					<!--BeginCdr-->
+						<tr>					
+							<td id="obcdr_{riga}_{colonna}" class="rendicontazione_obiettivo_cdr intestazione riga_{riga}" title="{desc_cdr}">{codice_cdr}</td>
+							<!--BeginObiettivoCdr-->
+							<td id="obcdr_{riga}_{colonna}" class="rendicontazione_obiettivo_cdr {azioni_class} riga_{riga} colonna_{colonna}">
+								<!--BeginRendicontazioneObiettivoCdr-->
+								<a id="{id_obiettivo_cdr}_{id_rendicontazione}"><div>{rendicontazione_obiettivo_cdr}</div></a>								
+								<!--EndRendicontazioneObiettivoCdr-->
+								<!--BeginNoObiettivoCdr-->
+								&nbsp;
+								<!--EndNoObiettivoCdr-->								
+							</td>					
+							<!--EndObiettivoCdr-->								
+						</tr>					
+					<!--EndCdr-->
+					<!--BeginNoCdr-->
+						<td colspan="{obiettivi_colspan}">Nessun CDR afferente.</td>
+					<!--EndNoCdr-->
+			</tbody>
+		</table>
+	<!--EndMatricePesiCdr-->
+	<!--BeginNoObiettivi-->
+		<p>
+			Nessun obiettivo definito per il CDR nell'anno selezionato.
+		</p>
+	<!--EndNoObiettivi-->
+</div>
+<div id="rendicontazione_dialog"></div>    
+<script>        
+        //gestione del dialog dei dettagli della rendicontazione      
+        $(function() {		
+                $( "#rendicontazione_dialog" ).dialog({
+                        autoOpen: false,
+                        modal: true,
+                        width: 800,
+                        height: 400,						
+                        show: {
+                                effect: "scale",
+                                duration: 200
+                        },
+                        hide: {
+                                effect: "scale",
+                                duration: 200
+                        }
+                        });
+        });               
+        
+        $(".rendicontazione_obiettivo_cdr a").click(function (){          
+            ids = $(this).attr("id").split('_');   
+            id_rendicontazione = ids[1];
+            
+            if (id_rendicontazione.length > 0) {
+                
+                $( "#rendicontazione_dialog" ).dialog( "open" );
+
+                var request = $.ajax({
+                        url: './rendicontazione.php?{globals}keys[ID_periodo]={id_periodo}&keys[ID_rendicontazione]='+id_rendicontazione+'&no_actions=1',                                                                    
+                        async: false,										
+                        cache: false,
+                        contentType: false
+
+                });
+                request.done(function(data) {										
+                        $.each(data, function(index, element) {												
+                                        if (index == 'html'){
+                                                $('#rendicontazione_dialog').html(element);
+                                        }											
+                                });																		
+                });
+            }
+        });
+        
+        //riga e colonna evidenziate
+	$(".rendicontazione_obiettivo_cdr")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+			$(".colonna_"+id_parts[2]).addClass("highlighted");
+			$(this).removeClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");
+			$(".colonna_"+id_parts[2]).removeClass("highlighted");
+		})
+	;	
+	
+	$(".tot_obiettivi_cdr")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");			
+		})
+	;	
+	
+	$(".intestazione")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".riga_"+id_parts[1]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".riga_"+id_parts[1]).removeClass("highlighted");			
+		})
+	;
+	
+	$(".rotated_text")
+		.mouseover(function(){
+			id = $(this).attr("id");
+			id_parts = id.split("_");		
+			$(".colonna_"+id_parts[2]).addClass("highlighted");
+		})
+		.mouseout(function(){
+			id_parts = $(this).attr("id").split("_");
+			$(".colonna_"+id_parts[2]).removeClass("highlighted");			
+		})
+	;			
+</script>

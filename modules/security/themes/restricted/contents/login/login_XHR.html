@@ -1,0 +1,271 @@
+<div id='ffLoginBox'>
+<!--BeginSectError-->
+	<div class="error">{sError}</div>
+<!--EndSectError-->
+
+<!--BeginSectLogin-->
+	<div class="standard-login">
+		<!--BeginSectDomain-->
+		<div class="login-field">
+			<label>{_login_domain}</label>
+            <input type="text" id="domain" name="domain" value="{domain}"/>
+        </div>
+		<!--EndSectDomain-->
+		
+		<div class="login-field">
+			<label>{_login_username}</label>
+			<input type="text" id="username" name="username" value="{username}"/>
+		</div>
+		<div class="login-field">
+			<label>{_login_password}</label>
+			<input onkeydown="return ff.submitProcessKey(event, 'btLogin')" type="password" id="password" name="password" value="{password}" autocomplete="off"/>
+		</div>
+    	<div class="actions">
+            <input id="btLogin" type="button" value="{_login_confirm}" onclick="{login_bt_confirm}" />
+		</div>
+		
+        <div class="links"> 
+            <!--BeginSectRecover-->
+            <a class="recover" href="{site_path}{recover}?ret_url={encoded_this_url}&{globals}">{_recover_password}</a>
+            <!--EndSectRecover-->
+        </div>
+	</div>
+
+	<!--BeginSectSocialLogin-->
+	<div class="social-login">
+		<!--BeginSectSocialLoginGoogle-->
+		<a id ="modsec_googlelogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_google_login_window_title}');">{_social_google_login_bt_title}</a>
+		<!--EndSectSocialLoginGoogle-->
+        <!--BeginSectFBLogin-->
+		<div class="fb-content">
+			<p>{_fb_login_pre}</p>
+       		<div id="fb-root"></div>
+       			<a class="fb-login-button" href="javascript:checkSessionFBAlt();" scope='email,user_birthday'>{_fb_login_button}</a> 
+		</div>
+		<div class="fb-data hidden"></div>
+		<!--BeginSectAjaxLoader-->
+		<div class="fb-loading hidden">
+			<img class="ajax-loader" src="{img_ajax_loader}" />
+			<p>{logged_message}</p>
+		</div>
+        <!--EndSectAjaxLoader-->
+        <div class="fb-error hidden"></div>
+        <!--EndSectFBLogin-->
+        <!--BeginSectJanRainLogin-->
+        <div id="janrainEngageEmbed"><a class="janrainEngage" href="#">{_janrain_sign_in}</a></div>
+        <!--EndSectJanRainLogin-->
+    </div>
+	<!--EndSectSocialLogin-->
+	
+	<script type="text/javascript">
+		jQuery('#{focus_target}').focus();
+	</script>	
+<!--EndSectLogin-->
+
+<!--BeginSectLogout-->
+	<div class="logout-field">
+		<h2>{_logout_title}</h2>
+		<!--BeginSectSocialLogout-->
+		<div class="social-logout">
+			<p>Desidero anche revocare l'accesso dai seguenti Social Network</p>
+			<!--BeginSectSocialLogout_google-->
+			<input type="checkbox" value="1" name="social_logout_check[google]" /> Google
+			<!--EndSectSocialLogout_google-->
+		</div>
+		<!--EndSectSocialLogout-->
+
+		<!--BeginSectFBLogout-->
+	    <div id="fb-root"></div>
+		<div class="fb-data hidden"></div>
+		<div class="fb-error hidden"></div>
+	    <!--EndSectFBLogout-->
+		<div class="actions">
+			<input type="button" value="{_logout_confirm}" onclick="{logout_bt_confirm}" />
+			<input type="button" value="{_logout_cancel}" onclick="{logout_bt_cancel}"/>
+		</div>
+    </div>
+<!--EndSectLogout-->
+	
+	<!--BeginSectBack-->
+	<p class="back-to"><a href="{back_url}">{_back_to_site}</a></p>
+	<!--EndSectBack-->
+
+</div>
+<!--BeginSectJanrain-->
+<script type="text/javascript"> 
+    jQuery(function () {
+		//if (typeof window.janrain !== 'object') 
+		window.janrain = {};
+		window.janrain.settings = {};
+
+		window.janrain.settings.tokenUrl = 'http://{domain}{site_path}/services/janrain_auth?frmAction=login&ret_url={encoded_ret_url}&err_url={encoded_this_url}';
+		
+		var e = document.createElement('script');
+		e.type = 'text/javascript';
+		e.id = 'janrainAuthWidget';
+
+		if (document.location.protocol === 'https:') {
+		  e.src = 'https://rpxnow.com/js/lib/{janrain_appname}/engage.js';
+		} else {
+		  e.src = 'http://widget-cdn.rpxnow.com/js/lib/{janrain_appname}/engage.js';
+		}
+
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(e, s);
+
+		window.janrain.ready = true;
+	});
+</script>
+<!--EndSectJanrain-->
+<!--BeginSectFB-->
+<script type="text/javascript">
+    var sysLogged = {logged};
+    var enableFB = false;
+    FB.init({
+        appId  : '{fb_appid}',
+        status : true, // check login status
+        cookie : true, // enable cookies to allow the server to access the session
+        xfbml  : true  // parse XFBML
+    });
+	
+    if(!sysLogged && window.location.search.indexOf('auto') >= 0) {
+	    jQuery(".loginBox .standard-login").hide();
+	}
+    //jQuery(".loginBox .logout-field").hide();
+	
+
+    FB.getLoginStatus(function(response) {
+    	removeFB();
+        if (response.session) {
+		    FB.Event.subscribe('auth.logout', function(response) {
+		        //removeFB();
+		    });
+
+		    if(!sysLogged && window.location.search.indexOf('auto') >= 0) {
+				checkSessionFB(response);
+			}
+        } else {
+			FB.Event.subscribe('auth.login', function(response) {
+				FB.getLoginStatus(function(response) {
+					if(response.session) {
+						checkSessionFB(response);
+					}
+				});
+				//showFB();
+			});
+        	jQuery(".loginBox .fb-loading").hide();
+            //removeFB();
+        }
+    });
+	
+	//removeFB('{fb_not_supported}');
+
+    function removeFB(strError) {
+        jQuery(".loginBox .standard-login").fadeIn();
+		jQuery(".loginBox .social-login .fb-data").html("");
+		jQuery(".loginBox .social-field .fb-data").hide(); 
+		jQuery(".loginBox .logout-field .fb-data").html("");
+		jQuery(".loginBox .logout-field .fb-data").hide();       
+
+		if(strError) {
+			jQuery(".loginBox .social-login .fb-error").html(strError);
+			jQuery(".loginBox .social-login .fb-error").fadeIn();
+		    jQuery(".loginBox .social-login .fb-content").hide();
+		} else {
+			jQuery(".loginBox .social-login .fb-error").html("");
+			jQuery(".loginBox .social-login .fb-error").hide();
+		    jQuery(".loginBox .social-login .fb-content").show();
+		}        
+    }
+    function showFB(userID, showWaiting){
+        jQuery(".loginBox .standard-login").hide();
+		jQuery(".loginBox .error, .loginBox .fb-error").hide();
+
+		if(showWaiting) {
+            jQuery(".loginBox .fb-loading").show();
+		} else {
+            jQuery(".loginBox .fb-loading").hide();
+		}
+
+        FB.api('/' + userID, function(response) {
+			jQuery(".loginBox .social-login").fadeIn();
+	        jQuery(".loginBox .social-login .fb-data").html('<img class="fb-image-profile" src="https://graph.facebook.com/' + userID + '/picture" /><span>' + response.name + '</span>');
+	        jQuery(".loginBox .social-field .fb-data").fadeIn();
+            jQuery(".loginBox .logout-field .fb-data").html('<img class="fb-image-profile" src="https://graph.facebook.com/' + userID + '/picture" /><span>' + response.name + '</span>');
+            jQuery(".loginBox .logout-field .fb-data").fadeIn();
+        });
+    }
+    function checkSessionFB(response) {
+	    var domainSel = "";
+	    var strError = "";
+		
+		showFB(response.session.uid, true); 
+		
+		//jQuery(".loginBox .login-field").hide();
+		//jQuery(".loginBox #btLogin").hide();
+	    //jQuery(".loginBox .fb-loading").fadeIn();
+
+	    if(!sysLogged) {
+	        jQuery(".loginBox #fb-root").next().hide();
+		}
+	    if(jQuery(".loginBox #domain").val() !== undefined) {
+	        if(parseInt(jQuery(".loginBox #domain").val()) > 0) {
+	        	domainSel = "&domain=" + jQuery(".loginBox #domain").val();
+			} else {
+				strError = "domain invalid";
+			}
+		}
+		if(strError.length > 0) {
+			removeFB();
+		} else {
+			if(!sysLogged) {
+		        jQuery.get(ff.site_path + "/services/fb_auth"
+            		, "frmAction=login&token=" + response.session.access_token + domainSel
+            		, function(data) {
+            			if(data.length > 0) {
+            				jQuery(".loginBox .fb-loading").hide();
+            				
+							var dataJson = null;
+							try {
+            					dataJson = jQuery.parseJSON(data);
+							} catch (e) {
+						        dataJson = undefined;
+						    }
+
+            				if(dataJson !== undefined && dataJson.url !== undefined) {
+            					showFB(response.session.uid, true);
+            					window.location.href = dataJson.url;
+							} else {
+								removeFB(data);
+							}
+						} else {
+							showFB(response.session.uid, true);
+							window.location.href= "{ret_url}";
+						}
+				});
+			}
+		}
+	}
+
+	function checkSessionFBAlt() {
+	    if(!sysLogged) {
+	        jQuery(".loginBox #fb-root").next().hide();
+		}
+	    FB.getLoginStatus(function(response) {
+    		if (response.session) {
+				jQuery.get(ff.site_path + "/services/fb_auth"
+			        , "frmAction=login&token=" + response.session.access_token
+			        , function(data) {
+			            if(data.length > 0) {
+            				jQuery(".login-box .fb-loading").hide();
+							removeBlockFB(data);
+						} else { 
+							window.location.href= "{ret_url}";
+						}
+				});
+				showFB(response.session.uid, true);
+			}
+		});
+	}    
+</script>
+<!--EndSectFB-->

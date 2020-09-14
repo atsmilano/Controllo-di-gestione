@@ -1,0 +1,204 @@
+<div id="matrice_pesi">
+    <div id="loading_image"><img src="{module_theme_path}images\matrice_loader.gif"></div>
+    <!--BeginMatricePesi-->
+        <!--BeginAzioniMatrice-->
+            <style>
+                #categoria_sezione_edit_pesi {
+                    {modifica_sez_cat_display}
+                }
+
+                #categoria_ambito_edit_pesi {
+                    {modifica_amb_cat_display}
+                }
+            </style>
+            <h2>Assegnazione pesi {y_data} {x_title}</h2>
+            <div id="{x_data}_{y_data}_notifiche_pesi" class="notifiche"></div>
+            <div id="{x_data}_{y_data}_edit_pesi" class="actionbt custom-edit"><i class="fa-edit fa-lg fa"></i>&nbsp;Modifica pesi</div>
+            <div id="{x_data}_{y_data}_salvataggio_edit_pesi" class="actionbt custom-save"><i class="fa-check-square fa-lg fa"></i>&nbsp;Salva</div>
+            <div id="{x_data}_{y_data}_chiusura_edit_pesi" class="actionbt custom-close"><i class="fa-undo fa-lg fa"></i>&nbsp;Annulla</div>
+        <!--EndAzioniMatrice-->
+        <table>
+            <script>
+                var {x_data}_{y_data} = new Array();
+            </script>
+            <thead>
+            <tr>
+                <th rowspan="{rowspan}" id="{x_data}_{y_data}_0_0" class="intestazione">{y_data} / {x_title}</th>
+                <!--BeginXData-->
+                    <th colspan="{colspan}" id="{x_data}_{y_data}_{riga}_{colonna}" class="rotated_text colonna_{colonna}"
+                        title="{descr_x}">{codice_y}
+                    </th>
+                <!--EndXData-->
+            </tr>
+            <tr>
+                <!--BeginHeaderPesoMetodo-->
+                    <th>Peso</th>
+                    <th>Metodo</th>
+                <!--EndHeaderPesoMetodo-->
+            </tr>
+            </thead>
+            <tbody>
+            <!--BeginYData-->
+                <tr>
+                    <td id="{x_data}_{y_data}_{riga}_{colonna}" class="peso_x_y_class intestazione riga_{riga}"
+                        title="{descr_y}">{codice_y}
+                    </td>
+                    <!--BeginXDataYData-->
+                    <script>
+                        {x_data}_{y_data}.push(["{x_data}_{y_data}_{riga}_{colonna}", "{id_x}", "{id_y}"]);
+                    </script>
+                        <td colspan={colspan} id="{x_data}_{y_data}_{riga}_{colonna}" class="peso_x_y_class {modificabile_class} riga_{riga} colonna_{colonna}">
+                            <div id="peso_{riga}_{colonna}" class="div-peso" style="float:left;{style_peso}">{peso_x_y}</div>
+                            <input id="input_{riga}_{colonna}" name="input_{riga}_{colonna}" type="text" value="" style="float:left;{style_peso}">
+                            <!--BeginPesoMetodo-->
+                                <div id="metodo_{riga}_{colonna}" class="div-metodo" style="float:left;width:50%">{metodo_valutazione_x_y}</div>
+                                <select id="select_{riga}_{colonna}" name="select_{riga}_{colonna}" type="text" value="" style="float:right;">
+                                    <option value="0"></option>
+                                    <!--BeginOptionsMetodo-->
+                                        <option value="{id_metodo}">{descr_metodo}</option>
+                                    <!--EndOptionsMetodo-->
+                                </select>
+                            <!--EndPesoMetodo-->
+                        </td>
+                    <!--EndXDataYData-->
+                </tr>
+            <!--EndYData-->
+            </tbody>
+        </table>
+    <br />
+    <br />
+    <!--EndMatricePesi-->
+
+</div>
+
+<!--BeginScript-->
+<script>
+
+    $("#{x_data}_{y_data}_edit_pesi").click(function(){
+        $("#{x_data}_{y_data}_edit_pesi").hide();
+        $(".peso_x_y_class.{x_data}_{y_data}_modificabile").each(function(){
+            id = $(this).attr("id");
+            $(this).children("div").hide();
+            $(this).children("input").show();
+            $(this).children("select").show();
+
+            let metodo_div = $(this).children("div.div-metodo").html();
+            const metodo_selected = $(this).children("select").find("option").filter(function() {
+                return $(this).html() == metodo_div;
+            }).val();
+            $(this).children("input").val($(this).children("div.div-peso").html());
+            $(this).children("select").val(metodo_selected);
+
+        });
+        $("#{x_data}_{y_data}_chiusura_edit_pesi").show();
+        $("#{x_data}_{y_data}_salvataggio_edit_pesi").show();
+    });
+
+    $("#{x_data}_{y_data}_chiusura_edit_pesi").click(function(){
+        $("#{x_data}_{y_data}_chiusura_edit_pesi").hide();
+        $(".peso_x_y_class.{x_data}_{y_data}_modificabile").each(function(){
+            id = $(this).attr("id");
+            $(this).children("div").show();
+            $(this).children("input").hide();
+            $(this).children("select").hide();
+        });
+        $("#{x_data}_{y_data}_edit_pesi").show();
+        $("#{x_data}_{y_data}_salvataggio_edit_pesi").hide();
+    });
+
+    $("#{x_data}_{y_data}_salvataggio_edit_pesi").click(function(){
+        //vengono recuperati tutti i punteggi variati
+        var punteggi_variati = [];
+        $(".peso_x_y_class.{x_data}_{y_data}_modificabile").each(function(){
+            id = $(this).attr("id");
+            const peso_div = $(this).children("div.div-peso").html();
+            const peso_input = $(this).children("input").val();
+            const metodo_div = $(this).children("div.div-metodo").html();
+            const metodo_select = $(this).children("select").find("option:selected").text();
+
+            if(peso_div !== peso_input || (metodo_div !== undefined && metodo_div !== metodo_select)) {
+                id_{x_data}_{y_data} = $(this).children("div.div-peso").attr("id");
+                //viene recuperato l'array con le informazioni dell'obiettivo_cdr
+                var i;
+                for (i=0; i<{x_data}_{y_data}.length; i++) {
+                    //vengono accodate all'array le informazioni della relazione eventualmente esistente e punteggio variato
+                    if ({x_data}_{y_data}[i][0] === id) {
+                        punteggi_variati.push({x_data}_{y_data}[i]
+                           .concat([$(this).children("input").val()])
+                           .concat([$(this).children("select").val()]));
+                        i = {x_data}_{y_data}.length;
+                    }
+                }
+            }
+        });
+        // nel caso sia variato almeno un punteggio si procede con il salvataggio su db (chiamata ajax)
+        if (punteggi_variati.length > 0){
+            $("#loading_image").modal("show");
+
+            var data = {
+                pesi: punteggi_variati
+            };
+
+            var request = $.ajax({
+                url: window.location.pathname + '/pesi_anno/save_peso_{x_data}_{y_data}.php?{globals}',
+                type: 'GET',
+                data: data,
+                cache: false,
+                contentType: false,
+            });
+            request.done(function(data) {
+                response = JSON.parse(data);
+                if (response.esito === "success"){
+                    $("#{x_data}_{y_data}_edit_pesi").show();
+                    $("#{x_data}_{y_data}_chiusura_edit_pesi").hide();
+                    $("#{x_data}_{y_data}_salvataggio_edit_pesi").hide();
+                    $(".peso_x_y_class.{x_data}_{y_data}_modificabile").each(function(){
+                        $(this).html($(this).children("input").val());
+                        $(this).html($(this).children("select").text());
+                        $(this).children("div.div-metodo").show();
+                        $(this).children("input").hide();
+                        $(this).children("select").hide();
+                    });
+                }
+                $("#{x_data}_{y_data}_notifiche_pesi").removeClass("error");
+                $("#{x_data}_{y_data}_notifiche_pesi").removeClass("success");
+                $("#{x_data}_{y_data}_notifiche_pesi").addClass(response.esito);
+                $("#{x_data}_{y_data}_notifiche_pesi").html(response.messaggio);
+                $("#{x_data}_{y_data}_notifiche_pesi").show("blind");
+
+                if(response.esito === "success") {
+                    var current_index = $("#tabs").tabs("option","active");
+                    setTimeout(function(){
+                        $("#loading_image").modal("hide");
+                        $("#tabs").tabs('load',current_index);
+                    }, 3000);
+                }
+                else {
+                    $("#loading_image").modal("hide");
+                    $("#{x_data}_{y_data}_notifiche_pesi").delay(5000).hide("blind");
+                }
+            })
+            request.fail(function() {
+                $("#{x_data}_{y_data}_notifiche_pesi").removeClass("success");
+                $("#{x_data}_{y_data}_notifiche_pesi").addClass("error");
+                $("#{x_data}_{y_data}_notifiche_pesi").html("Errore durante l'aggiornamento dei pesi");
+                $("#loading_image").modal("hide");
+                $("#{x_data}_{y_data}_notifiche_pesi").show("blind");
+                $("#{x_data}_{y_data}_notifiche_pesi").delay(5000).hide("blind");
+            });
+        }
+        else {
+            $("#{x_data}_{y_data}_edit_pesi").show();
+            $("#{x_data}_{y_data}_salvataggio_edit_pesi").hide();
+            $("#{x_data}_{y_data}_chiusura_edit_pesi").hide();
+            $(".peso_x_y_class.{x_data}_{y_data}_modificabile").each(function(){
+                $(this).children("div.div-peso").html($(this).children("input").val());
+                $(this).children("div").show();
+                $(this).children("input").hide();
+                $(this).children("select").hide();
+            });
+        }
+    });
+
+</script>
+<!--EndScript-->

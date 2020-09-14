@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"<!--BeginSectHtmlAttr--> {attr_type}="{attr_content}"<!--EndSectHtmlAttr-->>
+<head>
+<title>{title}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+<!--BeginSectMeta-->
+	<meta {meta_type}="{meta_name}" content="{meta_content}" />
+<!--EndSectMeta-->
+<!--BeginSectJSDefer--> 
+<script type="text/javascript">
+   function ffDF() {
+   		function js() {
+			var s = {defer_js};
+			for(var i = 0; i< s.length; i++) {
+				var e = document.createElement("script");
+				e.type = "text/javascript"; 
+				e.src = s[i];
+				document.head.appendChild(e);
+			}
+		}   
+		
+		<!--BeginSectNoCSSDefer-->
+		{defer_above_the_fold}
+		js();
+		<!--EndSectNoCSSDefer-->
+		<!--BeginSectCSSDefer-->
+	   	var l = setTimeout(function() {
+			document.body.className = "pbar";
+	   	}, 5000); 		
+		var c = {defer_css}, t, x;
+		for(var i = 0; i< c.length; i++) {
+			var e = document.createElement("link");
+			e.type = "text/css";
+			e.rel = "stylesheet"; 
+			if(c[i]["media"]) {
+				e.media = c[i]["media"];
+				e.href = c[i]["src"];
+			} else 
+				e.href = c[i];
+			var ev = document.head.appendChild(e);
+		}
+		t = setInterval( function() {
+	      try {
+	         if ( (ev.sheet && ev.sheet.cssRules.length)
+	            || (ev.styleSheet && ev.styleSheet.cssText.length)
+	          ) {
+	            document.body.className = "";
+	            clearInterval( t );
+	            clearTimeout( l );
+	            clearTimeout( x );
+	            
+				{defer_above_the_fold}
+	            js();
+	         }
+	      } catch( ev ) {} finally {}
+	   }, 10 );
+	   <!--EndSectCSSDefer-->
+	}
+
+	if (window.addEventListener)
+		window.addEventListener("load", ffDF, false);
+	else if (window.attachEvent)
+		window.attachEvent("onload", ffDF);
+	else 
+		window.onload = ffDF;
+</script>
+<!--EndSectJSDefer-->
+<!--BeginSectCss-->
+<!--BeginSectCssLink-->
+<link href="{css_path}"{link_properties}/>
+<!--EndSectCssLink-->
+<!--BeginSectCssEmbed-->
+<style id="{css_key}" type="{css_type}"{link_properties}>{css_embed}</style>
+<!--EndSectCssEmbed-->
+<!--EndSectCss-->
+<!--BeginSectJs-->
+<script<!--BeginSectJsSrc--> src="{js_path}"<!--EndSectJsSrc--><!--BeginSectJSAsync--> async="async" defer="defer"<!--EndSectJSAsync-->>{js_embed}</script>
+<!--EndSectJs-->
+<!--BeginSectFFJS-->
+	ff.initFF({
+        "base_path"		: "{base_path}",
+		"site_path"		: "{site_path}",
+		"theme"			: "{theme}", 
+		"theme_ui"		: "{theme_ui}", 
+		"language"		: "{language}", 
+		"locale"		: "{locale}",
+		"layer"			: "{layer}",
+		"frameworkCss"	: "{framework_css}",
+		"fontIcon"		: "{font_icon}",
+        <!--BeginSectGroup-->"group"         : "{group}",<!--EndSectGroup-->    
+        "lazyImg"	: {lazy_img},
+		
+		<!--BeginSectFFProperty-->
+		"{prop_name}"	: {prop_value},
+		<!--EndSectFFProperty-->
+        <!--BeginSectGroup-->"group"         : "{group}",<!--EndSectGroup-->    
+		"struct"		: ff.hash([
+			{'id': 'fields', 'value' : ff.hash([
+				<!--BeginSectFFFld-->
+				{
+					'id' : '{fieldid}',
+					'value' : {
+						"type"		: undefined
+						, "widget"		: "{widget}"
+						, "resources"	: [<!--BeginSectFFFldResource-->{resource}<!--EndSectFFFldResource-->]
+					}
+				},
+				<!--EndSectFFFld-->
+			])},
+			{'id': 'comps', 'value' : ff.hash([
+				<!--BeginSectFFObj-->
+				{'id': '{objid}', 'value' : {
+					"type"			: "{type}"
+					, "resources"	: [<!--BeginSectFFObjResource-->{resource}<!--EndSectFFObjResource-->]
+					, "fields"		: ff.hash([
+						<!--BeginSectFFObjFld-->
+						{
+							'id' : '{fieldid}',
+							'value' : {
+								"type"		: "{fldtype}"
+								, "widget"		: "{widget}"
+								, "resources"	: [<!--BeginSectFFFldResource-->{resource}<!--EndSectFFFldResource-->]
+							}
+						},
+						<!--EndSectFFObjFld-->
+					])
+					<!--BeginSectFFObjProperty-->
+					, "{prop_name}"	: {prop_value}
+					<!--EndSectFFObjProperty-->
+				}},
+				<!--EndSectFFObj-->
+			])}
+		])
+		<!--BeginSectLibs-->
+		, "libs"		: [
+			<!--BeginSectLib-->
+			{'type' : '{lib_type}', 'id' : '{lib_tag}', 'deps' : {lib_deps}, 'media' : {lib_media}} ,<!--EndSectLib-->
+		]
+		<!--EndSectLibs-->
+	});
+	
+	<!--BeginSectAsyncCssPlugin-->
+	ff.injectCSS("{css_tag}", "{css_path}", undefined, {lib_media}, {css_async});
+	<!--EndSectAsyncCssPlugin-->
+	<!--BeginSectAsyncJsPlugin-->
+	ff.pluginLoad("{js_tag}", "{js_path}", undefined, {js_async}, {js_deps});
+	<!--EndSectAsyncJsPlugin-->
+<!--EndSectFFJS-->
+<!--BeginSectWidgetsHeaders-->
+{WidgetsContent}
+<!--EndSectWidgetsHeaders-->
+</head>
+<body{class_body}>
+<!--BeginSectFormHeader-->
+	<form id="{form_id}" name="{form_name}" method="{form_method}"{form_action}{form_enctype}>
+    <!--BeginSectFormHidden-->
+        <input type="hidden" id="{varname}" name="{varname}" value="{varvalue}" />
+    <!--EndSectFormHidden-->
+<!--EndSectFormHeader-->
+	{content}
+<!--BeginSectWidgetsFooters-->
+{WidgetsContent}
+<!--EndSectWidgetsFooters-->
+<!--BeginSectFormFooter-->
+	</form>
+<!--EndSectFormFooter-->
+</body>
+</html>

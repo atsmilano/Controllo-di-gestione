@@ -1,0 +1,26 @@
+<button type="{type}" id="{container}{id}" class="{class}" {properties}
+	<!--BeginSectSubmit-->
+		onclick="
+		<!--BeginSectFormAction-->
+			document.getElementById('frmAction').value = '{component_action}{frmAction}';
+		<!--EndSectFormAction-->
+		<!--BeginSectFormMethod-->
+			jQuery(this).closest('form').method = '{form_method}';
+		<!--EndSectFormMethod-->
+		<!--BeginSectFormActionUrl-->
+			this.form.action = '{form_action_url}';
+		<!--EndSectFormActionUrl-->
+		<!--BeginSectSetVariable-->
+			document.getElementById('{varname}').value = '{varvalue}';
+		<!--EndSectSetVariable-->
+			{jsaction}
+		"
+	<!--EndSectSubmit-->
+	<!--BeginSectGotourlSelf-->
+		onclick="window.location.href = '{url}'"
+	<!--EndSectGotourlSelf-->
+	<!--BeginSectGotourlOther-->
+		onclick="window.open('{url}','{target}');"
+	<!--EndSectGotourlOther-->
+	><!--BeginSectImage-->{image}<!--EndSectImage-->
+{label}</button>

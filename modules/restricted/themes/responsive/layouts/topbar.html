@@ -1,0 +1,19 @@
+<!--BeginSectMenu-->
+<ul class="{menu_class}">
+	<!--BeginSectElement-->
+    <li {item_class}>
+        <{item_tag} {item_properties}>{item_icon}{label}</{item_tag}>{actions}
+        <!--BeginSectChild-->
+        <div id="{child_id}" class="{child_class}">
+            {item_description}
+            <ul class="{menu_class}">
+                <!--BeginSectChildElement-->
+                <li><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}>{actions}{description}</li>
+                <!--EndSectChildElement-->
+            </ul>
+        </div>
+        <!--EndSectChild-->
+    </li>
+    <!--EndSectElement-->
+</ul>
+<!--EndSectMenu-->

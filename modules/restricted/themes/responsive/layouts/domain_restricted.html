@@ -1,0 +1,35 @@
+<span class="panel-container">
+<!--BeginSectDomainName-->
+<a class="{nav_left_class}" href="#panel-domain" {toggle_properties}>
+	<!--BeginSectLogo-->
+	<img  class="{logo_class}" src="{logo_url}" alt="{CM_LOCAL_APP_NAME}" />
+	<!--EndSectLogo-->		
+	{more_icon}
+</a>
+<!--EndSectDomainName-->
+<!--BeginSectDomainInfo-->
+
+	<!--<span class="{host_class}"><a id="domain-title" href="http://{host_name}" target="_blank">{host_name}</a>{host_icon}</span>-->
+	<div id="panel-domain" class="{panel_class}">
+		<!--BeginSectMultiDomain-->
+		<div class="{panel_header_class}">
+			{domain_switch}
+		</div>
+		<!--EndSectMultiDomain-->
+		<div class="{panel_body_class}">
+			<div class="{panel_links_class}">
+			<!--BeginSectElement--><!--BeginSectSeparator--> &nbsp; <!--EndSectSeparator--><{item_tag} {item_properties}>{item_icon}{label}</{item_tag}><!--EndSectElement-->
+			</div>
+		</div>
+		<div class="{panel_footer_class}">
+			<!--BeginSectDomains-->
+			<a class="{domains_class}" href="{manage_domains}">{_manage_domains}</a>
+			<!--EndSectDomains-->
+			<!--BeginSectProfiling-->
+			<a class="{profiling_class}" href="{manage_profiling}">{_manage_profiling}</a>
+			<!--EndSectProfiling-->			
+		</div>		
+	</div>
+
+<!--EndSectDomainInfo-->
+</span>

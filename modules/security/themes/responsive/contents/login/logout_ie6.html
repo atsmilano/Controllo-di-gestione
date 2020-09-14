@@ -1,0 +1,53 @@
+<div id="ffLoginBox" class="{container_class}">
+    {inner_wrap_start}
+        <div class="inner-box">
+            <!--BeginSectLogoPre-->
+            <div class="{logo_class}"><!--BeginSectLogoImgPre--><img src="{logo_login}" /><!--EndSectLogoImgPre--></div>
+            <!--EndSectLogoPre-->  
+            <!--BeginSectLogout-->
+            <div class="{logout_class}">
+                <!--BeginSectLogoutTitle-->
+                <h2>{logout_title}</h2>
+                <!--EndSectLogoutTitle--> 
+                <div class="{account_class}">
+               		<!--BeginSectAvatar-->
+               		<img class="{avatar_class}" src="{avatar}" alt="{username}" width="150" height="150"> 
+               		<!--EndSectAvatar-->
+               		<!--BeginSectUsername-->
+               		<h4>{username}</h4>
+               		<!--EndSectUsername-->
+               		<!--BeginSectEmail-->
+               		<h5>{email}</h5>
+               		<!--EndSectEmail-->
+                </div>
+                <!--BeginSectSocialLogout-->
+                <div class="{login_social_class}">
+                    <p>Desidero anche revocare l'accesso dai seguenti Social Network</p>
+                    <!--BeginSectSocialLogout_google-->
+                    <input type="checkbox" value="1" name="social_logout_check[google]" /> Google
+                    <!--EndSectSocialLogout_google-->
+                </div>
+                <!--EndSectSocialLogout-->
+                <!--BeginSectStandardLogout-->
+                <div class="{actions_class}">
+                    <a class="{logout_button_class}" href="javascript:void(0);" onclick="window.location.href = window.location.pathname + '?frmAction=logout&ret_url=/restricted';">{_logout_confirm}</a>
+                </div>
+                <!--EndSectStandardLogout-->
+                <!--BeginSectLogoutLinks-->
+                <div class="{link_class}"> 
+                    <!--BeginSectLogoutBack-->
+                    <a class="{back_class}" href="{back_url}">{_back_to_site}</a>
+                    <!--EndSectLogoutBack-->
+                </div>        
+                <!--EndSectLogoutLinks-->
+            </div>
+            <!--EndSectLogout-->
+            <!--BeginSectLogoPost-->
+            <div class="{logo_class}"><!--BeginSectLogoImgPost--><img src="{logo_login}" /><!--EndSectLogoImgPost--></div>
+            <!--EndSectLogoPost-->
+        </div>  
+    {inner_wrap_end}
+</div>
+<style type="text/css">
+    <!-- inserire qui il css-->
+</style>

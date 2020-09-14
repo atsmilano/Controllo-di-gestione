@@ -1,0 +1,43 @@
+<!--BeginSectHeaders-->
+<script type="text/javascript" >
+ff.pluginLoad("ff.ffField",	"/themes/library/ff/ffField.js", function() {
+	ff.pluginLoad("ff.ffField.gmap", "{widget_path}/gmap.js", function() {
+	});
+});
+</script>
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript" defer="defer">
+	ff.pluginAddInit("ff.ffField.gmap", function () {
+		<!--BeginSectBinding-->
+		ff.ffField.gmap.addData({
+			"id"			: "{container}{id}",
+			"draggable"		: {draggable},
+			"startLat"		: {start_lat},
+			"startLng"		: {start_lng},
+			"startZoom"		: {start_zoom},
+			"title"			: "{title}",
+			"setMarker"		: {set_marker},
+			"forceSearch"	: {force_search},
+			"updateClass"	: '{update_class}',
+			"prefixClass"	: '{update_class_prefix}'
+			
+		});
+		<!--EndSectBinding-->
+		ff.ffField.gmap.init("{key}", "{region}");
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<div class="{container_class}">  
+	{wrap_start}
+	<input class="{search_class}" type="text" {style_search} id="{container}{id}[search]" name="{container}{id}[search]" value="{title}" onkeydown="return ff.submitProcessKey(event, '{container}{id}[search_bt]');" />
+	{wrap_middle}
+	<a class="{search_bt_class}" id="{container}{id}[search_bt]" href="javascript:ff.ffField.gmap3.codeAddress(document.getElementById('{container}{id}[search]').value, '{container}{id}[map]', true)" ></a>
+	{wrap_end}
+</div>
+<div id="{container}{id}[map]" class="{map_class}" {properties} ></div>
+
+<!--EndSectControl-->

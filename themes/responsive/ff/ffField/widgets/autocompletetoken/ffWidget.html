@@ -1,0 +1,88 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectControl-->
+<div class="autocomplete-wrap">
+	<!--BeginSectControlLabel-->
+	<label>{autocompletetoken_label}</label> 
+	<!--EndSectControlLabel-->
+	<input type="text" id="{prefix}{container}{id}" name="{prefix}{container}{id}" class="autocompletetoken{class}" value="{selected_value}" {properties} />
+	<!--BeginSectCombo-->
+		<a class="{combo_class}" href="javascript:void(0);" onclick="jQuery('#{container}{id_encoded}').focus(); jQuery('#{container}{id_encoded}').parent().find('input').keydown(); "></a>
+	<!--EndSectCombo-->
+	<!--BeginSectDebug--><a href="#" onclick="window.open('{service}{srv_data}', '_blank')">[debug]</a><!--EndSectDebug-->
+</div>
+<!--EndSectControl-->
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("jquery.tokeninput", function () {
+        <!--BeginSectBinding-->
+            jQuery("#{container}{id_encoded}").tokenInput("{service}{srv_data}", {
+                theme: "{autocomplete_theme}",
+                hintText: "{init_label}",
+                noResultsText: "{not_found_label}",
+                searchingText: "{searching_label}", 
+                deleteText: "x",
+                searchDelay: {delay},
+                tokenLimit: {limit},
+                tokenDelimiter: "{delimiter}",
+                preventDuplicates: true,
+                prePopulate : {arr_values},
+                animateDropdown : true,
+                onAdd: function (item) {
+                },
+                onDelete: function (item) {
+                },
+                onReady : function() {
+                },
+                propertyToSearch: "name"
+                <!--BeginSectAttr-->
+                , resultsFormatter: function(item){ 
+                        //return item;   
+                        return "<li>" 
+                                    + (item.image !== undefined 
+                                    	? 	'<span class="image">'
+                                    			+ (item.image ? "<img src='" + item.image + "' title='" + item.name + "' width=50 height=50 />" : "") 
+                                    		+ '</span>'
+                                    	: ""
+                                    )
+                                    + '<div class="data">'
+                                        <!--BeginSectAttrResult-->
+                                        + (item.{attr_name} 
+                                        	? '<div class="{attr_name}">' 
+		                                            + item.{attr_name} 
+		                                        + "</div>" 
+		                                    : ""
+		                                )
+		                                <!--EndSectAttrResult-->
+                                    + "</div>" 
+                                + "</li>" 
+                }
+                , tokenFormatter: function(item) { 
+                   // return item;
+                    return "<li>" 
+                                + (item.image !== undefined 
+                                    ? 	'<span class="image">'
+                                    		+ (item.image ? "<img src='" + item.image + "' title='" + item.name + "' width=50 height=50 />" : "") 
+                                    	+ '</span>'
+                                    : ""
+                                )
+                                + "<div class='data'>" 
+                                    <!--BeginSectAttrToken-->
+                                    + (item.{attr_name} 
+                                        ? "<div class='{attr_name}'>" 
+		                                        + item.{attr_name} 
+		                                    + "</div>" 
+		                                : ""
+		                            )
+		                            <!--EndSectAttrToken-->
+                                + "</div>" 
+                            + "</li>" 
+                }
+                <!--EndSectAttr-->
+            });
+        <!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->

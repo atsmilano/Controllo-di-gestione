@@ -1,0 +1,49 @@
+<div id="scheda_investimenti">
+	<div id="tabs">
+		<ul>
+                    <li><a id="a_linee_guida" href="#linee_guida">Indicazioni</a></li>
+                    <!--BeginSectRichieste-->
+                        <li><a id="a_approvazione" href="investimenti/richieste?{globals}">Richieste</a></li>
+                    <!--EndSectRichieste-->
+                    <!--BeginSectApprovazione-->
+                        <li><a id="a_approvazione" href="investimenti/approvazione?{globals}">Approvazione</a></li>
+                    <!--EndSectApprovazione-->
+                    <!--BeginSectIstruttoria-->
+                        <li><a id="a_istruttoria" href="investimenti/istruttoria?{globals}">Istruttoria</a></li>                        
+                    <!--EndSectIstruttoria-->
+                    <li><a id="a_istruttoria" href="investimenti/piano_investimenti?{globals}">Piano investimenti</a></li> 
+		</ul>
+		<div id="linee_guida">
+                    <!--BeginLinkModifica-->
+                        <a href="{record_url}">Modifica indicazioni</a>
+                    <!--EndLinkModifica-->
+                    <!--BeginLineeGuida-->
+			<h1>Indicazioni per l'anno {anno_desc}</h1>	
+                        <p>{descrizione_linee_guida}</p>
+                    <!--EndLineeGuida-->
+                    <!--BeginNoLineeGuida-->
+                        <p>Linee guida non ancora definite per l'anno selezionato.</p>
+                    <!--EndNoLineeGuida-->
+		</div>
+	</div>
+</div>
+		
+<script>
+$( function() {
+	$('#tabs').tabs({
+		beforeLoad: function( event, ui ) {						            			
+                    ui.panel.html('<div class="loading">Loading...</div>');
+
+                    ui.ajaxSettings.dataFilter = function(data) {					
+                            contents_to_load = $.parseJSON(data);
+                            ui.panel.html(contents_to_load.footers);
+                            ui.panel.html(contents_to_load.headers);
+                            ui.panel.html(contents_to_load.html);
+                     };
+		}
+		
+		,load: function( event, ui ) {                    
+		}
+	});
+});
+</script>

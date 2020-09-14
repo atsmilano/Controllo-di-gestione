@@ -1,0 +1,34 @@
+<div id="anagrafe_tabs">
+    <div id="tabs">
+        <ul>            
+            <li><a id="a_deleghe" href="configurazione/deleghe_accesso?{globals}">Deleghe accesso</a></li>
+            <!--BeginSectAnniBudget-->
+            <li><a id="a_anni_budget" href="configurazione/anni_budget?{globals}">Anni budget</a></li>            
+            <!--EndSectAnniBudget-->
+            <!--BeginSectModuli-->
+            <li><a id="a_moduli" href="configurazione/moduli?{globals}">Moduli applicativi</a></li>
+            <!--EndSectModuli-->
+            <li><a id="a_cms_home" href="configurazione/cms_home?{globals}">CMS Homepage</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

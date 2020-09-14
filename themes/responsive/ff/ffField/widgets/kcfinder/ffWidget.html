@@ -1,0 +1,39 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+
+<!--BeginSectFooters-->
+<script language="javascript" type="text/javascript">
+	ff.pluginAddInit("ff.ffField.kcfinder", function () {
+		ff.ffField.kcfinder.init({
+			component 		: "{container}{id}",
+            start           : "{suffix_start}",
+            target          : "{suffix_target}",
+            tmpname         : "{suffix_tmpname}",
+            sufdel	        : "{suffix_delete}",
+			baseUrl			: "{site_base_url}", 
+			previewJs		: {preview_js},
+			viewUrl			: '{view_url}',
+			previewUrl		: '{preview_url}',
+            writable        : {writable},
+			modelThumb		: '{thumb_model}',
+			showFile		: {show_file},
+            aviary            : {aviary},
+            icons           : {
+                                "cancel" : "{cancel_class}",
+                                "aviary" : "{aviary_class}"
+                            }
+		});
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<a href="#{container}{id}" id="KcFinder_{container}{id}" title="File selector" class="{browse_class}" onclick="ff.ffField.kcfinder.openKCFinder('/{resource_type}{base_url_kc}', '{container}{id}' );"></a>
+<!--BeginSectPreview-->
+<a href="{view_url}{view_query_string}" rel="{show_file}" target="_blank">
+	<img id="{container}{id}_img" src="{preview_url}{preview_query_string}" />
+</a>
+<!--EndSectPreview-->
+{control}
+<!--EndSectControl-->

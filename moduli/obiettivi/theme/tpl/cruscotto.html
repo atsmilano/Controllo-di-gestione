@@ -1,0 +1,52 @@
+<div id="cruscotto_obiettivi">
+	<div id="tabs">
+		<ul>
+			<li><a href="#introduzione">Cruscotto</a></li>
+			<li><a href="cruscotto/matrice_pesi_cdr.php?{globals}">Distribuzione obiettivi - cdr / assegnazione pesi</a></li>
+			<li><a href="cruscotto/matrice_pesi_personale.php?{globals}">Distribuzione obiettivi - personale / assegnazione pesi</a></li>   
+		</ul>
+		<div id="introduzione">
+			<h2>CRUSCOTTO DI CONTROLLO E GESTIONE DEI PESI</h2>
+			<p>Il cruscotto consente di monitorare l&acute;assegnazione degli obiettivi e la gestione (assegnazione /variazione) dei pesi:</p>
+			<ol>
+				<li>ASSEGNAZIONE OBIETTIVI AL CDR<br>
+					Le informazioni consentono al Responsabile di Struttura, per il proprio ambito gestionale di:
+					<ul>
+						<li>visualizzare gli obiettivi e il peso assegnato alle strutture afferenti;</li>
+						<li>verificare l'inserimento delle azioni attuative da parte delle strutture afferenti;</li>
+						<li>effettuare la variazione/inserimento dei pesi.</li>
+					</ul>					
+				</li>				
+				<li>
+					ASSEGNAZIONE DEGLI OBIETTIVI AL PERSONALE<br>
+					Le informazioni consentono al Responsabile di Struttura, ognuno per il proprio ambito gestionale di:
+					<ul>
+						<li>visualizzare l&acute;attribuzione degli obiettivi al personale ( dirigenza e comparto) e il relativo peso;</li>
+						<li>effettuare la variazione/inserimento dei pesi (modifica pesi).</li>
+					</ul>
+				</li>					
+			</ol>	
+		</div>
+	</div>
+</div>
+		
+<script>
+$( function() {
+	$('#tabs').tabs({
+		beforeLoad: function( event, ui ) {			
+			ui.panel.html('<div class="loading">Loading...</div>');
+
+			ui.jqXHR.error(function() {
+				ui.panel.html('<div align="center"><p>Errore durante il caricamento del report.</p></div>');
+			});
+		}
+		,load:function( event, ui ) {}
+	});
+        
+        //tooltip
+	$( function() {
+		$( document ).tooltip();
+	} );
+});
+
+</script>

@@ -1,0 +1,460 @@
+<!--BeginReportCoan-->
+    <script>  	
+            $( function() {				
+                    $("#elenco_conti tbody tr").not(".fp1, #tr_no_conti").hide();
+
+                    $("#filter_button").click(function(event){
+                        event.preventDefault();
+                        url = window.location.pathname+"?{globals}periodo_select="+$("#periodo_select").val()
+                                +"&distretto_select="+$("#distretto_select").val()
+                                +"&cdr_ramo_select="+$("#cdr_ramo").is(':checked')
+                                +"&cdc_standard_regionale_select="+$("#cdc_standard_regionale_select").val()
+                                +"&cdr_coan_select="+$("#cdr_coan_select").val();
+                        window.location = url;
+                    });
+
+                    //ricerca elemento nella pagina
+                    $("#search_string").keypress(function(event){
+                            if (event.keyCode == 13){
+                                    event.preventDefault();	
+                                    search ($("#search_string").val());
+                            } 
+                    });
+
+                    $("#search_button").click(function(){		
+                            search ($("#search_string").val());
+                    });	
+
+                    $("#coan_back_to_top").click(function (){
+                            $('html,body').animate({
+                                    scrollTop: $("#coan").offset().top
+                            }, 700);
+                    });				
+
+                    jQuery.expr[':'].contains = function(a, i, m) {
+                            return jQuery(a).text().toUpperCase()
+                                    .indexOf(m[3].toUpperCase()) >= 0;
+                    };
+
+                    function search(searchedText){	
+                            $("#coan_search_result").empty();
+                            if(searchedText.length<3){
+                                    $("#coan_search_result").append("Il termine di ricerca inserito deve essere lungo almeno 3 caratteri");
+                                    return;
+                            }			
+                            $(".found").each( function() {				
+                                    $(this).toggleClass("found");				
+                            });
+                            $("#elenco_conti tbody td:contains('"+searchedText+"'):not('.tot')").each( function(i) {
+                                    $(this).addClass("found");
+                                    expandTree($(this).parent().attr("id"));
+                                    if (i===0){
+                                            $('html,body').animate({
+                                                    scrollTop: $(this).offset().top - 90
+                                            }, 700);
+                                    }
+                            });
+                            $("#coan_search_result").append("Fine ricerca");
+                            setTimeout(function(){
+                                    $("#coan_search_result").empty();
+                            },5000);
+
+                    }
+
+                    //apertura livelli
+                    $("#elenco_conti tr").click(function(){		
+                            elementToggle($(this).attr("id"));				
+                    });		
+
+                    //funzione che permette di fissare l'intestazione sullo scrolling della pagina
+                    //viene in primis clonata l'intestazione e lo stile ad eccezione della posizione
+                    $("#conti_thead").clone().prependTo("#elenco_conti ").prop("id", "conti_fixed_thead");
+                    th = $("#conti_thead th").toArray();		
+                    $("#conti_fixed_thead th").each( function(i) {				
+                                            $(this).css({
+                                                                    "width": $(th[i]).width()							
+                                            });										
+                    });							
+                    $("#conti_fixed_thead").hide();
+
+                    //visualizzazione dell'intestazione corretta in base allo scrolling
+                    $(window).scroll(function() {
+                            //se l'intestazione di tabella supera il limite della pagina viene visualizzata l'intestazione fissa
+                            if ($("#conti_thead").offset().top < $(document).scrollTop())
+                            {
+                                    $("#conti_fixed_thead").show();
+                                    $("#coan_back_to_top").show();				
+                            }
+                            else
+                            {
+                                    $("#conti_fixed_thead").hide();
+                                    $("#coan_back_to_top").hide();
+                            }
+                    });
+
+                    $(window).resize(function() {
+                            $("#conti_fixed_thead th").each( function(i) {				
+                                                    $(this).css({
+                                                                            "width": $(th[i]).width()							
+                                                    });										
+                            });	
+                    });
+                    //**********************************************************************
+                    //gestione espansione livelli
+                    $(".fp2_expand").change(function(){	
+                            if ($(this).is(":checked")) 
+                            {
+                                    $(".fp2").each(function(){	
+                                            $("#"+$(this).attr("id")).show();
+                                    });		
+                                    $(".fp2_expand").prop('checked', true);
+                            }
+                            else
+                            {
+                                    $(".conto").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();					
+                                    });							
+                                    $(".conto_expand").prop('checked', false);
+
+                                    $(".fp4").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();					
+                                    });
+                                    $(".fp4_expand").prop('checked', false);
+
+                                    $(".fp3").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();					
+                                    });
+                                    $(".fp3_expand").prop('checked', false);
+
+                                    $(".fp2").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();
+                                    });
+                                    $(".fp2_expand").prop('checked', false);
+                            }
+                    });
+
+                    $(".fp3_expand").change(function(){	
+                            if ($(this).is(":checked")) 
+                            {
+                                    $(".fp2").each(function(){	
+                                            $("#"+$(this).attr("id")).show();										
+                                    });	
+                                    $(".fp2_expand").prop('checked', true);
+
+                                    $(".fp3").each(function(){	
+                                            $("#"+$(this).attr("id")).show();
+                                    });		
+                                    $(".fp3_expand").prop('checked', true);
+                            }
+                            else
+                            {
+                                    $(".conto").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();					
+                                    });
+                                    $(".conto_expand").prop('checked', false);
+
+                                    $(".fp4").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();					
+                                    });
+                                    $(".fp4_expand").prop('checked', false);
+
+                                    $(".fp3").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();
+                                    });				
+                                    $(".fp3_expand").prop('checked', false);
+                            }
+                    });
+
+                    $(".fp4_expand").change(function(){	
+                            if ($(this).is(":checked")) 
+                            {
+                                    $(".fp2").each(function(){	
+                                            $("#"+$(this).attr("id")).show();					
+                                    });	
+                                    $(".fp2_expand").prop('checked', true);
+
+                                    $(".fp3").each(function(){	
+                                            $("#"+$(this).attr("id")).show();					
+                                    });
+                                    $(".fp3_expand").prop('checked', true);
+
+                                    $(".fp4").each(function(){	
+                                            $("#"+$(this).attr("id")).show();					
+                                    });					
+                                    $(".fp4_expand").prop('checked', true);
+                            }
+                            else
+                            {
+                                    $(".conto").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();					
+                                    });
+                                    $(".conto_expand").prop('checked', false);
+
+                                    $(".fp4").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();
+                                    });						
+                                    $(".fp4_expand").prop('checked', false);
+                            }
+                    });
+
+                    $(".conto_expand").change(function(){	
+                            if ($(this).is(":checked")) 
+                            {
+                                    $(".fp2").each(function(){	
+                                            $("#"+$(this).attr("id")).show();					
+                                    });	
+                                    $(".fp2_expand").prop('checked', true);
+
+                                    $(".fp3").each(function(){	
+                                            $("#"+$(this).attr("id")).show();				
+                                    });
+                                    $(".fp3_expand").prop('checked', true);
+
+                                    $(".fp4").each(function(){	
+                                            $("#"+$(this).attr("id")).show();					
+                                    });	
+                                    $(".fp4_expand").prop('checked', true);
+
+                                    $(".conto").each(function(){	
+                                            $("#"+$(this).attr("id")).show();
+                                    });
+                                    $(".conto_expand").prop('checked', true);
+                            }
+                            else
+                            {
+                                    $(".conto").each(function(){	
+                                            $("#"+$(this).attr("id")).hide();
+                                    });		
+                                    $(".conto_expand").prop('checked', false);
+                            }
+                    });
+
+                    //**********************************************************************
+                    //attivazione tooltip
+                    $("#elenco_conti thead").tooltip();
+
+                    //gestione dialog dettaglio conto
+                    $( "#coan_conto_dialog" ).dialog({
+                            autoOpen: false,
+                            modal: true,			
+                            width: 800,
+                            height: 600,
+                            show: {
+                                    effect: "scale",
+                                    duration: 500
+                            },
+                            hide: {
+                                    effect: "scale",
+                                    duration: 500
+                            }
+                    });
+
+                    $( ".conto" ).click(function() {
+                            $( "#coan_conto_dialog" ).empty();
+                            $( "#coan_conto_dialog" ).append("<div id='loader'><img src='{module_img_path}/loader.gif' alt='Loading...'></div>");
+                            $( "#coan_conto_dialog" ).dialog( "open" );
+                            $("div#coan_conto_dialog").load("./coan/conto.php?ID_conto="+$(this).attr("id").substr(6)+"&ID_periodo="+{periodo_selezionato});			
+                    });
+            });
+
+            function elementToggle(id){									
+                    //se la classe è visibile (già esplosa) viene chiusa
+                    if($("."+id+"_figli").is(":visible") )
+                    {						
+                            //viene verificato che ci siano figli visibili (esplosi)
+                            $("."+id+"_figli").each(function(){	
+                                    primo = 1;
+                                    elementToggle($(this).attr("id"));
+                            });			
+                            $("."+id+"_figli").hide();
+                            primo = 0;
+                    }
+                    //altrimenti viene aperta
+                    else if(typeof primo == 'undefined' || primo == 0)
+                    {				
+                            $("."+id+"_figli").show();
+                            primo = 0;
+                    }				
+            }		
+
+            function expandTree(id)
+            {				
+                    if($("#"+id).hasClass("conto"))
+                    {			
+                            $("#"+id).prevAll(".fp4:first").show();
+                            $("."+$("#"+id).prevAll(".fp4:first").attr("id")+"_figli").show();
+                            $(".conto_expand").prop('checked', true);
+
+                            $("#"+id).prevAll(".fp3:first").show();
+                            $("."+$("#"+id).prevAll(".fp3:first").attr("id")+"_figli").show();
+                            $(".fp4_expand").prop('checked', true);
+
+                            $("#"+id).prevAll(".fp2:first").show();
+                            $("."+$("#"+id).prevAll(".fp2:first").attr("id")+"_figli").show();
+                            $(".fp3_expand").prop('checked', true);
+
+                            $("#"+id).prevAll(".fp1:first").show();
+                            $("."+$("#"+id).prevAll(".fp1:first").attr("id")+"_figli").show();
+                            $(".fp2_expand").prop('checked', true);
+                    }
+                    else if($("#"+id).hasClass("fp4"))
+                    {
+                            $("#"+id).prevAll(".fp3:first").show();
+                            $("."+$("#"+id).prevAll(".fp3:first").attr("id")+"_figli").show();
+                            $(".fp4_expand").prop('checked', true);
+
+                            $("#"+id).prevAll(".fp2:first").show();
+                            $("."+$("#"+id).prevAll(".fp2:first").attr("id")+"_figli").show();
+                            $(".fp3_expand").prop('checked', true);
+
+                            $("#"+id).prevAll(".fp1:first").show();
+                            $("."+$("#"+id).prevAll(".fp1:first").attr("id")+"_figli").show();
+                            $(".fp2_expand").prop('checked', true);	
+                    }
+                    else if($("#"+id).hasClass("fp3"))
+                    {
+                            $("#"+id).prevAll(".fp2:first").show();
+                            $("."+$("#"+id).prevAll(".fp2:first").attr("id")+"_figli").show();
+                            $(".fp3_expand").prop('checked', true);
+
+                            $("#"+id).prevAll(".fp1:first").show();
+                            $("."+$("#"+id).prevAll(".fp1:first").attr("id")+"_figli").show();
+                            $(".fp2_expand").prop('checked', true);						
+                    }	
+                    else if($("#"+id).hasClass("fp2"))
+                    {			
+                            $("#"+id).prevAll(".fp1:first").show();
+                            $("."+$("#"+id).prevAll(".fp1:first").attr("id")+"_figli").show();
+                            $(".fp2_expand").prop('checked', true);						
+                    }		
+            }
+    </script>
+    <div id="coan">
+            <h2>Contabilit&agrave; analitica</h2>	  		
+            <fieldset id="filtri">
+            <legend>Filtri</legend>
+                    <div>
+                            <select name='periodo_select' id='periodo_select'>
+                                    <!--BeginSectOptionPeriodo-->
+                                            <option value="{periodo_id}" {periodo_selected}>Periodo: {periodo_descrizione}&nbsp;(dal {periodo_data_inizio} al {periodo_data_fine})</option>
+                                    <!--EndSectOptionPeriodo-->
+                            </select>
+                            <select name='cdr_coan_select' id='cdr_coan_select'>
+                                    <option value="0">Tutti i CDR</option>
+                                    <!--BeginSectOptionCdrCoan-->
+                                            <option value="{cdr_coan_id}" {cdr_coan_selected}>CDR: {cdr_coan_indent}&nbsp;{cdr_coan_descrizione}</option>                                            
+                                    <!--EndSectOptionCdrCoan-->
+                            </select>
+                            <div id="cdr_ramo_div">
+                                <input id="cdr_ramo" name="filter_cdr_ramo" value="1" {filter_cdr_ramo_checked} type="checkbox" >
+                                <label>Solo valori CDR</label>
+                            </div>
+                            <select name='cdc_standard_regionale_select' id='cdc_standard_regionale_select'>
+                                    <option value="0">Tutti i cdc standard regionali</option>
+                                    <!--BeginSectOptionCdcStandardRegionale-->
+                                            <option value="{cdc_standard_regionale_id}" {cdc_standard_regionale_selected}>Cdc Standard Regionale: {cdc_standard_regionale_descrizione}&nbsp;({cdc_standard_regionale_codice})</option>
+                                    <!--EndSectOptionCdcStandardRegionale-->
+                            </select>
+                            <select name='distretto_select' id='distretto_select'>
+                                    <option value="0">Tutti i distretti</option>
+                                    <!--BeginSectOptionDistretto-->
+                                            <option value="{distretto_id}" {distretto_selected}>Distretto: {distretto_descrizione}</option>                   
+                                    <!--EndSectOptionDistretto-->        
+                            </select>											
+                            <button id="filter_button" type="button">Applicare filtri</button>
+                    </div>
+            </fieldset>
+            <fieldset id="ricerca">
+                    <legend>Ricerca fp / conto</legend>
+                    <input id="search_string" name="search_string" type="text"/>
+                    <button id="search_button" name="search_button" type="button">Ricerca</button>
+                    <div id="coan_search_result"></div>
+            </fieldset>
+            <table id="elenco_conti">
+                    <thead id="conti_thead">
+                            <tr>
+                                    <th class="fp">Fp1</th>
+                                    <th class="fp"><input type="checkbox" class="fp2_expand" title="Espandere a livello fp2"/>Fp2</th>
+                                    <th class="fp"><input type="checkbox" class="fp3_expand" title="Espandere a livello fp3"/>Fp3</th>
+                                    <th class="fp"><input type="checkbox" class="fp4_expand" title="Espandere a livello fp4"/>Fp4</th>
+                                    <th class="conto_th"><input type="checkbox" class="conto_expand" title="Espandere a livello conto"/>Conto</th>
+                                    <th class="tot">Budget</th>
+                                    <th class="tot">Consuntivo</th>
+                                    <th class="tot">Erosione</th>
+                            </tr>
+                    </thead>		
+                    <tbody>		
+                            <!--BeginSectNoConti-->
+                            <tr id="tr_no_conti">
+                                <td colspan="8">
+                                    Nessun conto trovato per i criteri selezionati.
+                                </td>
+                            </tr>
+                            <!--EndSectNoConti-->
+                            <!--BeginSectFp1-->
+                            <tr id="fp1_{id_fp1}" class="fp1">
+                                    <td colspan="5">
+                                            {cod_fp1}&nbsp;-&nbsp;{desc_fp1}
+                                    </td>
+                                    <td class="tot">{totale_budget_fp1}</td>				
+                                    <td class="tot">{totale_consuntivo_fp1}</td>
+                                    <td class="tot">{erosione_fp1}</td>
+                            </tr>			
+                            <!--BeginSectFp2-->	
+                            <tr id="fp2_{id_fp2}" class="fp2 fp1_{id_fp1}_figli">	
+                                    <td>&nbsp;</td>
+                                    <td colspan="4">
+                                            {cod_fp2}&nbsp;-&nbsp;{desc_fp2}
+                                    </td>
+                                    <td class="tot">{totale_budget_fp2}</td>				
+                                    <td class="tot">{totale_consuntivo_fp2}</td>
+                                    <td class="tot">{erosione_fp2}</td>
+                            </tr>			
+                            <!--BeginSectFp3-->
+                            <tr id="fp3_{id_fp3}" class="fp3 fp2_{id_fp2}_figli">
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td colspan="3">
+                                            {cod_fp3}&nbsp;-&nbsp;{desc_fp3}
+                                    </td>
+                                    <td class="tot">{totale_budget_fp3}</td>				
+                                    <td class="tot">{totale_consuntivo_fp3}</td>
+                                    <td class="tot">{erosione_fp3}</td>
+                            </tr>					
+                            <!--BeginSectFp4-->			
+                            <tr id="fp4_{id_fp4}" class="fp4 fp3_{id_fp3}_figli">
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td colspan="2">
+                                            {cod_fp4}&nbsp;-&nbsp;{desc_fp4}
+                                    </td>
+                                    <td class="tot">{totale_budget_fp4}</td>				
+                                    <td class="tot">{totale_consuntivo_fp4}</td>
+                                    <td class="tot">{erosione_fp4}</td>
+                            </tr>	
+                            <!--BeginSectConto-->											
+                            <tr id="conto_{id_conto}" class="conto fp4_{id_fp4}_figli">
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>{cod_conto}&nbsp;-&nbsp;{desc_conto}</td>
+                                    <td class="tot">{budget}</td>
+                                    <td class="tot">{consuntivo}</td>
+                                    <td class="tot">{erosione}</td>
+                            </tr>																																														
+                            <!--EndSectConto-->		
+                            <!--EndSectFp4-->
+                            <!--EndSectFp3-->
+                            <!--EndSectFp2-->
+                            <!--EndSectFp1-->
+                    </tbody>
+            </table>	
+            <div id="coan_conto_dialog" title="Dettaglio conto"></div>
+    </div>
+    <div id="coan_back_to_top" class='ui-icon-triangle-1-n'><i class="fa-arrow-up fa"></i></div>
+<!--EndReportCoan-->
+<!--BeginNoPeriodi-->
+    <h1>Nessun periodo disponibile per l'anno in esame.</h1>
+<!--EndNoPeriodi-->

@@ -1,0 +1,45 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+
+<!--BeginSectFooters-->
+<script language="javascript" type="text/javascript">
+	ff.pluginAddInit("ff.ffField.uploadify", function () {
+        <!--BeginSectBinding-->
+		ff.ffField.uploadify.init({
+			component 		: "{container}{id}",
+			start 			: "{suffix_start}",
+			target 			: "{suffix_target}",
+			tmpname 		: "{suffix_tmpname}",
+			sufdel	        : "{suffix_delete}",
+			basePath		: "{site_path}/themes/library/plugins/jquery.uploadify",
+			preview_qs		: "{preview_query_string}",
+			//baseUrl			: "{base_url}", 
+			previewJs		: {preview_js},
+			viewUrl			: '{view_url}',
+			previewUrl		: '{preview_url}',
+            writable        : {writable},
+			sizeLimit		: {size_limit},
+			fileExt			: {file_ext},
+			fileDesc		: {file_desc},
+			model			: '{type_model}', 
+			modelThumb		: '{thumb_model}',
+			showFile		: {show_file},
+            fullPath        : {full_path},
+            dataSrc			: "{data_src}",
+            icons           : {
+                                "cancel" : "{cancel_class}"
+                            }
+		});
+        <!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+{fixed_pre_content}
+<div class="uploadify {type_model}"> 
+{control}
+</div>
+{fixed_post_content}
+<!--EndSectControl-->

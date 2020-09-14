@@ -1,0 +1,43 @@
+<div id="cruscotto_rendicontazione">
+        <div id="selezione_periodi" class="selezione_parametri">
+            <h2>Selezione del periodo di rendicontazione</h2>
+            <!--BeginSectSelezionePeriodi-->
+            <div>	
+                    <label>Periodo:&nbsp;</label>
+                    <select name='periodo_select' id='periodo_select' onchange="this.form.submit()">					
+                            <!--BeginSectOptionPeriodi-->
+                                    <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                            <!--EndSectOptionPeriodi-->
+                    </select>
+            </div>
+            <!--EndSectSelezionePeriodi-->
+            <!--BeginSectNoPeriodi-->
+                    <p class='error'>Nessun periodo di rendicontazione definito per l'anno selezionato</p>
+            <!--EndSectNoPeriodi-->
+        </div>
+	<div id="tabs">
+            <ul>			
+                    <li><a href="cruscotto_rendicontazione/situazione_aziendale?{globals}periodo_select={periodo_select}">Situazione aziendale obiettivi</a></li>
+                    <li><a href="cruscotto_rendicontazione/bersaglio?{globals}periodo_select={periodo_select}">Bersaglio</a></li>
+                    <!--BeginSectObiettiviCdrTab-->
+                    <li><a href="cruscotto_rendicontazione/situazione_obiettivi_cdr?{globals}periodo_select={periodo_select}">Dettaglio obiettivi CDR</a></li>
+                    <!--EndSectObiettiviCdrTab-->
+            </ul>
+	</div>        
+</div>	
+<script>
+$( function() {
+	$('#tabs').tabs({
+		beforeLoad: function( event, ui ) {			
+			ui.panel.html('<div class="loading">Loading...</div>');
+
+			ui.jqXHR.error(function() {
+				ui.panel.html('<div align="center"><p>Errore durante il caricamento del report.</p></div>');
+			});
+		}
+		,load:function( event, ui ) { }
+	});
+        
+        $("#tabs").tabs({ active: {active_tab} });
+});
+</script>

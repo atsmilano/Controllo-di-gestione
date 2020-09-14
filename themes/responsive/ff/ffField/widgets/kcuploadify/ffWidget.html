@@ -1,0 +1,43 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+
+<!--BeginSectFooters-->
+<script language="javascript" type="text/javascript">
+	ff.pluginAddInit("ff.ffField.kcuploadify", function () {
+        <!--BeginSectBinding-->
+		ff.ffField.kcuploadify.init({
+			component 		: "{container}{id}",
+            start           : "{suffix_start}",
+            target          : "{suffix_target}",
+            tmpname         : "{suffix_tmpname}",
+            sufdel	        : "{suffix_delete}",
+			basePathUF		: "{site_path}/themes/library/plugins/jquery.uploadify",
+			//baseUrlUF		: "{base_url}", 
+			baseUrlKC		: "{site_base_url}", 
+			previewJs		: {preview_js},
+			viewUrl			: '{view_url}',
+			previewUrl		: '{preview_url}',
+            writable        : {writable},
+			sizeLimit		: {size_limit},
+			fileExt			: {file_ext},
+			model			: '{type_model}', 
+			modelThumb		: '{thumb_model}',
+			showFile		: {show_file},
+            fullPath        : {full_path},
+            dataSrc			: "{data_src}",
+            icons           : {
+                                "cancel" : "{cancel_class}"
+                            }
+		});
+        <!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<div class="uploadify {type_model}"> 
+<a href="#{container}{id}" id="KcFinder_{container}{id}" title="File selector" class="{browse_class}" onclick="ff.ffField.kcuploadify.openKCFinder('/{resource_type}{base_url_kc}', '{container}{id_kc}' );"></a> 
+{control}
+</div> 
+<!--EndSectControl-->

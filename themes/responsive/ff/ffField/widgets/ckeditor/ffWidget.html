@@ -1,0 +1,18 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+<!--BeginSectFooters-->
+<script language="javascript" type="text/javascript">
+	ff.pluginAddInit("ff.ffField.ckeditor", function () {
+		<!--BeginSectBinding-->
+		ff.ffField.ckeditor.init("{container}{id}", {widget_brmode}, "{widget_theme}", "{widget_skin}", "{widget_lang}", {widget_toolbar}, {widget_custom_config}, {dialog});
+		<!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+{fixed_pre_content}
+<textarea name="{container}{id}" id="{container}{id}" class="{class}" style="{style}" {properties} >{value}</textarea>
+{fixed_post_content}
+<!--EndSectControl-->

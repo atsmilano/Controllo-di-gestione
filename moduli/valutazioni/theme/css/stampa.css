@@ -1,0 +1,106 @@
+#stampa_valutazione{
+    font-size: 12px;     
+}
+
+#stampa_valutazione #logo {
+    width: 16%;
+    float: left;   
+}
+
+#stampa_valutazione #logo_qualita {
+    width: 16%;
+    float: right;    
+}
+
+#stampa_valutazione #titolo {
+}
+
+#stampa_valutazione #titolo h1{
+    color: #2D8215;
+    text-align: center;
+    font-size: 21px;
+    width: 100%;
+    padding-top: 35px;
+}
+
+#stampa_valutazione h2 {
+    color: #2D8215;
+    font-size: 15px;
+}
+
+#stampa_valutazione h3 {
+    margin-left: 18px;
+    font-size: 12px;
+}
+
+#stampa_valutazione #intestazione, #stampa_valutazione #totali, #stampa_valutazione .note{
+    clear:both;
+    border: solid 1px #2D8215;
+    -webkit-border-radius: 9px;	
+    -moz-border-radius: 9px;	
+    border-radius: 9px;
+    padding: 9px;
+    width: 100%;
+}
+
+#stampa_valutazione #totali, #stampa_valutazione .note {
+    margin: 9px;    
+}
+
+#stampa_valutazione .note p{
+    margin-left: 18px;
+    font-style: italic;
+}
+
+#stampa_valutazione .metodo_1 {
+    margin-left: 36px;
+}
+
+#stampa_valutazione .metodo_1 .label {
+    color: #2D8215;    
+}
+
+#stampa_valutazione .metodo_2 {
+    margin-left: 36px;
+}
+
+#stampa_valutazione .label {
+    font-weight: bold;
+    text-align: right;
+}
+
+#stampa_valutazione .val {
+    padding-left: 9px;
+}
+
+#stampa_valutazione .area_item {
+    font-weight: bold;
+    background-color: #2D8215;
+    color: white;
+    margin: 0;
+    padding: 6px;
+    width: 100%;
+}
+
+#stampa_valutazione .metodo_2{
+    border: solid 1px #2D8215;
+    -webkit-border-radius: 9px;	
+    -moz-border-radius: 9px;	
+    border-radius: 9px;
+    padding: 9px;
+}
+
+#stampa_valutazione .metodo_2 table td {
+    padding: 6px;
+    border-bottom: solid 1px #dfe2de; 
+    font-size: 12px;
+}
+
+#stampa_valutazione .metodo_2 table td.label {
+    width: 50%;
+}
+
+#stampa_valutazione .metodo_2 table td.punteggio {
+    width: 50%;
+}
+

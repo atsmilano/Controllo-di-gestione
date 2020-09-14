@@ -1,0 +1,11 @@
+<input type="hidden" id="{container}{id}" name="{container}{id}" value="{filename}" />
+<!--BeginShowPreview-->
+<!--BeginShowPreviewImg-->
+<a href="{view_url}{view_query_string}" target="_blank" class="{showfile_plugin}" title="{show_name}<!--BeginShowFilesize--> ({show_size})<!--EndShowFilesize-->">
+	<img class="image" id="{filevalue_normalized}" src="{preview_url}{preview_query_string}" />
+</a>
+<!--EndShowPreviewImg-->
+<!--BeginShowPreviewNoImg-->
+<span class="noimage{noimg_class}" title="{show_name}<!--BeginShowFilesize--> ({show_size})<!--EndShowFilesize-->"></span>
+<!--EndShowPreviewNoImg-->
+<!--EndShowPreview-->

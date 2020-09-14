@@ -1,0 +1,19 @@
+<!--BeginSectHeaders-->
+<!--EndSectHeaders-->
+
+
+<!--BeginSectFooters-->
+<script type="text/javascript">
+	ff.pluginAddInit("ff.ffField.timechooser", function () {
+		<!--BeginSectBinding-->
+		ff.ffField.timechooser.fill("{container}{id}", '{container}hours_{id}', '{container}mins_{id}', '{container}year_{id}', {sel_hours}, {sel_mins});
+		<!--EndSectBinding-->
+	});
+</script>
+<!--EndSectFooters-->
+
+<!--BeginSectControl-->
+<input type="hidden" id="{container}{id}" name="{container}{id}" value="{value}"/>
+<select id="{container}hours_{id}" name="{container}hours_{id}" class="{class}" {properties} onchange="ff.ffField.timechooser.change('{container}{id}', '{container}hours_{id}', '{container}mins_{id}', '{container}year_{id}')"></select>
+<select id="{container}mins_{id}" name="{container}mins_{id}" class="{class}" {properties}  onchange="ff.ffField.timechooser.change('{container}{id}', '{container}hours_{id}', '{container}mins_{id}', '{container}year_{id}')"></select>
+<!--EndSectControl-->

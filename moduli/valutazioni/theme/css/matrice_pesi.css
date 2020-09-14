@@ -1,0 +1,197 @@
+#matrice_pesi table {
+	table-layout: fixed;
+	width: 100%;
+	background-color: #e1e5ea;	
+	border-color: #2888E5;
+	color: #2888E5;
+}
+
+#matrice_pesi table thead tr {
+	background-color: #c7d4e2;
+}
+
+#matrice_pesi table thead th{
+	border: solid 1px;
+	cursor: default;
+	height: 30px;
+	text-align: center;	
+}
+
+#matrice_pesi table .intestazione {
+	background-color: #c7d4e2;
+	color: #2888E5;
+	cursor: default;
+	table-layout: fixed;
+	width: 90px;
+}
+
+#matrice_pesi table thead th.rotated_text{
+	line-height: 12px;
+	padding: 6px 0;
+}
+
+#matrice_pesi table tbody td{
+	border: solid 1px;
+	border-color: #2888E5;
+	text-align: center;
+	background-color: white;
+	color: black;
+	height: 21px;
+}
+
+#matrice_pesi #legenda {
+	margin: 12px;
+	float: right;
+	border: solid 1px black;
+	padding: 9px
+}
+
+#matrice_pesi #legenda span {
+	border: solid 1px #2888E5;
+	width: 100px;
+	height: 30px;
+	padding:6px;
+}
+
+#matrice_pesi .azioni_definite {
+	background-color: #bcc9b9;
+}
+
+#matrice_pesi .azioni_non_definite {
+	background-color: #eaa8a8;
+}
+
+#matrice_pesi .obiettivo_non_assegnato_da_cdr {
+	background-color: #2888E5;
+}
+
+#matrice_pesi table thead th.rotated_text div, #matrice_pesi table tbody td a div{
+	width: 50%;
+	height: 100%;
+        font-size: 0.7em;
+        font-style: italic;
+}
+
+#matrice_pesi table tbody td.categoria_sezione_non_modificabile a div, #matrice_pesi table tbody td.categoria_ambito_non_modificabile a div {
+        font-weight: bold;
+        font-style: normal;
+}
+
+#matrice_pesi table tbody td a:hover {
+	cursor: default;
+	text-decoration: none;
+}
+
+#matrice_pesi table tbody td.categoria_sezione_modificabile a:hover, #matrice_pesi table tbody td.categoria_ambito_modificabile a:hover {
+	font-weight: bold;
+	cursor: pointer;
+	color: #2888E5;
+	text-decoration: none;
+}
+
+#matrice_pesi table tbody td.highlighted, #matrice_pesi table thead th.highlighted {
+   opacity: 0.5;
+   filter: alpha(opacity=50);
+}
+
+#matrice_pesi .peso_x_y_class input,  #matrice_pesi .peso_x_y_class select {
+	width: 50%;
+	height: 30px;
+	border: solid 1px #299849;
+        box-shadow: inset 3px 3px 3px #299849;
+        -webkit-box-shadow: inset 3px 3px 3px #299849;
+        -moz-box-shadow: inset 3px 3px 3px #299849;
+        -o-box-shadow: inset 3px 3px 3px #299849;
+	display: none;
+	text-align: center;
+	float:left;
+}
+
+#matrice_pesi .actionbt{
+	border: solid 1px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	border-color: #2888E5;
+	background-color: #e1e5ea;
+	color: #2888E5;
+	width: 150px;
+	text-align: center;
+	font-weight: bold;
+	padding: 6px;
+	margin: 9px 9px 9px 0;
+}
+
+#matrice_pesi .actionbt i {
+	float: left;
+	line-height: normal;
+}
+
+#matrice_pesi .actionbt{	
+	float: left;
+}
+
+#matrice_pesi .actionbt:hover{	
+	background-color: #c7d4e2;
+	cursor: pointer;
+}
+
+#matrice_pesi #chiusura_edit_pesi, .custom-close {
+	background-color: #eaa8a8;
+	border-color: #a04545;
+	color: #a04545;
+	display: none;
+}
+
+#matrice_pesi #chiusura_edit_pesi:hover, .custom-close:hover{
+	background-color: #d87f7f;
+}
+
+#matrice_pesi #salvataggio_edit_pesi, .custom-save {
+	display: none;
+}
+
+#matrice_pesi #loading_image{
+	display: none;
+	width: 100%;
+	text-align: center;
+}
+
+#matrice_pesi #loading_image img{
+	height: 18px;
+	width: 30%;
+}
+
+#matrice_pesi .notifiche {
+	display: none;
+	padding: 6px;
+	border: solid 1px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+}
+
+#matrice_pesi .notifiche.success{
+	background-color: #8bd28a;
+	border-color: #2b5b2a;
+	color: #2b5b2a;
+}
+
+#matrice_pesi .notifiche.error{
+	background-color: #d87f7f;
+	border-color: #a04545;
+	color: #a04545;
+}
+
+#matrice_pesi table tbody tr.intestazione td{
+	background-color: #2888E5;
+	color: white;
+}
+
+.ui-tooltip {
+    white-space: pre-line;
+}
+
+.tot_pesi {
+	font-weight: bold;
+}

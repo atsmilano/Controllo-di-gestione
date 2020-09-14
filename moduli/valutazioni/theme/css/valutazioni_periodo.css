@@ -1,0 +1,50 @@
+#valutazioni div {
+    width: 100%;
+    border: solid 1px #263238;
+    -webkit-border-top-left-radius: 9px;
+    -webkit-border-top-right-radius: 9px;
+    -moz-border-radius-topleft: 9px;
+    -moz-border-radius-topright: 9px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;    
+    margin: 9px 9px 9px 0;
+    padding: 0 9px 9px 9px;
+} 
+
+#valutazioni div table {
+    border: solid 1px #263238;
+}
+
+#valutazioni div table caption {
+    background-color: #263238;
+    color: white;
+    padding: 6px;
+    margin-top: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#valutazioni div table th { 
+    background-color: #263238;
+    color: white;
+    padding: 3px;
+    text-align: center;    
+}
+
+#valutazioni div table th {
+    width: 15%;
+} 
+
+#valutazioni div table th {
+    width: 25%;
+}
+
+#valutazioni div table td {
+    border: solid 1px #263238;
+    padding: 3px;
+    text-align: center;
+}
+
+#valutazioni div table td a {
+    color: #1e88e5;
+}

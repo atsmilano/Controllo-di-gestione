@@ -1,0 +1,140 @@
+/*Obiettivi-cdr*/
+.stato_chiusura_obiettivi {
+	background-color: #c7d4e2;
+	color: #2888E5;
+	border: solid 1px #2888E5;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	padding: 3px 0px 3px 12px;
+}
+/*Chiusura obiettivi button*/
+#chiusura_obiettivi.chiusura_button,
+#riapertura_obiettivi.riapertura_button {
+	border: solid 1px #2888E5;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+	width: 300px;
+	margin: auto;
+	text-align: center;
+	background-color: #c7d4e2;
+	color: #2888E5;
+	float: right;
+    margin-left: 10px;
+}
+
+#chiusura_obiettivi.chiusura_button:hover,
+#riapertura_obiettivi.riapertura_button:hover {
+	cursor: pointer;
+	background-color: #2888E5;
+	color: white;
+}
+
+/*Chiusura obiettivi dialog*/
+div#chiusura_obiettivi_confirm_dialog,
+div#riapertura_obiettivi_confirm_dialog {
+	padding: 15px;
+        width: 500px;
+}
+
+.ui-dialog.chiusura_obiettivi_confirm_dialog  .ui-dialog-titlebar,
+.ui-dialog.riapertura_obiettivi_confirm_dialog  .ui-dialog-titlebar{
+	background-color: #2888E5;
+	color: white;
+}
+
+.ui-dialog.chiusura_obiettivi_confirm_dialog .ui-dialog-buttonpane,
+.ui-dialog.riapertura_obiettivi_confirm_dialog .ui-dialog-buttonpane {
+    text-align: center;
+}
+
+.ui-dialog.chiusura_obiettivi_confirm_dialog .ui-dialog-buttonpane .ui-dialog-buttonset,
+.ui-dialog.riapertura_obiettivi_confirm_dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: none;
+}
+
+.ui-dialog.chiusura_obiettivi_confirm_dialog .ui-dialog-buttonset button,
+.ui-dialog.riapertura_obiettivi_confirm_dialog .ui-dialog-buttonset button {
+    background-color: #2888E5;
+    color: white;     
+    width: 200px;
+    height: 30px;
+    margin: 10px;
+    border:none;
+}
+
+.ui-dialog.chiusura_obiettivi_confirm_dialog .ui-dialog-buttonset button:hover,
+.ui-dialog.riapertura_obiettivi_confirm_dialog .ui-dialog-buttonset button:hover{
+    background-color: #c7d4e2;
+    color: #2888E5;
+}
+
+/*Obiettivi individuali*/
+#obiettivi_individuali h2 {
+	border-bottom: solid 1px #2888E5;
+	width: 100%;
+}
+
+/*Rendicontazione obiettivi*/
+#rendicontazione_obiettivo h3, #riepilogo_obiettivo h3 {    
+    padding: 3px;
+    font-size: 18px;
+    color: #2888E5;
+}
+
+#rendicontazione_obiettivo .form-control.combobox, #riepilogo_obiettivo .form-control.combobox{
+    margin-left: 66px;
+    margin-top: 3px;
+    width: 50%;
+    height: 21px;
+    line-height: 6px;
+}
+
+#rendicontazione_obiettivo ul li, #riepilogo_obiettivo ul li {
+    margin-left: 12px;
+}
+
+#rendicontazione_obiettivo input[type="radio"], #riepilogo_obiettivo input[type="radio"] {
+    width: auto;
+    float: left;
+    clear: left;
+    height: 15px;
+    margin-left: 66px;
+    margin-right: 6px;
+}
+
+#rendicontazione_obiettivo legend.padding, #riepilogo_obiettivo legend.padding {
+    width: auto;
+    border: solid 1px #c7d4e2;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    color: #2888E5;
+    margin-bottom: 12px;
+}
+
+#rendicontazione_obiettivo label, #riepilogo_obiettivo label {
+    color: black;    
+}
+
+#rendicontazione_obiettivo .ui-slider-horizontal, #riepilogo_obiettivo .ui-slider-horizontal {
+    border: solid 1px #2888E5;
+}
+
+#rendicontazione_obiettivo .ui-slider-horizontal .ui-slider-handle, #riepilogo_obiettivo .ui-slider-horizontal .ui-slider-handle {
+    border: solid 1px #2888E5;
+    background-color: #c7d4e2;
+}
+
+#rendicontazione_obiettivo .ui-slider-horizontal .ui-slider-handle.ui-state-active, #riepilogo_obiettivo .ui-slider-horizontal .ui-slider-handle.ui-state-active {
+    background-color: #2888E5;
+}
+
+#rendicontazione_obiettivo .nucleo_non_favorevole, #riepilogo_obiettivo .nucleo_non_favorevole{
+    color: red;
+}
+
+
+#periodo-rendicontazione-modify {
+    margin-top: 12px;
+}

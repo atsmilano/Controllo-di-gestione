@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ff>
+    <ffPage>
+        <ffRecord id="MainRecord">
+            <ffField id="username" type="form">
+                <option name="class" value=" form-control" mode="merge" />
+			</ffField>
+            <ffField id="email" type="form">
+                <option name="placeholder" value="latuaemail@mail.it"  />
+                <option name="class" value=" form-control" mode="merge" />
+			</ffField>
+            <ffField id="confirmemail" type="form">
+                <option name="placeholder" value="latuaemail@mail.it"  />
+                <option name="class" value=" form-control" mode="merge" />
+			</ffField>
+            <ffField id="password" type="form">
+                <option name="placeholder" value="La tua Password"  />
+                <option name="class" value=" form-control" mode="merge" />
+			</ffField>
+            <ffField id="confpassword" type="form">
+                <option name="placeholder" value="La tua Password"  />
+                <option name="class" value=" form-control" mode="merge" />
+			</ffField>
+            <ffField id="condition_text" type="form">
+                <option name="class" value=" form-control textarea-big" mode="merge" />
+			</ffField>
+            <ffField id="privacy_text" type="form">
+                <option name="class" value=" form-control textarea-big" mode="merge" />
+			</ffField>
+
+		</ffRecord>
+	</ffPage>
+</ff>

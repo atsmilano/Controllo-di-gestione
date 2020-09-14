@@ -1,0 +1,51 @@
+<div id="configurazione_valutazioni">
+    <div id="tabs">
+        <ul>
+            <li><a id="a_periodi" href="configurazioni/periodi?{globals}">Periodi</a></li>
+            <li><a id="a_pesi_anno" href="configurazioni/pesi_anno?{globals}">Pesi anno</a></li>
+            <!--<li><a id="a_introduzione" href="#introduzione">Anno val.</a></li>-->
+            <li><a id="a_scheda" href="configurazioni/scheda?{globals}">Scheda</a></li>
+            <li><a id="a_item" href="configurazioni/item?{globals}">Item</a></li>
+            <li><a id="a_elenco_schede" href="configurazioni/elenco_schede?{globals}">Schede aperte</a></li>
+            <li><a id="a_elenco_non_valutati" href="configurazioni/elenco_non_valutati?{globals}">Elenco non valutati</a></li>
+            <!--<li><a id="a_peso_ambiti" href="configurazioni/peso_ambiti?{globals}">Peso ambiti</a></li>
+            <li><a id="a_totali" href="configurazioni/totali?{globals}">Totali</a></li>-->
+            <li><a id="a_estrazioni" href="configurazioni/estrazioni?{globals}">Estrazioni</a></li>
+            <li><a id="a_fasce_report" href="configurazioni/fasce_report?{globals}">Fasce report</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        const tplTabIndexes = [1];
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                var current_index = $('#tabs').tabs("option", "active");
+                if (tplTabIndexes.indexOf(current_index) == -1) {
+                    ui.ajaxSettings.dataFilter = function (data) {
+                        contents_to_load = $.parseJSON(data);
+                        ui.panel.html(contents_to_load.footers);
+                        ui.panel.html(contents_to_load.headers);
+                        ui.panel.html(contents_to_load.html);
+
+                    };
+                } else {
+                    ui.jqXHR.error(function () {
+                        ui.panel.html('<div align="center"><p>Errore durante il caricamento del report.</p></div>');
+                    });
+                }
+            }
+
+            , load: function (event, ui) {
+                var current_index = $('#tabs').tabs("option", "active");
+                if (tplTabIndexes.indexOf(current_index) != -1) {
+                    $(document).tooltip();
+                }
+            }
+        });
+        
+        $("#tabs").tabs({ active: {active_tab} });
+    });
+</script>

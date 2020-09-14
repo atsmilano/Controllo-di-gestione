@@ -1,0 +1,28 @@
+<div id="anagrafe_tabs">
+    <div id="tabs">
+        <ul>
+            <li><a id="tipo_piano_cdr" href="configurazione_cdr/tipo_piano_cdr/index?{globals}">Tipo Piano CdR</a></li>
+            <li><a id="tipo_cdr" href="configurazione_cdr/tipo_cdr/index?{globals}">Tipo CdR</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

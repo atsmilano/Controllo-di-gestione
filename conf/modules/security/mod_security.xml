@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<configdata>
+
+	<auth>
+
+		<noauth path="/area_riservata/login" />
+
+		<noauth path="/area_riservata/recover" />
+
+		<noauth path="/services/security/checkaccounts" />
+
+	</auth>
+
+	<fields>
+
+		<!--<firstname label="Nome"  required="true" class="form-control" group="default" />
+
+		<lastname label="Cognome"  required="true" class="form-control" group="default" />
+
+		<company label="Società" group="userinfo" />
+
+		<piva label="Partita IVA" group="userinfo" />
+
+		<cf label="Codice Fiscale" group="userinfo" validators="cf" required="true" />
+
+		<address label="Indirizzo" group="userinfo" required="true" />
+
+		<city label="Città" group="userinfo" required="true" />
+
+		<prov label="Provincia" required="true" group="userinfo" extended_type="Selection" source_SQL="SELECT support_province.CarAbbreviation, support_province.Name FROM support_province ORDER BY support_province.Name" />
+
+		<cap label="CAP" required="true" group="userinfo" />
+
+		<tel label="Telefono" group="userinfo" />
+
+		<cell label="Cellulare" required="true" group="userinfo" />
+
+		<fax label="FAX" group="userinfo" /-->
+
+	</fields>
+
+</configdata>

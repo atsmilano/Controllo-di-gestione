@@ -1,0 +1,9 @@
+<textarea class="{class}" id="{container}{id}" name="{container}{id}" {properties} >{value}</textarea>
+<!--BeginSectAutoGrow-->
+<script type="text/javascript">
+ff.load("jquery.plugins.autogrow-textarea", function() {
+	var controlId = "{container}{id}";
+    jQuery("#" + controlId.escapeRegExp()).autogrow();
+});
+</script>
+<!--EndSectAutoGrow-->

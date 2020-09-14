@@ -1,0 +1,28 @@
+<!--BeginSectMenu-->
+<ul class="mainmenu">
+	<!--BeginSectElement-->
+		<!--BeginSectHeading-->
+		<li class="{name}">
+			<span>{label}</span>
+		</li>
+		<!--EndSectHeading-->
+		<!--BeginSectLink-->
+		<li id="topbar_{name}" class="{name}">
+			<a href="{path}" {selected}>{label}</a>
+			<!--BeginSectChild-->
+			<ul class="{navbar_class}">
+				<!--BeginSectChildElement-->
+					<!--BeginSectChildLink-->
+					<li id="navbar_{name}" class="{name}"><a href="{path}" {selected}{properties}>{label}</a></li>
+					<!--EndSectChildLink-->
+					<!--BeginSectChildHeading-->
+					<li id="navbar_{name}" class="{name}">{label}</li>
+					<!--EndSectChildHeading-->
+				<!--EndSectChildElement-->
+			</ul>
+			<!--EndSectChild-->
+		</li>
+		<!--EndSectLink-->
+    <!--EndSectElement-->
+</ul>
+<!--EndSectMenu-->

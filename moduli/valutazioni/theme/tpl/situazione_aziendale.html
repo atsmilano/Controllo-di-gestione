@@ -1,0 +1,157 @@
+<div id='situazione_aziendale_valutazioni'>	                	
+    <!--BeginSectSituazioneAziendaleValutazioni-->
+    <div id='left'>
+        <div id='completamento_cdr'>
+            <h2>Stato Valutazioni ATS</h2>		
+            <div id='grafico_completamento_cdr'></div>
+            <script>
+                $(document).ready(function(){
+                $("#grafico_completamento_cdr").height({grafico_completamento_cdr_height});
+                var perc_comparto_valutatore = [{perc_comparto_valutatore}];
+                var point_label_comparto_valutatore = [{point_label_comparto_valutatore}];
+                var perc_comparto_valutato = [{perc_comparto_valutato}];
+                var point_label_comparto_valutato = [{point_label_comparto_valutato}];
+                var perc_dirigenza_valutatore = [{perc_dirigenza_valutatore}];
+                var point_label_dirigenza_valutatore = [{point_label_dirigenza_valutatore}];
+                var perc_dirigenza_valutato = [{perc_dirigenza_valutato}];
+                var point_label_dirigenza_valutato = [{point_label_dirigenza_valutato}];
+                var perc_tot_valutatore = [{perc_tot_valutatore}];
+                var point_label_tot_valutatore = [{point_label_tot_valutatore}];
+                var perc_tot_valutato = [{perc_tot_valutato}];
+                var point_label_tot_valutato = [{point_label_tot_valutato}];
+                var ticks = [{cdr_label}];
+                grafico_completamento_cdr = $.jqplot('grafico_completamento_cdr', [perc_dirigenza_valutatore, perc_dirigenza_valutato, perc_comparto_valutatore, perc_comparto_valutato, perc_tot_valutatore, perc_tot_valutato], {
+                animate: !$.jqplot.use_excanvas,
+                        seriesColors:['#f2bb30', '#f29b30', '#C1DD81', '#2D8215', '#7cc2e2', '#2a87d2'],
+                        seriesDefaults: {
+                        renderer:$.jqplot.BarRenderer,
+                                pointLabels: {
+                                show: true,
+                                },
+                                shadow: false,
+                                rendererOptions: {
+                                barDirection: 'horizontal',
+                                        barPadding: 0,
+                                        rendererOptions: {
+                                        barMargin: 10,
+                                        },
+                                }
+                        },
+                        series: [
+                        {pointLabels:{
+                        labels:point_label_dirigenza_valutatore}
+                        },
+                        {pointLabels:{
+                        labels:point_label_dirigenza_valutato}
+                        },
+                        {pointLabels:{
+                        labels:point_label_comparto_valutatore}
+                        },
+                        {pointLabels:{
+                        labels:point_label_comparto_valutato}
+                        },
+                        {pointLabels:{
+                        labels:point_label_tot_valutatore}
+                        },
+                        {pointLabels:{
+                        labels:point_label_tot_valutato}
+                        }
+                        ],
+                        axes: {
+                        xaxis: {
+                        renderer: $.jqplot.CanvasAxisTickRenderer,
+                                min: 0,
+                                max: 120,
+                                tickInterval: 10,
+                                label: "% Raggiungimento",
+                                tickOptions: {
+                                fontSize: '9pt'
+                                }
+                        },
+                                yaxis: {
+                                renderer: $.jqplot.CategoryAxisRenderer,
+                                        ticks: ticks,
+                                        tickOptions: {
+                                        fontSize: '9pt'
+                                        }
+                                }
+                        },
+                        legend: {
+                        show: true,
+                                location: 's',
+                                placement: 'outsideGrid',
+                                labels: ['% Schede dirigenza<br>completate dal valutatore', '% Schede dirigenza<br>con firma del valutato', '% Schede comparto<br>completate dal valutatore', '% Schede comparto<br>con firma del valutato', '% Totale schede<br>completate dal valutatore', '% Totale schede<br>con firma del valutato']
+                        },
+                });
+                });
+                /*Jqplot visualizza la legenda in ordine inverso alle serie del grafico per le barre orizzontali*/
+                /*la funzione iverte gli elementi della legenda per averla ordinata correttamente*/
+                $(function(){
+                $(".jqplot-table-legend").each(function(elem, index){
+                var arr = $.makeArray($("tr", this).detach());
+                arr.reverse();
+                $(this).append(arr);
+                });
+                });
+                /*sul ridimensionamento della finestra il grafico viene rivisualizzato per adattarne la dimensione*/
+                $(window).resize(function() {
+                grafico_completamento_cdr.replot();
+                });
+            </script>
+        </div>		
+    </div>
+    <div id='right'>              
+        <!--BeginSectCompletamentoValutazioni-->
+        <div class='completamento_azienda'>
+            <h2>Completamento aziendale {tipo_report}: {n_completate} / {n_valutazioni}</h2>
+            <div id='grafico_completamento_azienda_{tipo_report}'></div>
+            <div id="completamento_azienda_label_{tipo_report}" class='completamento_azienda_label'>0%</div>		
+            <script>
+                $(document).ready(function(){
+                    $( window ).resize(function() {
+                        $("#grafico_completamento_azienda_{tipo_report}").width($('.completamento_azienda').width()*0.96);
+                        grafico_completamento_{tipo_report}.replot( { resetAxes:true, resize: 'Resize'} );
+                        progress();
+                    });
+                s1 = [0];
+                grafico_completamento_{tipo_report} = $.jqplot('grafico_completamento_azienda_{tipo_report}', [s1], {
+                seriesDefaults: {
+                renderer: $.jqplot.MeterGaugeRenderer,
+                        rendererOptions: {
+                        min: 0,
+                                max: 100,
+                                intervals:[25, 50, 75, 100],
+                                ticks: [0, 25, 50, 75, 100],
+                                intervalColors:['#cc6666', '#E7E658', '#93b75f', '#66cc66'],
+                                animation: {
+                                show: true
+                                }
+                        }
+                }
+                });
+                setTimeout(progress(), 500);
+                function progress() {
+                var val = grafico_completamento_{tipo_report}.series[0].data[0][1] || 0;
+                $("#completamento_azienda_label_{tipo_report}").text(val + "%");
+                grafico_completamento_{tipo_report}.series[0].data[0] = [1, val + 1];
+                grafico_completamento_{tipo_report}.replot();
+                if (val < {perc_completamento}) {
+                setTimeout(progress, 5);
+                }
+                else{
+                $("#completamento_azienda_label_{tipo_report}").text({perc_completamento} + "%");
+                }
+                }
+
+                });
+            </script>
+        </div>           
+        <!--EndSectCompletamentoValutazioni-->
+        <script>
+        </script>
+    </div>
+    <!--EndSectSituazioneAziendaleValutazioni-->
+    <!--BeginSectNessunaValutazione-->
+    <h2>Nessuna valutazione per il periodo selezionato</h2>
+    <!--EndSectNessunaValutazione-->
+</div>

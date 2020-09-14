@@ -1,0 +1,100 @@
+<div id="elenco_valutazioni_periodo">  		
+	<div id="selezione_periodi" class="selezione_parametri">
+                <h2>Selezione del periodo di valutazione</h2>
+		<!--BeginSectSelezionePeriodi-->
+		<div>	
+                        <label>Periodo:&nbsp;</label>
+			<select name='periodo_select' id='periodo_select' onchange="submit();">					
+				<!--BeginSectOptionPeriodi-->
+					<option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+				<!--EndSectOptionPeriodi-->
+			</select>			
+		</div>
+		<!--EndSectSelezionePeriodi-->
+		<!--BeginSectNoPeriodi-->
+			<p class='warning'>Nessun periodo definito per l'anno selezionato</p>
+		<!--EndSectNoPeriodi-->
+        </div>	
+	<div id="valutazioni">			
+		<!--BeginSectValutazioni-->
+                    <div>
+			<table>		
+				<h2>Schede di valutazione con ruolo {ruolo}</h2>
+				<thead>
+					<tr>
+						<!--BeginSectValutatoreTh-->
+						<th rowspan="2">Valutatore</th>
+						<!--EndSectValutatoreTh-->
+						<!--BeginSectValutatoTh-->
+						<th rowspan="2">Valutato</th>
+						<!--EndSectValutatoTh-->
+						<th rowspan="2">Cdr</th>
+						<th rowspan="2">Tipologia scheda</th>
+						<th rowspan="2">Stato d'avanzamento<br>valutazione</th>					
+						<!--BeginSectAutovalutazioneTh1-->	
+						<th rowspan="2">Autovalutazione</th>
+						<!--EndSectAutovalutazioneTh1-->	
+						<th colspan="2">Valutazione (totali)</th>																		
+					</tr>						
+					<tr>					
+						<th>Modifica</th>
+						<th>Totali</th>
+					</tr>
+				</thead>		
+				<tbody>
+					<!--BeginSectValutazione-->											
+					<tr>			
+						<!--BeginSectValutatore-->
+						<td>{valutatore}</td>
+						<!--EndSectValutatore-->
+						<!--BeginSectValutato-->
+						<td>{valutato}</td>
+						<!--EndSectValutato-->
+						<td>
+                                                    <!--BeginSectCdrAssociati-->
+                                                    {cdr} - {perc_testa}%<br>
+                                                    <!--EndSectCdrAssociati-->
+                                                </td>
+						<td>{categoria_valutazione}</td>
+						<td>{stato_avanzamento}</td>
+						<!--BeginSectAutovalutazione-->	
+						<td>
+							<!--BeginSectModificaAutovalutazione-->
+							<a href="{record_path}?{globals}keys[ID_valutazione]={id_autovalutazione}&ret_url={ret_url}">{edit_view_autovalutazione}</a>
+                                                            <!--BeginSectStampaAutovalutazione-->
+                                                            <br>-<br>
+                                                            <a href="{stampa_path}?{globals}keys[ID_valutazione]={id_autovalutazione}&ret_url={ret_url}" target="_blank">Stampa</a>
+                                                            <!--EndSectStampaAutovalutazione-->
+                                                        <!--EndSectModificaAutovalutazione-->
+							<!--BeginSectNoAutovalutazione-->
+							Non prevista per la tipologia nel periodo
+							<!--EndSectNoAutovalutazione-->
+						</td>					
+						<!--EndSectAutovalutazione-->
+						<td>
+							<!--BeginSectModificaValutazione-->
+							<a href="{record_path}?{globals}keys[ID_valutazione]={id_valutazione}&ret_url={ret_url}">{edit_view_valutazione}{note_valutato}</a>
+                                                            <!--BeginSectStampaValutazione-->
+                                                            <br>-<br>
+                                                            <a href="{stampa_path}?{globals}keys[ID_valutazione]={id_valutazione}&ret_url={ret_url}" target="_blank">Stampa</a>
+                                                            <!--EndSectStampaValutazione-->
+                                                        <!--EndSectModificaValutazione-->
+						</td>
+						<td>
+							<ul>
+								<!--BeginSectTotaliValutazione-->
+								<li>{totale_valutazione}</li>
+								<!--EndSectTotaliValutazione-->
+							</ul>								
+						</td>												
+					</tr>																																														
+					<!--EndSectValutazione-->						
+				</tbody>
+			</table>
+                    </div>
+		<!--EndSectValutazioni-->
+		<!--BeginSectNoValutazioni-->
+			<p class='warning'>Nessuna valutazione per il periodo selezionato.</p>
+		<!--EndSectNoValutazioni-->
+	</div>	
+</div>

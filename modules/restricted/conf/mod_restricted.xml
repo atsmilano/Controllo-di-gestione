@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configdata>
+	<menu>
+		<default path="/" hide="true" />
+		<admin path="/restricted" redir="/restricted/layout"  hide="true" label="Admin" />
+
+
+		<!--<dashboard path="/restricted/dashboard" label="Dashboard" location="brand" />-->
+		<settings path="/restricted/settings" label="Settings" location="brand" position="footer" icon="cogs"  acl="3" />
+	</menu>
+	<layout>
+		<layer path="/restricted/ds" name="twocols" />
+		<nolayout path="/restricted/login" />
+	</layout>
+	<sections>
+		<topbar default="true" submenu="true" icons="submenu" />
+		<navbar />
+		<sidebar icons="true" default="true" />
+		<account />
+		<accountpanel />
+		<admin />
+		<favorite />
+		<brand />
+		<breadcrumb />
+		<rightcol />
+	</sections>
+	<!--<settings>
+		<nomegruppo label="NOME GRUPPO">
+			<NOMECAMPO label="nome campo" parametri del field />
+		</nomegruppo>
+		<packages label="Alterazione Package">
+			<nomecampo label="NOME CAMPO" allow_undefined="true" undefined_label="illimitati" />
+		</packages>
+	</settings>-->
+	<!--			<search />-->
+</configdata>

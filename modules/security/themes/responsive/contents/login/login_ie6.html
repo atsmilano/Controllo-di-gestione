@@ -1,0 +1,141 @@
+<div class="dialog--nux">
+<div id="ffLoginBox" class="inner-box col-lg-4 col-lg-offset-4" align="center"> {inner_wrap_start}
+  <div class="">
+    <!--BeginSectLogoPre-->
+    <div class="{logo_class}">
+      <!--BeginSectLogoImgPre-->
+      <img src="{logo_login}" />
+      <!--EndSectLogoImgPre-->
+    </div>
+    <!--EndSectLogoPre-->
+    <!--BeginSectLogin-->
+    <div class="{login_class} dialog--nux-content">
+      <!--BeginSectLoginTitle-->
+      <h2>{_login_title}</h2>
+      <!--EndSectLoginTitle-->
+      <div class="error-container">{sError}</div>
+      <!--BeginSectSocialLoginPre-->
+      <div class="{login_social_class}">
+        <!--BeginSectSocialLoginFacebookPre-->
+        <a class="{social_class}" id ="modsec_facebooklogin" href="javascript:void(0);" onclick="ff.modules.security.social.requestLogin('{app_title} - {_social_facebook_login_window_title}', '{social_url_facebook}');">{social_icon} Facebook</a>
+        <!--EndSectSocialLoginFacebookPre-->
+        <!--BeginSectSocialLoginGooglePre-->
+        <a class="{social_class}" id ="modsec_googlelogin" href="javascript:void(0);" onclick="ff.modules.security.social.requestLogin('{app_title} - {_social_google_login_window_title}', '{social_url_google}');">{social_icon} Google+</a>
+        <!--EndSectSocialLoginGooglePre-->
+        <!--BeginSectJanRainLoginPre-->
+        <div class="{social_class}" id="janrainEngageEmbed"><a class="janrainEngage" href="javascript:void(0);">{_janrain_sign_in}</a></div>
+        <!--EndSectJanRainLoginPre-->
+      </div>
+      <!--EndSectSocialLoginPre-->
+      <!--BeginSectStandardLogin-->
+      <div class="{login_standard_class}">
+        <!--BeginSectDomain-->
+        <div class="{row_class}">
+          <!--BeginSectDomainLabel-->
+          <label for="domain">{_login_domain}</label>
+          <!--EndSectDomainLabel-->
+          <input class="{field_class}" type="text" id="domain" name="domain" value="{domain}" placeholder="{_login_domain}" />
+        </div>
+        <!--EndSectDomain-->
+        <div class="{row_class}">
+          <!--BeginSectUsernameLabel-->
+          <label for="username">{_login_username}</label>
+          <!--EndSectUsernameLabel-->
+          <input class="{field_class}" type="text" id="username" name="username" value="{username}" placeholder="{_login_username}"/>
+          <!--BeginSectRecoverUsername-->
+          <p align="left"><a class="{recover_class}" href="{site_path}{recover}">{_recover_username}</a></p>
+          <!--EndSectRecoverUsername-->
+        </div>
+        <div class="{row_class}">
+          <!--BeginSectPasswordLabel-->
+          <label for="password">{_login_password}</label>
+          <!--EndSectPasswordLabel-->
+          <input class="{field_class}" onkeydown="return ff.submitProcessKey(event, 'btLogin')" type="password" id="password" name="password" value="{password}" autocomplete="off" placeholder="{_login_password}" />
+          <!--BeginSectRecoverPassword-->
+          <p align="left" style="padding-top:7px;"><a class="{recover_class}" href="{site_path}{recover}">{_recover_password}</a></p>
+          <!--EndSectRecoverPassword-->
+        </div>
+        <!--BeginSectStayConnected-->
+        <div class="{row_class}">
+          <input type="checkbox" name="stayconnected" id="stayconnected" />
+          <label for="stayconnected">{_stay_connected}</label>
+        </div>
+        <!--EndSectStayConnected-->
+        <div class="{actions_class}"> <a class="{login_button_class}" href="javascript:void(0);" id="btLogin" onclick="
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+            if(username && password) {
+            window.location.href = '{url}?username=' + username +'&password=' + password + '&frmAction=login&ret_url={encoded_ret_url}';
+            return false;
+            }">{_login_confirm}</a> </div>
+      </div>
+      <!--EndSectStandardLogin-->
+      <!--BeginSectSocialLoginPost-->
+      <div class="{login_social_class}">
+        <!--BeginSectSocialLoginFacebookPost-->
+        <a class="{social_class}" id ="modsec_facebooklogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_facebook_login_window_title}', '{social_url_facebook}');">{social_icon} Facebook</a>
+        <!--EndSectSocialLoginFacebookPost-->
+        <!--BeginSectSocialLoginGooglePost-->
+        <a class="{social_class}" id ="modsec_googlelogin" href="javascript:ff.modules.security.social.requestLogin('{app_title} - {_social_google_login_window_title}', '{social_url_google}');">{social_icon} Google+</a>
+        <!--EndSectSocialLoginGooglePost-->
+        <!--BeginSectJanRainLoginPost-->
+        <div class="{social_class}" id="janrainEngageEmbed"><a class="janrainEngage" href="javascript:void(0);">{_janrain_sign_in}</a></div>
+        <!--EndSectJanRainLoginPost-->
+      </div>
+      <!--EndSectSocialLoginPost-->
+    </div>
+          <!--BeginSectLoginLinks-->
+      <div class="{link_class}">
+        <!--BeginSectRegister-->
+        <span class="pull-right no-account">Non hai un account? &nbsp;&nbsp;<a class="{register_class}" href="{site_path}{register}">{_register_link}</a></span>
+        <!--EndSectRegister-->
+        <!--BeginSectLoginBack-->
+        <a class="{back_class}" href="{back_url}">{_back_to_site}</a>
+        <!--EndSectLoginBack-->
+      </div>
+      <!--EndSectLoginLinks-->
+    <script type="text/javascript">
+
+			    jQuery('#{focus_target}').focus();
+
+			</script>
+    <!--EndSectLogin-->
+    <!--BeginSectLogoPost-->
+    <div class="{logo_class}">
+      <!--BeginSectLogoImgPost-->
+      <img src="{logo_login}" />
+      <!--EndSectLogoImgPost-->
+    </div>
+    <!--EndSectLogoPost-->
+  </div>
+  {inner_wrap_end} </div>
+<!--BeginSectJanrainJS-->
+<script type="text/javascript">
+    jQuery(function () {
+        //if (typeof window.janrain !== 'object')
+        window.janrain = {};
+        window.janrain.settings = {};
+
+        window.janrain.settings.tokenUrl = 'http://{domain}{site_path}/services/janrain_auth?frmAction=login&ret_url={encoded_ret_url}&err_url={encoded_this_url}';
+
+        var e = document.createElement('script');
+        e.type = 'text/javascript';
+        e.id = 'janrainAuthWidget';
+
+        if (document.location.protocol === 'https:') {
+            e.src = 'https://rpxnow.com/js/lib/{janrain_appname}/engage.js';
+        } else {
+            e.src = 'http://widget-cdn.rpxnow.com/js/lib/{janrain_appname}/engage.js';
+        }
+
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(e, s);
+
+        window.janrain.ready = true;
+    });
+</script>
+<!--EndSectJanrainJS-->
+</div>
+<style type="text/css">
+  <!-- inserire qui il css-->
+</style>

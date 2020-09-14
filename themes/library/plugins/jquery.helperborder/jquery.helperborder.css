@@ -1,0 +1,79 @@
+.outline {
+    position: absolute;
+    color: rgba(0,127,255,0.65);
+    opacity: .99;
+    pointer-events: none;  
+    box-sizing: border-box; 
+}
+.outline.guide {
+	border-color: #4285f4;
+	border-style: dashed;
+	border-width: 2px;
+}
+
+.outline.selected { transition:box-shadow 0.5s; }
+.outline.selected:hover {
+	box-shadow: 0 0 0 2000px rgba(0,0,0,0.4);
+}
+.outline > .hb-breadcrumbs {
+    position: absolute;
+    left: 0;
+    max-width: 100%;
+    width: 100%;
+    /*height: 25px;
+    min-height: 24px;*/
+    border: 0;
+    background: none;
+}
+
+/*
+la barra non deve colorarsi in modalità compatta
+.outline.selected > .hb-breadcrumbs {
+	background-color:rgba(0,127,255,1);
+	border:1px solid rgba(0,127,255,1);
+}*/
+
+.outline.guide > .hb-breadcrumbs.hb-top-crumbs { 
+	top: 0;
+	/*margin-top: -26px;*/
+}
+
+.outline.guide > .hb-breadcrumbs.hb-bottom-crumbs {
+    bottom: 0;
+    /*margin-bottom: -26px;*/
+}
+.outline.selected > .hb-breadcrumbs.hb-top-crumbs {
+}
+.outline.selected > .hb-breadcrumbs.hb-bottom-crumbs {
+    bottom: 0;
+    /*margin-bottom: -26px;*/
+}
+
+
+
+.outline > .hb-breadcrumbs > .hb-inner {
+    font-size: 11px;
+    font-family:sans-serif;
+    position: absolute;
+    /*line-height: 19px;*/
+    bottom: 0;
+    pointer-events: auto;
+    /*min-height: 24px;*/
+}
+
+.outline.guide > .hb-breadcrumbs .hb-inner {
+    left: 0;
+}
+
+.outline.selected > .hb-breadcrumbs .hb-inner {
+    right: 0;
+}
+
+.hb-exclude { 
+    border: 1px dashed #333;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
