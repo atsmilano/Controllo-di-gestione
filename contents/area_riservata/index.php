@@ -1,4 +1,5 @@
 <?php
+$anno_budget = $cm->oPage->globals["anno"]["value"];
 $user = LoggedUser::Instance();
 
 $cm->oPage->addContent("<div id='home_contents'>");
