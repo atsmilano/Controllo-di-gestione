@@ -12,7 +12,9 @@ foreach($sezioni as $sezione) {
             $allegati_helper = new AllegatoHelper();
 
             //START GRANT PERMISSIONS
-            $allegati_permissions = $allegati_helper->defineAllegatiPermission($user);
+            if (empty($allegati_permissions)) {
+                        $allegati_permissions = $allegati_helper->defineAllegatiPermission($user);
+            }
             $allegati_permissions = $allegati_helper->definePermission($allegati, $allegati_permissions, true, false);
             $permission_cookie = $allegati_helper->encodePermissions($allegati_permissions);
             //Call before every output or will not work!!! IMPORTANT
