@@ -1,0 +1,17 @@
+RewriteEngine On
+
+RewriteCond   %{REQUEST_URI}	^/budget/modules
+RewriteCond   %{REQUEST_URI}	!^/budget/modules/([^/]+)/themes(.+)
+RewriteRule  ^modules/([^/]+)(.+)  /budget/modules/$1/themes$2 [L,QSA]
+
+#RewriteCond   %{HTTP_HOST}  	localhost$
+RewriteCond   %{REQUEST_URI}  	!^/budget/cm/main\.php
+RewriteCond   %{REQUEST_URI}  	!^/budget/cm/showfiles\.php
+RewriteCond   %{REQUEST_URI}  	!^/budget/themes
+RewriteCond   %{REQUEST_URI}  	!^/budget/ffsetup
+RewriteCond   %{REQUEST_URI}  	!^/budget/modules/([^/]+)/themes(.+)
+
+#ADDED-ATS regole per la gestione dei moduli
+RewriteCond   %{REQUEST_URI}  	!^/budget/moduli/(.*)/theme
+
+RewriteRule   ^(.*)    /budget/cm/main\.php?_ffq_=/$0 [L,QSA]
