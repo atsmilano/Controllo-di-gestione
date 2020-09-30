@@ -122,7 +122,9 @@ if (isset ($_GET["periodo"])) {
                     $record[] = $rendicontazione->criticita;
                     $record[] = $rendicontazione->misurazione_indicatori;
                     $record[] = $rendicontazione->raggiungibile == 1?"Si":"No";                        
-                    $record[] = $rendicontazione->richiesta_revisione == 1?"Si":"No"; 
+                    $record[] = $rendicontazione->richiesta_revisione == 2?"Si propone la sospensione dell'obiettivo":(
+                                            $rendicontazione->richiesta_revisione == 1?"Si propone la revisione dell'obiettivo": 
+                                            "Si conferma l'obiettivo assegnato"); 
                     $record[] = $rendicontazione->perc_raggiungimento;
                     $record[] = $rendicontazione->perc_nucleo;
                     $record[] = $rendicontazione->note_nucleo;

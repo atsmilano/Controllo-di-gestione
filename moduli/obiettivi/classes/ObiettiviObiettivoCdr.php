@@ -329,8 +329,7 @@ class ObiettiviObiettivoCdr {
         }
     }
 
-    //recupera l'obiettivo_cdr padre assegnato dalla direzione
-    //se l'obiettivo non è stato assegnato dalla direzione viene recuperata la valutazione della rendicontazione del primo cdr superiore
+    //recupera l'obiettivo_cdr padre assegnato dalla direzione    
     public function getObiettivoCdrAziendale() {
         //se l'obiettivo è stato assegnato dalla direzione viene restituito
         if ($this->isObiettivoCdrAziendale()) {

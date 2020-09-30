@@ -14,7 +14,7 @@ class IndicatoriParametro extends Entity {
 
     //la funzione restituisce l'oggetto IndicatoriValoreParametroRilevato per il parametro alla data di rilevazione
     //il valore di riferimento è il più recente fra quelli del periodo passato come parametro o senza periodo specificato
-    //nel caso veng apassato un cdr il valore considerato è quello più recente fra quelli del cdr specificato o senza cdr
+    //nel caso venga passato un cdr il valore considerato è quello più recente fra quelli del cdr specificato o senza cdr
     public function getValoreParametroIndicatoreRilevatoPeriodoRendicontazione(ObiettiviPeriodoRendicontazione $periodo, $codice_cdr = null) {
         //vengono recuperati tutti i valori del parametro ordinati in ordine decrescente per data di riferimento
         $filters = array(

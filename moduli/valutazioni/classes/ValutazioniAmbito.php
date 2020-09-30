@@ -71,26 +71,6 @@ class ValutazioniAmbito {
             return 0;
     }
 
-    public function getPesoAnno(ValutazioniAnnoBudget $anno, ValutazioniCategoria $categoria) {
-        $db = ffDb_Sql::factory();
-
-        $sql = "
-            SELECT 
-                valutazioni_ambito_categoria_anno.peso
-            FROM
-                valutazioni_ambito_categoria_anno
-            WHERE
-                valutazioni_ambito_categoria_anno.ID_ambito = " . $db->toSql($this->id) . " AND
-                valutazioni_ambito_categoria_anno.ID_categoria = " . $db->toSql($categoria->id) . " AND
-                valutazioni_ambito_categoria_anno.ID_anno_budget = " . $db->toSql($anno->id) . "				
-        ";
-        $db->query($sql);
-        if ($db->nextRecord())
-            return (int) $db->getField("peso", "Number", true);
-
-        throw new Exception("test");
-    }
-
     public function setPesoAnno(ValutazioniAnnoBudget $anno, ValutazioniCategoria $categoria, $peso, $metodo, $action) {
         $db = ffDb_Sql::factory();
         switch ($action) {

@@ -73,52 +73,7 @@ class ValutazioniCategoria {
         return $categorie;
     }
 
-    public function getValutazioniCategoria() {
-        $schede_valutazione = array();
-
-        $db = ffDb_Sql::factory();
-
-        $sql = "
-            SELECT 
-                valutazioni_valutazione_periodica.*,
-                valutazioni_categoria.abbreviazione,
-                valutazioni_categoria.descrizione,
-                valutazioni_categoria.dirigenza,
-                valutazioni_categoria.anno_inizio,
-                valutazioni_categoria.anno_fine
-            FROM valutazioni_valutazione_periodica
-                LEFT JOIN personale ON valutazioni_valutazione_periodica.matricola_valutato = personale.matricola
-                INNER JOIN valutazioni_categoria ON valutazioni_categoria.ID = valutazioni_valutazione_periodica.ID_categoria	
-            WHERE
-                valutazioni_valutazione_periodica.ID_categoria = " . $db->toSql($this->id) . "
-                AND valutazioni_valutazione_periodica.matricola_valutatore <> valutazioni_valutazione_periodica.matricola_valutato
-            ORDER BY personale.cognome, personale.nome
-        ";
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $scheda_valutazione = new ValutazioniValutazionePeriodica();
-
-                $scheda_valutazione->id = $db->getField("ID", "Number", true);
-                $scheda_valutazione->matricola_valutatore = $db->getField("matricola_valutatore", "Text", true);
-                $scheda_valutazione->matricola_valutato = $db->getField("matricola_valutato", "Text", true);
-                $scheda_valutazione->data_chiusura_autovalutazione = CoreHelper::getDateValueFromDB($db->getField("data_chiusura_autovalutazione", "Date", true));
-                $scheda_valutazione->note_valutatore = $db->getField("note_valutatore", "Text", true);
-                $scheda_valutazione->data_ultimo_colloquio = CoreHelper::getDateValueFromDB($db->getField("data_ultimo_colloquio", "Date", true));
-                $scheda_valutazione->data_firma_valutatore = CoreHelper::getDateValueFromDB($db->getField("data_firma_valutatore", "Date", true));
-                $scheda_valutazione->note_valutato = $db->getField("note_valutato", "Text", true);
-                $scheda_valutazione->data_firma_valutato = CoreHelper::getDateValueFromDB($db->getField("data_firma_valutato", "Date", true));
-                $scheda_valutazione->id_periodo = $db->getField("ID_periodo", "Number", true);
-                //$scheda_valutazione->categoria = $this;
-                $scheda_valutazione->id_categoria = $db->getField("ID_categoria", "Number", true);
-
-                $schede_valutazione[] = $scheda_valutazione;
-            } while ($db->nextRecord());
-        }
-        return $schede_valutazione;
-    }
-
-    // genrazione combo box delle categorie
+    // generazione combo box delle categorie
     public static function getQualifiche($categorie = array()) {
         if(empty($categorie)) {
             $categorie = self::getAll();

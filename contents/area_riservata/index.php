@@ -1,7 +1,6 @@
 <?php
 $anno_budget = $cm->oPage->globals["anno"]["value"];
 $user = LoggedUser::Instance();
-
 $cm->oPage->addContent("<div id='home_contents'>");
 $sezioni = CmsHomeSezione::getSezioneAnno($anno_budget);
 foreach($sezioni as $sezione) {
@@ -13,7 +12,7 @@ foreach($sezioni as $sezione) {
 
             //START GRANT PERMISSIONS
             if (empty($allegati_permissions)) {
-                        $allegati_permissions = $allegati_helper->defineAllegatiPermission($user);
+                $allegati_permissions = $allegati_helper->defineAllegatiPermission($user);
             }
             $allegati_permissions = $allegati_helper->definePermission($allegati, $allegati_permissions, true, false);
             $permission_cookie = $allegati_helper->encodePermissions($allegati_permissions);

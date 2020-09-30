@@ -42,7 +42,7 @@ class ValutazioniItem {
 		}
 	}
 	
-	//viene restituito un array con le categorie associate all' sezione'item
+	//viene restituito un array con le categorie associate all'item
 	public function getCategorieAssociate(){
 		$categorie = array();
 		$db = ffDb_Sql::factory();				

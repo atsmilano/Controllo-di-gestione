@@ -20,8 +20,7 @@ class ValutazioniPunteggioItem extends Entity {
         return false;
     }
 
-    public function canDelete() {
-        //return (new ValutazioniItem($this->id_item))->canDelete();
+    public function canDelete() {        
         return count(ValutazioniValutazioneItem::getAll(array("ID_item" => $this->id_item))) == 0;
     }
 }

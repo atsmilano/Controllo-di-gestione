@@ -9,7 +9,7 @@ class ValutazioniPersonale extends Personale{
     public $categoria = null;
     public $anomalie = "";
         
-    public function __construct($id = null, ValutazioniPeriodo $periodo, $ottimizza = true){        
+    public function __construct($id = null, ValutazioniPeriodo $periodo){        
         //selezione anno
         $anno = new ValutazioniAnnoBudget($periodo->id_anno_budget);
         $data_fineObject = new DateTime($periodo->data_fine);

@@ -145,9 +145,8 @@ foreach($ambiti as $ambito) {
     $colonna = 1;
 
     foreach($categorie as $categoria) {
-        try {
-            $peso = $ambito->getPesoAnno($valutazioneAnnoBudget, $categoria);
-        } catch (Exception $ex) {
+        $peso = $ambito->getPesoAmbitoCategoriaAnno($categoria, $valutazioneAnnoBudget);            
+        if ($peso == 0) {
             $peso = "";
         }
 

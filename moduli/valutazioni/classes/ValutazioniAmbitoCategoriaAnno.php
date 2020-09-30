@@ -91,6 +91,7 @@ class ValutazioniAmbitoCategoriaAnno extends Entity {
         }
         return false;
     }
+    
     public function canDelete($ignoreAssociationPeriodiAnno = false) {
         if(!$ignoreAssociationPeriodiAnno) {
             if($this->isAmbitoCategoriaAssociatiPeriodiAnno()) {

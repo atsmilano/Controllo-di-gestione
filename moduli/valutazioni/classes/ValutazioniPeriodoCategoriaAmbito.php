@@ -1,5 +1,4 @@
 <?php
-
 class ValutazioniPeriodoCategoriaAmbito extends Entity {
     protected static $tablename = "valutazioni_periodo_categoria_ambito";
 

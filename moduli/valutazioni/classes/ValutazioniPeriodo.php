@@ -124,7 +124,7 @@ class ValutazioniPeriodo {
         return $categorie;
     }
 
-    //restituisce la categoria valutate nel periodo, dato ID
+    //restituisce la categoria valutata nel periodo, dato ID
     public function getCategoriaPeriodo($id_periodo_categoria) {
         $categoria = array();
         $db = ffDb_Sql::factory();

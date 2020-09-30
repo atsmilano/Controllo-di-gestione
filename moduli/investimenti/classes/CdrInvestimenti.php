@@ -39,7 +39,7 @@ class CdrInvestimenti extends Cdr{
     
     public function isDipartimentoAmministrativoAnno (AnnoBudget $anno) {   
         
-		foreach (InvestimentiDipAmministrativoAnno::getCdrBilancioAnno($anno) as $cdr_dip_amm) {
+		foreach (InvestimentiDipAmministrativoAnno::getCdrDipartimentoAmministrativoAnno($anno) as $cdr_dip_amm) {
             if ($cdr_dip_amm->codice == $this->codice) {
                 return true;
             }

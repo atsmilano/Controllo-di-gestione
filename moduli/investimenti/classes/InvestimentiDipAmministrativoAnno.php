@@ -55,7 +55,7 @@ class InvestimentiDipAmministrativoAnno {
 	}
     
     //restituisce array con i cdr definiti come dipartimento amministrativo per l'anno
-    public static function getCdrBilancioAnno(AnnoBudget $anno){        
+    public static function getCdrDipartimentoAmministrativoAnno(AnnoBudget $anno){        
 		$cdr_diparitmento_amministrativo = array();
                                              
         $cdr_diparitmento_amministrativo_anno = InvestimentiDipAmministrativoAnno::getAll();        
