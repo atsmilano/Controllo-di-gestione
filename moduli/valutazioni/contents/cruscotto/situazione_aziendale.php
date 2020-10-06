@@ -64,7 +64,7 @@ $report = array();
 //conteggio valutazioni su rami gerarchici
 foreach ($rami_gerarchici as $ramo_gerarchico) {
     //array per il salvataggio dei dati del cdr (ramo) corrente per il report
-    //il cdr padre del piano è il primo del ramo gerarchico
+    //il cdr padre del piano Ã¨ il primo del ramo gerarchico
     $dati_cdr_report = array(
                             "cdr" => $ramo_gerarchico[0]["cdr"],
                             "n_valutazioni" => 0,
@@ -80,7 +80,7 @@ foreach ($rami_gerarchici as $ramo_gerarchico) {
     //vengono conteggiate tutte le valutazioni per il ramo gerarchico
     foreach ($ramo_gerarchico as $cdr_ramo) {     
         //se viene trovata una corrispondenza fra cdr del valutato e il rampo viene conteggiata la valutazione ed eliminato
-        //il cdr di afferenza (e nel caso non ce ne siano più anche il valutato) per evitare iterazioni successive inutili                
+        //il cdr di afferenza (e nel caso non ce ne siano piÃ¹ anche il valutato) per evitare iterazioni successive inutili                
         foreach ($valutazioni_per_report as $valutazione_key => $valutazione) {
             //per ogni cdr d'afferenza del dipendente
             foreach ($valutazione["cdr_afferenza"] as $cdr_afferenza_key => $cdr_afferenza) {                  
@@ -230,9 +230,12 @@ if (count($report) > 0) {
 
         //valorizzazione del grafico
         //calcoli
-        $perc_totale = 0;
-        $perc_dirigenza = 0;
-        $perc_comparto = 0;
+        $perc_totale_valutatore = 0;
+        $perc_totale_valutato = 0;
+        $perc_dirigenza_valutatore = 0;
+        $perc_dirigenza_valutato = 0;
+        $perc_comparto_valutatore = 0;
+        $perc_comparto_valutato = 0;
         if ($record["n_valutazioni"] > 0) {
             $perc_totale_valutatore = $record["n_valutazioni_completate_valutatore"]/$record["n_valutazioni"]*100;
             $perc_totale_valutato = $record["n_valutazioni_completate_valutato"]/$record["n_valutazioni"]*100;
@@ -240,11 +243,21 @@ if (count($report) > 0) {
                 $perc_dirigenza_valutatore = $record["n_valutazioni_dirigenza_completate_valutatore"]/$record["n_valutazioni_dirigenza"]*100;
                 $perc_dirigenza_valutato = $record["n_valutazioni_dirigenza_completate_valutato"]/$record["n_valutazioni_dirigenza"]*100;
             }
+            else {
+                $perc_dirigenza_valutatore = $perc_dirigenza_valutato = 100;
+            }
             if ($record["n_valutazioni_comparto"]) {                                
                 $perc_comparto_valutatore = $record["n_valutazioni_comparto_completate_valutatore"]/$record["n_valutazioni_comparto"]*100;
                 $perc_comparto_valutato = $record["n_valutazioni_comparto_completate_valutato"]/$record["n_valutazioni_comparto"]*100;
-            }                
+            }   
+            else {
+                $perc_comparto_valutatore = $perc_comparto_valutato = 100;
+            }
         }    
+        else {
+            $perc_totale_valutatore = $perc_totale_valutato = 100;
+        }
+        
         //accodamento dei valori totale
         if ($value_tot_valutatore !== false){			
             $value_tot_valutatore .= ", ";	

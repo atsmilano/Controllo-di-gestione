@@ -712,8 +712,7 @@ function myUpdate($oRecord, $frmAction) {
                             $valutazione->data_firma_valutatore = date("Y-m-d H:i:s");
                             $valutazione->note_valutatore = $oRecord->form_fields["note_valutatore"]->value->getValue();
                             if ($autovalutazione_collegata !== false) {                                
-                                $autovalutazione_collegata->data_firma_valutatore = date("Y-m-d H:i:s");
-                                $autovalutazione_collegata->note_valutatore = $oRecord->form_fields["note_valutatore"]->value->getValue();
+                                $autovalutazione_collegata->data_firma_valutatore = date("Y-m-d H:i:s");                                
                             }
                             try {
                                 $valutazione->save();
@@ -733,8 +732,7 @@ function myUpdate($oRecord, $frmAction) {
                             $valutazione->data_firma_valutato = date("Y-m-d H:i:s");
                             $valutazione->note_valutato = $oRecord->form_fields["note_valutato"]->value->getValue();
                             if ($autovalutazione_collegata !== false) {
-                                $autovalutazione_collegata->data_firma_valutato = date("Y-m-d H:i:s");
-                                $autovalutazione_collegata->note_valutato = $oRecord->form_fields["note_valutato"]->value->getValue();
+                                $autovalutazione_collegata->data_firma_valutato = date("Y-m-d H:i:s");                                
                             }
                             try {
                                 $valutazione->save();

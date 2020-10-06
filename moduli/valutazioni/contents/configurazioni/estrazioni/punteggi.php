@@ -63,8 +63,9 @@ if (isset ($_GET["periodo"]) && $periodo_valutazione = new ValutazioniPeriodo($_
         }            
         $record[] = $categoria->descrizione;											
         $record[] = $valutazione->matricola_valutato;
-        $record[] = $valutazione->matricola_valutatore;
-        $i++;
+        $record[] = $valutazione->matricola_valutatore; 
+        $matrice_dati[] = $record;
+        $record = array();
 
         foreach($ambiti_valutazione as $amb){
             $ambito = $amb["ambito"];
@@ -95,6 +96,9 @@ if (isset ($_GET["periodo"]) && $periodo_valutazione = new ValutazioniPeriodo($_
                         $record[] = $item_valutazione->descrizione;
                         $record[] = $item_valutazione->peso;
                         $record[] = $valutazione->getPunteggioItem($item_valutazione);
+                        
+                        $matrice_dati[] = $record;
+                        $record = array();
                     }
                 }                    
             }         

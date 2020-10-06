@@ -1,30 +1,37 @@
-#	Titolo del repository e descrizione del contesto d’uso e delle finalità, eventuali screenshot, riferimenti al contesto d’uso di ATS; 
-#	Descrizione della organizzazione del repository;
-#	Descrizione delle dipendenze da altri software;
-#	Comandi per deployment;
-#	Amministrazione committente e nomi dei soggetti incaricati del mantenimento del progetto open source (è richiesto il nome dell’azienda e facoltativamente si possono aggiungere nomi delle persone incaricate);
-#	Indirizzo e-mail a cui inviare segnalazioni di sicurezza;
-
-
+#	PP&C- Piattaforma di Programmazione e controllo  (N.V.B.L.A.)
+#
+#       Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
+#       controllo e valutazione della performance aziendale ed individuale.
+#
+#       Ultima versione: 5 Ottobre 2020
+#       Documentazione tecnica: https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Man_Tecnico:Manuale_Tecnico
+#	Prodotto da ATS Milano - Città Metropolitana
+#	controllodigestione@ats-milano.it
 
 
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
-
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
-
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
-
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
-
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+La Piattaforma di Programmazione e Controllo, interamente informatizzata e
+resa disponibile via web mediante accessi profilati a tutti gli utenti che
+a vario titolo partecipano al processo di programmazione, rappresenta lo
+strumento tecnico di comunicazione a disposizione della Direzione
+Strategica e del personale per la gestione del processo di programmazione
+e controllo. Sulla base del profilo dell'utente (ad es. Direzione,
+Responsabile di CDR, Dirigente, Comparto, ecc.), vengono resi disponibili
+i moduli abilitati ciascuno dei quali rappresenta uno strumento a
+supporto delle singole fasi del processo di programmazione e controllo
+aziendale. La predisposizione delle proposte di programmazione da parte
+dei Centri di Responsabilità  (CDR) segue un percorso logico guidato dalla
+struttura della scheda di programmazione che propone le seguenti
+sezioni:  
+- Programmazione 
+    - Strategia 
+    - Obiettivi 
+    - Progetti 
+    - Programmazione e Controllo Costi e Ricavi 
+    - Investimenti 
+- Controllo 
+    - Rendicontazione obiettivi 
+    - Report di Contabilità  analitica 
+    - Cruscotto indicatori 
+- Valutazioni 
+    - Valutazione della performance individuale
