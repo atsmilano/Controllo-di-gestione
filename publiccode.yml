@@ -5,7 +5,7 @@
 publiccodeYmlVersion: '0.2'
 name: PP&C- Piattaforma di Programmazione e controllo  (N.V.B.L.A.)
 url: >-
-  https://dev.azure.com/atsmi-open/Controllo%20di%20Gestione/_git/Controllo%20di%20Gestione
+  https://github.com/atsmilano/Controllo-di-gestione
 releaseDate: '2020-09-15'
 developmentStatus: stable
 platforms:
