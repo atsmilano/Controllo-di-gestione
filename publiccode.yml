@@ -24,9 +24,9 @@ maintenance:
       until: '2021-06-10'
 legal:
   license: LGPL-3.0-or-later
-  mainCopyrightOwner: ATS CittÃ  metropolitana di Milano
-  repoOwner: ATS CittÃ  metropolitana di Milano
-  authorsFile: ATS CittÃ  metropolitana di Milano
+  mainCopyrightOwner: ATS Città  metropolitana di Milano
+  repoOwner: ATS Città metropolitana di Milano
+  authorsFile: ATS Città metropolitana di Milano
 localisation:
   localisationReady: true
   availableLanguages:
@@ -53,16 +53,14 @@ description:
       a vario titolo partecipano al processo di programmazione, rappresenta lo
       strumento tecnico di comunicazione a disposizione della Direzione
       Strategica e del personale per la gestione del processo di programmazione
-      e controllo. Sulla base del profilo dellâ€™utente (ad es. Direzione,
+      e controllo. Sulla base del profilo dell'utente (ad es. Direzione,
       Responsabile di CDR, Dirigente, Comparto, ecc.), vengono resi disponibili
-      i â€œmoduliâ€� abilitati ciascuno dei quali rappresenta uno strumento a
+      i moduli abilitati ciascuno dei quali rappresenta uno strumento a
       supporto delle singole fasi del processo di programmazione e controllo
       aziendale. La predisposizione delle proposte di programmazione da parte
-      dei Centri di ResponsabilitÃ  (CDR) segue un percorso logico guidato dalla
+      dei Centri di Responsabilità (CDR) segue un percorso logico guidato dalla
       struttura della scheda di programmazione che propone le seguenti
       sezioni:  
-
-
       - Programmazione 
           - Strategia 
           - Obiettivi 
@@ -71,7 +69,7 @@ description:
           - Investimenti 
       - Controllo 
           - Rendicontazione obiettivi 
-          - Report di ContabilitÃ  analitica 
+          - Report di Contabilità  analitica 
           - Cruscotto indicatori 
       - Valutazioni 
           - Valutazione della performance individuale
