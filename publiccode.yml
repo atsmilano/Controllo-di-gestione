@@ -1,52 +1,21 @@
 # This repository adheres to the publiccode.yml standard by including this 
-# metadata file that makes public software easily discoverable.
+# metadata file that makes public oftware easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
 publiccodeYmlVersion: '0.2'
-name: PP&C- Piattaforma di Programmazione e controllo  (N.V.B.L.A.)
-url: >-
-  https://github.com/atsmilano/Controllo-di-gestione
-releaseDate: '2020-09-15'
-developmentStatus: stable
-platforms:
-  - web
-softwareType: standalone/web
 categories:
   - budgeting
   - business-process-management
-maintenance:
-  type: internal
-  contacts:
-    - name: Matteo Bonvini
-      email: controllodigestione@ats-milano.it
-  contractors:
-    - name: Invisible Farm
-      until: '2021-06-10'
-legal:
-  license: LGPL-3.0-or-later
-  mainCopyrightOwner: ATS Città  metropolitana di Milano
-  repoOwner: ATS Città metropolitana di Milano
-  authorsFile: ATS Città metropolitana di Milano
-localisation:
-  localisationReady: true
-  availableLanguages:
-    - it
-it:
-  riuso:
-    codiceIPA: atsmetmi
-  piattaforme:
-    cie: false
-  conforme:
-    lineeGuidaDesign: true
-    misureMinimeSicurezza: true
-    gdpr: true
-    modelloInteroperabilita: true
 description:
   it:
-    genericName: Piattaforma di P&C
     apiDocumentation: >-
       https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Man_Tecnico:Manuale_Tecnico
     documentation: 'https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Manuale_Utente'
+    features:
+      - >-
+        Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
+        controllo e valutazione
+    genericName: Piattaforma di P&C
     longDescription: >
       La Piattaforma di Programmazione e Controllo, interamente informatizzata e
       resa disponibile via web mediante accessi profilati a tutti gli utenti che
@@ -55,15 +24,12 @@ description:
       Strategica e del personale per la gestione del processo di programmazione
       e controllo. Sulla base del profilo dell'utente (ad es. Direzione,
       Responsabile di CDR, Dirigente, Comparto, ecc.), vengono resi disponibili
-      i moduli abilitati ciascuno dei quali rappresenta uno strumento a
-      supporto delle singole fasi del processo di programmazione e controllo
-      aziendale. La predisposizione delle proposte di programmazione da parte
-      dei Centri di Responsabilità (CDR) segue un percorso logico guidato dalla
-      struttura della scheda di programmazione che propone le seguenti
-      sezioni:  
-
-
-      - Programmazione 
+      i moduli abilitati ciascuno dei quali rappresenta uno strumento a supporto
+      delle singole fasi del processo di programmazione e controllo aziendale.
+      La predisposizione delle proposte di programmazione da parte dei Centri di
+      Responsabilità (CDR) segue un percorso logico guidato dalla struttura
+      della scheda di programmazione che propone le seguenti sezioni:   -
+      Programmazione 
           - Strategia 
           - Obiettivi 
           - Progetti 
@@ -71,14 +37,57 @@ description:
           - Investimenti 
       - Controllo 
           - Rendicontazione obiettivi 
-          - Report di ContabilitÃ  analitica 
+          - Report di Contabilità  analitica 
           - Cruscotto indicatori 
       - Valutazioni 
           - Valutazione della performance individuale
     shortDescription: >-
       Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
       controllo e valutazione della performance aziendale ed individuale
-    features:
-      - >-
-        Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
-        controllo e valutazione
+developmentStatus: stable
+intendedAudience:
+  scope:
+    - healthcare
+    - local-authorities
+    - welfare
+    - finance-and-economic-development
+it:
+  conforme:
+    gdpr: true
+    lineeGuidaDesign: true
+    misureMinimeSicurezza: true
+    modelloInteroperabilita: true
+  countryExtensionVersion: '0.2'
+  piattaforme:
+    anpr: false
+    cie: false
+    pagopa: false
+    spid: false
+  riuso:
+    codiceIPA: atsmetmi
+legal:
+  license: LGPL-3.0-or-later
+  mainCopyrightOwner: ATS Città  Metropolitana di Milano
+  repoOwner: ATS Città Metropolitana di Milano
+localisation:
+  availableLanguages:
+    - it
+  localisationReady: true
+logo: >-
+  https://raw.githubusercontent.com/atsmilano/Controllo-di-gestione/master/themes/ats/images/logo/login.png
+maintenance:
+  contacts:
+    - email: controllodigestione@ats-milano.it
+      name: >-
+        Antonio Nava, Giovandomenico Violante, Matteo Bonvini, Pasquale
+        Logiacco, Veronica Apruzzese
+  contractors:
+    - name: Invisible Farm
+      until: '2021-06-10'
+  type: internal
+name: PP&C- Piattaforma di Programmazione e Controllo  (N.V.B.L.A.)
+platforms:
+  - web
+releaseDate: '2020-09-15'
+softwareType: standalone/web
+url: 'https://github.com/atsmilano/Controllo-di-gestione'
