@@ -1,0 +1,79 @@
+<!--BeginSectFields-->
+    <input id="estrazione_xlsx" type="button" value="Estrazione .xlsx campi selezionati tabella '{table}'">        
+    <table id='elenco_campi_table'>
+        <caption>Campi da estrarre</caption>
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="check_all_fields" checked="checked"/></th>
+                <th>Nome campo</th>
+                <th>Tipologia</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!--BeginSectField-->
+            <tr>
+                <td><input type="checkbox" id="{nome_campo}" class="include_field" checked="checked"/></td>
+                <td>{nome_campo}</td>
+                <td>{tipo_campo}</td>
+            </tr>
+        <!--EndSectField-->
+        </tbody>
+    </table>   
+<!--EndSectFields-->
+<script>
+    $('#check_all_fields').click(function () { 
+        if ($(this).is(":checked")){
+            $(".include_field").each(function() {
+                $(this).prop('checked', true);
+            });
+        }
+        else {
+            $(".include_field").each(function() {
+                $(this).prop('checked', false);
+            });
+        }
+    });
+    
+    $('#estrazione_xlsx').click(function () {
+        $("#esito").empty();
+        $("#loading-img").modal("show");     
+        
+        field_list = Array();
+        $("input[type='checkbox'].include_field:checkbox:checked").each(function () {
+            let field_name = this.id;
+            field_list.push(field_name);                        
+        });                 
+        if (!field_list.length) {
+            $("#esito").html("Nessun campo selezionato.");
+            $("#esito").show();
+            setTimeout(function(){ $("#esito").hide(); }, 5000);
+            $("#loading-img").modal("hide");
+        }
+        else {                        
+            $.ajax({
+                url: window.location.pathname + "/estrazioni_db/estrazione_xlsx.php?table_name="+$("#tables option:selected").val(),
+                contentType: 'application/json',
+                data: JSON.stringify(field_list),
+                dataType: "json",
+                type: "POST",
+            })
+            .success(function (data) {
+                $("#esito").html("Estrazione avvenuta con successo.");  
+                var $a = $("<a>");
+                $a.attr("href",data.file);
+                $("body").append($a);
+                $a.attr("download",data.filename);
+                $a[0].click();
+                $a.remove();                     
+            })
+            .fail(function (){
+                $("#esito").html("Errore durante l'estrazione.");                
+            })
+            .always(function() {
+                $("#esito").show();
+                $("#loading-img").modal("hide");
+                setTimeout(function(){ $("#esito").hide(); }, 5000);
+            });
+        }
+    });
+</script>

@@ -64,6 +64,33 @@ $oField->required = true;
 $oRecord->addContent($oField);
 
 $oField = ffField::factory($cm->oPage);
+$oField->id = "allegati";
+$oField->base_type = "Number";
+$oField->extended_type = "Selection";
+$oField->control_type = "radio";    
+$oField->multi_pairs = array(
+    array(new ffData("1", "Number"), new ffData("Si", "Text")),
+    array(new ffData("0", "Number"), new ffData("No", "Text")),
+);
+$oField->label = "Allegati alla rendicontazione consentiti";
+$oRecord->addContent($oField);
+
+$multipairs_campo_revisione = array();
+$campi_revisione = ObiettiviCampoRevisione::getAll();
+foreach($campi_revisione as $campo){
+    $multipairs_campo_revisione[] = array(new ffData($campo->id, "Number"), new ffData($campo->nome, "Text"));
+}
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "ID_campo_revisione";    
+$oField->label = "Campo revisione";
+$oField->base_type = "Number";
+$oField->extended_type = "Selection";
+$oField->multi_select_one_label = "Nessun campo revisione";
+$oField->multi_pairs = $multipairs_campo_revisione;
+$oRecord->addContent($oField); 
+
+$oField = ffField::factory($cm->oPage);
 $oField->id = "data_termine_responsabile";
 $oField->base_type = "Date";
 $oField->widget = "datepicker";

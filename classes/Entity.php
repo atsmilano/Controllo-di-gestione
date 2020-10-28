@@ -53,8 +53,8 @@ class Entity {
                 }
             }
         }        
-    }
-
+    } 
+    
     //getAll
     //where = array("fieldname"=>"value=);
     //order = array(array("fieldname"=>nome_campo, "direction"=>ASC/DESC));
@@ -108,7 +108,6 @@ class Entity {
                     " . $where_sql . "
                     " . $order_sql
         ;
-        
         $db->query($sql);
         if ($db->nextRecord()) {
             do {
@@ -140,7 +139,10 @@ class Entity {
         return $result;
     }
     
-    public static function describe($hide_columns = array()) {        
+    public static function describe($hide_columns = array(), $table_name=null) {  
+        if ($table_name == null) {
+            $table_name = $calling_class::$tablename;
+        }
         $db = ffDB_Sql::factory();
         //condizioni where
         $where_sql = "";
@@ -166,7 +168,7 @@ class Entity {
         }
 
         $calling_class = static::class;
-        $sql = "SHOW FULL COLUMNS FROM ".$calling_class::$tablename." $where_sql";
+        $sql = "SHOW FULL COLUMNS FROM ".$table_name." $where_sql";
         $db->query($sql);
         if ($db->nextRecord()) {
             do {
@@ -196,5 +198,35 @@ class Entity {
             } while ($db->nextRecord());
         }
         return $result;
+    }
+    
+    //metodo per l'estrazione di tutte le tabelle del DB applicativo
+    //viene restituito un array di stringhe rappresentanti i nomi delle tabelle del DB
+    //il parametro include_framework_tables permette di considerare o meno le tabelle del framework nell'estrazione
+    public static function getDbTables ($include__framework_tables=false){
+        $db = ffDB_Sql::factory();
+        $tables = array();
+        $sql = "
+                SELECT 
+                    table_name 
+                FROM 
+                    information_schema.tables 
+                WHERE
+                    table_schema = " . $db->toSql(FF_DATABASE_NAME);
+        $db->query($sql);
+        if ($db->nextRecord()){
+            do {
+                $table_name = $db->getField("table_name", "Text", true);
+                if ($include__framework_tables==true
+                    || (substr($table_name,0,3)!=="cm_"
+                        && substr($table_name,0,3)!=="ff_"
+                        && substr($table_name,0,3)!=="support_"    
+                        )
+                    ){
+                    $tables[] = $table_name;
+                }
+            }while($db->nextRecord());
+        }
+        return $tables;
     }
 }

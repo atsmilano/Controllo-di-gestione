@@ -3,6 +3,7 @@ class ObiettiviObiettivo {
     public $id;
     public $id_anno_budget;
     public $codice_incr_anno;
+    public $suffisso_codice;
     public $titolo;
     public $descrizione;
     public $indicatori;
@@ -29,6 +30,7 @@ class ObiettiviObiettivo {
                 $this->id = $db->getField("ID", "Number", true);
                 $this->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
                 $this->codice_incr_anno = $db->getField("codice_incr_anno", "Text", true);
+                $this->suffisso_codice = $db->getField("suffisso_codice", "Text", true);
                 $this->titolo = $db->getField("titolo", "Text", true);
                 $this->descrizione = $db->getField("descrizione", "Text", true);
                 $this->indicatori = $db->getField("indicatori", "Text", true);
@@ -41,7 +43,7 @@ class ObiettiviObiettivo {
                 $this->data_eliminazione = CoreHelper::getDateValueFromDB($db->getField("data_eliminazione", "Date", true));
                 //generazione codice
                 $anno_budget = new AnnoBudget($this->id_anno_budget);
-                $this->codice = $anno_budget->descrizione . "-" . str_pad($this->codice_incr_anno, 4, "0", STR_PAD_LEFT);
+                $this->codice = $anno_budget->descrizione . "-" . str_pad($this->codice_incr_anno, 4, "0", STR_PAD_LEFT) . $this->suffisso_codice;
             } else
                 throw new Exception("Impossibile creare l'oggetto Obiettivo con ID = " . $id);
         }
@@ -69,6 +71,7 @@ class ObiettiviObiettivo {
                 $obiettivo->id = $db->getField("ID", "Number", true);
                 $obiettivo->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
                 $obiettivo->codice_incr_anno = $db->getField("codice_incr_anno", "Text", true);
+                $obiettivo->suffisso_codice = $db->getField("suffisso_codice", "Text", true);
                 $obiettivo->titolo = $db->getField("titolo", "Text", true);
                 $obiettivo->descrizione = $db->getField("descrizione", "Text", true);
                 $obiettivo->indicatori = $db->getField("indicatori", "Text", true);
@@ -82,7 +85,7 @@ class ObiettiviObiettivo {
 
                 //generazione codice
                 $anno_budget = new AnnoBudget($obiettivo->id_anno_budget);
-                $obiettivo->codice = $anno_budget->descrizione . "-" . str_pad($obiettivo->codice_incr_anno, 4, "0", STR_PAD_LEFT);
+                $obiettivo->codice = $anno_budget->descrizione . "-" . str_pad($obiettivo->codice_incr_anno, 4, "0", STR_PAD_LEFT) . $obiettivo->suffisso_codice;
                 $obiettivi[] = $obiettivo;
             } while ($db->nextRecord());
         }

@@ -1,3 +1,7 @@
+/*
+ Date: 27/10/2020 16:09:16
+*/
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -577,11 +581,11 @@ CREATE TABLE `cms_home_sezione`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ordinamento` int(11) NULL DEFAULT NULL,
   `tipo` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `testo` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `testo` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   `anno_inizio` int(11) NULL DEFAULT NULL,
   `anno_fine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for cms_home_sezione_allegato
@@ -4044,6 +4048,16 @@ CREATE TABLE `obiettivi_area_risultato`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for obiettivi_campo_revisione
+-- ----------------------------
+DROP TABLE IF EXISTS `obiettivi_campo_revisione`;
+CREATE TABLE `obiettivi_campo_revisione`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for obiettivi_obiettivo
 -- ----------------------------
 DROP TABLE IF EXISTS `obiettivi_obiettivo`;
@@ -4052,6 +4066,7 @@ CREATE TABLE `obiettivi_obiettivo`  (
   `ID_anno_budget` int(11) NOT NULL,
   `titolo` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `codice_incr_anno` int(11) NOT NULL,
+  `suffisso_codice` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `descrizione` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `indicatori` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `formula_calcolo_raggiungimento` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -4141,6 +4156,7 @@ CREATE TABLE `obiettivi_periodo_rendicontazione`  (
   `data_riferimento_fine` date NOT NULL,
   `ordinamento_anno` int(11) NOT NULL,
   `ID_anno_budget` int(11) NOT NULL,
+  `ID_campo_revisione` int(11) NULL DEFAULT NULL,
   `data_termine_responsabile` date NULL DEFAULT NULL,
   `allegati` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
@@ -4159,7 +4175,7 @@ CREATE TABLE `obiettivi_rendicontazione`  (
   `criticita` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `misurazione_indicatori` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `raggiungibile` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `richiesta_revisione` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `ID_scelta_campo_revisione` int(11) NULL DEFAULT NULL,
   `perc_raggiungimento` float(11, 2) NULL DEFAULT NULL,
   `perc_nucleo` int(11) NULL DEFAULT NULL,
   `note_nucleo` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
@@ -4180,6 +4196,17 @@ CREATE TABLE `obiettivi_rendicontazione_allegato`  (
   `deletedAt` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for obiettivi_scelta_campo_revisione
+-- ----------------------------
+DROP TABLE IF EXISTS `obiettivi_scelta_campo_revisione`;
+CREATE TABLE `obiettivi_scelta_campo_revisione`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `ID_campo_revisione` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for obiettivi_tipo
@@ -5411,6 +5438,58 @@ CREATE TABLE `valutazioni_totale_precalcolato`  (
   `valore` decimal(10, 2) NULL DEFAULT NULL,
   `time_aggiornamento` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for valutazioni_valutazione_ambito
+-- ----------------------------
+DROP TABLE IF EXISTS `valutazioni_valutazione_ambito`;
+CREATE TABLE `valutazioni_valutazione_ambito`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ID_valutazione_periodica` int(11) NOT NULL,
+  `ID_ambito` int(11) NOT NULL,
+  `punteggio` float NOT NULL,
+  `time_ultima_modifica` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE,
+  UNIQUE INDEX `ID`(`ID`) USING BTREE,
+  INDEX `key`(`ID_valutazione_periodica`, `ID_ambito`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for valutazioni_valutazione_item
+-- ----------------------------
+DROP TABLE IF EXISTS `valutazioni_valutazione_item`;
+CREATE TABLE `valutazioni_valutazione_item`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `ID_valutazione_periodica` int(11) NOT NULL,
+  `ID_item` int(11) NOT NULL,
+  `punteggio` float NOT NULL,
+  `time_ultima_modifica` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE,
+  UNIQUE INDEX `ID`(`ID`) USING BTREE,
+  INDEX `key`(`ID_valutazione_periodica`, `ID_item`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for valutazioni_valutazione_periodica
+-- ----------------------------
+DROP TABLE IF EXISTS `valutazioni_valutazione_periodica`;
+CREATE TABLE `valutazioni_valutazione_periodica`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `matricola_valutatore` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `matricola_valutato` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data_chiusura_autovalutazione` datetime(0) NULL DEFAULT NULL,
+  `note_valutatore` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `data_ultimo_colloquio` date NULL DEFAULT NULL,
+  `data_firma_valutatore` datetime(0) NULL DEFAULT NULL,
+  `note_valutato` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `data_firma_valutato` datetime(0) NULL DEFAULT NULL,
+  `ID_periodo` int(11) NOT NULL,
+  `ID_categoria` int(11) NOT NULL,
+  `date_time_ultima_modifica` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE,
+  UNIQUE INDEX `ID`(`ID`) USING BTREE,
+  INDEX `key`(`matricola_valutatore`(191), `matricola_valutato`(191), `ID_periodo`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

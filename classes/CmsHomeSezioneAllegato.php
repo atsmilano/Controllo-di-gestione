@@ -48,6 +48,7 @@ class CmsHomeSezioneAllegato extends Allegato {
         return $allegati;
     }
     
+    //TODO eliminare, ridondante rispetto a metodo della classe allegato
     public function save($array_row) {
         $return = array();
         if (!empty($array_row)) {

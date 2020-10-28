@@ -75,7 +75,8 @@ class CoreHelper {
     //come parametro viene passato il nome del file generato e array associativo nome foglio => matrice di dati da visualizzare in excel    
     //la matrice di dati è un array di array 
     //fogli_lavoro{foglio1{record1{0=>valorecampo1, 1=>valorecampo2, ...},$record2{...},...},$foglio2{...},...}
-    public static function simpleExcelWriter($filename, $fogli_lavoro) {                
+    //json indica se il metodo deve restituire una risposta json oppure se generare il download del file
+    public static function simpleExcelWriter($filename, $fogli_lavoro, $json = false) {                
         //error_reporting(0);
         require_once (FF_DISK_PATH.DIRECTORY_SEPARATOR."library".DIRECTORY_SEPARATOR."PHPSpreadsheet".DIRECTORY_SEPARATOR."PHPExcel".DIRECTORY_SEPARATOR."PHPExcel.php");
 
@@ -120,16 +121,33 @@ class CoreHelper {
         }        
         $objPHPExcel->setActiveSheetIndex(0);
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
-        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
-        header('Cache-Control: max-age=0'); //no cache         
+        if ($json == false){
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
+            header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
+            header('Cache-Control: max-age=0'); //no cache    
+        }
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');                                                 
         //download del file        
+        if ($json == true ){
+            ob_start();
+        }
         $objWriter->save('php://output');        
-
+        
         $objPHPExcel->disconnectWorksheets();
         unset($objPHPExcel);   
-        exit;
+        
+        if ($json == true ){            
+            $xlsData = ob_get_contents();
+            ob_end_clean();
+            $response =  array(
+                'filename' => $filename.".xlsx",
+                'file' => "data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,".base64_encode($xlsData)
+            );
+            return json_encode($response);
+        }
+        else {
+            exit;
+        }
     }   
 
     //Funzione per la generazione di messaggi di errore all'interno della pagina di dettaglio dei record
@@ -141,9 +159,12 @@ class CoreHelper {
     }
 
     //Viene tagliato il testo passato come parametro 1 alla lunghezza passata come parametro 2 e aggiunto [...]
-    public static function cutText ($text, $length){
-        if (strlen($text) >= $length) {
-            return substr($text, 0, $length) . "[...]";
+    //add_dots viene impostato a true se si intende accodare al testo tagliato la stringa '[...]'
+    public static function cutText ($text, $length, $add_dots = true){
+        if (strlen($text) >= $length) {  
+            $dots = $add_dots?"[...]":"";
+            $return_string = substr($text, 0, $length) . $dots;
+            return $return_string;
         }
         else {
             return $text;

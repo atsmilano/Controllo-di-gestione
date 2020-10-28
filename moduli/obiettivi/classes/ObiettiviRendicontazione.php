@@ -8,7 +8,7 @@ class ObiettiviRendicontazione {
     public $criticita;
     public $misurazione_indicatori;
     public $raggiungibile;
-    public $richiesta_revisione;
+    public $id_scelta_campo_revisione;
     public $perc_raggiungimento;
     public $perc_nucleo;
     public $note_nucleo;
@@ -33,7 +33,7 @@ class ObiettiviRendicontazione {
                 $this->criticita = $db->getField("criticita", "Text", true);
                 $this->misurazione_indicatori = $db->getField("misurazione_indicatori", "Text", true);
                 $this->raggiungibile = CoreHelper::getBooleanValueFromDB($db->getField("raggiungibile", "Number", true));
-                $this->richiesta_revisione = $db->getField("richiesta_revisione", "Number", true);
+                $this->id_scelta_campo_revisione = $db->getField("ID_scelta_campo_revisione", "Number", true);
                 $this->perc_raggiungimento = $db->getField("perc_raggiungimento", "Number", true);
                 $this->perc_nucleo = $db->getField("perc_nucleo", "Number", true);
                 $this->note_nucleo = $db->getField("note_nucleo", "Text", true);
@@ -71,7 +71,7 @@ class ObiettiviRendicontazione {
                 $rendicontazione->criticita = $db->getField("criticita", "Text", true);
                 $rendicontazione->misurazione_indicatori = $db->getField("misurazione_indicatori", "Text", true);
                 $rendicontazione->raggiungibile = CoreHelper::getBooleanValueFromDB($db->getField("raggiungibile", "Number", true));
-                $rendicontazione->richiesta_revisione = $db->getField("richiesta_revisione", "Number", true);
+                $rendicontazione->id_scelta_campo_revisione = $db->getField("ID_scelta_campo_revisione", "Number", true);
                 $rendicontazione->perc_raggiungimento = $db->getField("perc_raggiungimento", "Number", true);
                 $rendicontazione->perc_nucleo = $db->getField("perc_nucleo", "Number", true);
                 $rendicontazione->note_nucleo = $db->getField("note_nucleo", "Text", true);
@@ -192,10 +192,8 @@ class ObiettiviRendicontazione {
             }
             $html_indicatori .= "</span></div>";
         }
-        $richiesta_revisione_desc = $this->richiesta_revisione == 2?
-                                "Si propone la sospensione dell'obiettivo":(
-                                $this->richiesta_revisione == 1?"Si propone la revisione dell'obiettivo"
-                                :"Si conferma l'obiettivo assegnato");
+        $scelta_campo_revisione = new ObiettiviSceltaCampoRevisione($this->id_scelta_campo_revisione);
+        $campo_revisione = new ObiettiviCampoRevisione($scelta_campo_revisione->id_campo_revisione);
         $html = "
                 <div class='form-group clearfix padding'>
                     <label>Azioni</label>
@@ -223,9 +221,9 @@ class ObiettiviRendicontazione {
                     <span class='form-control readonly'>" . $raggiungibile . "</span>
                 </div>
                 <div class='form-group clearfix padding'>
-                    <label>Richiesta di variazione in conseguenza dell'emergenza COVID-19</label>
+                    <label>" . $campo_revisione->nome . "</label>
                     <span class='form-control readonly'>
-                    " . $richiesta_revisione_desc . 
+                    " . $scelta_campo_revisione->descrizione . 
                     "</span>
                 </div>
                 <div class='form-group clearfix padding'>
