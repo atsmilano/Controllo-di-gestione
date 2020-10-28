@@ -671,36 +671,40 @@ if ($obiettivo_cdr_padre == null) {
     }
     $oRecord->addContent($oField, "raggiungimento");            
     
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "richiesta_revisione";    
-    $oField->label = "Richiesta di variazione in conseguenza dell'emergenza COVID-19";
-    if (!$user_privileges["edit_responsabile"]) {
-        $oField->base_type = "Text";
-        $oField->data_type = "";
-        $oField->control_type = "label";        
-        if ($rendicontazione->richiesta_revisione == 2) {
-            $oField->default_value = new ffData($rendicontazione->richiesta_revisione = "Si propone la sospensione dell'obiettivo");
+    //richieste revisioni
+    if ($periodo_rendicontazione->id_campo_revisione != null) {    
+        $campo_revisione = new ObiettiviCampoRevisione($periodo_rendicontazione->id_campo_revisione);
+        $multipairs_scelte_campo_revisione = array();
+        $default_scelta = null;
+        foreach($campo_revisione->getScelte() as $scelta){
+            if ($scelta->id == $rendicontazione->id_scelta_campo_revisione) {
+                $default_scelta = $scelta->descrizione;
+            }
+            $multipairs_scelte_campo_revisione[] = array(new ffData($scelta->id, "Number"), new ffData($scelta->descrizione, "Text"));
         }
-        else if ($rendicontazione->richiesta_revisione == 1) {
-            $oField->default_value = new ffData($rendicontazione->richiesta_revisione = "Si propone la revisione dell'obiettivo");
+        if ($default_scelta == null){
+            $default_scelta = "ND";
         }
-        else { 
-            $oField->default_value = new ffData($rendicontazione->richiesta_revisione = "Si conferma l'obiettivo assegnato");            
-        }
-        $oField->store_in_db = false;        
-    } else {
-        $oField->base_type = "Number";
-        $oField->extended_type = "Selection";
-        $oField->control_type = "radio";    
-        $oField->multi_pairs = array(
-            array(new ffData(0, "Number"), new ffData("Si conferma l'obiettivo assegnato", "Text")),
-            array(new ffData(1, "Number"), new ffData("Si propone la revisione dell'obiettivo", "Text")),
-            array(new ffData(2, "Number"), new ffData("Si propone la sospensione dell'obiettivo", "Text")),
-        );
-        $oField->required = true;
-    }    
-    $oField->class = "richiesta_revisione";
-    $oRecord->addContent($oField, "raggiungimento");                
+
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "ID_scelta_campo_revisione";    
+        $oField->label = $campo_revisione->nome;
+        if (!$user_privileges["edit_responsabile"]) {            
+            $oField->base_type = "Text";
+            $oField->data_type = "";
+            $oField->control_type = "label";        
+            $oField->default_value = new ffData($default_scelta, "Text");
+            $oField->store_in_db = false;        
+        } else {
+            $oField->base_type = "Number";
+            $oField->extended_type = "Selection";
+            $oField->control_type = "radio";    
+            $oField->multi_pairs = $multipairs_scelte_campo_revisione;
+            $oField->required = true;
+        }    
+        $oField->class = "richiesta_revisione";
+        $oRecord->addContent($oField, "raggiungimento");                
+    }
 
     $oField = ffField::factory($cm->oPage);
     $oField->id = "perc_raggiungimento";

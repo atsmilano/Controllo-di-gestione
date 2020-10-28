@@ -1,0 +1,33 @@
+<div id="core_estrazioni_db">
+    <span><img id="loading-img" src="{images_path}loader.gif" /></span>
+    <div id="esito"></div>
+    <span>Tabella DB:&nbsp;{table_selection_field}</span>
+    <input id="estrazione_elenco_campi" type="button" value="Elenco campi">        
+    <div id="elenco_campi"></div>        
+    <script>
+        $('#tables').change(function(){
+            $('#elenco_campi').empty();
+        });
+    
+        $('#estrazione_elenco_campi').click(function () { 
+            $("#elenco_campi").empty();
+            $("#esito").empty();
+            $("#loading-img").modal("show");         
+            $.ajax({
+                url: window.location.pathname + "/estrazioni_db/elenco_campi.php?table_name="+$("#tables option:selected").val(),
+                cache: false,
+                contentType: false,
+            })
+            .success(function (data) {
+                $("#elenco_campi").html(data);
+            })
+            .fail(function (){                                
+                $("#esito").html("Errore durante il recupero delle informazioni della tabella.");
+                setTimeout(function(){ $("#esito").hide(); }, 5000);
+            })
+            .always(function() {
+                $("#loading-img").modal("hide");                              
+            });                
+        });  
+    </script>
+</div>

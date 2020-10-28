@@ -45,6 +45,12 @@ $oField->base_type = "Number";
 $oRecord->addKeyField($oField, "descrizione");
 
 $oField = ffField::factory($cm->oPage);
+$oField->id = "suffisso_codice";
+$oField->label = "Suffisso codice";
+$oField->base_type = "Text";
+$oRecord->addContent($oField, "descrizione");
+
+$oField = ffField::factory($cm->oPage);
 $oField->id = "titolo";
 $oField->label = "Titolo";
 $oField->base_type = "Text";

@@ -4,6 +4,10 @@ if (isset ($_GET["periodo"])) {
 	$anno = new AnnoBudget($periodo->id_anno_budget);
 	$data_riferimento = CoreHelper::getDataRiferimentoBudget($anno);
     $date = $data_riferimento;
+    if ($periodo->id_campo_revisione != null) {
+        $campo_revisione = new ObiettiviCampoRevisione($periodo->id_campo_revisione);
+        $scelte_campo_revisione = $campo_revisione->getScelte();
+    }
     
     $cdr = $cm->oPage->globals["cdr"]["value"];    
 		
@@ -35,12 +39,16 @@ if (isset ($_GET["periodo"])) {
             "provvedimenti", 
             "criticità", 
             "misurazione indicatori", 
-            "raggiungibile",
-            "richiesta_revisione",
-            "%raggiungimento", 
-            "%nucleo", 
-            "note nucleo",
-        )
+            "raggiungibile"    )
+    );
+    if ($periodo->id_campo_revisione != null) {
+        $matrice_dati[0][] = $campo_revisione->nome;
+    }
+    array_push($matrice_dati[0],
+        "allegati",
+        "%raggiungimento", 
+        "%nucleo", 
+        "note nucleo"
     );
 	
     // per ogni cdr della gerarchia del cdr selezionato vengono estratti tutti gli obiettivi-cdr
@@ -122,9 +130,22 @@ if (isset ($_GET["periodo"])) {
                     $record[] = $rendicontazione->criticita;
                     $record[] = $rendicontazione->misurazione_indicatori;
                     $record[] = $rendicontazione->raggiungibile == 1?"Si":"No";                        
-                    $record[] = $rendicontazione->richiesta_revisione == 2?"Si propone la sospensione dell'obiettivo":(
-                                            $rendicontazione->richiesta_revisione == 1?"Si propone la revisione dell'obiettivo": 
-                                            "Si conferma l'obiettivo assegnato"); 
+                    if ($periodo->id_campo_revisione != null) {
+                        $scelta_campo_revisione = "";
+                        foreach ($scelte_campo_revisione as $scelta) {
+                            if ($rendicontazione->id_scelta_campo_revisione == $scelta->id) {
+                                $scelta_campo_revisione = $scelta->descrizione;
+                                break;
+                            }
+                        }                                
+                        $record[] = $scelta_campo_revisione;
+                    } 
+                    if (count(ObiettiviRendicontazioneAllegato::getAll(['rendicontazione_id' => $rendicontazione->id]))) {
+                        $record [] = "Si";
+                    }
+                    else {
+                        $record[] = "No";
+                    }
                     $record[] = $rendicontazione->perc_raggiungimento;
                     $record[] = $rendicontazione->perc_nucleo;
                     $record[] = $rendicontazione->note_nucleo;

@@ -6,6 +6,7 @@ class ObiettiviPeriodoRendicontazione {
     public $data_riferimento_fine;
     public $ordinamento_anno;
     public $id_anno_budget;
+    public $id_campo_revisione;
     public $data_termine_responsabile;
     public $allegati;
 	
@@ -29,6 +30,7 @@ class ObiettiviPeriodoRendicontazione {
                 $this->data_riferimento_fine = CoreHelper::getDateValueFromDB($db->getField("data_riferimento_fine", "Date", true));	
                 $this->ordinamento_anno = $db->getField("ordinamento_anno", "Number", true);
                 $this->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);  
+                $this->id_campo_revisione = $db->getField("ID_campo_revisione", "Number", true);
                 $this->data_termine_responsabile = CoreHelper::getDateValueFromDB($db->getField("data_termine_responsabile", "Date", true));
                 $this->allegati = CoreHelper::getBooleanValueFromDB($db->getField("allegati", "Text", true));
             }	
@@ -59,6 +61,7 @@ class ObiettiviPeriodoRendicontazione {
                 $periodo_rendicontazione->data_riferimento_fine = CoreHelper::getDateValueFromDB($db->getField("data_riferimento_fine", "Date", true));               
                 $periodo_rendicontazione->ordinamento_anno = $db->getField("ordinamento_anno", "Number", true);
                 $periodo_rendicontazione->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);                			
+                $periodo_rendicontazione->id_campo_revisione =  $db->getField("ID_campo_revisione", "Number", true);
                 $periodo_rendicontazione->data_termine_responsabile = CoreHelper::getDateValueFromDB($db->getField("data_termine_responsabile", "Date", true));
                 $periodo_rendicontazione->allegati = CoreHelper::getBooleanValueFromDB($db->getField("allegati", "Text", true));
 
