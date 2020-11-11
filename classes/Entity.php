@@ -141,6 +141,7 @@ class Entity {
     
     public static function describe($hide_columns = array(), $table_name=null) {  
         if ($table_name == null) {
+            $calling_class = static::class;
             $table_name = $calling_class::$tablename;
         }
         $db = ffDB_Sql::factory();

@@ -1,5 +1,17 @@
 /*
- Date: 27/10/2020 16:09:16
+ Navicat MySQL Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 50731
+ Source Host           : localhost:3306
+ Source Schema         : budget_riuso
+
+ Target Server Type    : MySQL
+ Target Server Version : 50731
+ File Encoding         : 65001
+
+ Date: 11/11/2020 15:27:53
 */
 
 SET NAMES utf8mb4;
@@ -4263,60 +4275,6 @@ CREATE TABLE `piano_cdr`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for progetti_direzione_riferimento_anno
--- ----------------------------
-DROP TABLE IF EXISTS `progetti_direzione_riferimento_anno`;
-CREATE TABLE `progetti_direzione_riferimento_anno`  (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `ID_anno_budget` int(11) NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for progetti_libreria_territorio_applicazione
--- ----------------------------
-DROP TABLE IF EXISTS `progetti_libreria_territorio_applicazione`;
-CREATE TABLE `progetti_libreria_territorio_applicazione`  (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `descrizione_territorio_applicazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for progetti_libreria_tipo_progetto
--- ----------------------------
-DROP TABLE IF EXISTS `progetti_libreria_tipo_progetto`;
-CREATE TABLE `progetti_libreria_tipo_progetto`  (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `codice_tipo_progetto` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `descrizione_tipo_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for progetti_libreria_tipologia_monitoraggio
--- ----------------------------
-DROP TABLE IF EXISTS `progetti_libreria_tipologia_monitoraggio`;
-CREATE TABLE `progetti_libreria_tipologia_monitoraggio`  (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `descrizione_tipologia_monitoraggio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
 -- Table structure for progetti_monitoraggio
 -- ----------------------------
 DROP TABLE IF EXISTS `progetti_monitoraggio`;
@@ -4331,9 +4289,6 @@ CREATE TABLE `progetti_monitoraggio`  (
   `note_rispetto_risorse_previste` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note_rispetto_tempistiche` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note_replicabilita_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4346,9 +4301,6 @@ CREATE TABLE `progetti_monitoraggio_indicatore`  (
   `ID_monitoraggio` int(11) NULL DEFAULT NULL,
   `ID_indicatore` int(11) NULL DEFAULT NULL,
   `valore` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4365,7 +4317,7 @@ CREATE TABLE `progetti_progetto`  (
   `matricola_responsabile_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ID_tipo_progetto` int(11) NULL DEFAULT NULL,
   `ID_file` int(11) NULL DEFAULT NULL,
-  `finanziato` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0',
+  `ID_risorse_finanziarie_disponibili` int(11) NULL DEFAULT NULL,
   `capofila` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `team_progetto` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `partner_esterni` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -4407,9 +4359,6 @@ CREATE TABLE `progetti_progetto`  (
   `validazione_finale` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note_validazione_finale` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `data_validazione_finale` datetime(0) NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4423,9 +4372,6 @@ CREATE TABLE `progetti_progetto_fase_tempo_realizzazione`  (
   `data_inizio_fase` datetime(0) NULL DEFAULT NULL,
   `data_fine_fase` datetime(0) NULL DEFAULT NULL,
   `descrizione_fase` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4441,9 +4387,6 @@ CREATE TABLE `progetti_progetto_finanziamento`  (
   `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `atto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `cofinanziamento` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4456,9 +4399,6 @@ CREATE TABLE `progetti_progetto_indicatore`  (
   `ID_progetto` int(11) NULL DEFAULT NULL,
   `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `valore_atteso` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4470,9 +4410,47 @@ CREATE TABLE `progetti_progetto_partner_interni`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_progetto` int(11) NULL DEFAULT NULL,
   `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
-  `record_attivo` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for progetti_risorse_finanziarie_disponibili
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_risorse_finanziarie_disponibili`;
+CREATE TABLE `progetti_risorse_finanziarie_disponibili`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for progetti_territorio_applicazione
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_territorio_applicazione`;
+CREATE TABLE `progetti_territorio_applicazione`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for progetti_tipo_progetto
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_tipo_progetto`;
+CREATE TABLE `progetti_tipo_progetto`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for progetti_tipologia_monitoraggio
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_tipologia_monitoraggio`;
+CREATE TABLE `progetti_tipologia_monitoraggio`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4604,8 +4582,8 @@ DROP TABLE IF EXISTS `strategia_cdr_programmazione_strategica`;
 CREATE TABLE `strategia_cdr_programmazione_strategica`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `codice_cdr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `anno_inizio` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `anno_fine` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NOT NULL DEFAULT 0,
+  `anno_fine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

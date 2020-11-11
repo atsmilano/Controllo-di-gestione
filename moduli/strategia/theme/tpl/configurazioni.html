@@ -1,0 +1,31 @@
+<div id="configurazione_strategia">
+    <div id="tabs">
+        <ul>
+            <li><a id="a_anno" href="configurazioni/data_chiusura?{globals}">Data chiusura</a></li>
+            <li><a id="a_desc_intro" href="configurazioni/desc_intro?{globals}">
+                    Descrizione introduttiva</a></li>
+            <li><a id="a_cdr_prog_strat" href="configurazioni/cdr_prog_strat?{globals}">
+                    CdR Programmazione Strategica</a></li>
+            <li><a id="a_prospettiva" href="configurazioni/prospettive?{globals}">
+                    Prospettiva Strategica</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

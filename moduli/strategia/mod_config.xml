@@ -5,5 +5,9 @@
 	<attivazione>
             <anno_inizio>2017</anno_inizio>
             <anno_fine>0</anno_fine>	
+            <FF_ENV_PRODUCTION_EXT_INSUBRIA>
+                <anno_inizio>2019</anno_inizio>
+                <anno_fine>0</anno_fine>
+            </FF_ENV_PRODUCTION_EXT_INSUBRIA>
         </attivazione>	
 </config_data>

@@ -61,7 +61,8 @@ if ($user->hasPrivilege("progetti_admin")){
  * Ruolo: Responsabile ramo gerarchico
  * Solo view
  * */
-if ($user->hasPrivilege("resp_cdr_selezionato") && ($is_newProject || ($user->matricola_utente_selezionato == $progetto->matricola_utente_creazione))) {
+if ($user->hasPrivilege("resp_cdr_selezionato") && 
+    ($is_newProject || ($user->matricola_utente_selezionato == $progetto->matricola_utente_creazione))) {
     $view = true;
     $edit_responsabile_cdr = true;
 }
@@ -113,7 +114,8 @@ if ($is_concluso) {
 /*
  * Il Direttore di Riferimento deve approvare il monitoraggio finale
  */
-if ($is_attesa_validazione && $user->matricola_utente_selezionato == $progetto->matricola_responsabile_riferimento_approvazione) {
+if ($is_attesa_validazione && 
+    $user->matricola_utente_selezionato == $progetto->matricola_responsabile_riferimento_approvazione) {
     $edit_responsabile_riferimento = true;
 }
 
@@ -216,10 +218,10 @@ if (!$is_newProject) {
     $oRecord->addContent("<hr>");
 
     // Select per selezionare tipo di progetto (P1, P2, ecc...)
-    foreach (ProgettiLibreriaTipoProgetto::getAll(array("record_attivo" => 1)) AS $libreria_tipo_progetto) {
+    foreach (ProgettiTipoProgetto::getAll() AS $libreria_tipo_progetto) {
         $libreria_tipo_progetto_select[] = array(
             new ffData ($libreria_tipo_progetto->id, "Number"),
-            new ffData ($libreria_tipo_progetto->codice_tipo_progetto." (".$libreria_tipo_progetto->descrizione_tipo_progetto.")", "Text")
+            new ffData ($libreria_tipo_progetto->codice." (".$libreria_tipo_progetto->descrizione.")", "Text")
         );
     }
     $oField = ffField::factory($cm->oPage);
@@ -257,7 +259,6 @@ if (!$is_newProject) {
     
     $partner_interni_list = ProgettiProgettoPartnerInterni::getAll(
         array(
-            "record_attivo" => 1,
             "ID_progetto" => $progetto->id
         )
     );
@@ -428,10 +429,10 @@ if (!$is_newProject) {
     $oRecord->addContent($oField);
 
     // Territorio di applicazione (ATS, Extra ATS, ATS ed extra-ATS)
-    foreach (ProgettiLibreriaTerritorioApplicazione::getAll(array("record_attivo" => 1)) AS $libreria) {
+    foreach (ProgettiTerritorioApplicazione::getAll() AS $libreria) {
         $libreria_select[] = array(
             new ffData ($libreria->id, "Number"),
-            new ffData ($libreria->descrizione_territorio_applicazione, "Text")
+            new ffData ($libreria->descrizione, "Text")
         );
     }
     $oField = ffField::factory($cm->oPage);
@@ -509,7 +510,6 @@ if (!$is_newProject) {
     
     $fase_tempo_realizzazione_list = ProgettiProgettoFaseTempoRealizzazione::getAll(
         array(
-            "record_attivo" => 1,
             "ID_progetto" => $progetto->id
         )
     );
@@ -621,7 +621,6 @@ if (!$is_newProject) {
     
     $indicatore_list = ProgettiProgettoIndicatore::getAll(
         array(
-            "record_attivo" => 1,
             "ID_progetto" => $progetto->id
         )
     );
@@ -857,30 +856,20 @@ if (!$is_newProject) {
     }
     $oRecord->addContent($oField);
     
+    $risorse_finanziarie_disponibili = array();
+    foreach (ProgettiRisorseFinanziarieDisponibili::getAll() as $item) {
+        $risorse_finanziarie_disponibili[] = array(
+            new ffData($item->id, "Number"),
+            new ffData($item->descrizione, "Text"),
+        );
+    }
     $oField = ffField::factory($cm->oPage);
-    $oField->id = "finanziato";
+    $oField->id = "ID_risorse_finanziarie_disponibili";
     $oField->base_type = "Text";
     $oField->extended_type = "Selection";
     $oField->control_type = "radio";
-    $oField->multi_pairs = array (
-        array(
-            new ffData("1", "Number"),
-            new ffData("Si - Fonti interne, mezzi propri ATS", "Text")
-        ),
-        array(
-            new ffData("2", "Number"),
-            new ffData("Si - Fonti esterne", "Text")
-        ),
-        array(
-            new ffData("3", "Number"),
-            new ffData("Si - Fonti interne ed esterne", "Text")
-        ),
-        array(
-            new ffData("0", "Number"),
-            new ffData("No", "Text")
-        ),
-    );
-    $oField->label = "Sono disponibili le risorse finanziare da dedicare al progetto";
+    $oField->multi_pairs = $risorse_finanziarie_disponibili;
+    $oField->label = "Sono disponibili le risorse finanziare da dedicare al progetto?";
     if (!$edit_responsabile_progetto || $is_preso_in_carico || $is_attesa_validazione) {
         $oField->control_type = "label";
         $oField->store_in_db = false;
@@ -889,7 +878,6 @@ if (!$is_newProject) {
     
     $finanziamento_list = ProgettiProgettoFinanziamento::getAll(
         array(
-            "record_attivo" => 1,
             "ID_progetto" => $progetto->id
         )
     );
@@ -1007,12 +995,8 @@ if (!$is_newProject) {
         $oField->value = new ffData($oracle_erp, "Text");
     }
     $oRecord->addContent($oField);
-        
-    foreach (ProgettiDirezioneRiferimentoAnno::getAll(array("ID_anno_budget" => $anno->id, "record_attivo" => 1)) as $direzione_riferimento) {
-        $tipo_piano_cdr = Cdr::getTipoPianoPriorita($direzione_riferimento->codice_cdr, $date);
-        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date);
-        $cdr = Cdr::factoryFromCodice($direzione_riferimento->codice_cdr, $piano_cdr);
-        $personale = $cdr->getResponsabile($dateTimeObject);        
+    
+    foreach (Personale::getAll() as $personale) {
         $anagrafe = $personale->cognome . " " . $personale->nome . " (matr. " . $personale->matricola_responsabile . ")";
         $personale_select[] = array(
             new ffData ($personale->matricola_responsabile, "Text"),
@@ -1040,7 +1024,6 @@ if (!$is_newProject) {
     $numero_totale_indicatori = ProgettiProgettoIndicatore::getNumeroTotaleIndicatori($progetto->id);
     $monitoraggio_list = ProgettiMonitoraggio::getAll(
         array(
-            "record_attivo" => 1,
             "ID_progetto" => $progetto->id
         )
     );
@@ -1049,23 +1032,20 @@ if (!$is_newProject) {
         if (strlen($grid_sql_source) > 0) {
             $grid_sql_source .= " UNION ";
         }       
-        $tipologia_monitoraggio = new ProgettiLibreriaTipologiaMonitoraggio($monitoraggio->id_tipologia_monitoraggio);
+        $tipologia_monitoraggio = new ProgettiTipologiaMonitoraggio($monitoraggio->id_tipologia_monitoraggio);
         
         $numero_totale_indicatori_non_consuntivati = ProgettiProgettoIndicatore::getNumeroTotaleIndicatoriNonConsuntivati($progetto->id, $monitoraggio->id);
 
         $grid_sql_source .= "
             SELECT ".$db->toSql($monitoraggio->id, "Number")." AS ID_progetti_monitoraggio,
                 ".$db->toSql($monitoraggio->numero_monitoraggio)." AS numero_monitoraggio,
-                ".$db->toSql($tipologia_monitoraggio->descrizione_tipologia_monitoraggio)." AS ID_tipologia_monitoraggio,
+                ".$db->toSql($tipologia_monitoraggio->descrizione)." AS ID_tipologia_monitoraggio,
                 ".$db->toSql($monitoraggio->descrizione_fase)." AS descrizione_fase,
                 ".$db->toSql($monitoraggio->costi_sostenuti)." AS costi_sostenuti,
                 ".$db->toSql($monitoraggio->descrizione_utilizzo_risorse)." AS descrizione_utilizzo_risorse,
                 ".$db->toSql($monitoraggio->note_rispetto_risorse_previste)." AS note_rispetto_risorse_previste,
                 ".$db->toSql($monitoraggio->note_rispetto_tempistiche)." AS note_rispetto_tempistiche,
                 ".$db->toSql($monitoraggio->note_replicabilita_progetto)." AS note_replicabilita_progetto,
-                ".$db->toSql($monitoraggio->extend)." AS extend,
-                ".$db->toSql($monitoraggio->time_modifica)." AS time_modifica,
-                ".$db->toSql($monitoraggio->record_attivo)." AS record_attivo,
                 ".$db->toSql(($numero_totale_indicatori - $numero_totale_indicatori_non_consuntivati) ."/". $numero_totale_indicatori) ." AS riepilogo_indicatori
         ";
     }
@@ -1092,10 +1072,7 @@ if (!$is_newProject) {
                 '' AS descrizione_utilizzo_risorse,
                 '' AS note_rispetto_risorse_previste,
                 '' AS note_rispetto_tempistiche,
-                '' AS note_replicabilita_progetto,
-                '' AS extend,
-                '' AS time_modifica,
-                '' AS record_attivo
+                '' AS note_replicabilita_progetto
             FROM progetti_monitoraggio
             WHERE 1=0
             [AND]
@@ -1414,17 +1391,11 @@ if ($is_newProject) {
     $oRecord->insert_additional_fields["data_creazione"] = new ffData(date("Y-m-d H:i:s"), "Datetime");
     $oRecord->insert_additional_fields["stato"] = new ffData("0", "Text");
     $oRecord->insert_additional_fields["numero_revisione"] = new ffData(1, "Number");
-    $oRecord->insert_additional_fields["time_modifica"] = new ffData(date("Y-m-d H:i:s"), "Datetime");
-    $oRecord->insert_additional_fields["record_attivo"] = new ffData(1, "Number");
 }
 else {
 
     if ($edit_responsabile_riferimento) {
         $oRecord->allow_update = false;
-    }
-    else {
-        $oRecord->update_additional_fields["time_modifica"] = new ffData(date("Y-m-d H:i:s"), "Datetime");
-        $oRecord->update_additional_fields["record_attivo"] = new ffData(1, "Number");
     }
 }
 
@@ -1472,8 +1443,6 @@ function myPrjNuovaRevisione($oRecord, $frmAction) {
         $progetto->data_approvazione = new ffData(null, "Datetime");
         $progetto->note = new ffData(null, "Text");
         $progetto->numero_revisione = new ffData($progetto->numero_revisione + 1, "Number");
-        $progetto->time_modifica = new ffData(date("Y-m-d H:i:s"), "Datetime");
-        $progetto->record_attivo = new ffData(1, "Number");
 
         // Progetto revisionato
         $message = "Progetto \"".$progetto->titolo_progetto."\" in attesa di una nuova revisione";
@@ -1512,8 +1481,6 @@ function myPrjStatoApprovazione($oRecord, $frmAction) {
         $progetto = new ProgettiProgetto($oRecord->key_fields["ID"]->value->getValue());
 
         $progetto->note = new ffData($oRecord->form_fields["note"]->value->getValue(), "Text");
-        $progetto->time_modifica = new ffData(date("Y-m-d H:i:s"), "Datetime");
-        $progetto->record_attivo = new ffData(1, "Number");
 
         if ($frmAction == "prj_approvare") {
             // Progetto approvato
@@ -1566,8 +1533,6 @@ function myPrjValidazioneFinale($oRecord, $frmAction) {
         $progetto->validazione_finale = new ffData($oRecord->form_fields["validazione_finale"]->value->getValue(), "Text");
         $progetto->note_validazione_finale = new ffData($oRecord->form_fields["note_validazione_finale"]->value->getValue(), "Text");
         $progetto->data_validazione_finale = new ffData(date("Y-m-d H:i:s"), "Datetime");
-        $progetto->time_modifica = new ffData(date("Y-m-d H:i:s"), "Datetime");
-        $progetto->record_attivo = new ffData(1, "Number");
 
         if ($progetto->validazione_finale == "1") {
             $message = "Progetto \"".$progetto->titolo_progetto."\" validato";
