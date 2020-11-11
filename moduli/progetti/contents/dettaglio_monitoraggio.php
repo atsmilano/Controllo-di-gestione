@@ -82,10 +82,10 @@ if (!$edit_responsabile_progetto) {
 }
 $oRecord->addContent($oField);
 
-foreach (ProgettiLibreriaTipologiaMonitoraggio::getAll(array("record_attivo" => 1)) AS $tipologia_monitoraggio) {
+foreach (ProgettiTipologiaMonitoraggio::getAll() AS $tipologia_monitoraggio) {
     $tipologia_monitoraggio_select[] = array(
         new ffData ($tipologia_monitoraggio->id, "Number"),
-        new ffData ($tipologia_monitoraggio->descrizione_tipologia_monitoraggio, "Text")
+        new ffData ($tipologia_monitoraggio->descrizione, "Text")
     );
 }
 $oField = ffField::factory($cm->oPage);
@@ -169,7 +169,7 @@ $oRecord->addContent($oField);
 
 $oRecord->addContent("<hr />");
 
-$indicatore_list = ProgettiProgettoIndicatore::getAll(array("record_attivo" => 1, "ID_progetto" => $progetto->id));
+$indicatore_list = ProgettiProgettoIndicatore::getAll(array("ID_progetto" => $progetto->id));
 
 if (count($indicatore_list) > 0) {
     foreach ($indicatore_list AS $indicatore) {
@@ -253,11 +253,6 @@ $oRecord->addEvent("on_done_action", "myPrjDeleteMonitoraggioIndicatore");
 $oRecord->addEvent("on_done_action", "myPrjUpdateMonitoraggioIndicatore");
 
 $oRecord->insert_additional_fields["ID_progetto"] = new ffData($progetto->id, "Number");
-$oRecord->insert_additional_fields["time_modifica"] = new ffData(date("Y-m-d H:i:s"), "Datetime");
-$oRecord->insert_additional_fields["record_attivo"] = new ffData(1, "Number");
-
-$oRecord->update_additional_fields["time_modifica"] = new ffData(date("Y-m-d H:i:s"), "Datetime");
-$oRecord->update_additional_fields["record_attivo"] = new ffData(1, "Number");
 
 //JS per intercettare click sul pulsante Indietro
 $oRecord->addContent("
@@ -300,29 +295,25 @@ function myPrjInsertMonitoraggioIndicatore($oRecord, $frmAction) {
          * per recuperare il valore consuntivato
          */
         $query_values = array();
-        $indicatore_list = ProgettiProgettoIndicatore::getAll(array("record_attivo" => 1, "ID_progetto" => $progetto->id));
+        $indicatore_list = ProgettiProgettoIndicatore::getAll(array("ID_progetto" => $progetto->id));
         foreach ($indicatore_list as $indicatore) {
             $valore = $oRecord->form_fields["valore_consuntivo_" . $indicatore->id]->getValue();
 
             $query_values[] = array(
                 "ID_monitoraggio" => $progetti_monitoraggio_last_id,
                 "ID_indicatore" => $indicatore->id,
-                "valore" => $valore,
-                "time_modifica" => date("Y-m-d H:i:s"),
-                "record_attivo" => 1
+                "valore" => $valore
             );
         }
 
         ProgettiMonitoraggioIndicatore::save($query_values);
         
         $monitoraggio = new ProgettiMonitoraggio($progetti_monitoraggio_last_id);
-        $tipologia_monitoraggio = new ProgettiLibreriaTipologiaMonitoraggio($monitoraggio->id_tipologia_monitoraggio);
+        $tipologia_monitoraggio = new ProgettiTipologiaMonitoraggio($monitoraggio->id_tipologia_monitoraggio);
 
         // Monitoraggio finale: chiusura del progetto che avrà stato in attesa di validazione
         if ($tipologia_monitoraggio->id == 2) {
             $progetto->stato = new ffData("4", "Text");
-            $progetto->time_modifica = new ffData(date("Y-m-d H:i:s"), "Datetime");
-            $progetto->record_attivo = new ffData(1, "Number");
 
             try {
                 $save_status = $progetto->saveChiudiProgetto();
@@ -366,10 +357,7 @@ function myPrjUpdateMonitoraggioIndicatore($oRecord, $frmAction) {
         // Recupero progetti_monitoraggio.ID appena eliminato
         $id_monitoraggio_updated = $oRecord->key_fields["ID_progetti_monitoraggio"]->getValue();
 
-        $indicatori_lists = ProgettiProgettoIndicatore::getAll(array(
-            "record_attivo" => 1,
-            "ID_progetto" => $id_progetto
-        ));
+        $indicatori_lists = ProgettiProgettoIndicatore::getAll(array("ID_progetto" => $id_progetto));
 
         $update_me = array();
         foreach ($indicatori_lists as $indicatori) {
@@ -378,9 +366,7 @@ function myPrjUpdateMonitoraggioIndicatore($oRecord, $frmAction) {
             $update_me[] = array(
                 "ID_monitoraggio" => new ffData($id_monitoraggio_updated, "Number"),
                 "ID_indicatore" => new ffData($indicatori->id, "Number"),
-                "valore" => new ffData($new_value, "Text"),
-                "time_modifica" => new ffData(date("Y-m-d H:i:s"), "Datetime"),
-                "record_attivo" => new ffData(1, "Number")
+                "valore" => new ffData($new_value, "Text")
             );
         }
         ProgettiMonitoraggioIndicatore::update($id_monitoraggio_updated, $update_me);

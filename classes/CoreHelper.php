@@ -271,5 +271,56 @@ class CoreHelper {
             }
         }
         return $date_str_formatted;
+    }        
+    
+    //valore nullo (o 0) ammesso per la fine dell'intervallo
+    public static function verificaIntervalloAnni($start, $end) {        
+        //viene verificato che i parametri siano anni validi (interi senza decimali)
+        //anno inizio non nullo
+        if ($start <= 0 || !strtotime($start) || !ctype_digit($start)) {
+            return false;
+        }
+        //viene ammesso come valore anche l'anno di fine nullo
+        if (!($end == 0 || ($end > 0 && strtotime($end)) && ctype_digit($end))) {
+            return false;
+        }
+        
+        //viene verificato che l'inizio sia precedente al termine
+        if ($end > 0 && $end < $start) {
+            return false;
+        }
+        return true;
+    }   
+    
+    //restituisce true se i due intervalli temporali definiti da anno inizio e anno fine non si sovrappongono
+    public static function verificaNonSovrapposizioneIntervalliAnno($int1_start, $int1_end, $int2_start, $int2_end){      
+        //verifica che gli intervalli siano validi
+        if(!CoreHelper::verificaIntervalloAnni($int1_start, $int1_end)) {
+            return false;
+        }
+        if(!CoreHelper::verificaIntervalloAnni($int2_start, $int2_end)) {
+            return false;
+        }
+        //verifica sovrapposizione
+        if ($int1_end != 0){
+            if ($int2_end != 0){
+                if ($int1_end < $int2_start || $int2_end < $int1_start){
+                    return true; 
+                }                    
+            }
+            else if ($int1_end < $int2_start){
+                return true;                
+            }
+        }        
+        else {
+            if ($int2_end != 0 && $int2_end < $int1_start){
+                return true;                                     
+            }
+        }
+        return false;
+    }
+    
+    public static function stripTagsUTF8Encode($testo) {
+        return strip_tags(html_entity_decode($testo, ENT_QUOTES, 'UTF-8'));
     }
 }

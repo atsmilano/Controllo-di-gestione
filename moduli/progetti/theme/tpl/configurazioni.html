@@ -1,0 +1,44 @@
+<div id="configurazione_strategia">
+    <div id="tabs">
+        <ul>
+            <li>
+                <a id="a_ris_fin_disp" href="configurazioni/ris_fin_disp">
+                    Risorse Finanziarie Disponibili
+                </a>
+            </li>
+            <li>
+                <a id="a_ter_app" href="configurazioni/ter_app?{globals}">
+                    Territorio Applicazione
+                </a>
+            </li>
+            <li>
+                <a id="a_tipo_prog" href="configurazioni/tipo_prog?{globals}">
+                    Tipo Progetto
+                </a>
+            </li>
+            <li>
+                <a id="a_tip_mon" href="configurazioni/tip_mon?{globals}">
+                    Tipologia Monitoraggio
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

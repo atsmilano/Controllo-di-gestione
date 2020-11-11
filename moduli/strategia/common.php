@@ -12,14 +12,12 @@ foreach ($user->user_groups as $group) {
 define("STRATEGIA_CDR_PROGRAMMAZIONE", true);	
 
 // Creazione variabili di supporto per verifica privilegi utente
-$prospettive_edit = (
-    $user->hasPrivilege("strategia_prospettive_edit")
-);
+$prospettive_edit = ($user->hasPrivilege("strategia_prospettive_edit"));
 
 //menu
 $allowed_actions = array();
 $allowed_actions["prospettive"] =  array(
-    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/prospettive?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/configurazioni?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
     "icon" => $prospettive_edit ? "table" : MODULES_ICONHIDE,
     "dialog" => false
 );

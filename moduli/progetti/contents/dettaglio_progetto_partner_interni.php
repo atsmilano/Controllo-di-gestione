@@ -78,7 +78,5 @@ $oField->required = true;
 $oRecord->addContent($oField);
 
 $oRecord->insert_additional_fields["ID_progetto"] = new ffData($progetto->id, "Number");
-$oRecord->insert_additional_fields["time_modifica"] = new ffData(date("Y-m-d H:i:s"), "Datetime");
-$oRecord->insert_additional_fields["record_attivo"] = new ffData(1, "Number");
 
 $cm->oPage->addContent($oRecord);

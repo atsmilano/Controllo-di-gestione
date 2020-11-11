@@ -28,7 +28,7 @@ $db = ffDb_Sql::factory();
  * Successivamente verranno resi disponibili per visibilità utente se
  * Responsabile di CdR e Responsabile di Riferimento
  */
-$progetti_visibili = ProgettiProgetto::getAll(array("record_attivo" => 1));
+$progetti_visibili = ProgettiProgetto::getAll();
 
 $source_sql = "";
 foreach ($progetti_visibili as $progetto) {
@@ -88,10 +88,10 @@ foreach ($progetti_visibili as $progetto) {
         }
 
         // Recupero delle informazioni sul tipo di progetto (P1, P2, ecc...), se ci sono
-        $tipo_progetto = new ProgettiLibreriaTipoProgetto($progetto->id_tipo_progetto);
+        $tipo_progetto = new ProgettiTipoProgetto($progetto->id_tipo_progetto);
         $anagrafe_tipo_progetto = 'Da definire';
-        if ($tipo_progetto->codice_tipo_progetto) {
-            $anagrafe_tipo_progetto = $tipo_progetto->codice_tipo_progetto." (".$tipo_progetto->descrizione_tipo_progetto.")";
+        if ($tipo_progetto->codice) {
+            $anagrafe_tipo_progetto = $tipo_progetto->codice." (".$tipo_progetto->descrizione.")";
         }
         $source_sql .= "
             SELECT 
@@ -174,6 +174,7 @@ $oGrid->addKeyField($oField);
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "numero_progetto";
+$oField->data_source = "ID";
 $oField->base_type = "Number";
 $oField->label = "Numero Progetto";
 $oGrid->addContent($oField);

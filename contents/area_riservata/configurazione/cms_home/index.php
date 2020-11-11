@@ -18,7 +18,7 @@ $grid_fields = array(
 );
 $grid_recordset = array();
 foreach ($sezioni as $sezione) {
-    $testo = strip_tags(html_entity_decode($sezione->testo, ENT_QUOTES, 'UTF-8'));
+    $testo = CoreHelper::stripTagsUTF8Encode($sezione->testo);
 
     if ($sezione->isAllegato()) {
         $allegati = CmsHomeSezioneAllegato::getAll(["ID_sezione" => $sezione->id]);

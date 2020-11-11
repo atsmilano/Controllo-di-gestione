@@ -1,5 +1,7 @@
 <?php
+
 class AnagraficaCdr {
+
     public $id;
     public $codice;
     public $descrizione;
@@ -7,11 +9,11 @@ class AnagraficaCdr {
     public $id_tipo_cdr;
     public $data_introduzione;
     public $data_termine;
-    
-    public function __construct($id = null){
+
+    public function __construct($id = null) {
         $calling_class_name = static::class;
-		if ($id !== null) {
-			$db = ffDb_Sql::factory();
+        if ($id !== null) {
+            $db = ffDb_Sql::factory();
 
             $sql = "
 					SELECT 
@@ -30,14 +32,13 @@ class AnagraficaCdr {
                 $this->id_tipo_cdr = $db->getField("ID_tipo_cdr", "Number", true);
                 $this->data_introduzione = CoreHelper::getDateValueFromDB($db->getField("data_introduzione", "Date", true));
                 $this->data_termine = CoreHelper::getDateValueFromDB($db->getField("data_termine", "Date", true));
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto " . $calling_class_name . " con ID = ".$id);
-		}		
-    }	
-	
+            } else
+                throw new Exception("Impossibile creare l'oggetto " . $calling_class_name . " con ID = " . $id);
+        }
+    }
+
     //metodo per istanziare l'oggetto da codice cdr
-    public static function factoryFromCodice($codice, DateTime $date) {   
+    public static function factoryFromCodice($codice, DateTime $date) {
         $calling_class_name = static::class;
         $cdr_anagrafica = null;
 
@@ -63,8 +64,11 @@ class AnagraficaCdr {
                 $cdr_anagrafica->id_tipo_cdr = $db->getField("ID_tipo_cdr", "Number", true);
                 $cdr_anagrafica->data_introduzione = CoreHelper::getDateValueFromDB($db->getField("data_introduzione", "Date", true));
                 $cdr_anagrafica->data_termine = CoreHelper::getDateValueFromDB($db->getField("data_termine", "Date", true));
-                
-                if (strtotime($cdr_anagrafica->data_introduzione) <= strtotime($date->format("Y-m-d")) && ($cdr_anagrafica->data_termine == null || strtotime($cdr_anagrafica->data_termine) >= strtotime($date->format("Y-m-d")))) {
+
+                if (strtotime($cdr_anagrafica->data_introduzione) <= strtotime($date->format("Y-m-d")) && (
+                    $cdr_anagrafica->data_termine == null || 
+                    strtotime($cdr_anagrafica->data_termine) >= strtotime($date->format("Y-m-d"))
+                    )) {
                     break;
                 }
             } while ($db->nextRecord());
@@ -108,10 +112,9 @@ class AnagraficaCdr {
     }
 
     //restituisce tutti i record dell'anagrafica attivi in una data specifica
-    public static function getAnagraficaInData (DateTime $date) {
-        $calling_class_name = static::class;
-        $anagrafica_data = array();	                
-        foreach($calling_class_name::getAll() AS $cdr_anagrafica){
+    public static function getAnagraficaInData(DateTime $date) {
+        $anagrafica_data = array();
+        foreach (AnagraficaCdr::getAll() AS $cdr_anagrafica) {
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
             if (strtotime($cdr_anagrafica->data_introduzione) <= strtotime($date->format("Y-m-d")) && ($cdr_anagrafica->data_termine == null || strtotime($cdr_anagrafica->data_termine) >= strtotime($date->format("Y-m-d")))) {
                 $anagrafica_data[] = $cdr_anagrafica;
@@ -121,15 +124,30 @@ class AnagraficaCdr {
     }
 
     //restituisce tutti i record dell'anagrafica attivi in un anno specifico
-    public static function getAnagraficaAnno (AnnoBudget $anno) {
-        $calling_class_name = static::class;
-        $anagrafica_data = array();    
-        foreach($calling_class_name::getAll() AS $cdr_anagrafica){
+    public static function getAnagraficaAnno(AnnoBudget $anno) {
+        $anagrafica_data = array();
+        foreach (AnagraficaCdr::getAll() AS $cdr_anagrafica) {
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
             if (strtotime($cdr_anagrafica->data_introduzione) <= strtotime($anno->descrizione . "-12-31") && ($cdr_anagrafica->data_termine == null || strtotime($cdr_anagrafica->data_termine) >= strtotime($anno->descrizione . "-01-01"))) {
                 $anagrafica_data[] = $cdr_anagrafica;
             }
         }
         return $anagrafica_data;
+    }
+
+    public static function isCdrInInterval($codice_cdr, DateTime $date_start, DateTime $date_end) {       
+        foreach (AnagraficaCdr::getAll(["codice" => $codice_cdr]) AS $cdr_anagrafica) {
+            //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
+            if (
+                strtotime($cdr_anagrafica->data_introduzione) <= strtotime($date_start->format("Y-m-d")) && (
+                    $cdr_anagrafica->data_termine == null ||
+                    strtotime($cdr_anagrafica->data_termine) >= strtotime($date_end->format("Y-m-d"))
+                )
+            ) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 }
