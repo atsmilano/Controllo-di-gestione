@@ -1,5 +1,5 @@
 <?php
-class ProgettiProgetto  extends Entity {
+class ProgettiProgetto extends Entity {
     protected static $tablename = "progetti_progetto";
 
     public static function viewMenuByMatricola($user_matricola) {

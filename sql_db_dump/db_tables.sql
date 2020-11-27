@@ -11,7 +11,7 @@
  Target Server Version : 50731
  File Encoding         : 65001
 
- Date: 11/11/2020 15:27:53
+ Date: 27/11/2020 13:58:43
 */
 
 SET NAMES utf8mb4;
@@ -622,6 +622,8 @@ CREATE TABLE `coan_cdc`  (
   `ID_cdc_standard_regionale` int(11) NULL DEFAULT NULL,
   `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `ID_distretto` int(11) NULL DEFAULT NULL,
+  `anno_introduzione` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -729,7 +731,6 @@ CREATE TABLE `coan_periodo`  (
   `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ID_anno_budget` int(11) NOT NULL,
   `ordinamento_anno` int(11) NULL DEFAULT NULL,
-  `data_apertura` date NOT NULL,
   `data_inizio` date NOT NULL,
   `data_fine` date NOT NULL,
   PRIMARY KEY (`ID`) USING BTREE
@@ -746,7 +747,8 @@ CREATE TABLE `costi_ricavi_conto`  (
   `ID_fp` int(11) NOT NULL,
   `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `evidenza` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `ID_anno_budget` int(11) NOT NULL,
+  `anno_inizio` int(11) NOT NULL,
+  `anno_fine` int(11) NOT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -877,37 +879,17 @@ INSERT INTO `ff_international` VALUES (25, 1, 'user_codicefiscale', 'Codice Fisc
 INSERT INTO `ff_international` VALUES (26, 1, 'user_sessomaschio', 'Maschio', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (27, 1, 'user_sessofemmina', 'Femmina', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (28, 1, 'user_piva', 'Partita IVA', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (29, 1, 'user_publish', 'Pubblica in Home Page', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (30, 1, 'back_to_site', 'Torna al sito', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (31, 1, 'developer_label', 'Sviluppato da ', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (32, 1, 'developer_url', 'http://www.ats-milano.it', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (33, 1, 'developer_name', 'Controllo di Gestione - ATS Città Metropolitana Milano', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (34, 1, 'ffGrid_addnew', 'Aggiungi', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (35, 1, 'articles', 'Pagine', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (36, 1, 'articles_sections', 'Sezioni', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (37, 1, 'catalog_items', 'Prodotti', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (38, 1, 'no_limit_items_begin', 'Puoi inserire ancora', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (39, 1, 'no_limit_items_end', 'prodotti su ', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (40, 1, 'catalog_categories', 'Categorie', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (41, 1, 'catalog_groups', 'Gruppi Campi Aggiuntivi', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (42, 1, 'catalog_fields', 'Campi Aggiuntivi', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (43, 1, 'article', 'Pagina', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (44, 1, 'article_detail', 'Contenuto', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (45, 1, 'grid_no_record', 'Nessun elemento disponibile', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (46, 1, 'article_title', 'Titolo', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (47, 1, 'article_slug', 'Slug', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (48, 1, 'article_short_desc', 'Descrizione', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (49, 1, 'article_video', 'Video', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (50, 1, 'article_img', 'Immagine', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (51, 1, 'ffRecord_update', 'Aggiorna', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (52, 1, 'ffRecord_delete', 'Elimina', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (53, 1, 'ffRecord_cancel', 'Indietro', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (54, 1, 'ffRecord_close', 'Chiudi', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (55, 1, 'articolo', 'Prodotto', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (56, 1, 'ffDetail_addrow', 'Aggiungi', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (57, 1, 'articolo_modify', 'Modifica prodotto', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (58, 1, 'articolo_insert', 'Inserimento prodotto', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (59, 1, 'item_detail', 'Descrizione prodotto', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (60, 1, 'right', 'Destra', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (61, 1, 'left', 'Sinistra', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (62, 1, 'top', 'Evidenza', 0, '0000-00-00 00:00:00');
@@ -917,15 +899,12 @@ INSERT INTO `ff_international` VALUES (65, 1, 'register_link', 'Registrati', 0, 
 INSERT INTO `ff_international` VALUES (66, 1, 'ffRecord_insert', 'Inserisci', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (67, 1, 'video', 'Video', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (68, 1, 'pdf', 'PDF', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (69, 1, 'gallery', 'Galleria Fotografica', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (70, 1, 'yes', 'Si', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (71, 1, 'no', 'No', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (72, 1, 'logout', 'Esci', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (73, 1, 'edit_profile', 'Modifica profilo', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (74, 1, 'frame_per_page', 'Righe per pagina', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (75, 1, 'notify_add_cat', 'Hai aggiunto:', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (76, 1, 'category_name', 'Sezione', 0, '0000-00-00 00:00:00');
-INSERT INTO `ff_international` VALUES (77, 1, 'category_slug', 'Slug', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (78, 1, 'ldap_login_wrong_user_or_password', 'Nome utente e/o password errati', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (79, 1, 'ldap_user_not_qualified', 'Utente senza autorizzazione', 0, '0000-00-00 00:00:00');
 INSERT INTO `ff_international` VALUES (80, 1, 'cm::LAYOUT_PRIORITY_TOPLEVEL', '', 1, '0000-00-00 00:00:00');
@@ -4275,6 +4254,60 @@ CREATE TABLE `piano_cdr`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for progetti_direzione_riferimento_anno
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_direzione_riferimento_anno`;
+CREATE TABLE `progetti_direzione_riferimento_anno`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `ID_anno_budget` int(11) NULL DEFAULT NULL,
+  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `record_attivo` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for progetti_libreria_territorio_applicazione
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_libreria_territorio_applicazione`;
+CREATE TABLE `progetti_libreria_territorio_applicazione`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione_territorio_applicazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `record_attivo` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for progetti_libreria_tipo_progetto
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_libreria_tipo_progetto`;
+CREATE TABLE `progetti_libreria_tipo_progetto`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_tipo_progetto` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `descrizione_tipo_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `record_attivo` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for progetti_libreria_tipologia_monitoraggio
+-- ----------------------------
+DROP TABLE IF EXISTS `progetti_libreria_tipologia_monitoraggio`;
+CREATE TABLE `progetti_libreria_tipologia_monitoraggio`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione_tipologia_monitoraggio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `record_attivo` tinyint(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for progetti_monitoraggio
 -- ----------------------------
 DROP TABLE IF EXISTS `progetti_monitoraggio`;
@@ -4421,7 +4454,7 @@ CREATE TABLE `progetti_risorse_finanziarie_disponibili`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for progetti_territorio_applicazione

@@ -1,54 +1,22 @@
 <?php
-class CoanDistretto{	
-    public $id;
-    public $codice;
-	public $descrizione;
+class CoanDistretto extends Entity {
+    protected static $tablename = "coan_distretto";
     
-	public function __construct($id) {				
-		$db = ffDb_Sql::factory();
-		
-		$sql = "
-				SELECT 
-					coan_distretto.*
-				FROM
-					coan_distretto
-				WHERE
-					coan_distretto.ID = " . $db->toSql($id) 
-				;
-		$db->query($sql);
-		if ($db->nextRecord()){
-			$this->id = $db->getField("ID", "Number", true);
-            $this->codice = $db->getField("codice", "Text", true);
-			$this->descrizione = $db->getField("descrizione", "Text", true);
-		}	
-		else
-			throw new Exception("Impossibile creare l'oggetto CoanDistretto con ID = ".$id);
-	}
+    public static function getAttiviAnno(AnnoBudget $anno) {
+        $result = array();
+        $cdc_attivi_anno = CoanCdc::getAttiviAnno($anno);
+        
+        foreach($cdc_attivi_anno as $cdc) {
+            $distretto = new CoanDistretto($cdc->id_distretto);
+            if (!in_array($distretto, $result)) {
+                $result[] = $distretto;    
+            }
+        }
+        
+        return $result;
+    }
     
-    public static function getAll($filters=array()){			
-		$coan_distretto = array();
-        
-		$db = ffDb_Sql::factory();
-		$where = "WHERE 1=1 ";
-		foreach ($filters as $field => $value){
-			$where .= "AND ".$field."=".$db->toSql($value)." ";		
-		}
-        
-		$sql = "
-				SELECT 
-					coan_distretto.*
-				FROM
-					coan_distretto
-                    " . $where . "
-				ORDER BY
-					coan_distretto.descrizione ASC
-				";
-		$db->query($sql);
-		if ($db->nextRecord()){
-            do {
-                $coan_distretto[] = new CoanDistretto($db->getField("ID", "Number", true));			
-            } while ($db->nextRecord());
-		}	
-		return $coan_distretto;
-	}
+    public function canDelete() {
+        return empty(CoanCdc::getAll(["ID_distretto" => $this->id]));
+    }
 }

@@ -10,7 +10,7 @@ $grid_fields = array(
 
 $grid_recordset = array();
 foreach (StrategiaCdrProgrammazioneStrategica::getAll() as $item) {
-    $cdr = AnagraficaCdr::factoryFromCodice($item->codice_cdr, $date); //TODO
+    $cdr = AnagraficaCdr::factoryFromCodice($item->codice_cdr, $date);
     
     $grid_recordset[] = array(
         $item->id,
