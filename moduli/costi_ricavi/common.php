@@ -49,6 +49,11 @@ $allowed_actions["costi_ricavi_admin"] =  array(
     "icon"   => $admin_view ? "cogs" : MODULES_ICONHIDE,
     "dialog" => false
 );
+$allowed_actions["costi_ricavi_crud"] =  array(
+    "path"   => FF_SITE_PATH . "/area_riservata".$module->site_path."/configurazioni?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "icon"   => $admin_view ? "table" : MODULES_ICONHIDE,
+    "dialog" => false
+);
 
 //gruppo costi_ricavi
 $menu["programmazione"]["costi_ricavi"] = array(

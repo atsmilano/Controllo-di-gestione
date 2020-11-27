@@ -22,6 +22,11 @@ $allowed_actions["progetti_view_all"] =  array(
     "icon" => $progetti_admin ? "cogs" : MODULES_ICONHIDE,
     "dialog" => false
 );
+$allowed_actions["progetti_crud"] =  array(    
+    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/configurazioni?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "icon" => $progetti_admin ? "table" : MODULES_ICONHIDE,
+    "dialog" => false
+);
 
 $menu["programmazione"]["progetti"] = array(
     "key"     => "programmazione",

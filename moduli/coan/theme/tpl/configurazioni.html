@@ -1,0 +1,53 @@
+<div id="configurazione_coan">
+    <div id="tabs">
+        <ul>
+            <li>
+                <a id="a_periodo" href="configurazioni/periodo?{globals}">Periodo</a>
+            </li>
+            <li>
+                <a id="a_distretto" href="configurazioni/distretto?{globals}">Distretto</a>
+            </li>
+            <li>
+                <a id="a_cdc_standard_regionale" href="configurazioni/cdc_standard_regionale?{globals}">
+                    Cdc Standard Regionale
+                </a>
+            </li>
+            <li>
+                <a id="a_cdc" href="configurazioni/cdc?{globals}">Cdc</a>
+            </li>
+            <li>
+                <a id="a_fp_primo" href="configurazioni/fp_primo?{globals}">Fp primo</a>
+            </li>
+            <li>
+                <a id="a_fp_secondo" href="configurazioni/fp_secondo?{globals}">Fp secondo</a>
+            </li>
+            <li>
+                <a id="a_fp_terzo" href="configurazioni/fp_terzo?{globals}">Fp terzo</a>
+            </li>
+            <li>
+                <a id="a_fp_quarto" href="configurazioni/fp_quarto?{globals}">Fp quarto</a>
+            </li>
+            <li>
+                <a id="a_conto" href="configurazioni/conto?{globals}">Conto</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

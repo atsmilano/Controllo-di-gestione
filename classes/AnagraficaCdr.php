@@ -1,41 +1,8 @@
 <?php
 
-class AnagraficaCdr {
+class AnagraficaCdr extends Entity {
 
-    public $id;
-    public $codice;
-    public $descrizione;
-    public $abbreviazione;
-    public $id_tipo_cdr;
-    public $data_introduzione;
-    public $data_termine;
-
-    public function __construct($id = null) {
-        $calling_class_name = static::class;
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-					SELECT 
-						anagrafica_cdr.*
-					FROM
-						anagrafica_cdr
-					WHERE
-						anagrafica_cdr.ID = " . $db->toSql($id)
-            ;
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->codice = $db->getField("codice", "Text", true);
-                $this->descrizione = $db->getField("descrizione", "Text", true);
-                $this->abbreviazione = $db->getField("abbreviazione", "Text", true);
-                $this->id_tipo_cdr = $db->getField("ID_tipo_cdr", "Number", true);
-                $this->data_introduzione = CoreHelper::getDateValueFromDB($db->getField("data_introduzione", "Date", true));
-                $this->data_termine = CoreHelper::getDateValueFromDB($db->getField("data_termine", "Date", true));
-            } else
-                throw new Exception("Impossibile creare l'oggetto " . $calling_class_name . " con ID = " . $id);
-        }
-    }
+    protected static $tablename = "anagrafica_cdr";
 
     //metodo per istanziare l'oggetto da codice cdr
     public static function factoryFromCodice($codice, DateTime $date) {
@@ -44,13 +11,9 @@ class AnagraficaCdr {
 
         $db = ffDb_Sql::factory();
         $sql = "
-            SELECT 
-                anagrafica_cdr.*
-            FROM
-                anagrafica_cdr
-            WHERE
-                anagrafica_cdr.codice = " . $db->toSql($codice)
-        ;
+            SELECT anagrafica_cdr.*
+            FROM anagrafica_cdr
+            WHERE anagrafica_cdr.codice = " . $db->toSql($codice);
 
         $db->query($sql);
         if ($db->nextRecord()) {
@@ -66,7 +29,7 @@ class AnagraficaCdr {
                 $cdr_anagrafica->data_termine = CoreHelper::getDateValueFromDB($db->getField("data_termine", "Date", true));
 
                 if (strtotime($cdr_anagrafica->data_introduzione) <= strtotime($date->format("Y-m-d")) && (
-                    $cdr_anagrafica->data_termine == null || 
+                    $cdr_anagrafica->data_termine == null ||
                     strtotime($cdr_anagrafica->data_termine) >= strtotime($date->format("Y-m-d"))
                     )) {
                     break;
@@ -75,40 +38,6 @@ class AnagraficaCdr {
         }
 
         return $cdr_anagrafica;
-    }
-
-    public static function getAll($filters = null) {
-        $calling_class_name = static::class;
-        $anagrafica = array();
-
-        $db = ffDb_Sql::factory();
-
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value)
-            $where .= "AND " . $field . "=" . $db->toSql($value) . " ";
-
-        $sql = "SELECT 
-                    anagrafica_cdr.*
-                FROM 
-                    anagrafica_cdr
-                " . $where;
-
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $cdr_anagrafica = new $calling_class_name();
-                $cdr_anagrafica->id = $db->getField("ID", "Number", true);
-                $cdr_anagrafica->codice = $db->getField("codice", "Text", true);
-                $cdr_anagrafica->descrizione = $db->getField("descrizione", "Text", true);
-                $cdr_anagrafica->abbreviazione = $db->getField("abbreviazione", "Text", true);
-                $cdr_anagrafica->id_tipo_cdr = $db->getField("ID_tipo_cdr", "Number", true);
-                $cdr_anagrafica->data_introduzione = CoreHelper::getDateValueFromDB($db->getField("data_introduzione", "Date", true));
-                $cdr_anagrafica->data_termine = CoreHelper::getDateValueFromDB($db->getField("data_termine", "Date", true));
-
-                $anagrafica[] = $cdr_anagrafica;
-            } while ($db->nextRecord());
-        }
-        return $anagrafica;
     }
 
     //restituisce tutti i record dell'anagrafica attivi in una data specifica
@@ -135,19 +64,19 @@ class AnagraficaCdr {
         return $anagrafica_data;
     }
 
-    public static function isCdrInInterval($codice_cdr, DateTime $date_start, DateTime $date_end) {       
+    public static function isCdrInInterval($codice_cdr, DateTime $date_start, DateTime $date_end) {
         foreach (AnagraficaCdr::getAll(["codice" => $codice_cdr]) AS $cdr_anagrafica) {
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
             if (
                 strtotime($cdr_anagrafica->data_introduzione) <= strtotime($date_start->format("Y-m-d")) && (
-                    $cdr_anagrafica->data_termine == null ||
-                    strtotime($cdr_anagrafica->data_termine) >= strtotime($date_end->format("Y-m-d"))
+                $cdr_anagrafica->data_termine == null ||
+                strtotime($cdr_anagrafica->data_termine) >= strtotime($date_end->format("Y-m-d"))
                 )
             ) {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
