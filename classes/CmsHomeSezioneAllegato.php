@@ -1,5 +1,4 @@
 <?php
-
 class CmsHomeSezioneAllegato extends Allegato {
     public static $bridge_table_name = "cms_home_sezione_allegato";
     

@@ -30,6 +30,7 @@ if (!$user->hasPrivilege("coan_view")) {
 $coan_admin = $user->hasPrivilege("coan_admin");
 $coan_privileges = (
     $user->hasPrivilege("coan_view") && (
+        $user->hasPrivilege("coan_admin") ||
         $user->hasPrivilege("cdr_view_all") ||
         $user->hasPrivilege("resp_cdr_selezionato") ||
         $user->hasPrivilege("resp_padre_ramo_cdr_selezionato") ||
@@ -38,6 +39,11 @@ $coan_privileges = (
 );
 
 $allowed_actions = array();
+$allowed_actions["coan_import"] = array(
+    "path" => FF_SITE_PATH . "/area_riservata" . $module->site_path . "/importazione?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "icon" => $coan_admin ? "cogs" : MODULES_ICONHIDE,
+    "dialog" => false
+);
 $allowed_actions["coan_crud"] = array(
     "path" => FF_SITE_PATH . "/area_riservata" . $module->site_path . "/configurazioni?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
     "icon" => $coan_admin ? "table" : MODULES_ICONHIDE,

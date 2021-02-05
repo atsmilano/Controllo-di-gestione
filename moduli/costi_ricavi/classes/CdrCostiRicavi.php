@@ -1,7 +1,5 @@
 <?php
-
 class CdrCostiRicavi extends Cdr {
-
     //estrazione di tutti i conti associati ad un cdr nell'anno passato come parametro
     public function getContiAnno(AnnoBudget $anno) {
         $conti_attivi_anno = CostiRicaviConto::getAttiviAnno($anno);

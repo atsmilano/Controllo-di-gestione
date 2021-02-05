@@ -1,5 +1,5 @@
 <?php
-
+$module = Modulo::getCurrentModule();
 $anno = $cm->oPage->globals["anno"]["value"];
 //******************************************************************************
 //Validazione e selezione parametro periodo
@@ -129,10 +129,8 @@ if (count($periodi) > 0) {
     }
     $oGrid->order_default = "sum_campo_1";
     $oGrid->record_id = "costi-ricavi-conto-modify";
-    //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
-    $path_info_parts = explode("/", $cm->path_info);
-    $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
-    $oGrid->record_url = FF_SITE_PATH . $path_info . "dettaglio_conto";
+    //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))    
+    $oGrid->record_url = FF_SITE_PATH . "/area_riservata" . $module->site_path . "/dettaglio_conto";
     $oGrid->order_method = "labels";
     $oGrid->force_no_field_params = true;
     $oGrid->display_navigator = false;

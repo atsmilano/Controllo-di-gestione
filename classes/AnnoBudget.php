@@ -1,58 +1,21 @@
 <?php
-class AnnoBudget {
-    public $id;
-    public $descrizione;
-    public $attivo;
-
-    public function __construct($id = null) {
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                SELECT anno_budget.*
-                FROM anno_budget
-                WHERE anno_budget.ID = " . $db->toSql($id)
-            ;
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->descrizione = $db->getField("descrizione", "Text", true);
-                if ($db->getField("attivo", "Text", true) == 1)
-                    $this->attivo = 1;
-                else
-                    $this->attivo = 0;
-            } else
-                throw new Exception("Impossibile creare l'oggetto AnnoBudget con ID = " . $id);
-        }
-    }
-
+class AnnoBudget extends Entity{
+    protected static $tablename = "anno_budget";
+   
     //restituisce array con tutti gli anni di budget ordinati in maniera decrescente
-    public static function getAll() {
-        $anni = array();
-
-        $db = ffDB_Sql::factory();
-        $sql = "SELECT anno_budget.*
-                FROM anno_budget
-                ORDER BY descrizione DESC";
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $anno = new AnnoBudget();
-                $anno->id = $db->getField("ID", "Number", true);
-                $anno->descrizione = $db->getField("descrizione", "Text", true);
-                if ($db->getField("attivo", "Text", true) == 1)
-                    $anno->attivo = 1;
-                else
-                    $anno->attivo = 0;
-                $anni[] = $anno;
-            }while ($db->nextRecord());
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"descrizione", "direction"=>"DESC"))) {        
+        //filtro di default
+        if (!isset($where["attivo"])) {
+            $where["attivo"] = 1;
         }
-        return $anni;
+        //metodo classe entity
+        return parent::getAll($where, $order);        
     }
 
     //restituisce l'ultimo anno definito
     public static function ultimoDefinito() {
-        $anni_budget = AnnoBudget::getAll();
+        $calling_class = static::class;
+        $anni_budget = $calling_class::getAll();
         //viene estratto l'ultimo anno attivo definito (il primo degli anni estratti con GetAll())
         foreach ($anni_budget AS $anno) {
             if ($anno->attivo == 1)
@@ -63,17 +26,18 @@ class AnnoBudget {
 
     //restituisce l'ultimo anno attivo alla data
     public static function ultimoAttivoInData($date = null) {
+        $calling_class = static::class;
         //nel caso non sia passata la data viene utilizzata quella corrente
         if ($date == null)
             $anno_cercato = date("Y");
         else
             $anno_cercato = date("Y", strtotime($date));
 
-        foreach (AnnoBudget::getAll() as $anno) {
+        foreach ($calling_class::getAll() as $anno) {
             //essendo gli anni ordinati in ordine crescente viene considerato il primo minore o uguale a quello ricercato
             if ($anno->attivo == 1 && $anno->descrizione <= $anno_cercato) {
                 try {
-                    return new AnnoBudget($anno->id);
+                    return new $calling_class($anno->id);
                 } catch (Exception $ex) {
                     ffErrorHandler::raise($ex->getMessage());
                 }
@@ -92,7 +56,7 @@ class AnnoBudget {
             if ($end == true) {
                 if ($anno->attivo == 1) {
                     try {
-                        return new AnnoBudget($anno->id);
+                        return new $calling_class($anno->id);
                     } catch (Exception $ex) {
                         ffErrorHandler::raise($ex->getMessage());
                     }

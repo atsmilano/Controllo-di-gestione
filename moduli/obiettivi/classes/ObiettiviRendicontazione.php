@@ -1,87 +1,11 @@
 <?php
-class ObiettiviRendicontazione {
-    public $id;
-    public $id_periodo_rendicontazione;
-    public $id_obiettivo_cdr;
-    public $azioni;
-    public $provvedimenti;
-    public $criticita;
-    public $misurazione_indicatori;
-    public $raggiungibile;
-    public $id_scelta_campo_revisione;
-    public $perc_raggiungimento;
-    public $perc_nucleo;
-    public $note_nucleo;
-    public $time_ultima_modifica_referente;
+class ObiettiviRendicontazione extends Entity{
+    protected static $tablename = "obiettivi_rendicontazione";
 
-    public function __construct($id = null) {
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                SELECT obiettivi_rendicontazione.*
-                FROM obiettivi_rendicontazione
-                WHERE obiettivi_rendicontazione.ID = " . $db->toSql($id)
-            ;
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->id_periodo_rendicontazione = $db->getField("ID_periodo_rendicontazione", "Number", true);
-                $this->id_obiettivo_cdr = $db->getField("ID_obiettivo_cdr", "Number", true);
-                $this->azioni = $db->getField("azioni", "Text", true);
-                $this->provvedimenti = $db->getField("provvedimenti", "Text", true);
-                $this->criticita = $db->getField("criticita", "Text", true);
-                $this->misurazione_indicatori = $db->getField("misurazione_indicatori", "Text", true);
-                $this->raggiungibile = CoreHelper::getBooleanValueFromDB($db->getField("raggiungibile", "Number", true));
-                $this->id_scelta_campo_revisione = $db->getField("ID_scelta_campo_revisione", "Number", true);
-                $this->perc_raggiungimento = $db->getField("perc_raggiungimento", "Number", true);
-                $this->perc_nucleo = $db->getField("perc_nucleo", "Number", true);
-                $this->note_nucleo = $db->getField("note_nucleo", "Text", true);
-                $this->time_ultima_modifica_referente = CoreHelper::getDateValueFromDB($db->getField("time_ultima_modifica_referente", "Date", true));
-            } else
-                throw new Exception("Impossibile creare l'oggetto ObiettivoPeriodoRendicontazione con ID = " . $id);
-        }
-    }
-
-    public static function getAll($filters = array()) {
-        $rendicontazioni = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value) {
-            $where .= "AND " . $field . "=" . $db->toSql($value) . " ";
-        }
-        $sql = "
-            SELECT obiettivi_rendicontazione.*
-            FROM obiettivi_rendicontazione                
-            " . $where . "
-            ORDER BY obiettivi_rendicontazione.ID_periodo_rendicontazione ASC, 
-                obiettivi_rendicontazione.ID_obiettivo_cdr ASC
-        ";
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $rendicontazione = new ObiettiviRendicontazione();
-
-                $rendicontazione->id = $db->getField("ID", "Number", true);
-                $rendicontazione->id_periodo_rendicontazione = $db->getField("ID_periodo_rendicontazione", "Number", true);
-                $rendicontazione->id_obiettivo_cdr = $db->getField("ID_obiettivo_cdr", "Number", true);
-                $rendicontazione->azioni = $db->getField("azioni", "Text", true);
-                $rendicontazione->provvedimenti = $db->getField("provvedimenti", "Text", true);
-                $rendicontazione->criticita = $db->getField("criticita", "Text", true);
-                $rendicontazione->misurazione_indicatori = $db->getField("misurazione_indicatori", "Text", true);
-                $rendicontazione->raggiungibile = CoreHelper::getBooleanValueFromDB($db->getField("raggiungibile", "Number", true));
-                $rendicontazione->id_scelta_campo_revisione = $db->getField("ID_scelta_campo_revisione", "Number", true);
-                $rendicontazione->perc_raggiungimento = $db->getField("perc_raggiungimento", "Number", true);
-                $rendicontazione->perc_nucleo = $db->getField("perc_nucleo", "Number", true);
-                $rendicontazione->note_nucleo = $db->getField("note_nucleo", "Text", true);
-                $rendicontazione->time_ultima_modifica_referente = CoreHelper::getDateValueFromDB($db->getField("time_ultima_modifica_referente", "Date", true));
-
-                $rendicontazioni[] = $rendicontazione;
-            } while ($db->nextRecord());
-        }
-        return $rendicontazioni;
-    }
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"ID_periodo_rendicontazione", "direction"=>"ASC"),array("fieldname"=>"ID_obiettivo_cdr", "direction"=>"ASC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
+    }    
 
     //factory da periodo e obiettivo_cdr
     public static function factoryFromObiettivoCdrPeriodo(ObiettiviObiettivoCdr $obiettivo_cdr, ObiettiviPeriodoRendicontazione $periodo) {
@@ -144,6 +68,8 @@ class ObiettiviRendicontazione {
             $note_nucleo_class = "";
         }
 
+        $periodo_rendicontazione = new ObiettiviPeriodoRendicontazione($this->id_periodo_rendicontazione);
+        
         //generazione html indicatori
         $indicatori_associati = $obiettivo->getIndicatoriAssociati();
         $html_indicatori = "";
@@ -155,8 +81,7 @@ class ObiettiviRendicontazione {
                 $parametri_indicatore = $indicatore->getParametri();
                 $html_parametri = "";
                 if (count($parametri_indicatore)) {
-                    $parametri_calcolo = array();
-                    $periodo_rendicontazione = new ObiettiviPeriodoRendicontazione($this->id_periodo_rendicontazione);
+                    $parametri_calcolo = array();                    
                     $html_parametri .= "<ul>";
                     foreach ($parametri_indicatore as $parametro) {
                         $valore_parametro = $parametro->parametro_indicatore->getValoreParametroIndicatoreRendicontazione($periodo_rendicontazione, $obiettivo_cdr);
@@ -192,8 +117,17 @@ class ObiettiviRendicontazione {
             }
             $html_indicatori .= "</span></div>";
         }
-        $scelta_campo_revisione = new ObiettiviSceltaCampoRevisione($this->id_scelta_campo_revisione);
-        $campo_revisione = new ObiettiviCampoRevisione($scelta_campo_revisione->id_campo_revisione);
+        if ($periodo_rendicontazione->id_campo_revisione != null){
+            $scelta_campo_revisione = new ObiettiviSceltaCampoRevisione($this->id_scelta_campo_revisione);        
+            $campo_revisione = new ObiettiviCampoRevisione($scelta_campo_revisione->id_campo_revisione);
+            $html_campo_revisione = 
+                "<div class='form-group clearfix padding'>
+                    <label>" . $campo_revisione->nome . "</label>
+                    <span class='form-control readonly'>
+                    " . $scelta_campo_revisione->descrizione . 
+                    "</span>
+                </div>";
+        }
         $html = "
                 <div class='form-group clearfix padding'>
                     <label>Azioni</label>
@@ -220,12 +154,7 @@ class ObiettiviRendicontazione {
                     <label>Si ritiene l&acute;obiettivo raggiungibile al 31/12</label>
                     <span class='form-control readonly'>" . $raggiungibile . "</span>
                 </div>
-                <div class='form-group clearfix padding'>
-                    <label>" . $campo_revisione->nome . "</label>
-                    <span class='form-control readonly'>
-                    " . $scelta_campo_revisione->descrizione . 
-                    "</span>
-                </div>
+                " . $html_campo_revisione . "
                 <div class='form-group clearfix padding'>
                     <label>Raggiungimento Nucleo (NVP) di Dipartimento</label>
                     <span class='form-control readonly'>" . $ragg_nucleo . "</span>
@@ -248,13 +177,13 @@ class ObiettiviRendicontazione {
         
         $db = ffDB_Sql::factory();
         $sql = "
-            DELETE FROM obiettivi_rendicontazione
+            DELETE FROM ".self::$tablename."
             WHERE ID = " . $db->toSql($this->id) . "
         ";
         
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile eliminare fisicamente l'oggetto "
-                . "Rendicontazione con ID = " . $this->id . " nel DB");
+            throw new Exception("Impossibile eliminare fisicamente l'oggetto ".static::class
+                . " con ID = " . $this->id . " nel DB");
         }
         else if ($propagate) {
             foreach($allegati_rendicontazione as $allegato_rendicontazione) {

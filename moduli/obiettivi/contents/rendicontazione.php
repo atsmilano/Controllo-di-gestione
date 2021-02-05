@@ -133,7 +133,7 @@ $user_privileges = array(
 );       
 $user_privileges["view"] = true;
 
-if ($resp_cdr_selezionato) {
+if ($resp_cdr_selezionato) {    
     //if ($obiettivo_cdr->isChiuso()) {       
     $user_privileges["view"] = true;
     if (!$obiettivo_cdr->isCoreferenza() && $periodo_attivo == true) {
@@ -152,7 +152,7 @@ if ($user->hasPrivilege("nucleo_di_valutazione")) {
 if (!$user_privileges["view"]) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina dell'obiettivo.");
 }
-//se Ã¨ stato definito il parametro "no_action" si garantisce la sola visualizzazione
+//se è stato definito il parametro "no_action" si garantisce la sola visualizzazione
 if (isset($_REQUEST["no_actions"]) && $_REQUEST["no_actions"] == 1) {
     $user_privileges["edit_responsabile"] = false;
     $user_privileges["edit_nucleo"] = false;
@@ -259,7 +259,7 @@ if ($obiettivo_cdr_padre == null) {
     $oField->id = "criticita";
     $oField->base_type = "Text";
     $oField->extended_type = "Text";
-    $oField->label = "CriticitÃ  riscontrate e interventi messi in atto per il loro superamento";
+    $oField->label = "Criticità  riscontrate e interventi messi in atto per il loro superamento";
     if (!$user_privileges["edit_responsabile"]) {
         $oField->control_type = "label";
         $oField->store_in_db = false;
@@ -449,7 +449,7 @@ if (count($indicatori_associati)) {
 
             //in caso di coreferenza i valori da proporre sono quelli del referente
             //la seconda condizione ($obiettivo_cdr_padre!==null) viene introdotta per gestire l'arrivo dal bersaglio (in cui viene passato l'id della rendicontazione del padre)
-            //e quindi l'id_obiettivo_cdr che ne viene ricavato Ã¨ quello aziendale
+            //e quindi l'id_obiettivo_cdr che ne viene ricavato è quello aziendale
             if ($obiettivo_cdr->isCoreferenza() && $obiettivo_cdr_padre !== null) {
                 $obiettivo_cdr_valore_parametro = $obiettivo_cdr_padre;
             } else {
@@ -579,7 +579,7 @@ if ($periodo_rendicontazione->allegati == 1) {
     // Ruolo view: solo visualizzazione
     // Ruolo edit_responsabile: visualizzazione download ed eliminazione
     $html = "<label>Allegati</label>";
-    //in fase di inserimento non Ã¨ possibile allegare file
+    //in fase di inserimento non è possibile allegare file
     if ($rendicontazione == null) {
         $html .= '<p id="no_allegati_user_friendly">Gli allegati possono essere caricati successivamente al salvataggio della rendicontazione</p><br />';
         $oRecord->addContent($html, "allegati");
@@ -610,7 +610,7 @@ if ($periodo_rendicontazione->allegati == 1) {
                 }
 
                 if ($user_privileges["edit_responsabile"]) {
-                    // Se il periodo non Ã¨ quello finale NON Ã¨ possibile eliminare
+                    // Se il periodo non è quello finale NON è possibile eliminare
                     if (($periodo_rendicontazione->allegati == 0)) {
                         $txt_elimina = "-";
                     }
@@ -645,7 +645,7 @@ if ($periodo_rendicontazione->allegati == 1) {
 }
 
 //******************************************************************************
-//se l'obiettivo Ã¨ di coreferenza non vengono visualizzati i campi di raggiungimento obiettivo e nucleo
+//se l'obiettivo è di coreferenza non vengono visualizzati i campi di raggiungimento obiettivo e nucleo
 if ($obiettivo_cdr_padre == null) {
     $oRecord->addContent(null, true, "raggiungimento");
     $oRecord->groups["raggiungimento"]["title"] = "Raggiungimento obiettivo";
@@ -717,7 +717,7 @@ if ($obiettivo_cdr_padre == null) {
         $oField->control_type = "label";
         $oField->store_in_db = false;
     }
-    //in caso di indicatori definiti il raggiungimento non Ã¨ modificabile in quanto calcolato in automatico ma viene comunque salvato a db
+    //in caso di indicatori definiti il raggiungimento non è modificabile in quanto calcolato in automatico ma viene comunque salvato a db
     else if (count($indicatori_associati)) {
         $oField->control_type = "label";
     } else {
@@ -829,7 +829,7 @@ function saveRelations($oRecord) {
         foreach ($indicatore->getParametri() as $parametro) {
             $parametro_indicatore = $parametro->parametro_indicatore;
             //viene recuperato il valore del parametro dalla grid            
-            //viene salvato il valore solamente se il parametro Ã¨ modificabile (verifica su control type)                  
+            //viene salvato il valore solamente se il parametro è modificabile (verifica su control type)                  
             if ($oRecord->form_fields["parametro_" . $indicatore->obiettivo_indicatore->id . "_" . $parametro_indicatore->id]->control_type !== "label") {
                 $parametro_indicatore->setValoreParametroIndicatoreRendicontazione($rendicontazione_obiettivo, $oRecord->form_fields["parametro_" . $indicatore->obiettivo_indicatore->id . "_" . $parametro_indicatore->id]->value->getValue());
             }

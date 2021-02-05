@@ -58,7 +58,7 @@ $oGrid->addContent($oField);
 $oField = ffField::factory($cm->oPage);
 $oField->id = "fp_primo";
 $oField->base_type = "Text";
-$oField->label = "Fp Secondo";
+$oField->label = "Fp Primo";
 $oGrid->addContent($oField);
 
 $oGrid->addEvent("on_before_parse_row", "checkRelations");

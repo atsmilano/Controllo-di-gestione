@@ -1,20 +1,5 @@
 <?php
-class PersonaleObiettivi extends Personale {
-    public static function factoryFromMatricola($matricola) {
-        $db = ffDb_Sql::factory();
-
-        $sql = "
-            SELECT personale.ID
-            FROM personale
-            WHERE personale.matricola = " . $db->toSql($matricola)
-        ;
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            return new PersonaleObiettivi($db->getField("ID", "Number", true));
-        }
-        throw new Exception("Impossibile creare l'oggetto Personale con matricola = " . $matricola);
-    }
-
+class PersonaleObiettivi extends Personale {    
     public function getObiettiviCdrPersonaleAnno(AnnoBudget $anno) {
         $ob_personale_associati = array();
         $db = ffDB_Sql::factory();

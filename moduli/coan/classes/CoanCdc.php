@@ -1,14 +1,13 @@
 <?php
-
 class CoanCdc extends Entity {
     protected static $tablename = "coan_cdc";
 
     public static function isCdrAssociatoAnno(AnnoBudget $anno, $cdr) {
         $db = ffDb_Sql::factory();
         $sql = "
-            SELECT DISTINCT coan_cdc.codice_cdr
-            FROM coan_cdc
-                INNER JOIN coan_consuntivo_periodo ON coan_cdc.ID = coan_consuntivo_periodo.ID_cdc_coan
+            SELECT DISTINCT ".self::$tablename.".codice_cdr
+            FROM ".self::$tablename."
+                INNER JOIN coan_consuntivo_periodo ON ".self::$tablename.".ID = coan_consuntivo_periodo.ID_cdc_coan
                 INNER JOIN coan_periodo ON coan_consuntivo_periodo.ID_periodo_coan = coan_periodo.ID
             WHERE coan_periodo.ID_anno_budget = " . $db->toSql($anno->id) . "
         ";

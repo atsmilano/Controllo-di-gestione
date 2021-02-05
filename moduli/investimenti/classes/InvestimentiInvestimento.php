@@ -1,57 +1,6 @@
 <?php
-class InvestimentiInvestimento {
-    public $id;
-    public $codice_cdr_creazione;
-    public $id_anno_budget;
-    public $data_creazione;
-    public $richiesta_codice_cdc;
-    public $richiesta_nuova;
-    public $richiesta_matricola_bene_da_sostituire;
-    public $richiesta_id_categoria;
-    public $richiesta_descrizione_bene;
-    public $richiesta_quantita;
-    public $richiesta_motivo;
-    public $richiesta_motivazioni_supporto;
-    public $richiesta_eventuali_costi_aggiuntivi;
-    public $richiesta_costo_stimato;
-    public $richiesta_id_priorita;
-    public $richiesta_tempi;
-    public $richiesta_ubicazione_bene;
-    public $richiesta_data_chiusura;
-    public $approvazione_id_parere_direzione_riferimento;
-    public $approvazione_note_parere_direzione_riferimento;
-    public $approvazione_id_priorita_direzione_riferimento;
-    public $approvazione_id_tempi_stimati_direzione_riferimento;
-    public $approvazione_data;
-    public $approvazione_data_scarto_direzione_riferimento;
-    public $istruttoria_id_categoria_uoc_competente_anno;
-    public $istruttoria_data_avvio;
-    public $istruttoria_costo_presunto;
-    public $istruttoria_modalita_acquisizione;
-    public $istruttoria_id_tempi_stimati_uoc_competente;
-    public $istruttoria_anno_soddisfacimento;
-    public $istruttoria_id_fonte_finanziamento_proposta;
-    public $istruttoria_id_categoria_registro_cespiti_proposta;
-    public $istruttoria_non_coerente_piano_investimenti;
-    public $istruttoria_data_chiusura_uoc_competente;
-    public $istruttoria_data_scarto_uoc_competente;
-    public $verifica_copertura_id_registro_cespiti;
-    public $verifica_copertura_id_fonte_finanziamento;
-    public $verifica_copertura_data_fine;
-    public $proposta_piano_investimenti_data;
-    public $dg_id_parere;
-    public $dg_id_priorita;
-    public $dg_id_tempi;
-    public $dg_data_validazione_piano_investimenti;
-    public $dg_data_scarto_piano_investimenti;
-    public $monitoraggio_importo_definitivo;
-    public $monitoraggio_data;
-    public $monitoraggio_provvedimento;
-    public $monitoraggio_fatture;
-    public $monitoraggio_fornitore;
-    public $monitoraggio_id_fonte_finanziamento;
-    public $monitoraggio_note;
-    public $monitoraggio_data_chiusura;
+class InvestimentiInvestimento extends Entity{
+    protected static $tablename = "investimenti_investimento";    
     
     public static $stati_investimento = array	(
                                                 //anomalia
@@ -121,154 +70,9 @@ class InvestimentiInvestimento {
 													),
 												);
 	
-	public function __construct($id=null){				
-		if ($id !== null){
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						*
-					FROM
-						investimenti_investimento                     
-					WHERE
-						investimenti_investimento.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord()){
-                $this->id = $db->getField("ID", "Number", true);
-                $this->codice_cdr_creazione = $db->getField("codice_cdr_creazione", "Text", true);
-                $this->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
-                $this->data_creazione = CoreHelper::getDateValueFromDB($db->getField("data_creazione", "Date", true));
-                $this->richiesta_codice_cdc = $db->getField("richiesta_codice_cdc", "Text", true);
-                $this->richiesta_nuova = CoreHelper::getBooleanValueFromDB($db->getField("richiesta_nuova", "Number", true));
-                $this->richiesta_matricola_bene_da_sostituire = $db->getField("richiesta_matricola_bene_da_sostituire", "Text", true);
-                $this->richiesta_id_categoria = $db->getField("richiesta_ID_categoria", "Number", true);
-                $this->richiesta_descrizione_bene = $db->getField("richiesta_descrizione_bene", "Text", true);
-                $this->richiesta_quantita = $db->getField("richiesta_quantita", "Number", true);
-                $this->richiesta_motivo = $db->getField("richiesta_motivo", "Text", true);
-                $this->richiesta_motivazioni_supporto = $db->getField("richiesta_motivazioni_supporto", "Text", true);
-                $this->richiesta_eventuali_costi_aggiuntivi = $db->getField("richiesta_eventuali_costi_aggiuntivi", "Text", true);
-                $this->richiesta_costo_stimato = $db->getField("richiesta_costo_stimato", "Number", true);
-                $this->richiesta_id_priorita = $db->getField("richiesta_ID_priorita", "Number", true);
-                $this->richiesta_tempi = $db->getField("richiesta_tempi", "Text", true);
-                $this->richiesta_ubicazione_bene = $db->getField("richiesta_ubicazione_bene", "Text", true);
-                $this->richiesta_data_chiusura = CoreHelper::getDateValueFromDB($db->getField("richiesta_data_chiusura", "Date", true));
-                $this->approvazione_id_parere_direzione_riferimento = $db->getField("approvazione_ID_parere_direzione_riferimento", "Number", true);
-                $this->approvazione_note_parere_direzione_riferimento = $db->getField("approvazione_note_parere_direzione_riferimento", "Text", true);
-                $this->approvazione_id_priorita_direzione_riferimento = $db->getField("approvazione_ID_priorita_direzione_riferimento", "Number", true);
-                $this->approvazione_id_tempi_stimati_direzione_riferimento = $db->getField("approvazione_ID_tempi_stimati_direzione_riferimento", "Number", true);
-                $this->approvazione_data = CoreHelper::getDateValueFromDB($db->getField("approvazione_data", "Date", true));
-                $this->approvazione_data_scarto_direzione_riferimento = CoreHelper::getDateValueFromDB($db->getField("approvazione_data_scarto_direzione_riferimento", "Date", true));                
-                $this->istruttoria_id_categoria_uoc_competente_anno = $db->getField("istruttoria_ID_categoria_uoc_competente_anno", "Number", true);
-                $this->istruttoria_data_avvio = CoreHelper::getDateValueFromDB($db->getField("istruttoria_data_avvio", "Date", true));
-                $this->istruttoria_costo_presunto = $db->getField("istruttoria_costo_presunto", "Number", true);
-                $this->istruttoria_modalita_acquisizione = $db->getField("istruttoria_modalita_acquisizione", "Text", true);
-                $this->istruttoria_id_tempi_stimati_uoc_competente = $db->getField("istruttoria_ID_tempi_stimati_uoc_competente", "Number", true);
-                $this->istruttoria_anno_soddisfacimento = $db->getField("istruttoria_anno_soddisfacimento", "Text", true);
-                $this->istruttoria_id_fonte_finanziamento_proposta = $db->getField("istruttoria_ID_fonte_finanziamento_proposta", "Text", true);
-                $this->istruttoria_id_categoria_registro_cespiti_proposta = $db->getField("istruttoria_ID_categoria_registro_cespiti_proposta", "Text", true);
-                $this->istruttoria_non_coerente_piano_investimenti = CoreHelper::getBooleanValueFromDB($db->getField("istruttoria_non_coerente_piano_investimenti", "Number", true));
-                $this->istruttoria_data_chiusura_uoc_competente = CoreHelper::getDateValueFromDB($db->getField("istruttoria_data_chiusura_uoc_competente", "Date", true));
-                $this->istruttoria_data_scarto_uoc_competente = CoreHelper::getDateValueFromDB($db->getField("istruttoria_data_scarto_uoc_competente", "Date", true));  
-                $this->verifica_copertura_id_registro_cespiti = $db->getField("verifica_copertura_ID_registro_cespiti", "Number", true);                                
-                $this->verifica_copertura_id_fonte_finanziamento = $db->getField("verifica_copertura_ID_fonte_finanziamento", "Number", true);
-                $this->verifica_copertura_data_fine = CoreHelper::getDateValueFromDB($db->getField("verifica_copertura_data_fine", "Date", true));
-                $this->proposta_piano_investimenti_data = CoreHelper::getDateValueFromDB(CoreHelper::getDateValueFromDB($db->getField("proposta_piano_investimenti_data", "Date", true)));
-                $this->dg_id_parere = $db->getField("dg_ID_parere", "Number", true);
-                $this->dg_id_priorita = $db->getField("dg_ID_priorita", "Number", true);
-                $this->dg_id_tempi = $db->getField("dg_ID_tempi", "Number", true);
-                $this->dg_data_validazione_piano_investimenti = CoreHelper::getDateValueFromDB($db->getField("dg_data_validazione_piano_investimenti", "Date", true));
-                $this->dg_data_scarto_piano_investimenti = CoreHelper::getDateValueFromDB($db->getField("dg_data_scarto_piano_investimenti", "Date", true));                
-                $this->monitoraggio_importo_definitivo = $db->getField("monitoraggio_importo_definitivo", "Number", true);
-                $this->monitoraggio_data = CoreHelper::getDateValueFromDB($db->getField("monitoraggio_data", "Date", true));
-                $this->monitoraggio_provvedimento = $db->getField("monitoraggio_provvedimento", "Text", true);
-                $this->monitoraggio_fatture = $db->getField("monitoraggio_fatture", "Text", true);
-                $this->monitoraggio_fornitore = $db->getField("monitoraggio_fornitore", "Text", true);
-                $this->monitoraggio_id_fonte_finanziamento = $db->getField("monitoraggio_ID_fonte_finanziamento", "Number", true);
-                $this->monitoraggio_note = $db->getField("monitoraggio_note", "Text", true);
-                $this->monitoraggio_data_chiusura = CoreHelper::getDateValueFromDB($db->getField("monitoraggio_data_chiusura", "Date", true));  
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto InvestimentiInvestimento con ID = ".$id);
-		}
-	}
-        
-    public static function getAll($filters = array()) {
-        $investimenti = array();
-
-        $db = ffDB_Sql::factory();
-
-        $where = "WHERE 1=1 ";
-        foreach($filters as $field => $value){
-            $where .= " AND ".$field."=".$db->toSql($value);
-        }
-        $sql = "
-                SELECT investimenti_investimento.*
-                FROM investimenti_investimento
-                " . $where . "
-                ORDER BY ID"
-                ;
-        $db->query($sql);
-        if ($db->nextRecord()){
-            do{
-                $investimento = new InvestimentiInvestimento();
-                $investimento->id = $db->getField("ID", "Number", true);
-                $investimento->codice_cdr_creazione = $db->getField("codice_cdr_creazione", "Text", true);
-                $investimento->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
-                $investimento->data_creazione = CoreHelper::getDateValueFromDB($db->getField("data_creazione", "Date", true));
-                $investimento->richiesta_codice_cdc = $db->getField("richiesta_codice_cdc", "Text", true);
-                $investimento->richiesta_nuova = CoreHelper::getBooleanValueFromDB($db->getField("richiesta_nuova", "Number", true));
-                $investimento->richiesta_matricola_bene_da_sostituire = $db->getField("richiesta_matricola_bene_da_sostituire", "Text", true);
-                $investimento->richiesta_id_categoria = $db->getField("richiesta_ID_categoria", "Number", true);
-                $investimento->richiesta_descrizione_bene = $db->getField("richiesta_descrizione_bene", "Text", true);
-                $investimento->richiesta_quantita = $db->getField("richiesta_quantita", "Number", true);
-                $investimento->richiesta_motivo = $db->getField("richiesta_motivo", "Text", true);
-                $investimento->richiesta_motivazioni_supporto = $db->getField("richiesta_motivazioni_supporto", "Text", true);
-                $investimento->richiesta_eventuali_costi_aggiuntivi = $db->getField("richiesta_eventuali_costi_aggiuntivi", "Text", true);
-                $investimento->richiesta_costo_stimato = $db->getField("richiesta_costo_stimato", "Number", true);
-                $investimento->richiesta_id_priorita = $db->getField("richiesta_ID_priorita", "Number", true);
-                $investimento->richiesta_tempi = $db->getField("richiesta_tempi", "Text", true);
-                $investimento->richiesta_ubicazione_bene = $db->getField("richiesta_ubicazione_bene", "Text", true);
-                $investimento->richiesta_data_chiusura = CoreHelper::getDateValueFromDB($db->getField("richiesta_data_chiusura", "Date", true));
-                $investimento->approvazione_id_parere_direzione_riferimento = $db->getField("approvazione_ID_parere_direzione_riferimento", "Number", true);
-                $investimento->approvazione_note_parere_direzione_riferimento = $db->getField("approvazione_note_parere_direzione_riferimento", "Text", true);
-                $investimento->approvazione_id_priorita_direzione_riferimento = $db->getField("approvazione_ID_priorita_direzione_riferimento", "Number", true);
-                $investimento->approvazione_id_tempi_stimati_direzione_riferimento = $db->getField("approvazione_ID_tempi_stimati_direzione_riferimento", "Number", true);
-                $investimento->approvazione_data = CoreHelper::getDateValueFromDB($db->getField("approvazione_data", "Date", true));
-                $investimento->approvazione_data_scarto_direzione_riferimento = CoreHelper::getDateValueFromDB($db->getField("approvazione_data_scarto_direzione_riferimento", "Date", true));                
-                $investimento->istruttoria_id_categoria_uoc_competente_anno = $db->getField("istruttoria_ID_categoria_uoc_competente_anno", "Number", true);
-                $investimento->istruttoria_data_avvio = CoreHelper::getDateValueFromDB($db->getField("istruttoria_data_avvio", "Date", true));
-                $investimento->istruttoria_costo_presunto = $db->getField("istruttoria_costo_presunto", "Number", true);
-                $investimento->istruttoria_modalita_acquisizione = $db->getField("istruttoria_modalita_acquisizione", "Text", true);
-                $investimento->istruttoria_id_tempi_stimati_uoc_competente = $db->getField("istruttoria_ID_tempi_stimati_uoc_competente", "Text", true);
-                $investimento->istruttoria_anno_soddisfacimento = $db->getField("istruttoria_anno_soddisfacimento", "Text", true);
-                $investimento->istruttoria_id_fonte_finanziamento_proposta = $db->getField("istruttoria_ID_fonte_finanziamento_proposta", "Text", true);
-                $investimento->istruttoria_id_categoria_registro_cespiti_proposta = $db->getField("istruttoria_ID_categoria_registro_cespiti_proposta", "Text", true);
-                $investimento->istruttoria_non_coerente_piano_investimenti = CoreHelper::getBooleanValueFromDB($db->getField("istruttoria_non_coerente_piano_investimenti", "Number", true));
-                $investimento->istruttoria_data_chiusura_uoc_competente = CoreHelper::getDateValueFromDB($db->getField("istruttoria_data_chiusura_uoc_competente", "Date", true));
-                $investimento->istruttoria_data_scarto_uoc_competente = CoreHelper::getDateValueFromDB($db->getField("istruttoria_data_scarto_uoc_competente", "Date", true));                                
-                $investimento->verifica_copertura_id_registro_cespiti = $db->getField("verifica_copertura_ID_registro_cespiti", "Number", true);                                
-                $investimento->verifica_copertura_id_fonte_finanziamento = $db->getField("verifica_copertura_ID_fonte_finanziamento", "Number", true);
-                $investimento->verifica_copertura_data_fine = CoreHelper::getDateValueFromDB($db->getField("verifica_copertura_data_fine", "Date", true));
-                $investimento->proposta_piano_investimenti_data = CoreHelper::getDateValueFromDB($db->getField("proposta_piano_investimenti_data", "Date", true));
-                $investimento->dg_id_parere = $db->getField("dg_ID_parere", "Number", true);
-                $investimento->dg_id_priorita = $db->getField("dg_ID_priorita", "Number", true);
-                $investimento->dg_id_tempi = $db->getField("dg_ID_tempi", "Number", true);
-                $investimento->dg_data_validazione_piano_investimenti = CoreHelper::getDateValueFromDB($db->getField("dg_data_validazione_piano_investimenti", "Date", true));
-                $investimento->dg_data_scarto_piano_investimenti = CoreHelper::getDateValueFromDB($db->getField("dg_data_scarto_piano_investimenti", "Date", true));
-                $investimento->monitoraggio_importo_definitivo = $db->getField("monitoraggio_importo_definitivo", "Number", true);
-                $investimento->monitoraggio_data = CoreHelper::getDateValueFromDB($db->getField("monitoraggio_data", "Date", true));
-                $investimento->monitoraggio_provvedimento = $db->getField("monitoraggio_provvedimento", "Text", true);
-                $investimento->monitoraggio_fatture = $db->getField("monitoraggio_fatture", "Text", true);
-                $investimento->monitoraggio_fornitore = $db->getField("monitoraggio_fornitore", "Text", true);
-                $investimento->monitoraggio_id_fonte_finanziamento = $db->getField("monitoraggio_ID_fonte_finanziamento", "Number", true);
-                $investimento->monitoraggio_note = $db->getField("monitoraggio_note", "Text", true);
-                $investimento->monitoraggio_data_chiusura = CoreHelper::getDateValueFromDB($db->getField("monitoraggio_data_chiusura", "Date", true));
-
-                $investimenti[] = $investimento;
-            }while($db->nextRecord());
-        }
-        return $investimenti;
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"ID", "direction"=>"ASC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
     }
     
     //funzione che restituisce lo stato d'avanzamento dell'investimento in base alla valorizzazione dei campi
@@ -331,7 +135,7 @@ class InvestimentiInvestimento {
 		//insert
 		if ($this->id !== null){            
 			$sql = "
-				UPDATE investimenti_investimento
+				UPDATE ".self::$tablename."
 				SET
                     codice_cdr_creazione=".$db->toSql($this->codice_cdr_creazione).",
                     ID_anno_budget=".$db->toSql($this->id_anno_budget).",
@@ -391,7 +195,7 @@ class InvestimentiInvestimento {
         else {
             
             $sql = "
-				INSERT INTO investimenti_investimento
+				INSERT INTO ".self::$tablename."
                     (
                     codice_cdr_creazione,
                     ID_anno_budget,
@@ -501,6 +305,6 @@ class InvestimentiInvestimento {
                     )";		            
         } 
         if (!$db->execute($sql))		
-            throw new Exception("Impossibile aggiornare l'oggetto InvestimentiInvestimento con ID='".$this->id."' nel DB");
+            throw new Exception("Impossibile aggiornare l'oggetto ".static::class." con ID='".$this->id."' nel DB");
 	}
 }

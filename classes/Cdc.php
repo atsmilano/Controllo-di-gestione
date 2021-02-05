@@ -1,5 +1,4 @@
 <?php
-
 class Cdc {
     public $id;
     public $id_anagrafica_cdc;

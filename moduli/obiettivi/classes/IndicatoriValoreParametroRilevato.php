@@ -4,11 +4,10 @@ class IndicatoriValoreParametroRilevato extends Entity{
     
     public function save() {
         $db = ffDb_Sql::factory();
-        
-        $calling_class = static::class;
+                
         if ($this->id == null) {
             // INSERT
-            $sql = "INSERT INTO ".$calling_class::$tablename." (
+            $sql = "INSERT INTO ".self::$tablename." (
                     ID_parametro, 
                     ID_periodo_rendicontazione,
                     ID_periodo_cruscotto, 
@@ -30,7 +29,7 @@ class IndicatoriValoreParametroRilevato extends Entity{
             ";
             
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile salvare l'oggetto ".$calling_class." "
+                throw new Exception("Impossibile salvare l'oggetto ".static::class." "
                     . "con ID = " . $this->id . " nel DB");
             }
         }

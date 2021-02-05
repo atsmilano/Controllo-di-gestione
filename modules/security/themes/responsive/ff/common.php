@@ -1057,6 +1057,7 @@ function mod_sec_process_error($sError, $framework_css = null) {
 		if(!$framework_css)
 			$framework_css = mod_sec_get_framework_css();
 	
+        $sError = ffTemplate::_get_word_by_code($sError);
 		$strError = '<div class="' . cm_getClassByDef($framework_css["error"]) . '">' . $sError . '</div>';
 	}
 	return $strError;

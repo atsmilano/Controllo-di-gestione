@@ -1,6 +1,6 @@
 <?php
 class ObiettiviRendicontazioneAllegato extends Allegato {
-    public $bridge_table_name = 'obiettivi_rendicontazione_allegato';
+    protected static $tablename = "obiettivi_rendicontazione_allegato";
     
     public function save($array_row) {
         $return = array();
@@ -23,7 +23,7 @@ class ObiettiviRendicontazioneAllegato extends Allegato {
                     $db->query($sql_allegato);
                     $allegato = parent::getAll(array('filename_plain' => $array_row['Allegato']['filename_plain']));
                     //Save custom fields in bdrige table
-                    $sql_bridge_query = "INSERT INTO obiettivi_rendicontazione_allegato (rendicontazione_id, allegato_id, createdAt ) VALUES (" .
+                    $sql_bridge_query = "INSERT INTO ".self::$tablename." (rendicontazione_id, allegato_id, createdAt ) VALUES (" .
                         $db->toSql($array_row['ObiettiviRendicontazioneAllegato']['rendicontazione_id']) . ", " .
                         $db->toSql($allegato->id) . ", " .
                         $db->toSql(date('Y-m-d H:i:s', time()))
@@ -61,11 +61,11 @@ class ObiettiviRendicontazioneAllegato extends Allegato {
         }
         $sql = "
             SELECT *
-            FROM obiettivi_rendicontazione_allegato
+            FROM ".self::$tablename."
                 INNER JOIN allegato ON (
-                    obiettivi_rendicontazione_allegato.allegato_id = allegato.ID
+                    ".self::$tablename.".allegato_id = allegato.ID AND allegato.deletedAt is null
                 )
-            " . $where . "
+            " . $where . "            
         ";
         $db->query($sql);
         if ($db->nextRecord()) {
@@ -93,11 +93,11 @@ class ObiettiviRendicontazioneAllegato extends Allegato {
     public function hardDelete() {
         $db = ffDB_Sql::factory();
         $sql = "
-            DELETE FROM obiettivi_rendicontazione_allegato
+            DELETE FROM ".self::$tablename."
             WHERE ID = ".$db->toSql($this->id);
 
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile eliminare l'oggetto RendicontazioneAllegato"
+            throw new Exception("Impossibile eliminare l'oggetto ".static::class
                 . " con ID = " . $this->id . " nel DB");
         }
         else {

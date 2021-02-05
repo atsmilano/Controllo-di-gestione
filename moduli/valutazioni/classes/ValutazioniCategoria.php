@@ -1,76 +1,10 @@
 <?php
-class ValutazioniCategoria {
-    public $id;
-    public $abbreviazione;
-    public $descrizione;
-    public $dirigenza;
-    public $formula_appartenenza_personale;
-    public $anno_inizio;
-    public $anno_fine;
+class ValutazioniCategoria extends Entity{
+    protected static $tablename = "valutazioni_categoria";
 
-    public function __construct($id = null) {
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                SELECT *
-                FROM valutazioni_categoria
-                WHERE valutazioni_categoria.ID = " . $db->toSql($id)
-            ;
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->abbreviazione = $db->getField("abbreviazione", "Text", true);
-                $this->descrizione = $db->getField("descrizione", "Text", true);
-                $this->id_anno_budget_inizio = $db->getField("ID_anno_budget_inizio", "Number", true);
-                $this->dirigenza = CoreHelper::getBooleanValueFromDB($db->getField("dirigenza", "Number", true));
-                $this->formula_appartenenza_personale = $db->getField("formula_appartenenza_personale", "Text", true);
-                $this->anno_inizio = $db->getField("anno_inizio", "Number", true);
-                if ($db->getField("anno_fine", "Number", true) == 0 || $db->getField("anno_fine", "Number", true) == null) {
-                    $this->anno_fine = null;
-                } else {
-                    $this->anno_fine = $db->getField("anno_fine", "Number", true);
-                }
-            } else
-                throw new Exception("Impossibile creare l'oggetto ValutazioniCategoria con ID = " . $id);
-        }
-    }
-
-    public static function getAll($filters = array()) {
-        $categorie = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value) {
-            $where .= "AND " . $field . "=" . $db->toSql($value) . " ";
-        }
-
-        $sql = "
-            SELECT valutazioni_categoria.*
-            FROM valutazioni_categoria
-            " . $where . "
-            ORDER BY valutazioni_categoria.descrizione DESC
-        ";
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $categoria = new ValutazioniCategoria();
-
-                $categoria->id = $db->getField("ID", "Number", true);
-                $categoria->abbreviazione = $db->getField("abbreviazione", "Text", true);
-                $categoria->descrizione = $db->getField("descrizione", "Text", true);
-                $categoria->dirigenza = CoreHelper::getBooleanValueFromDB($db->getField("dirigenza", "Number", true));
-                $categoria->formula_appartenenza_personale = $db->getField("formula_appartenenza_personale", "Text", true);
-                $categoria->anno_inizio = $db->getField("anno_inizio", "Number", true);
-                if ($db->getField("anno_fine", "Number", true) == 0 || $db->getField("anno_fine", "Number", true) == null) {
-                    $categoria->anno_fine = null;
-                } else {
-                    $categoria->anno_fine = $db->getField("anno_fine", "Number", true);
-                }
-                $categorie[] = $categoria;
-            } while ($db->nextRecord());
-        }
-        return $categorie;
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"descrizione", "direction"=>"DESC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
     }
 
     // generazione combo box delle categorie
@@ -131,12 +65,12 @@ class ValutazioniCategoria {
 
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_categoria
-                WHERE valutazioni_categoria.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniCategoria con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
             return true;
         }

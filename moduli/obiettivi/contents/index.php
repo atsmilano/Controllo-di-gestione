@@ -372,8 +372,8 @@ $grid_fields = array(
     "raggiungimento",
 );
 $grid_recordset_responsabile = array();
-foreach ($personale->getCdrResponsabilitaAnno($anno) as $cdr_resp) {    
-    $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $dateTimeObject);
+foreach ($personale->getCodiciCdrResponsabilitaAnno($anno) as $codice_cd_resp) {    
+    $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($codice_cd_resp, $dateTimeObject);
     $peso_tot_obiettivi_cdr = $cdr_resp_anno->getPesoTotaleObiettivi($anno);
     foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {
         //recupero del cdr											

@@ -25,7 +25,7 @@ $tpl->load_file("cruscotto_rendicontazione.html", "main");
 /* ---------------------------------------------------------------------------- */
 //estrazione dei periodi per l'anno
 $anno = $cm->oPage->globals["anno"]["value"];
-$periodi_rendicontazione = ObiettiviPeriodoRendicontazione::getAll(array("ID_anno_budget" => $anno->id), "DESC");
+$periodi_rendicontazione = ObiettiviPeriodoRendicontazione::getAll(array("ID_anno_budget" => $anno->id), array(array("fieldname"=>"ordinamento_anno", "direction"=>"DESC")));
 
 $date = $cm->oPage->globals["data_riferimento"]["value"];
 $anagrafica_cdr = AnagraficaCdrObiettivi::factoryFromCodice($cm->oPage->globals["cdr"]["value"]->codice, $date);

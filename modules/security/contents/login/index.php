@@ -133,7 +133,7 @@ if ($rc !== null)
 
 switch($frmAction)
 {
-	case "login":
+	case "login":       
 		$ret =	mod_sec_check_login($req["username"], $req["password"], $req["domain"], $options, $req["permanent_session"], $logged, $sError, false);
 		if ($ret["logged"] === true)
 		{

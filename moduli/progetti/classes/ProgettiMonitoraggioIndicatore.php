@@ -7,7 +7,7 @@ class ProgettiMonitoraggioIndicatore extends Entity {
         $db = ffDb_Sql::factory();
         $query = "
             SELECT *
-            FROM progetti_monitoraggio_indicatore pmi
+            FROM ".self::$tablename." pmi
             WHERE pmi.ID_monitoraggio = ".$db->toSql($id_monitoraggio)
         ;
 
@@ -31,7 +31,7 @@ class ProgettiMonitoraggioIndicatore extends Entity {
         $db = ffDb_Sql::factory();
         $query = "
             SELECT *
-            FROM progetti_monitoraggio_indicatore pmi
+            FROM ".self::$tablename." pmi
             WHERE pmi.ID_monitoraggio = ".$db->toSql($id_monitoraggio)."
                 AND pmi.ID_indicatore = ".$db->toSql($id_indicatore)
         ;
@@ -66,7 +66,7 @@ class ProgettiMonitoraggioIndicatore extends Entity {
 
         $insert_values = substr($insert_values, 0, strrpos($insert_values, ", "));
         $query_insert = "
-            INSERT INTO progetti_monitoraggio_indicatore (ID_monitoraggio, ID_indicatore, valore)
+            INSERT INTO ".self::$tablename." (ID_monitoraggio, ID_indicatore, valore)
             VALUES $insert_values
         ";
         try {
@@ -77,7 +77,7 @@ class ProgettiMonitoraggioIndicatore extends Entity {
         }
 
         if (!$result) {
-            throw new Exception("Impossibile inserire l'oggetto ProgettiMonitoraggioIndicatore nel DB. "
+            throw new Exception("Impossibile inserire l'oggetto ".static::class." nel DB. "
                 . "Di seguito i valori: ".json_encode($values));
         }
         return $result;
@@ -91,7 +91,7 @@ class ProgettiMonitoraggioIndicatore extends Entity {
         }
 
         $query_delete = "
-            DELETE FROM progetti_monitoraggio_indicatore
+            DELETE FROM ".self::$tablename."
             $where
         ";
 

@@ -1,96 +1,23 @@
 <?php
-class ObiettiviObiettivo {
-    public $id;
-    public $id_anno_budget;
-    public $codice_incr_anno;
-    public $suffisso_codice;
-    public $titolo;
-    public $descrizione;
-    public $indicatori;
-    public $formula_calcolo_raggiungimento;
-    public $id_origine;
-    public $id_tipo;
-    public $id_area_risultato;
-    public $id_area;
-    public $data_ultima_modifica;
-    public $data_eliminazione;
-    public $codice;
+class ObiettiviObiettivo extends Entity{
+    protected static $tablename = "obiettivi_obiettivo";
 
     public function __construct($id = null) {
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                SELECT obiettivi_obiettivo.*
-                FROM obiettivi_obiettivo
-                WHERE obiettivi_obiettivo.ID = " . $db->toSql($id)
-            ;
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
-                $this->codice_incr_anno = $db->getField("codice_incr_anno", "Text", true);
-                $this->suffisso_codice = $db->getField("suffisso_codice", "Text", true);
-                $this->titolo = $db->getField("titolo", "Text", true);
-                $this->descrizione = $db->getField("descrizione", "Text", true);
-                $this->indicatori = $db->getField("indicatori", "Text", true);
-                $this->formula_calcolo_raggiungimento = $db->getField("formula_calcolo_raggiungimento", "Text", true);
-                $this->id_origine = $db->getField("ID_origine", "Number", true);
-                $this->id_tipo = $db->getField("ID_tipo", "Number", true);
-                $this->id_area_risultato = $db->getField("ID_area_risultato", "Number", true);
-                $this->id_area = $db->getField("ID_area", "Number", true);
-                $this->data_ultima_modifica = CoreHelper::getDateValueFromDB($db->getField("data_ultima_modifica", "Date", true));
-                $this->data_eliminazione = CoreHelper::getDateValueFromDB($db->getField("data_eliminazione", "Date", true));
-                //generazione codice
-                $anno_budget = new AnnoBudget($this->id_anno_budget);
-                $this->codice = $anno_budget->descrizione . "-" . str_pad($this->codice_incr_anno, 4, "0", STR_PAD_LEFT) . $this->suffisso_codice;
-            } else
-                throw new Exception("Impossibile creare l'oggetto Obiettivo con ID = " . $id);
-        }
+        parent::__construct($id);
+        //generazione codice
+        $anno_budget = new AnnoBudget($this->id_anno_budget);
+        $this->codice = $anno_budget->descrizione . "-" . str_pad($this->codice_incr_anno, 4, "0", STR_PAD_LEFT) . $this->suffisso_codice;                    
     }
 
-    public static function getAll($filters = array()) {
-        $obiettivi = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value) {
-            $where .= "AND " . $field . "=" . $db->toSql($value) . " ";
-        }
-
-        $sql = "
-            SELECT obiettivi_obiettivo.*
-            FROM obiettivi_obiettivo
-            " . $where . "
-            ORDER BY obiettivi_obiettivo.codice_incr_anno DESC
-        ";
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $obiettivo = new ObiettiviObiettivo();
-                $obiettivo->id = $db->getField("ID", "Number", true);
-                $obiettivo->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
-                $obiettivo->codice_incr_anno = $db->getField("codice_incr_anno", "Text", true);
-                $obiettivo->suffisso_codice = $db->getField("suffisso_codice", "Text", true);
-                $obiettivo->titolo = $db->getField("titolo", "Text", true);
-                $obiettivo->descrizione = $db->getField("descrizione", "Text", true);
-                $obiettivo->indicatori = $db->getField("indicatori", "Text", true);
-                $obiettivo->formula_calcolo_raggiungimento = $db->getField("formula_calcolo_raggiungimento", "Text", true);
-                $obiettivo->id_origine = $db->getField("ID_origine", "Number", true);
-                $obiettivo->id_tipo = $db->getField("ID_tipo", "Number", true);
-                $obiettivo->id_area_risultato = $db->getField("ID_area_risultato", "Number", true);
-                $obiettivo->id_area = $db->getField("ID_area", "Number", true);
-                $obiettivo->data_ultima_modifica = CoreHelper::getDateValueFromDB($db->getField("data_ultima_modifica", "Date", true));
-                $obiettivo->data_eliminazione = CoreHelper::getDateValueFromDB($db->getField("data_eliminazione", "Date", true));
-
-                //generazione codice
-                $anno_budget = new AnnoBudget($obiettivo->id_anno_budget);
-                $obiettivo->codice = $anno_budget->descrizione . "-" . str_pad($obiettivo->codice_incr_anno, 4, "0", STR_PAD_LEFT) . $obiettivo->suffisso_codice;
-                $obiettivi[] = $obiettivo;
-            } while ($db->nextRecord());
+    public static function getAll($where=array(), $order=array()) {                
+        //metodo classe entity
+        $obiettivi = parent::getAll($where, $order);
+        foreach ($obiettivi as $key => $obiettivo) {
+            $anno_budget = new AnnoBudget($obiettivo->id_anno_budget);
+            $obiettivi[$key]->codice = $anno_budget->descrizione . "-" . str_pad($obiettivo->codice_incr_anno, 4, "0", STR_PAD_LEFT) . $obiettivo->suffisso_codice;            
         }
         return $obiettivi;
-    }
+    }        
 
     //entità collegate
     public function getObiettivoCdrAssociati($cdr = null) {

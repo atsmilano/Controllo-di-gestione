@@ -9,7 +9,7 @@ class IndicatoriValoreParametroIndicatoreRendicontazione extends Entity {
         //update
         if ($this->id == null) {
             //TODO ripristino del record eliminato logicamente in caso di corrispondenza invece che inserimento di un nuovo record
-            $sql = "INSERT INTO indicatori_valore_parametro_indicatore_rendicontazione 
+            $sql = "INSERT INTO ".self::$tablename." 
                     (
                         ID_rendicontazione,				
                         ID_parametro_indicatore,
@@ -21,28 +21,28 @@ class IndicatoriValoreParametroIndicatoreRendicontazione extends Entity {
                         " . (strlen($this->valore) ? $db->toSql($this->valore) : "null") . "
                     );";
         } else {
-            $sql = "UPDATE indicatori_valore_parametro_indicatore_rendicontazione
+            $sql = "UPDATE ".self::$tablename."
                     SET					
                         ID_rendicontazione = " . (strlen($this->id_rendicontazione) ? $db->toSql($this->id_rendicontazione) : "null") . ",						
                         ID_parametro_indicatore = " . (strlen($this->id_parametro_indicatore) ? $db->toSql($this->id_parametro_indicatore) : "null") . ",
                         valore = " . (strlen($this->valore) ? $db->toSql($this->valore) : "null") . "                       
                     WHERE 
-                        indicatori_valore_parametro_indicatore_rendicontazione.ID = " . $db->toSql($this->id) . "
+                        ".self::$tablename.".ID = " . $db->toSql($this->id) . "
                     ";
         }
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile salvare l'oggetto IndicatoriValoreParametroIndicatoreRendicontazione con ID = " . $this->id . " nel DB");
+            throw new Exception("Impossibile salvare l'oggetto ".static::class." con ID = " . $this->id . " nel DB");
         }
     }
     
     public function delete() {
         $db = ffDB_Sql::factory();
-        $sql = "DELETE FROM indicatori_valore_parametro_indicatore_rendicontazione
+        $sql = "DELETE FROM ".self::$tablename."
             WHERE ID = ".$db->toSql($this->id);
             
         if (!$db->execute($sql)) {
             throw new Exception("Impossibile eliminare l'oggetto "
-                . "IndicatoriValoreParametroIndicatoreRendicontazione con ID = " . $this->id . " nel DB");
+                . static::class." con ID = " . $this->id . " nel DB");
         }        
         return true;
     }

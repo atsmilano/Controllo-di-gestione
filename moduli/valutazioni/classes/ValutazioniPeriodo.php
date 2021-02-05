@@ -1,47 +1,6 @@
 <?php
-class ValutazioniPeriodo {
-    public $id;
-    public $descrizione;
-    public $id_anno_budget;
-    public $inibizione_visualizzazione_totali;
-    public $inibizione_visualizzazione_ambiti_totali;
-    public $inibizione_visualizzazione_data_colloquio;
-    public $data_inizio;
-    public $data_fine;
-    public $data_apertura_compilazione;
-    public $data_chiusura_autovalutazione;
-    public $data_chiusura_valutatore;
-    public $data_chiusura_valutato;
-
-    public function __construct($id = null) {
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                    SELECT 
-                        *
-                    FROM
-                        valutazioni_periodo
-                    WHERE
-                        valutazioni_periodo.ID = " . $db->toSql($id);
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->descrizione = $db->getField("descrizione", "Text", true);
-                $this->id_anno_budget = $db->getField("ID_anno_budget", "Number", true);
-                $this->inibizione_visualizzazione_totali = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_totali", "Text", true));
-                $this->inibizione_visualizzazione_ambiti_totali = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_ambiti_totali", "Text", true));
-                $this->inibizione_visualizzazione_data_colloquio = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_data_colloquio", "Text", true));                
-                $this->data_inizio = $db->getField("data_inizio", "Date", true);
-                $this->data_fine = CoreHelper::getDateValueFromDB($db->getField("data_fine", "Date", true));
-                $this->data_apertura_compilazione = CoreHelper::getDateValueFromDB($db->getField("data_apertura_compilazione", "Date", true));
-                $this->data_chiusura_autovalutazione = CoreHelper::getDateValueFromDB($db->getField("data_chiusura_autovalutazione", "Date", true));
-                $this->data_chiusura_valutatore = CoreHelper::getDateValueFromDB($db->getField("data_chiusura_valutatore", "Date", true));
-                $this->data_chiusura_valutato = CoreHelper::getDateValueFromDB($db->getField("data_chiusura_valutato", "Date", true));
-            } else
-                throw new Exception("Impossibile creare l'oggetto ValutazioniPeriodo con ID = " . $id);
-        }
-    }
+class ValutazioniPeriodo extends Entity{
+    protected static $tablename = "valutazioni_periodo";
 
     public static function getAll($filters = array()) {
         $periodi = array();
@@ -54,14 +13,14 @@ class ValutazioniPeriodo {
 
         $sql = "
             SELECT 
-                valutazioni_periodo.*
+                ".self::$tablename.".*
             FROM
-                valutazioni_periodo
-                INNER JOIN anno_budget ON valutazioni_periodo.ID_anno_budget = anno_budget.ID
+                ".self::$tablename."
+                INNER JOIN anno_budget ON ".self::$tablename.".ID_anno_budget = anno_budget.ID
             " . $where . "
             ORDER BY
                 anno_budget.descrizione DESC,
-                valutazioni_periodo.data_fine DESC
+                ".self::$tablename.".data_fine DESC
         ";
         $db->query($sql);
         if ($db->nextRecord()) {
@@ -453,12 +412,12 @@ class ValutazioniPeriodo {
             }
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_periodo
-                WHERE valutazioni_periodo.ID = " . $db->toSql($this->id) . "
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = " . $db->toSql($this->id) . "
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniPeriodo con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
             return true;
         }

@@ -1,46 +1,18 @@
 <?php
-class Personale {		
-    public $id;
-    public $matricola;
-    public $cognome;
-    public $nome;
-
-    public function __construct($id = null){				
-		if ($id !== null) {
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						personale.*
-					FROM
-						personale
-					WHERE
-						personale.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord()){			
-				$this->id = $db->getField("ID", "Number", true);
-				$this->matricola = $db->getField("matricola", "Text", true);			
-				$this->cognome = $db->getField("cognome", "Text", true);			
-				$this->nome = $db->getField("nome", "Text", true);
-			}	
-			else {
-				throw new Exception("Impossibile creare l'oggetto Personale con ID = ".$id);
-            }
-		}
-    }
-	
+class Personale extends Entity{		
+    protected static $tablename = "personale";
+    	
 	public static function factoryFromMatricola($matricola) {
         $calling_class_name = static::class;
 		$db = ffDb_Sql::factory();
 
         $sql = "
                 SELECT 
-                    personale.ID
+                    ".self::$tablename.".ID
                 FROM
-                    personale
+                    ".self::$tablename."
                 WHERE
-                    personale.matricola = " . $db->toSql($matricola) 
+                    ".self::$tablename.".matricola = " . $db->toSql($matricola) 
                 ;
 		$db->query($sql);
         if ($db->nextRecord()){
@@ -50,35 +22,12 @@ class Personale {
 	}
 	
     //restituisce array con tutti i dipendenti in anagrafica
-    public static function getAll ($filters=array()){			
-        $calling_class_name = static::class;
-        $personale = array();
-     
-		$db = ffDB_Sql::factory();
-		$where = "WHERE 1=1 ";
-		foreach ($filters as $field => $value){
-			$where .= "AND ".$field."=".$db->toSql($value)." ";		
-        }
-		      		       
-        $sql = "SELECT personale.*
-                FROM personale
-				".$where."
-                ORDER BY personale.cognome, personale.nome";
-        $db->query($sql);
-        if ($db->nextRecord()){            
-            do{	
-				$dipendente = new $calling_class_name();
-				$dipendente->id = $db->getField("ID", "Number", true);
-				$dipendente->matricola = $db->getField("matricola", "Text", true);			
-				$dipendente->cognome = $db->getField("cognome", "Text", true);			
-				$dipendente->nome = $db->getField("nome", "Text", true);
-				$personale[] = $dipendente;                               
-            }while ($db->nextRecord());            
-        }
-        return $personale;
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"cognome", "direction"=>"ASC"),array("fieldname"=>"nome", "direction"=>"ASC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
     }
 	
-	//restituisce un array con i cdc d'afferenza di un dipendente alla data per un tipo piano
+    //restituisce un array con i cdc d'afferenza di un dipendente alla data per un tipo piano
     //viene restituito un array di array contententi PersonaleCdc e Cdc    
     public function getCdcAfferenzaInData(TipoPianoCdr $tipo_piano_cdr, $date){
             $afferenza = array();
@@ -212,20 +161,13 @@ class Personale {
 
     //viene restituito un array con i cdr di responsabilità diretta in un anno di budget (anche su piani cdr differenti)
     //resitutisce un array con oggetti PianoCdr piano_cdr, Cdr cdr, boolean resp_diretta
-    public function getCdrResponsabilitaAnno(AnnoBudget $anno, TipoPianoCdr $tipo_piano = null){
-        $elenco_cdr_resp = array();
-        foreach ($anno->getPianiCdr($tipo_piano) as $piano_anno){
-            foreach($piano_anno->getCdr() as $cdr){    
-                $responsabile = $cdr->getResponsabile(DateTime::createFromFormat('Y-m-d', $anno->descrizione.'-12-31'));
-
-                if($responsabile->id_personale == $this->id){					
-                    $elenco_cdr_resp[] = array(
-                        "piano" => $piano_anno, 
-                        "cdr" => $cdr
-                    );
-                }
+    public function getCodiciCdrResponsabilitaAnno(AnnoBudget $anno, TipoPianoCdr $tipo_piano = null){        
+        $elenco_cdr_resp = array();                
+        foreach (ResponsabileCdr::getResponsabiliCdrAnno($anno) as $responsabile_anno) {
+            if ($responsabile_anno->matricola_responsabile == $this->matricola) {
+                $elenco_cdr_resp[] = $responsabile_anno->codice_cdr;
             }
-        }			
+        }                     
         return $elenco_cdr_resp;
     }
 

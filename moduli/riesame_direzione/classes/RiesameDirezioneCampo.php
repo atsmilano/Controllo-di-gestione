@@ -1,14 +1,6 @@
 <?php
-
-class RiesameDirezioneCampo {		
-	public $id;
-    public $nome;
-	public $descrizione;
-    public $id_tipo_campo;
-    public $ordinamento;
-    public $id_sezione;
-    public $anno_introduzione;
-    public $anno_termine;
+class RiesameDirezioneCampo extends Entity{		
+	protected static $tablename = "riesame_direzione_campo";
 	
     public static $tipi_campo = array	(
                                                 array(  "ID" => 1,
@@ -19,65 +11,11 @@ class RiesameDirezioneCampo {
                                                     ),
 												);
     
-	public function __construct($id=null){				
-		if ($id !== null){
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						*
-					FROM
-						riesame_direzione_campo                       
-					WHERE
-						riesame_direzione_campo.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord()){
-				$this->id = $db->getField("ID", "Number", true);
-                $this->nome = $db->getField("nome", "Text", true);
-				$this->descrizione = $db->getField("descrizione", "Text", true);
-                $this->id_tipo_campo = $db->getField("ID_tipo_campo", "Number", true);
-                $this->ordinamento = $db->getField("ordinamento", "Number", true);
-                $this->id_sezione = $db->getField("ID_sezione", "Number", true);
-                $this->anno_introduzione = $db->getField("anno_introduzione", "Number", true);
-                if ((int)$db->getField("anno_termine", "Text", true) !== 0) {
-					$this->anno_termine = $db->getField("anno_termine", "Text", true);
-				}
-				else {
-					$this->anno_termine = null;
-				}
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto RiesameDirezioneCampo con ID = ".$id);
-		}
-	}
-    
-    public static function getAll($filters=array()){			
-		$campi = array();
-        
-		$db = ffDb_Sql::factory();
-		$where = "WHERE 1=1 ";
-		foreach ($filters as $field => $value){
-			$where .= "AND ".$field."=".$db->toSql($value)." ";		
-		}
-        
-		$sql = "
-				SELECT 
-					riesame_direzione_campo.*
-				FROM
-					riesame_direzione_campo
-                    " . $where . "
-                ORDER BY
-                    riesame_direzione_campo.ordinamento
-				";
-		$db->query($sql);
-		if ($db->nextRecord()){
-            do {
-                $campi[] = new RiesameDirezioneCampo($db->getField("ID", "Number", true));			
-            } while ($db->nextRecord());
-		}	
-		return $campi;
-	}
+    //restituisce array con tutti campi del riesame ordinati per ordinamento
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"ordinamento", "direction"=>"ASC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
+    }
     
     public static function getCampiAnno (AnnoBudget $anno) {
         //i campi verranno restituiti secondo ordinamento nel db per via dei valori restituiti da getAll

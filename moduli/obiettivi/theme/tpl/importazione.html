@@ -1,3 +1,4 @@
+<h2>Importazione valori parametri</h2>
 <div id="importazione">
     <div id="wait"><i class="fa fa-spinner fa-spin fa-5x" title="Caricamento..."></i></div>
     <div id="download-tracciato">
@@ -41,7 +42,7 @@
                 $("#upload-tracciato").append(uploadForm);
                 
                 $("#upload-tracciato form").submit(function(e) {
-                    $("#wait").show();
+                    $("#wait").modal("show");
                     e.preventDefault();
                     
                     let formData = new FormData(this);
@@ -79,7 +80,7 @@
                             $("#upload-tracciato-error").append("Si è verificato un errore inatteso");
                         },
                         complete: function() {
-                            $("#wait").hide();
+                            $("#wait").modal("hide");
                             // Clear input field per obbligare l'utente a ricaricare il file
                             $("#file_input_obj").val("");
                         },

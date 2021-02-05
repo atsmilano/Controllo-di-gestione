@@ -1,5 +1,4 @@
 <?php
-
 class CoanFpSecondo extends Entity {
     protected static $tablename = "coan_fp_secondo";
     

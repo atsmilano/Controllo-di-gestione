@@ -1,5 +1,4 @@
 <?php
-
 class CostiRicaviFp extends Entity {
     protected static $tablename = "costi_ricavi_fp";
 

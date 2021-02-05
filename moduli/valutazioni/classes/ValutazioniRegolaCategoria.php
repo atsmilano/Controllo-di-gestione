@@ -106,10 +106,10 @@ class ValutazioniRegolaCategoria extends Entity{
             case 6:
                 //recupero eventuale responsabilità                
                 $anno_riferimento = new ValutazioniAnnoBudget($personale->periodo_riferimento->id_anno_budget);
-                $cdr_responsabilità = $personale->getCdrResponsabilitaAnno($anno_riferimento);
+                $codici_cdr_responsabilità = $personale->getCodiciCdrResponsabilitaAnno($anno_riferimento);
                 if ($this->id_attributo == 4) {                                    
                     //con responsibilità
-                    if (!empty($cdr_responsabilità)) {
+                    if (!empty($codici_cdr_responsabilità)) {
                         $resp = 1;                      
                     }
                     //senza responsabilità
@@ -126,16 +126,18 @@ class ValutazioniRegolaCategoria extends Entity{
                     //per poterne verificare la tipologia
                     $max_lvl = "ND";
                     $return = null;
-                    foreach ($cdr_responsabilità as $cdr_resp) {
+                    foreach ($codici_cdr_responsabilità as $codice_cdr_resp) {
+                        $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $personale->periodo_riferimento->data_fine);
+                        $cdr_resp = Cdr::factoryFromCodice($codice_cdr_resp, $piano_cdr);
                         //se il livello è quello di radice viene restituito senza continuare la verifica
                         if ($max_lvl == 0) {
-                            $cdr_resp_max = $cdr_resp["cdr"];
+                            $cdr_resp_max = $cdr_resp;
                             break;
                         }
                         $cdr_resp_lvl = $cdr_resp->getLivelloGerarchico();
                         if (($max_lvl == "ND") || ($cdr_resp_lvl < $max_lvl)) {
                             $max_lvl = $cdr_resp_lvl;
-                            $cdr_resp_max = $cdr_resp["cdr"];
+                            $cdr_resp_max = $cdr_resp;
                         }                        
                     }    
                     if ($cdr_resp_max->id_tipo_cdr == $this->valore) {
@@ -166,12 +168,12 @@ class ValutazioniRegolaCategoria extends Entity{
         if($this->canDelete()) {
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_regola_categoria
-                WHERE valutazioni_regola_categoria.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniRegolaCategoria con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
 
             return true;

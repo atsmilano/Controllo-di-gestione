@@ -6,7 +6,7 @@ class ProgettiProgetto extends Entity {
         $db = ffDb_Sql::factory();
         $query = "
             SELECT *
-            FROM progetti_progetto pp
+            FROM ".self::$tablename." pp
             WHERE (
                     pp.matricola_utente_creazione = ".$db->toSql($user_matricola)." OR
                     pp.matricola_responsabile_progetto = ".$db->toSql($user_matricola)." OR
@@ -39,7 +39,7 @@ class ProgettiProgetto extends Entity {
         $db = ffDB_Sql::factory();
 
         $query_update = "
-            UPDATE progetti_progetto
+            UPDATE ".self::$tablename."
             SET oracle_erp = ".$db->toSql($this->oracle_erp).",
                 note = ".$db->toSql($this->note).",
                 stato = ".$db->toSql($this->stato).",
@@ -48,7 +48,7 @@ class ProgettiProgetto extends Entity {
             WHERE ID = ".$db->toSql($this->id);
         $result = $db->execute($query_update);
         if (!$result) {
-            throw new Exception("Impossibile aggiornare l'oggetto ProgettiProgetto con ID='" . $this->id . "' nel DB");
+            throw new Exception("Impossibile aggiornare l'oggetto ".static::class." con ID='" . $this->id . "' nel DB");
         }
         return $result;
     }
@@ -56,13 +56,13 @@ class ProgettiProgetto extends Entity {
     public function saveChiudiProgetto() {
         $db = ffDB_Sql::factory();
         $query_update = "
-            UPDATE progetti_progetto
+            UPDATE ".self::$tablename."
             SET stato = ".$db->toSql($this->stato)."
             WHERE ID = ".$db->toSql($this->id);
 
         $result = $db->execute($query_update);
         if (!$result) {
-            throw new Exception("Impossibile chiudere/riapire l'oggetto ProgettiProgetto con ID='" . $this->id . "' nel DB");
+            throw new Exception("Impossibile chiudere/riapire l'oggetto ".static::class." con ID='" . $this->id . "' nel DB");
         }
         return $result;
     }
@@ -71,7 +71,7 @@ class ProgettiProgetto extends Entity {
         $db = ffDB_Sql::factory();
 
         $query_update = "
-            UPDATE progetti_progetto
+            UPDATE ".self::$tablename."
             SET stato = ".$db->toSql($this->stato).",
                 validazione_finale = ".$db->toSql($this->validazione_finale).",
                 note_validazione_finale = ".$db->toSql($this->note_validazione_finale).",
@@ -80,7 +80,7 @@ class ProgettiProgetto extends Entity {
 
         $result = $db->execute($query_update);
         if (!$result) {
-            throw new Exception("Impossibile aggiornare l'oggetto ProgettiProgetto con ID='" . $this->id . "' nel DB");
+            throw new Exception("Impossibile aggiornare l'oggetto ".static::class." con ID='" . $this->id . "' nel DB");
         }
         return $result;
     }

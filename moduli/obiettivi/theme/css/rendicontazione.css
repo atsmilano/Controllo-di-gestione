@@ -132,3 +132,9 @@ div.parametri_indicatore div.internal_left_indicatore div {
     min-height: 70px;
     position: relative;
 }
+
+#rendicontazione-modify .error.bs-callout.bs-callout-danger {
+    background-color: #d87f7f;
+    border-color: #a04545;
+    color: black;
+}

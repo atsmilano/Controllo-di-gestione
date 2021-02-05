@@ -6,13 +6,12 @@ class TipoCdr extends Entity {
     public function getPadri () {
         $tipi_cdr_padri = array();
         
-		foreach(TipoCdrPadre::getAll() as $tipo_cdr_padre)
-		{
+		foreach(TipoCdrPadre::getAll() as $tipo_cdr_padre){
+            $calling_class = static::class;
 			//l'accoppiata tipo_cdr e tipo_cdr_padre è univoca, nel caso in cui il tipo_cdr sia quello dell'oggetto viene restituito il padre
-			if ($tipo_cdr_padre->id_tipo_cdr == $this->id)
-			{
+			if ($tipo_cdr_padre->id_tipo_cdr == $this->id){
 				try {
-					$tipi_cdr_padri[] = new TipoCdr($tipo_cdr_padre->id_tipo_cdr_padre);					
+					$tipi_cdr_padri[] = new $calling_class($tipo_cdr_padre->id_tipo_cdr_padre);					
 				} 				
 				catch (Exception $ex) {
 					ffErrorHandler::raise($ex->getMessage());
@@ -26,11 +25,9 @@ class TipoCdr extends Entity {
 	public function getPadriRelation (){
         $tipi_cdr_padri = array();
         
-		foreach(TipoCdrPadre::getAll() as $tipo_cdr_padre)
-		{
+		foreach(TipoCdrPadre::getAll() as $tipo_cdr_padre){
 			//l'accoppiata tipo_cdr e tipo_cdr_padre è univoca, nel caso in cui il tipo_cdr sia quello dell'oggetto viene restituito il padre
-			if ($tipo_cdr_padre->id_tipo_cdr == $this->id)
-			{
+			if ($tipo_cdr_padre->id_tipo_cdr == $this->id){
 				try {
 					$tipi_cdr_padri[] = new TipoCdrPadre($tipo_cdr_padre->id);					
 				} 				
@@ -51,7 +48,8 @@ class TipoCdr extends Entity {
 			//se il tipo cdr risulta padre il figlio viene accodato all'array da restituire
 			if ($this->id == $tipo_cdr_padre->id_tipo_cdr_padre){
 				try {
-					$tipi_cdr_figli[] = new TipoCdr($tipo_cdr_padre->id_tipo_cdr);					
+                    $calling_class = static::class;
+					$tipi_cdr_figli[] = new $calling_class($tipo_cdr_padre->id_tipo_cdr);					
 				} 				
 				catch (Exception $ex) {
 					ffErrorHandler::raise($ex->getMessage());
