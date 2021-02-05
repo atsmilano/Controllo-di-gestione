@@ -2,24 +2,32 @@
 class AnagraficaCdrObiettivi extends AnagraficaCdr {
     //restituisce tutti gli obiettivi non eliminati logicamente per l'anno
     public function getObiettiviCdrAnno(AnnoBudget $anno) {
-        $ob_obiettivi_cdr_anno = array();
-        foreach (ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id)) as $obiettivo_anno) {
-            if ($obiettivo_anno->data_eliminazione == null) {
-                foreach ($obiettivo_anno->getObiettivoCdrAssociati($this) as $cdr_obiettivo_anno) {
-                    if ($cdr_obiettivo_anno->codice_cdr == $this->codice && $cdr_obiettivo_anno->data_eliminazione == null) {
-                        $ob_obiettivi_cdr_anno[] = $cdr_obiettivo_anno;
-                    }
-                }
-            }
+        $ob_obiettivi_cdr_anno = array();        
+        
+        $obiettivi_cdr = ObiettiviObiettivoCdr::getAll(array("codice_cdr" => $this->codice));
+        foreach(ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id)) as $obiettivo_anno) {
+            foreach($obiettivi_cdr as $obiettivo_cdr) {                                                
+                if ($obiettivo_anno->data_eliminazione == null
+                    && $obiettivo_cdr->data_eliminazione == null
+                    && $obiettivo_anno->id == $obiettivo_cdr->id_obiettivo) {
+                    $ob_obiettivi_cdr_anno[] = $obiettivo_cdr;
+                } 
+            }            
         }
+
         return $ob_obiettivi_cdr_anno;
     }
 
     //restituisce il peso tottale degli obiettivi assegnati al cdr in un anno di budget, eventualmente escluso l'obiettivo passato come secondo parametro
     //le verifiche sulla data eliminazione vengono effettuate in getObiettiviCdrAnno
-    public function getPesoTotaleObiettivi(AnnoBudget $anno, ObiettiviObiettivo $obiettivo = null) {
+    //è possibile passare come parametro un array di oggetti di tipo ObiettiviObiettivoCdr
+    //rappresentante gli obiettivi cdr assegnati oer il calcolo del peso
+    public function getPesoTotaleObiettivi(AnnoBudget $anno, ObiettiviObiettivo $obiettivo = null, $obiettivi_cdr_anno = null) {
         $peso_totale_cdr = 0;
-        foreach ($this->getObiettiviCdrAnno($anno) as $obiettivo_cdr) {
+        if ($obiettivi_cdr_anno == null) {
+            $obiettivi_cdr_anno = $this->getObiettiviCdrAnno($anno);
+        }
+        foreach ($obiettivi_cdr_anno as $obiettivo_cdr) {
             if ($obiettivo == null || $obiettivo->id !== $obiettivo_cdr->id_obiettivo) {
                 $peso_totale_cdr += $obiettivo_cdr->peso;
             }

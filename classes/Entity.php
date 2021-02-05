@@ -43,20 +43,58 @@ class Entity {
     //costruttore
     public function __construct($id = null) {
         if ($id !== null) {
-            $calling_class_name = static::class;
-            $record = $calling_class_name::getAll(array("ID" => $id));
-            if (!count($record) > 0) {
-                throw new Exception("Impossibile creare l'oggetto " . $calling_class_name . " con ID = " . $id);
+            $calling_class = static::class;
+
+            //******************************************************************
+            //Il seguente codice sostituisce la soluzione originale
+            //$record = $calling_class::getAll(array("ID" => $id));
+            //Si introduce la ridondanza per evitare errori nell'estensione della classe in caso overriding delle classi getAll
+            //che generalmente richiamano la getAll di Entity valorizzando l'array dei filtri o degli ordinamenti
+            //In questi casi l'utilizzo del costruttore non risulta funzionare correttamente
+                                    
+            $db = ffDB_Sql::factory();            
+            $sql = "SELECT * FROM ".$calling_class::$tablename." WHERE ID=".$id;
+            $db->query($sql);
+            if ($db->nextRecord()) {
+                do {
+                    $record = new $calling_class();
+                    foreach ($db->fields as $field) {
+                        //viene recuperato il tipo di campo per recuperare il valore corretto                     
+                        $found = array_search($field->type, array_column(Entity::$db_types, "id_db_type"));
+                        $app_type = Entity::$db_types[$found]["app_type"];
+                        //vengono inizializzati i dati in base al tipo di campo                    
+                        if ($app_type == "Date") {
+                            $record->{strtolower($field->name)} = CoreHelper::getDateValueFromDB($db->getField($field->name, $app_type, true));
+                        }
+                        //in caso di valori numerici comunque viene restituito null nel caso in cui il campo non sia definito
+                        else if ($app_type == "Number") {
+                            if ($db->getField($field->name, $app_type, true) == null) {
+                                $record->{strtolower($field->name)} = null;
+                            } else {
+                                $record->{strtolower($field->name)} = $db->getField($field->name, $app_type, true);
+                            }
+                        } else if ($app_type == "Boolean") {
+                            $record->{strtolower($field->name)} = CoreHelper::getBooleanValueFromDB($db->getField($field->name, "Number", true));
+                        } else {
+                            $record->{strtolower($field->name)} = $db->getField($field->name, $app_type, true);
+                        }
+                    }
+                    $result[] = $record;
+                } while ($db->nextRecord());
+            }
+            //******************************************************************
+            if (!count($result) > 0) {
+                throw new Exception("Impossibile creare l'oggetto " . $calling_class . " con ID = " . $id);
             } else {
-                foreach (get_object_vars($record[0]) as $key => $val) {
+                foreach (get_object_vars($result[0]) as $key => $val) {
                     $this->$key = $val;
                 }
             }
-        }        
+        } 
     } 
     
     //getAll
-    //where = array("fieldname"=>"value=);
+    //where = array("fieldname"=>"value);
     //order = array(array("fieldname"=>nome_campo, "direction"=>ASC/DESC));
     public static function getAll($where = array(), $order = array()) {
         $result = array();
@@ -138,7 +176,32 @@ class Entity {
         }
         return $result;
     }
-    
+        
+    //metodo per la generazione di una matrice dati rappresentante una collezione di oggetti della classe, con intestazione
+    //i parametri determinano i filtri con lo stesso funzionamento  di getAll 
+    public static function getMatriceDati ($where = array(), $order = array()) {
+        $calling_class = static::class;        
+        
+        $matrice = array();
+        $intestazione = array();
+        $first = true;
+        foreach($calling_class::getAll($where, $order) as $obj) {                            
+            $record= array();            
+            foreach ($obj as $attributo => $valore){
+                if($first == true) {
+                    $intestazione[] = $attributo;
+                }
+                $record[] = $valore;              
+            }   
+            if ($first == true) {
+                $matrice[] = $intestazione;
+                $first = false;
+            }            
+            $matrice[] = $record;    
+        }
+        return $matrice;
+    }
+                      
     public static function describe($hide_columns = array(), $table_name=null) {  
         if ($table_name == null) {
             $calling_class = static::class;

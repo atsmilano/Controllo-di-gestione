@@ -1,46 +1,11 @@
 <?php
-class ValutazioniItem {		
-	public $id;
-	public $nome;
-	public $descrizione;
-	public $peso;
-	public $anno_introduzione;
-	public $anno_esclusione;
-	public $id_area_item;
-	public $ordine_visualizzazione;
+class ValutazioniItem extends Entity{		
+	protected static $tablename = "valutazioni_item";
 	
-	public function __construct($id=null){				
-		if ($id !== null){
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						*
-					FROM
-						valutazioni_item
-					WHERE
-						valutazioni_item.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord())
-			{
-				$this->id = $db->getField("ID", "Number", true);
-				$this->nome = $db->getField("nome", "Text", true);
-				$this->peso = $db->getField("peso", "Number", true);
-				$this->descrizione = $db->getField("descrizione", "Text", true);
-				$this->anno_introduzione = $db->getField("anno_introduzione", "Number", true);
-				if($db->getField("anno_esclusione", "Number", true) == 0 || $db->getField("anno_esclusione", "Number", true) == null){
-					$this->anno_esclusione = null;
-				}
-				else{
-					$this->anno_esclusione = $db->getField("anno_esclusione", "Number", true);
-				}	
-				$this->id_area_item = $db->getField("ID_area_item", "Number", true);
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto ValutazioniItem con ID = ".$id);
-		}
-	}
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"ordine_visualizzazione", "direction"=>"DESC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
+    }
 	
 	//viene restituito un array con le categorie associate all'item
 	public function getCategorieAssociate(){
@@ -133,47 +98,7 @@ class ValutazioniItem {
 			return $db->getField("punteggio", "Number", true);
 		}	
 		return null;
-	}
-
-    public function getAll($filters = array()) {
-        $items = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value){
-            $where .= "AND ".$field."=".$db->toSql($value)." ";
-        }
-
-        $sql = "SELECT valutazioni_item.*
-                FROM valutazioni_item
-				" . $where ."
-				ORDER BY valutazioni_item.ordine_visualizzazione DESC";
-        $db->query($sql);
-        if ($db->nextRecord())
-        {
-            do
-            {
-                $item = new ValutazioniItem();
-                $item->id = $db->getField("ID", "Number", true);
-                $nome = $db->getField("nome", "Text", true);
-                $item->nome = isset($nome) ? $nome : null;
-                $item->descrizione = $db->getField("descrizione", "Text", true);
-                $item->peso = $db->getField("peso", "Number", true);
-                $item->id_ambito = $db->getField("id_ambito", "Number", true);
-                $item->anno_introduzione = $db->getField("anno_introduzione", "Number", true);
-                if($db->getField("anno_esclusione", "Number", true) == 0 || $db->getField("anno_esclusione", "Number", true) == null){
-                    $item->anno_esclusione = null;
-                }
-                else{
-                    $item->anno_esclusione = $db->getField("anno_esclusione", "Number", true);
-                }
-                $item->id_area_item = $db->getField("ID_area_item", "Number", true);
-                $item->ordine_visualizzazione = $db->getField("ordine_visualizzazione", "Number", true);
-                $items[] = $item;
-            }while ($db->nextRecord());
-        }
-        return $items;
-    }
+	}  
 
     function delete($propaga = true) {
         if($this->canDelete()) {
@@ -183,12 +108,12 @@ class ValutazioniItem {
 
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_item
-                WHERE valutazioni_item.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniItem con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
 
             return true;

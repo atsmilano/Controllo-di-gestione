@@ -133,10 +133,10 @@ if ($edit == true) {
     //personale_assegnato
     if ($obiettivo_cdr_personale !== null) {
         //l'utente assegnato all'obiettivo potrà visualizzarlo solamente nel caso in cui l'obiettivo risulta chiuso
-        if ($obiettivo_cdr->isChiuso()) {
+        //if ($obiettivo_cdr->isChiuso()) {
             $user_privileges["view"] = true;
             $user_privileges["view_obiettivo_cdr_dipendente"] = true;
-        }
+        //}
     }
     //privilegi per utenti con la visualizzazione su tutti i cdr
     if ($user->hasPrivilege("cdr_view_all")) {
@@ -144,7 +144,7 @@ if ($edit == true) {
         $user_privileges["view_assegnazioni_cdr"] = true;
         if ($obiettivo_cdr->isCoreferenza()) {
             $user_privileges["view_coreferenti_associati"] = true;
-        }
+        }        
     }
     //privilegi per il responsabile del cdr padre gerarchico
     if ($resp_padre_ramo_cdr_selezionato) {
@@ -480,14 +480,24 @@ if ($user_privileges["view_obiettivo_cdr_dipendente"] && $obiettivo_cdr_personal
     $oRecord->addContent($oField, "assegnazione_dipendente");
 
     $oField = ffField::factory($cm->oPage);
-    $oField->id = "data_accettazione";
-    $oField->base_type = "DateTime";
-    $oField->extended_type = "DateTime";
-    $oField->label = "Data accettazione obiettivo";
-    $oField->control_type = "label";
-    $oField->store_in_db = false;
-    $oField->data_type = "";
-    $oField->default_value = new ffData($obiettivo_cdr_personale->data_accettazione, "DateTime");
+    $oField->id = "data_accettazione";      
+    $oField->label = "Data accettazione obiettivo"; 
+    if (!$user->hasPrivilege("obiettivi_aziendali_edit")) {        
+        $oField->default_value = new ffData($obiettivo_cdr_personale->data_accettazione, "DateTime");
+        $oField->base_type = "DateTime";
+        $oField->extended_type = "DateTime";        
+        $oField->control_type = "label";
+        $oField->store_in_db = false;
+        $oField->data_type = "";                
+    }        
+    else {        
+        $oField->default_value = new ffData($obiettivo_cdr_personale->data_accettazione, "DateTime");
+        $oField->base_type = "Date";
+        $oField->extended_type = "Date";
+        $oField->data_type = "";
+        $oField->widget = "datepicker";
+        $oField->store_in_db = false;                            
+    }  
     $oRecord->addContent($oField, "assegnazione_dipendente");
 }
 
@@ -1026,12 +1036,31 @@ if ($edit == true) {
 // *********** ADDING TO PAGE ****************    
 $cm->oPage->addContent($oRecord);
 
-//propagazione dell'eliminazione sulle relazioni
+//propagazione dell'eliminazione sulle relazioni, salvataggio informazioni obiettivo-cdr-personale
 function editRelations($oRecord, $frmAction) {    
     switch ($frmAction) {
-        case "insert":
-            break;
+        case "insert":            
         case "update":
+            $user = LoggedUser::Instance();           
+            //solo in caso di utente amministratore degli obiettivi sarà permessa la modifica
+            if ($user->hasPrivilege("obiettivi_aziendali_edit") && isset($oRecord->form_fields["data_accettazione"])) {
+                $obiettivo_cdr = new ObiettiviObiettivoCdr($oRecord->key_fields["ID_obiettivo_cdr"]->value->getValue());
+                $personale = PersonaleObiettivi::factoryFromMatricola($user->matricola_utente_selezionato);                
+                $obiettivo_cdr_personale = null;
+                $obiettivi_cdr_personale = $obiettivo_cdr->getObiettivoCdrPersonaleAssociati($personale->matricola);
+                if (count($obiettivi_cdr_personale)) {
+                    $obiettivo_cdr_personale = $obiettivi_cdr_personale[0];
+                }
+                $data_accettazione_record = $oRecord->form_fields["data_accettazione"]->value->getValue();
+                //vengono formattate le date senza considerare il time per aggiornare il record solo in caso di variazione                           
+                $formatted_data_accettazione_record = CoreHelper::formatUiDate($data_accettazione_record, "d/m/Y", "Y-m-d");                                                
+                $formatted_data_accettazione_db = CoreHelper::formatUiDate($obiettivo_cdr_personale->data_accettazione, "Y-m-d H:i:s", "Y-m-d");
+                                
+                if ($formatted_data_accettazione_record != $formatted_data_accettazione_db) {                    
+                    $obiettivo_cdr_personale->data_accettazione = CoreHelper::formatUiDate($data_accettazione_record, "d/m/Y", "Y-m-d H:i:s");                   
+                    $obiettivo_cdr_personale->save();                    
+                }                
+            }
             break;
         case "delete":
         case "confirmdelete":

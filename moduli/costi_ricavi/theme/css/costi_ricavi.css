@@ -79,3 +79,10 @@
     background-color: rgba(141, 41, 118, 0.5);
 	background: rgba(141, 41, 118, 0.5);
 }
+
+#importazione #wait {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}

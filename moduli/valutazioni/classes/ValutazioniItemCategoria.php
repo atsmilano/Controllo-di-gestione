@@ -5,10 +5,10 @@ class ValutazioniItemCategoria extends Entity {
     public static function factoryFromItemCategoria($id_item, $id_categoria) {
         $db = ffDb_Sql::factory();
         $sql = "
-            SELECT * FROM valutazioni_item_categoria
+            SELECT * FROM ".self::$tablename."
             WHERE 
-              valutazioni_item_categoria.ID_item = ".$db->toSql($id_item)." AND
-              valutazioni_item_categoria.ID_categoria = ".$db->toSql($id_categoria)."
+              ".self::$tablename.".ID_item = ".$db->toSql($id_item)." AND
+              ".self::$tablename.".ID_categoria = ".$db->toSql($id_categoria)."
         ";
 
         $db->query($sql);
@@ -23,13 +23,13 @@ class ValutazioniItemCategoria extends Entity {
                 return $item_categoria;
             } while ($db->nextRecord());
         }
-        throw new Exception("Impossibile creare l'oggetto ValutazioniItemCategoria con id_totale = " . $id_item . " e id_categoria = " . $id_categoria);
+        throw new Exception("Impossibile creare l'oggetto ".static::class." con id_totale = " . $id_item . " e id_categoria = " . $id_categoria);
     }
 
     public function insert() {
         $db = ffDb_Sql::factory();
         $sql = "
-                INSERT INTO valutazioni_item_categoria (
+                INSERT INTO ".self::$tablename." (
                     ID_item, 
                     ID_categoria
                 )
@@ -43,19 +43,19 @@ class ValutazioniItemCategoria extends Entity {
             return $db->getInsertID(true);
         }
 
-        throw new Exception("Impossibile inserire l'oggetto ValutazioniItemCategoria nel DB.");
+        throw new Exception("Impossibile inserire l'oggetto ".static::class." nel DB.");
     }
 
     public function delete() {
         if($this->canDelete()) {
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_item_categoria
-                WHERE valutazioni_item_categoria.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniItemCategoria con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
             return true;
         }

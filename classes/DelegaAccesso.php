@@ -91,7 +91,7 @@ class DelegaAccesso extends Entity{
     public function delete () {
         $this->deleteRelations();
         $db = ffDb_Sql::factory();            
-        $sql = "DELETE FROM delega_accesso WHERE ID = " . $this->id;
+        $sql = "DELETE FROM ".self::$tablename." WHERE ID = " . $this->id;
         $db->execute($sql);
     }
     

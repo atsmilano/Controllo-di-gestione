@@ -40,11 +40,11 @@ class IndicatoriObiettivoIndicatore extends Entity{
     public function delete() {
         $db = ffDb_Sql::factory();
         $sql = "
-            DELETE FROM indicatori_obiettivo_indicatore
+            DELETE FROM ".self::$tablename."
             WHERE ID = ". $db->toSql($this->id);
 
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile eliminare l'oggetto ValutazioniCategoria con ID='" . $this->id . "' dal DB");
+            throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
         }
     }
 }

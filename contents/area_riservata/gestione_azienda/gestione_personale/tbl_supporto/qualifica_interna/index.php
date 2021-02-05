@@ -12,7 +12,7 @@ $grid_fields = array(
 $grid_recordset = array();
 foreach (QualificaInterna::getAll() as $qualifica_interna) {
     $ruolo = new Ruolo($qualifica_interna->id_ruolo);
-    
+   
     $grid_recordset[] = array(
         $qualifica_interna->id,
         $qualifica_interna->codice,

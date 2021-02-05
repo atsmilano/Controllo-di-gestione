@@ -1,0 +1,98 @@
+<h2>Importazione dati Costi e Ricavi</h2>
+<div id="importazione">
+    <div id="wait"><i class="fa fa-spinner fa-spin fa-5x" title="Caricamento..."></i></div>
+    <div id="download-tracciato">
+        <!--BeginDownloadTracciato-->
+        <a href="{download_tracciato_url}" class="btn btn-success">Download tracciato</a>
+        <!--EndDownloadTracciato-->
+    </div>
+    <hr>
+    <div id="upload-tracciato">
+        <!--BeginUploadTracciato-->
+        <script type="text/javascript">
+            $(function() {
+                var uploadForm = jQuery(
+                    "<form>", {
+                        "enctype": "multipart/form-data",
+                        "action": "{upload_tracciato_url}",
+                        "target": "_Self",
+                        "method": "post"
+                    }
+                ).append(
+                    jQuery(
+                        "<input>", {
+                            "id": "file_input_obj",
+                            "name":"file-upload",
+                            "type":"file",
+                            "class": "btn active-buttons",
+                            "value": ""
+                        }
+                    ),
+                    jQuery(
+                        "<input>", {
+                            "id":"submit-id",
+                            "name":"send",
+                            "type":"submit",
+                            "class": "btn btn-success active-buttons",
+                            "value": "Caricamento file"
+                        }
+                    )
+                );
+
+                $("#upload-tracciato").append(uploadForm);
+                
+                $("#upload-tracciato form").submit(function(e) {
+                    $("#wait").modal("show");
+                    e.preventDefault();
+                    
+                    let formData = new FormData(this);
+                    
+                    $("#upload-tracciato-success").empty();
+                    $("#upload-tracciato-error").empty();
+                    
+                    $("#upload-tracciato-success").hide();
+                    $("#upload-tracciato-error").hide();
+                    
+                    $.ajax({
+                        url: "{upload_tracciato_url}",
+                        type: "POST",
+                        data: formData,
+                        success: function(data) {
+                            let result = JSON.parse(data);
+                            for (let item in result) {
+                                if (result.hasOwnProperty(item)) {
+                                    let status = result[item].status;
+                                    let msg = result[item].msg + "<br />";
+                                    if (status) {
+                                        $("#upload-tracciato-success").show();
+                                        $("#upload-tracciato-success").append(msg);
+                                    }
+                                    else {
+                                        $("#upload-tracciato-error").show();
+                                        $("#upload-tracciato-error").append(msg);
+                                    }
+                                }
+                            }
+                        },
+                        error: function(error) {
+                            $("#upload-tracciato-error").empty();
+                            $("#upload-tracciato-error").show();
+                            $("#upload-tracciato-error").append("Si è verificato un errore inatteso");
+                        },
+                        complete: function() {
+                            $("#wait").modal("hide");
+                            // Clear input field per obbligare l'utente a ricaricare il file
+                            $("#file_input_obj").val("");
+                        },
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    });
+                });
+            });
+        </script>
+        <div id="upload-tracciato-success" class="alert alert-success" style="display: none"></div>
+        <div id="upload-tracciato-error" class="alert alert-danger" style="display: none"></div>
+        <!--EndUploadTracciato-->
+    </div>
+</div>

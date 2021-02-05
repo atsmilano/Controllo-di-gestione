@@ -5,11 +5,11 @@ class ValutazioniAmbitoCategoriaAnno extends Entity {
     public static function factoryFromAmbitoCategoriaAnno($id_ambito, $id_categoria, $id_anno) {
         $db = ffDb_Sql::factory();
         $sql = "
-            SELECT * FROM valutazioni_ambito_categoria_anno
+            SELECT * FROM ".self::$tablename."
             WHERE 
-              valutazioni_ambito_categoria_anno.ID_ambito = ".$db->toSql($id_ambito)." AND
-              valutazioni_ambito_categoria_anno.ID_categoria = ".$db->toSql($id_categoria)." AND
-              valutazioni_ambito_categoria_anno.ID_anno_budget = ".$db->toSql($id_anno)."
+              ".self::$tablename.".ID_ambito = ".$db->toSql($id_ambito)." AND
+              ".self::$tablename.".ID_categoria = ".$db->toSql($id_categoria)." AND
+              ".self::$tablename.".ID_anno_budget = ".$db->toSql($id_anno)."
         ";
 
         $db->query($sql);
@@ -26,7 +26,7 @@ class ValutazioniAmbitoCategoriaAnno extends Entity {
                 return $ambito_categoria_anno;
             } while ($db->nextRecord());
         }
-        throw new Exception("Impossibile creare l'oggetto ValutazioniAmbitoCategoriaAnno con id_totale = " . $id_categoria . " e id_ambito = " . $id_ambito);
+        throw new Exception("Impossibile creare l'oggetto ".static::class." con id_totale = " . $id_categoria . " e id_ambito = " . $id_ambito);
     }
 
     public function isAmbitoCategoriaAssociatiPeriodiAnno() {
@@ -80,12 +80,12 @@ class ValutazioniAmbitoCategoriaAnno extends Entity {
         if($this->canDelete($ignoreAssociationPeriodiAnno)) {
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_ambito_categoria_anno
-                WHERE valutazioni_ambito_categoria_anno.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniAmbitoCategoriaAnno con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
             return true;
         }
@@ -105,11 +105,11 @@ class ValutazioniAmbitoCategoriaAnno extends Entity {
         $db = ffDB_Sql::factory();
 
         $sqlAmbitoCategoriaAnno = "
-            SELECT valutazioni_ambito_categoria_anno.id
-            FROM valutazioni_ambito_categoria_anno
+            SELECT ".self::$tablename.".id
+            FROM ".self::$tablename."
             INNER JOIN anno_budget
-              ON (valutazioni_ambito_categoria_anno.ID_anno_budget = anno_budget.ID AND anno_budget.descrizione > ".$db->toSql($anno_fine).")
-            WHERE valutazioni_ambito_categoria_anno.".$id_name." = ".$db->toSql($id_value)."
+              ON (".self::$tablename.".ID_anno_budget = anno_budget.ID AND anno_budget.descrizione > ".$db->toSql($anno_fine).")
+            WHERE ".self::$tablename.".".$id_name." = ".$db->toSql($id_value)."
         ";
         $db->query($sqlAmbitoCategoriaAnno);
         return $db->nextRecord();

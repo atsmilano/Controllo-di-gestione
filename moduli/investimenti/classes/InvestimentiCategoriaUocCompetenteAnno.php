@@ -1,60 +1,6 @@
 <?php
-class InvestimentiCategoriaUocCompetenteAnno {		
-	public $id;
-	public $codice_cdr;
-    public $id_categoria;
-    public $anno_inizio;
-    public $anno_termine;
-	
-	public function __construct($id=null){				
-		if ($id !== null){
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						*
-					FROM
-						investimenti_categoria_uoc_competente_anno                        
-					WHERE
-						investimenti_categoria_uoc_competente_anno.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord()){
-				$this->id = $db->getField("ID", "Number", true);
-				$this->codice_cdr = $db->getField("codice_cdr", "Text", true);
-                $this->id_categoria = $db->getField("ID_categoria", "Number", true);
-                $this->anno_inizio = $db->getField("anno_inizio", "Number", true);
-                $this->anno_termine = $db->getField("anno_termine", "Number", true);
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto InvestimentiCategoriaUocCompetenteAnno con ID = ".$id);
-		}
-	}
-    
-    public static function getAll($filters=array()){			
-		$categorie_uoc_competenti = array();
-        
-		$db = ffDb_Sql::factory();
-		$where = "WHERE 1=1 ";
-		foreach ($filters as $field => $value){
-			$where .= "AND ".$field."=".$db->toSql($value)." ";		
-		}
-        
-		$sql = "
-				SELECT 
-					investimenti_categoria_uoc_competente_anno.*
-				FROM
-					investimenti_categoria_uoc_competente_anno
-                    " . $where . "
-				";
-		$db->query($sql);
-		if ($db->nextRecord()){
-            do {
-                $categorie_uoc_competenti[] = new InvestimentiCategoriaUocCompetenteAnno($db->getField("ID", "Number", true));			
-            } while ($db->nextRecord());
-		}	
-		return $categorie_uoc_competenti;
-	}
+class InvestimentiCategoriaUocCompetenteAnno extends Entity{		
+	protected static $tablename = "investimenti_categoria_uoc_competente_anno";		
     
     //restituisce l'oggetto InvestimentiCategoriaUoccompetente di una categoria passata come parametro
     public static function getCategoriaUocCompetentiAnno(AnnoBudget $anno, $id_categoria=null){        
@@ -65,8 +11,7 @@ class InvestimentiCategoriaUocCompetenteAnno {
                     $categorie_uoc_competenti[] = $categoria_uoc_competente_anno;
                 }
             }
-        }
-        
+        }        
 		return $categorie_uoc_competenti;
 	}
     

@@ -1,58 +1,6 @@
 <?php
-class InvestimentiDipAmministrativoAnno {		
-	public $id;
-	public $codice_cdr;
-	public $anno_inizio;
-    public $anno_termine;
-	
-	public function __construct($id=null){				
-		if ($id !== null){
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						*
-					FROM
-						investimenti_dipartimento_amministrativo_anno
-					WHERE
-						investimenti_dipartimento_amministrativo_anno.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord()){
-				$this->id = $db->getField("ID", "Number", true);
-				$this->codice_cdr = $db->getField("codice_cdr", "Text", true);
-				$this->anno_inizio = $db->getField("anno_inizio", "Number", true);
-                $this->anno_termine = $db->getField("anno_termine", "Number", true);
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto InvestimentiDipAmministrativoAnno con ID = ".$id);
-		}
-	}
-    
-    public static function getAll($filters=array()){			
-		$cdr_diparitmento_amministrativo = array();
-        
-		$db = ffDb_Sql::factory();
-		$where = "WHERE 1=1 ";
-		foreach ($filters as $field => $value){
-			$where .= "AND ".$field."=".$db->toSql($value)." ";		
-		}
-        
-		$sql = "
-				SELECT 
-					investimenti_dipartimento_amministrativo_anno.*
-				FROM
-					investimenti_dipartimento_amministrativo_anno
-                    " . $where . "
-				";
-		$db->query($sql);
-		if ($db->nextRecord()){
-            do {
-                $cdr_diparitmento_amministrativo[] = new InvestimentiDipAmministrativoAnno($db->getField("ID", "Number", true));			
-            } while ($db->nextRecord());
-		}	
-		return $cdr_diparitmento_amministrativo;
-	}
+class InvestimentiDipAmministrativoAnno extends Entity{		
+	protected static $tablename = "investimenti_dipartimento_amministrativo_anno";			
     
     //restituisce array con i cdr definiti come dipartimento amministrativo per l'anno
     public static function getCdrDipartimentoAmministrativoAnno(AnnoBudget $anno){        

@@ -1,58 +1,6 @@
 <?php
-class InvestimentiDirezioneRiferimentoAnno {		
-	public $id;
-	public $codice_cdr;
-	public $anno_inizio;
-    public $anno_termine;
-	
-	public function __construct($id=null){				
-		if ($id !== null){
-			$db = ffDb_Sql::factory();
-
-			$sql = "
-					SELECT 
-						*
-					FROM
-						investimenti_direzione_riferimento_anno
-					WHERE
-						investimenti_direzione_riferimento_anno.ID = " . $db->toSql($id) 
-					;
-			$db->query($sql);
-			if ($db->nextRecord()){
-				$this->id = $db->getField("ID", "Number", true);
-				$this->codice_cdr = $db->getField("codice_cdr", "Text", true);
-                $this->anno_inizio = $db->getField("anno_inizio", "Number", true);
-				$this->anno_termine = $db->getField("anno_termine", "Number", true);
-			}	
-			else
-				throw new Exception("Impossibile creare l'oggetto InvestimentiDirezioneRiferimentoAnno con ID = ".$id);
-		}
-	}
-    
-    public static function getAll($filters=array()){			
-		$direzioni_riferimento = array();
-        
-		$db = ffDb_Sql::factory();
-		$where = "WHERE 1=1 ";
-		foreach ($filters as $field => $value){
-			$where .= "AND ".$field."=".$db->toSql($value)." ";		
-		}
-        
-		$sql = "
-				SELECT 
-					investimenti_direzione_riferimento_anno.*
-				FROM
-					investimenti_direzione_riferimento_anno
-                    " . $where . "
-				";
-		$db->query($sql);
-		if ($db->nextRecord()){
-            do {
-                $direzioni_riferimento[] = new InvestimentiDirezioneRiferimentoAnno($db->getField("ID", "Number", true));			
-            } while ($db->nextRecord());
-		}	
-		return $direzioni_riferimento;
-	}
+class InvestimentiDirezioneRiferimentoAnno extends Entity{		
+	protected static $tablename = "investimenti_direzione_riferimento_anno";	
     
     //restituisce array con i cdr definiti come direzioni di riferimento per l'anno
     public static function getDirezioneRiferimentoAnno(AnnoBudget $anno){        

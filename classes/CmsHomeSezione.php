@@ -1,11 +1,11 @@
 <?php
-
 class CmsHomeSezione extends Entity{
     protected static $tablename = "cms_home_sezione";
     
     public static function getSezioneAnno(AnnoBudget $anno_budget) {
+        $calling_class = static::class;
         $result = array();        
-        foreach (CmsHomeSezione::getAll(array(),array(array("fieldname"=>"ordinamento", "direction"=>"ASC"))) as $sezione) {
+        foreach ($calling_class::getAll(array(),array(array("fieldname"=>"ordinamento", "direction"=>"ASC"))) as $sezione) {
             if ($sezione->anno_inizio <= $anno_budget->descrizione && 
                 ($sezione->anno_fine == null || $sezione->anno_fine >= $anno_budget->descrizione)) {
                 $result[] = $sezione;

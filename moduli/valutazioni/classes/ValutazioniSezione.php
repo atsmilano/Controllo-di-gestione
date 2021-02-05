@@ -1,29 +1,6 @@
 <?php
-class ValutazioniSezione {
-    public $id;
-    public $codice;
-    public $descrizione;
-
-    public function __construct($id) {
-        $db = ffDb_Sql::factory();
-
-        $sql = "
-				SELECT 
-					*
-				FROM
-					valutazioni_sezione
-				WHERE
-					valutazioni_sezione.ID = " . $db->toSql($id)
-        ;
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            $this->id = $db->getField("ID", "Number", true);
-            $this->codice = $db->getField("codice", "Text", true);
-            $this->descrizione = $db->getField("descrizione", "Text", true);
-        } else {
-            throw new Exception("Impossibile creare l'oggetto ValutazioniSezione con ID = " . $id);
-        }
-    }
+class ValutazioniSezione extends Entity{
+    protected static $tablename = "valutazioni_sezione";
 
     //viene restituito un array con gli ambiti associati alla sezione
     public function getAmbitiAssociati() {
@@ -64,30 +41,7 @@ class ValutazioniSezione {
             return $db->getField("peso", "Number", true);
         }        
         throw new Exception("Peso sezione '" . $this->codice . "' non definito per l'anno " . $anno->descrizione);
-    }
-
-    public static function getAll($filters = array()) {
-        $sezioni = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value)
-            $where .= "AND " . $field . "=" . $db->toSql($value) . " ";
-
-        $sql = "SELECT valutazioni_sezione.*
-                FROM valutazioni_sezione
-				" . $where;
-
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $id = $db->getField("ID", "Number", true);
-                $sezione = new ValutazioniSezione($id);
-                $sezioni[] = $sezione;
-            } while ($db->nextRecord());
-        }
-        return $sezioni;
-    }
+    }  
 
     public function setPesoAnno(ValutazioniAnnoBudget $anno, ValutazioniCategoria $categoria, $peso, $action) {
         $db = ffDb_Sql::factory();
@@ -151,12 +105,12 @@ class ValutazioniSezione {
 
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_sezione
-                WHERE valutazioni_sezione.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniSezione con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
             return true;
         }

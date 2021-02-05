@@ -21,10 +21,10 @@ class ValutazioniPersonale extends Personale{
 
             $sql = "
                     SELECT 
-                        personale.ID,
-                        personale.matricola,
-                        personale.cognome,
-                        personale.nome,
+                        ".self::$tablename.".ID,
+                        ".self::$tablename.".matricola,
+                        ".self::$tablename.".cognome,
+                        ".self::$tablename.".nome,
                         carriera.ID AS ID_carriera,
                         carriera.matricola_personale,
                         carriera.ID_tipo_contratto,
@@ -40,11 +40,11 @@ class ValutazioniPersonale extends Personale{
                         qualifica_interna.dirigente,
                         qualifica_interna.ID_ruolo
                     FROM
-                        personale
+                        ".self::$tablename."
                         LEFT JOIN carriera ON personale.matricola = carriera.matricola_personale
                         LEFT JOIN qualifica_interna ON carriera.ID_qualifica_interna = qualifica_interna.ID
                     WHERE
-                        personale.ID = " . $db->toSql($id) . "
+                        ".self::$tablename.".ID = " . $db->toSql($id) . "
                         ORDER BY carriera.data_inizio DESC"
                     ;
             $db->query($sql);
@@ -85,7 +85,7 @@ class ValutazioniPersonale extends Personale{
                 } while($db->nextRecord());
             }
             else {
-                throw new Exception("Impossibile creare l'oggetto Personale con ID = ".$id);
+                throw new Exception("Impossibile creare l'oggetto ".static::class." con ID = ".$id);
             }            
         }
                 
@@ -93,18 +93,22 @@ class ValutazioniPersonale extends Personale{
         //valorizzazione del cdr di riferimento e del valutatore suggerito
         //viene considerato il cdr con percentuale maggiore fra quelli del dipendente (si potrà sempre cambiare il valutatore)
         $this->cdr_afferenza = $this->getCdrAfferenzaInData($tipo_piano_cdr, $periodo->data_fine);            
+        //se il dipendente è cessato a fine periodo (nessun cdr afferenza) si recupera l'ultimo CdR di afferenza
+        $cessato = false;
         if (count ($this->cdr_afferenza) == 0) {
+            $cessato = true;
             $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
             $ultimi_cdr_afferenza = $this->getCdrUltimaAfferenza($tipo_piano_cdr);
             if (count ($ultimi_cdr_afferenza) > 0) {
                 foreach ($ultimi_cdr_afferenza as $cdr_aff) {
                     $cdr_attuale = Cdr::factoryFromCodice($cdr_aff["cdr"]->codice, $piano_cdr);
-                    if ($cdr_attuale->id == $cdr_aff["cdr"]->id) {
+                    if ($cdr_attuale->codice == $cdr_aff["cdr"]->codice) {
                         $this->cdr_afferenza[] = $cdr_aff;
                     }
-                }
+                }                                                                                
             }
         }
+              
         //il primo cdc estratto sarà quello con percentuale maggiore (per l'ordinamento con cui vengono estratti i dati dal record)
         foreach ($this->cdr_afferenza as $afferenza_cdr){
             $this->cdr_riferimento = $afferenza_cdr["cdr"];
@@ -113,18 +117,28 @@ class ValutazioniPersonale extends Personale{
         if (empty($this->cdr_afferenza)){
             $this->accodaAnomalia("Nessun CdR di afferenza");
         }
-        else {                           
+        else {   
+            //se il dipendente è cessato viene verificato se nell'anno sia stato responsabile del cdr
+            $ex_responsabile_cdr_riferimento = false;
+            if ($cessato == true) {                               
+                foreach ($this->getCodiciCdrResponsabilitaAnno($anno, $tipo_piano_cdr) as $cdr_resp) {
+                    if($this->cdr_riferimento->codice == $cdr_resp){
+                        $ex_responsabile_cdr_riferimento = true;
+                        break;
+                    }
+                }
+            }   
             $responsabile_cdr = $this->cdr_riferimento->getResponsabile($data_fineObject);
-            if ($responsabile_cdr->matricola_responsabile == $this->matricola) {
+            if (($responsabile_cdr->matricola_responsabile == $this->matricola) ||
+                $ex_responsabile_cdr_riferimento == true){
                 $this->valutatore_suggerito = $this->cdr_riferimento->getPrimoResponsabilePadre($data_fineObject);
             }                        
             else {
-                $resp_cdr = $this->cdr_riferimento->getResponsabile($data_fineObject);            
-                $this->valutatore_suggerito = $resp_cdr;
+                $this->valutatore_suggerito = $responsabile_cdr;                
             }
             if ($this->valutatore_suggerito == null || $this->valutatore_suggerito->matricola_responsabile == ""){                
                 $this->accodaAnomalia("Nessun valutatore suggerito");
-            }
+            } 
         }
          
         //**********************************************************************        

@@ -1,5 +1,4 @@
 <?php
-
 class StrategiaProspettiva extends Entity {    
     protected static $tablename = "strategia_prospettiva";
 

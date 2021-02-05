@@ -1,10 +1,5 @@
 <?php
-interface IAllegato{
-
-}
-
-class Allegato implements IAllegato{
-
+class Allegato{
     //Fields
     public $id;
     public $filename_md5;

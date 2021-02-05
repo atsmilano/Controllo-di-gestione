@@ -1,17 +1,6 @@
 <?php
-class ObiettiviObiettivoCdr {
-    public $id;
-    public $id_obiettivo;
-    public $codice_cdr;
-    public $codice_cdr_coreferenza;
-    public $id_tipo_piano_cdr;
-    public $peso;
-    public $azioni;
-    public $id_parere_azioni;
-    public $note_azioni;
-    public $data_chiusura_modifiche;
-    public $data_ultima_modifica;
-    public $data_eliminazione;
+class ObiettiviObiettivoCdr extends Entity{
+    protected static $tablename = "obiettivi_obiettivo_cdr";
 
     public function __construct($id = null) {
         if ($id !== null) {
@@ -45,7 +34,7 @@ class ObiettiviObiettivoCdr {
                 throw new Exception("Impossibile creare l'oggetto ObiettivoCdr con ID = " . $id);
         }
     }
-
+    
     public static function getAll($filters = array()) {
         $obiettivi_cdr = array();
 
@@ -78,8 +67,8 @@ class ObiettiviObiettivoCdr {
             } while ($db->nextRecord());
         }
         return $obiettivi_cdr;
-    }
-
+    }    
+    
     //restituisce l'obiettivo_cdr (se non eliminato logicamente) assegnato a ID_obiettivo e codice_cdr
     static public function factoryFromObiettivoCdr(ObiettiviObiettivo $obiettivo, Cdr $cdr) {
         if ($obiettivo->data_eliminazione !== null) {
@@ -104,7 +93,7 @@ class ObiettiviObiettivoCdr {
         //update
         if ($this->id == null) {
             //TODO ripristino del record eliminato logicamente in caso di corrispondenza invece che inserimento di un nuovo record
-            $sql = "INSERT INTO obiettivi_obiettivo_cdr 
+            $sql = "INSERT INTO ".self::$tablename." 
                     (
                         ID_obiettivo,				
                         ID_tipo_piano_cdr,
@@ -132,7 +121,7 @@ class ObiettiviObiettivoCdr {
                         " . (strlen($this->data_eliminazione) ? $db->toSql($this->data_eliminazione) : "null") . "
                     );";
         } else {
-            $sql = "UPDATE obiettivi_obiettivo_cdr
+            $sql = "UPDATE ".self::$tablename."
                     SET					
                         ID_obiettivo = " . (strlen($this->id_obiettivo) ? $db->toSql($this->id_obiettivo) : "null") . ",						
                         ID_tipo_piano_cdr = " . (strlen($this->id_tipo_piano_cdr) ? $db->toSql($this->id_tipo_piano_cdr) : "null") . ",
@@ -146,11 +135,11 @@ class ObiettiviObiettivoCdr {
                         data_ultima_modifica = " . (strlen($this->data_ultima_modifica) ? $db->toSql($this->data_ultima_modifica) : "null") . ",
                         data_eliminazione = " . (strlen($this->data_eliminazione) ? $db->toSql($this->data_eliminazione) : "null") . "
                     WHERE 
-                        obiettivi_obiettivo_cdr.ID = " . $db->toSql($this->id) . "
+                        ".self::$tablename.".ID = " . $db->toSql($this->id) . "
                     ";
         }
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile salvare l'oggetto ObiettivoCdr con ID = " . $this->id . " nel DB");
+            throw new Exception("Impossibile salvare l'oggetto ".static::class." con ID = " . $this->id . " nel DB");
         }
     }
 
@@ -166,13 +155,13 @@ class ObiettiviObiettivoCdr {
         }
         $db = ffDB_Sql::factory();
         $sql = "
-            UPDATE obiettivi_obiettivo_cdr
+            UPDATE ".self::$tablename."
                 SET data_eliminazione = " . $db->toSql(date("Y-m-d H:i:s")) . "
-            WHERE obiettivi_obiettivo_cdr.ID = " . $db->toSql($this->id) . "
+            WHERE ".self::$tablename.".ID = " . $db->toSql($this->id) . "
         ";
 
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile eliminare logicamente l'oggetto ObiettivoCdr con ID = " . $this->id . " nel DB");
+            throw new Exception("Impossibile eliminare logicamente l'oggetto ".static::class." con ID = " . $this->id . " nel DB");
         } else if ($propagate == true) {
             foreach ($obiettivi_cdr_personale_associati as $obiettivo_cdr_personale) {
                 $obiettivo_cdr_personale->logicalDelete();
@@ -234,10 +223,15 @@ class ObiettiviObiettivoCdr {
             //i cdr sono ordinati per livello gerarchico inverso partendo dal cdr che chiama il metodo
             foreach ($cdr->getPadriRamo() as $cdr_padre_ramo) {
                 //la selezione restituisce al più un elemento
-                $obiettivo_cdr_padre = ObiettiviObiettivoCdr::factoryFromObiettivoCdr($obiettivo, $cdr_padre_ramo);
-                if ($obiettivo_cdr_padre !== null && strlen($obiettivo_cdr_padre->codice_cdr_coreferenza) > 0 && $obiettivo_cdr_padre->codice_cdr_coreferenza !== $this->codice_cdr) {
-                    return true;
-                }
+                $obiettivo_cdr_padre = ObiettiviObiettivoCdr::factoryFromObiettivoCdr($obiettivo, $cdr_padre_ramo);               
+                if ($obiettivo_cdr_padre !== null) {
+                    if (!strlen($obiettivo_cdr_padre->codice_cdr_coreferenza) > 0 && $obiettivo_cdr_padre->id_tipo_piano_cdr == 0) {
+                        return false;
+                    }
+                    if(strlen($obiettivo_cdr_padre->codice_cdr_coreferenza) > 0 && $obiettivo_cdr_padre->codice_cdr_coreferenza !== $this->codice_cdr) {
+                        return true;
+                    }
+                }                                                     
             }
         }
         return false;
@@ -487,7 +481,7 @@ class ObiettiviObiettivoCdr {
                 $tot_obiettivi = $dipendente->getPesoTotaleObiettivi($anno);
                 $html .= "<li>" . $dipendente->nome . " " . $dipendente->cognome . " (" . $dipendente->matricola .
                     ") - peso: " . $obiettivo_cdr_personale_associato->peso . "/" . $tot_obiettivi . " (" .
-                    CoreHelper::percentuale($obiettivo_cdr_personale_associato->peso, $tot_obiettivi) . "%)</li>";
+                    number_format(CoreHelper::percentuale($obiettivo_cdr_personale_associato->peso, $tot_obiettivi),2) . "%)</li>";
             }
             $html .= "</ul></span>";
         } else {

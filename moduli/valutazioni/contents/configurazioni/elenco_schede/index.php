@@ -98,7 +98,7 @@ if (count($periodi_valutazione) > 0) {
                     foreach ($ultimi_cdr_afferenza as $cdr_aff) {
                         try {
                             $cdr_attuale = Cdr::factoryFromCodice($cdr_aff["cdr"]->codice, $piano_cdr);
-                            if ($cdr_attuale->id == $cdr_aff["cdr"]->id) {
+                            if ($cdr_attuale->codice == $cdr_aff["cdr"]->codice) {
                                 $cdr_afferenza[] = $cdr_aff;
                             }
                         } catch (Exception $ex) {

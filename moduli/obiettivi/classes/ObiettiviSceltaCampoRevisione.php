@@ -15,11 +15,11 @@ class ObiettiviSceltaCampoRevisione extends Entity{
         if ($this->canDelete()) {
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM obiettivi_scelta_campo_revisione
+                DELETE FROM ".self::$tablename."
                 WHERE ID = " . $db->toSql($this->id);
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto obiettivi_scelta_campo_revisione "
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class
                 . "con ID='" . $this->id . "' dal DB");
             }            
             

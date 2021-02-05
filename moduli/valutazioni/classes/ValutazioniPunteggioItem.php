@@ -6,12 +6,12 @@ class ValutazioniPunteggioItem extends Entity {
 	    if($this->canDelete()) {
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_punteggio_item
-                WHERE valutazioni_punteggio_item.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniPunteggioItem con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
 
             return true;

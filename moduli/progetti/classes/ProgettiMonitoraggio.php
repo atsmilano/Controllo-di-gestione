@@ -6,7 +6,7 @@ class ProgettiMonitoraggio extends Entity {
         $db = ffDB_Sql::factory();
         $query = "
             SELECT MAX(pm.numero_monitoraggio) AS 'current_value'
-            FROM progetti_monitoraggio pm
+            FROM ".self::$tablename." pm
             WHERE pm.ID_progetto = ".$db->toSql($id_progetto)."
         ";
 
@@ -24,10 +24,10 @@ class ProgettiMonitoraggio extends Entity {
             $where .= "AND ". $field ." = ". $db->toSql($value);
         }
         $sql = "
-            SELECT progetti_monitoraggio.*
-            FROM progetti_monitoraggio
+            SELECT ".self::$tablename.".*
+            FROM ".self::$tablename."
             " . $where . "
-            ORDER BY progetti_monitoraggio.ID
+            ORDER BY ".self::$tablename.".ID
         ";
         $db->query($sql);
         if ($db->nextRecord()) {
@@ -44,13 +44,13 @@ class ProgettiMonitoraggio extends Entity {
         }
         $sql = "
             SELECT MAX(ID) AS 'last_id'
-            FROM progetti_monitoraggio
+            FROM ".self::$tablename."
             " . $where . "
         ";
         $db->query($sql);
         if ($db->nextRecord()) {
             return $db->getField("last_id", "Number", true);
         }
-        throw new Exception("Impossibile recuperare l'ultimo ID inserito per ProgettiMonitoraggio");
+        throw new Exception("Impossibile recuperare l'ultimo ID inserito per " . static::class);
     }
 }

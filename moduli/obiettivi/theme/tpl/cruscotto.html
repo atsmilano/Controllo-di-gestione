@@ -4,6 +4,7 @@
 			<li><a href="#introduzione">Cruscotto</a></li>
 			<li><a href="cruscotto/matrice_pesi_cdr.php?{globals}">Distribuzione obiettivi - cdr / assegnazione pesi</a></li>
 			<li><a href="cruscotto/matrice_pesi_personale.php?{globals}">Distribuzione obiettivi - personale / assegnazione pesi</a></li>   
+                        <li><a href="cruscotto/report_assegnazioni.php?{globals}">Report assegnazione cdr</a></li>   
 		</ul>
 		<div id="introduzione">
 			<h2>CRUSCOTTO DI CONTROLLO E GESTIONE DEI PESI</h2>
@@ -32,13 +33,24 @@
 		
 <script>
 $( function() {
-	$('#tabs').tabs({
+	$('#tabs').tabs({            
 		beforeLoad: function( event, ui ) {			
 			ui.panel.html('<div class="loading">Loading...</div>');
+                        var current_index = $('#tabs').tabs("option", "active");
+                        //tabs with ffGrid
+                        if (current_index == 3) {
+                            ui.ajaxSettings.dataFilter = function (data) {
+                                contents_to_load = $.parseJSON(data);
+                                ui.panel.html(contents_to_load.footers);
+                                ui.panel.html(contents_to_load.headers);
+                                ui.panel.html(contents_to_load.html);
 
-			ui.jqXHR.error(function() {
-				ui.panel.html('<div align="center"><p>Errore durante il caricamento del report.</p></div>');
-			});
+                            };
+                        } else {
+                            ui.jqXHR.error(function () {
+                                ui.panel.html('<div align="center"><p>Errore durante il caricamento del report.</p></div>');
+                            });
+                        }
 		}
 		,load:function( event, ui ) {}
 	});
@@ -48,5 +60,4 @@ $( function() {
 		$( document ).tooltip();
 	} );
 });
-
 </script>

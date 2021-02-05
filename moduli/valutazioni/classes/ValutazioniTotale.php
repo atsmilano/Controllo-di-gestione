@@ -1,40 +1,11 @@
 <?php
-class ValutazioniTotale {		
-	public $id;
-	public $descrizione;
-	public $anno_inizio;
-	public $anno_fine;
-	public $ordine_visualizzazione;
+class ValutazioniTotale extends Entity{		
+	protected static $tablename = "valutazioni_totale";
 
-	public function __construct($id=null) {
-	    if($id!=null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                    SELECT 
-                        *
-                    FROM
-                        valutazioni_totale
-                    WHERE
-                        valutazioni_totale.ID = " . $db->toSql($id)
-                    ;
-            $db->query($sql);
-            if ($db->nextRecord())
-            {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->descrizione = $db->getField("descrizione", "Text", true);
-                $this->anno_inizio = $db->getField("anno_inizio", "Text", true);
-                if($db->getField("anno_fine", "Number", true) == 0 || $db->getField("anno_fine", "Number", true) == null){
-                    $this->anno_fine = null;
-                }
-                else{
-                    $this->anno_fine = $db->getField("anno_fine", "Number", true);
-                }
-            }
-            else
-                throw new Exception("Impossibile creare l'oggetto ValutazioniTotale con ID = ". $id);
-	    }
-	}		
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"ordine_visualizzazione", "direction"=>"ASC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
+    }
 		
 	//restituisce array con tutti gli ambiti utilizzati per il calcolo di un totale
 	public function getAmbitiTotale (){		
@@ -76,41 +47,7 @@ class ValutazioniTotale {
 			}while ($db->nextRecord());			
 		}
 		return $categorie;
-	}
-
-    public function getAll($filters = array()) {
-        $totali = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value){
-            $where .= "AND ".$field."=".$db->toSql($value)." ";
-        }
-
-        $sql = "SELECT valutazioni_totale.*
-                FROM valutazioni_totale
-				" . $where ."
-				ORDER BY valutazioni_totale.ordine_visualizzazione
-		";
-
-        $db->query($sql);
-        if ($db->nextRecord()){
-            do{
-                $totale = new ValutazioniTotale();
-                $totale->id = $db->getField("ID", "Number", true);
-                $totale->descrizione = $db->getField("descrizione", "Text", true);
-                $totale->anno_inizio = $db->getField("anno_inizio", "Number", true);
-                if($db->getField("anno_fine", "Number", true) == 0 || $db->getField("anno_fine", "Number", true) == null){
-                    $totale->anno_fine = null;
-                }
-                else{
-                    $totale->anno_fine = $db->getField("anno_fine", "Number", true);
-                }
-                $totali[] = $totale;
-            }while ($db->nextRecord());
-        }
-        return $totali;
-    }
+	}   
 
     public function canDelete() {
         $totale_categorie = ValutazioniTotaleCategoria::getAll(array("ID_totale" => $this->id));
@@ -151,12 +88,12 @@ class ValutazioniTotale {
 
             $db = ffDb_Sql::factory();
             $sql = "
-                DELETE FROM valutazioni_totale
-                WHERE valutazioni_totale.ID = ".$db->toSql($this->id)."
+                DELETE FROM ".self::$tablename."
+                WHERE ".self::$tablename.".ID = ".$db->toSql($this->id)."
             ";
 
             if (!$db->execute($sql)) {
-                throw new Exception("Impossibile eliminare l'oggetto ValutazioniTotale con ID='" . $this->id . "' dal DB");
+                throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID='" . $this->id . "' dal DB");
             }
 
             return true;

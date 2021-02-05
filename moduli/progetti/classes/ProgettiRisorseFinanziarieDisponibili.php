@@ -1,5 +1,4 @@
 <?php
-
 class ProgettiRisorseFinanziarieDisponibili extends Entity {
     protected static $tablename = "progetti_risorse_finanziarie_disponibili";    
     

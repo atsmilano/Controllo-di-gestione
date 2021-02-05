@@ -274,3 +274,10 @@ body.loading {
 body.loading .modal {
     display: block;
 }
+
+#importazione #wait {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}

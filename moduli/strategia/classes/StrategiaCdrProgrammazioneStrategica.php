@@ -1,5 +1,4 @@
 <?php
-
 class StrategiaCdrProgrammazioneStrategica extends Entity {
     protected static $tablename = "strategia_cdr_programmazione_strategica";
 

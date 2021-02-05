@@ -9,7 +9,7 @@ class ProgettiProgettoIndicatore extends Entity {
 
         $query = "
             SELECT ppi.*
-            FROM progetti_progetto_indicatore ppi
+            FROM ".self::$tablename." ppi
                 INNER JOIN progetti_monitoraggio pm ON (
                     ppi.ID_progetto = pm.ID_progetto AND
                     pm.ID = ". $db->toSql($id_monitoraggio) ."
@@ -46,7 +46,7 @@ class ProgettiProgettoIndicatore extends Entity {
 
         $query = "
             SELECT COUNT(ppi.ID) AS 'totale'
-            FROM progetti_progetto_indicatore ppi
+            FROM ".self::$tablename." ppi
             WHERE ppi.ID_progetto = ".$db->toSql($id_progetto)."
             GROUP BY ppi.ID_progetto
         ";
@@ -68,7 +68,7 @@ class ProgettiProgettoIndicatore extends Entity {
 
         $query = "
             SELECT COUNT(ppi.ID) AS 'totale'
-            FROM progetti_progetto_indicatore ppi
+            FROM ".self::$tablename." ppi
                 INNER JOIN progetti_monitoraggio pm ON (
                     ppi.ID_progetto = pm.ID_progetto AND
                     pm.ID = ". $db->toSql($id_monitoraggio) ."

@@ -1,0 +1,27 @@
+<div id="configurazione_costi_ricavi">
+    <div id="tabs">
+        <ul>
+            <li><a id="a_periodo" href="tabelle_supporto/periodo?{globals}">Periodi</a></li>
+            <li><a id="a_fp" href="tabelle_supporto/fp?{globals}">Fattori Produttivi</a></li>            
+            <li><a id="a_conto" href="tabelle_supporto/conto?{globals}">Conti</a></li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+    });
+</script>

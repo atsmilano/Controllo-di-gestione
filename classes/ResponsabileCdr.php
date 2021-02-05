@@ -59,7 +59,7 @@ class ResponsabileCdr {
         } 
     }
     
-    //voiene istanziato l'oggetto tramite codice_cdr e una data di riferimento
+    //viene istanziato l'oggetto tramite codice_cdr e una data di riferimento
     public static function factoryFromCodiceCdr($codice_cdr, DateTime $date) {        
         $cm = cm::getInstance();
         $responsabile_cdr = null;
@@ -157,35 +157,30 @@ class ResponsabileCdr {
             
         return $responsabile_cdr;
     }
-    
-    
+        
     //restituisce tutti i record attivi in una data specifica
     public static function getResponsabiliCdrInData (DateTime $date) {
-        $responsabile_cdr = array();	     
-        
+        $responsabile_cdr = array();	             
         foreach(ResponsabileCdr::getAll() AS $resp_cdr){
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa
             if (strtotime($resp_cdr->data_inizio) <= strtotime($date->format("Y-m-d")) 
                 && ($resp_cdr->data_fine == null || strtotime($resp_cdr->data_fine) >= strtotime($date->format("Y-m-d")))){               
                 $responsabile_cdr[] = $resp_cdr;                				
             }
-        }	
-        
+        }	        
         return $responsabile_cdr;
     }
     
     //restituisce tutti i record dell'anagrafica attivi in un anno specifico
     public static function getResponsabiliCdrAnno (AnnoBudget $anno) {
-        $responsabile_cdr = array();
-        
+        $responsabile_cdr = array();        
         foreach(ResponsabileCdr::getAll() AS $item){
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
             if (strtotime($item->data_inizio) <= strtotime($anno->descrizione."-12-31") 
                 && ($item->data_fine == null || strtotime($item->data_fine) >= strtotime($anno->descrizione."-01-01"))){               
                 $responsabile_cdr[] = $item;                				
             }
-        }
-        
+        }        
         return $responsabile_cdr;
     }
     

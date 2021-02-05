@@ -14,7 +14,7 @@ if (isset($_REQUEST["keys[ID_tipologia_monitoraggio]"])) {
 
 $oRecord = ffRecord::factory($cm->oPage);
 $oRecord->id = "tipologia-monitoraggio-modify";
-$oRecord->title = ($isEdit ? "Modifica" : "Nuova") . " Tipologia Monitoraggoi";
+$oRecord->title = ($isEdit ? "Modifica" : "Nuova") . " Tipologia Monitoraggio";
 $oRecord->resources[] = "tipologia-monitoraggio";
 $oRecord->src_table  = "progetti_tipologia_monitoraggio";
 $oRecord->allow_delete = !$isEdit || ($isEdit && $tipologia_monitoraggio->canDelete());

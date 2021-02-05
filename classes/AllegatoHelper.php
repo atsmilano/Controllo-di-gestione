@@ -1,6 +1,5 @@
 <?php
 class AllegatoHelper {
-
     protected $error_operazione_vietata = "Permessi insufficienti per compiere l'operazione di ";
     protected $error_md5 = "Il file non è valido";
     

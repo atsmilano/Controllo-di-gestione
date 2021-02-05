@@ -1,65 +1,17 @@
 <?php
-class PianoCdr {
-    public $id;
-    public $data_definizione;
-    public $data_introduzione;
-    public $id_tipo_piano_cdr;
+class PianoCdr extends Entity{
+    protected static $tablename = "piano_cdr";    
 
-    public function __construct($id = null) {
-        if ($id !== null) {
-            $db = ffDb_Sql::factory();
-
-            $sql = "
-                SELECT 
-                    piano_cdr.*
-                FROM
-                    piano_cdr
-                WHERE
-                    piano_cdr.ID = " . $db->toSql($id)
-            ;
-            $db->query($sql);
-            if ($db->nextRecord()) {
-                $this->id = $db->getField("ID", "Number", true);
-                $this->data_definizione = CoreHelper::getDateValueFromDB($db->getField("data_definizione", "Date", true));
-                $this->data_introduzione = CoreHelper::getDateValueFromDB($db->getField("data_introduzione", "Date", true));
-                $this->id_tipo_piano_cdr = $db->getField("ID_tipo_piano_cdr", "Number", true);
-            } else {
-                throw new Exception("Impossibile creare l'oggetto PianoCdr con ID = " . $id);
-            }
-        }
-    }
-
-    //restituisce array con tutti i piani dei cdr
-    public static function getAll($filters = array()) {
-        $piani_cdr = array();
-
-        $db = ffDB_Sql::factory();
-        $where = "WHERE 1=1 ";
-        foreach ($filters as $field => $value){
-            $where .= "AND " . $field . "=" . $db->toSql($value) . " ";
-        }
-
-        $sql = "SELECT piano_cdr.*
-                FROM piano_cdr
-				" . $where . "
-                ORDER BY piano_cdr.data_definizione DESC";
-        $db->query($sql);
-        if ($db->nextRecord()) {
-            do {
-                $piano_cdr = new PianoCdr();
-                $piano_cdr->id = $db->getField("ID", "Number", true);
-                $piano_cdr->data_definizione = CoreHelper::getDateValueFromDB($db->getField("data_definizione", "Date", true));
-                $piano_cdr->data_introduzione = CoreHelper::getDateValueFromDB($db->getField("data_introduzione", "Date", true));
-                $piano_cdr->id_tipo_piano_cdr = $db->getField("ID_tipo_piano_cdr", "Number", true);
-                $piani_cdr[] = $piano_cdr;
-            } while ($db->nextRecord());
-        }
-        return $piani_cdr;
+    //restituisce array con tutti i piani dei cdr ordinati per data di definizione
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"data_definizione", "direction"=>"DESC"))) {                
+        //metodo classe entity
+        return parent::getAll($where, $order);        
     }
 
     //restituisce il piano attivo alla data selezionata, null se nessun piano attivo
     public static function getAttivoInData(TipoPianoCdr $tipo_piano, $date) {
-        $piani_cdr = PianoCdr::getAll();
+        $calling_class = static::class;
+        $piani_cdr = $calling_class::getAll();
         foreach ($piani_cdr as $piano) {
             //i piani sono ordinati in ordine decrescente dalla getAll, 
             //viene quindi selezionato il primo piano del tipo passato come parametro con data introduzione minore o uguale a quella considerata		
@@ -71,6 +23,7 @@ class PianoCdr {
     }
     
     public static function getPianiCdrCodice($codice, $class) {
+       $calling_class = static::class;
        $piani_cdr_codice = array();
        $classes = array("Cdc","Cdr");
        //Per sicurezza viene verificato che il nome della classe sia uno dei due valori ammissibili
@@ -78,7 +31,7 @@ class PianoCdr {
            ffErrorHandler::raise("Classe inesistente");
        }
 
-       foreach(PianoCdr::getAll() as $piano_cdr) {
+       foreach($calling_class::getAll() as $piano_cdr) {
            try {
                $tmp = $class::factoryFromCodice($codice, $piano_cdr);
                $piani_cdr_codice[] = $piano_cdr;
@@ -106,9 +59,9 @@ class PianoCdr {
 
     public function delete() {
         $db = ffDB_Sql::factory();
-        $sql = "DELETE FROM piano_cdr WHERE piano_cdr.ID = " . $db->toSql($this->id);
+        $sql = "DELETE FROM ".self::$tablename." WHERE ".self::$tablename.".ID = " . $db->toSql($this->id);
         if (!$db->execute($sql)) {
-            throw new Exception("Impossibile eliminare l'oggetto PianoCdr con ID = " . $this->id . " dal DB");
+            throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID = " . $this->id . " dal DB");
         }
     }
 
@@ -116,11 +69,11 @@ class PianoCdr {
         $db = ffDB_Sql::factory();
         $sql = "
             UPDATE 
-                piano_cdr
+                ".self::$tablename."
             SET							
                 data_introduzione = " . $db->toSql($this->data_definizione) ."
             WHERE 
-                piano_cdr.ID = " . $db->toSql($this->id) . "
+                ".self::$tablename.".ID = " . $db->toSql($this->id) . "
         ";
 
         if (!$db->execute($sql)) {
@@ -132,7 +85,7 @@ class PianoCdr {
         $db = ffDB_Sql::factory();
         $sql = "
                 INSERT INTO
-                    piano_cdr
+                    ".self::$tablename."
                     (ID_tipo_piano_cdr, data_definizione)
                 VALUES
                     (" . (strlen($this->id_tipo_piano_cdr) ? $db->toSql($this->id_tipo_piano_cdr) : "null") . ",

@@ -44,10 +44,36 @@ class ffValidator_password extends ffValidator_base
 	{
 		$password = $value->getValue();
 
-		//verifica formale dell'password
+		//verifica formale dell'password        
+        //ADDED-ATS changed password policy*************************************
+        /*old controls
         if(preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z!@#$%\.]{8,30}$/', $password) < 1) 
             return "Il valore inserito nel campo \"$label\" non soddisfa i criteri minimi di sicurezza: La lunghezza deve essere compresa tra gli 8 e i 30 caratteri, e deve essere composta sia da lettere che da numeri.";
+        */
+        $errors = array();
+        if (strlen($password) < 12 || strlen($password) > 30) {
+            $errors[] = "lunghezza minuma di 12 caratteri e lunghezza massima di 30";
+        }
+        if (!preg_match("/\d/", $password)) {
+            $errors[] = "contenere almeno una numero";
+        }
+        if (!preg_match("/[A-Z]/", $password)) {
+            $errors[] = "contenere almeno una maiuscola";
+        }
+        if (!preg_match("/[a-z]/", $password)) {
+            $errors[] = "contenere almeno una minuscola";
+        }
+        if (!preg_match("/\W/", $password)) {
+            $errors[] = "contenere almeno un carattere speciale";
+        }
+        if (preg_match("/\s/", $password)) {
+            $errors[] = "non contenere spazi vuoti";
+        }
 
+        if ($errors) {
+            return "La password non rispetta i seguenti criteri:<br>".implode("<br>",$errors);
+        }
+        //**********************************************************************
 		return false;
 	}
 }

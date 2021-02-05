@@ -36,5 +36,7 @@ return array (
   'ldap_user_not_qualified' => 'Utente senza autorizzazione',
   'edit_profile' => 'Modifica profilo',
   'manage_users' => '{manage_users}',
+  'login_wrong_user_not_found' => 'Nome utente e/o password errati',
+  'login_wrong_user_or_password' => 'Nome utente e/o password errati',
 );
 

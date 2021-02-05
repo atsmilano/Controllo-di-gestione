@@ -1,31 +1,4 @@
 <?php
-function checkHeaderColumnExist($column, $db_columns) {
-    foreach ($db_columns as $obj) {
-        if (strcasecmp($column, $obj->field) == 0) {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-function setUploadResult(&$result_row, $status, $message) {
-    $result_row['status'] = $status;
-    $result_row['message'][] = $message;
-}
-
-function checkValiditaValore($valore_parametro_rilevato, $field, $parametri_allowed) {
-    $real_field = strtolower($field);
-    $value = $valore_parametro_rilevato->{$real_field};
-    if(!empty($value)) {
-        if(!in_array($value, $parametri_allowed)) {
-            throw new Exception("
-                Valore $value per il campo <b>$field</b> non valido
-            ");
-        }
-    }
-}
-
 if ($_FILES["file-upload"]["error"] !== UPLOAD_ERR_OK) {
     $result[] = [
         "status" => false, 
@@ -87,10 +60,16 @@ try {
         foreach ($cell_iterator as $cell) {
             if ($first_row == true) {
                 $header = strtolower($cell->getValue());
-                if (checkHeaderColumnExist($header, $db_columns)) {
-                    $intestazioni[] = $header;
-                }
-                else {
+                $found = false;
+                //verifica esistenza del campo nel db (attributo della classe)
+                foreach ($db_columns as $obj) {
+                    if (strcasecmp($header, $obj->field) == 0) {
+                        $intestazioni[] = $header;
+                        $found = true;
+                        break;
+                    }
+                }                                                    
+                if ($found !== true) {
                     throw new Exception("Colonna $header sconosciuta");
                 }
             }
@@ -191,4 +170,17 @@ catch (Exception $e) {
 }
 finally {
     die(json_encode($result));
+}
+
+//validazione di un valore in un insieme discreto per un campo
+function checkValiditaValore($valore_parametro_rilevato, $field, $parametri_allowed) {
+    $real_field = strtolower($field);
+    $value = $valore_parametro_rilevato->{$real_field};
+    if(!empty($value)) {
+        if(!in_array($value, $parametri_allowed)) {
+            throw new Exception("
+                Valore '$value' per il campo <b>$field</b> non valido
+            ");
+        }
+    }
 }
