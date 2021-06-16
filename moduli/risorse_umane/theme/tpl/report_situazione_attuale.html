@@ -1,0 +1,291 @@
+<div id="ru_report_attuale">
+    <h2>Dotazione personale CdR</h2>	  		
+    <fieldset id="filtri">
+        <legend>Filtri</legend>                   
+        <div>
+            <select name='cdr_ru_select' id='cdr_ru_select'>
+                <option value="0">Tutti i CDR</option>
+                <!--BeginSectOptionCdrRU-->
+                <option value="{cdr_ru_id}" {cdr_ru_selected}>CDR: {cdr_ru_indent}&nbsp;{cdr_ru_descrizione}</option>                                            
+                <!--EndSectOptionCdrRU-->
+            </select>
+        </div>
+        <div id="cdr_ramo_div">
+            <input id="filter_cdr_ramo" name="filter_cdr_ramo" value="1" {filter_cdr_ramo_checked} type="checkbox" >
+            <label>Solo personale CDR selezionato</label>
+        </div>
+        <div>
+            <select name='ruolo_select' id='ruolo_select'>
+                <option value="0">Tutti i Ruoli</option>
+                <!--BeginSectOptionRuolo-->
+                <option value="{ruolo_select_id}" {ruolo_selected}>{ruolo_select_descrizione}</option>                                            
+                <!--EndSectOptionRuolo-->
+            </select>
+        </div>
+        <div id="ruoli_multicheck">
+            <div>Qualifiche interne</div>
+            <!--BeginSectOptionQI-->
+            <span class="qi_checkbox">
+                <input id="filter_qi_checkbox_{qi_checkbox_id}" name="filter_qi[]" value="1" {filter_qi_checked} type="checkbox" >
+                <label>{qi_checkbox_descrizione}</label>
+            </span>
+            <!--EndSectOptionQI-->
+        </div>
+        <button id="filter_button" type="button">Applicare filtri</button>
+    </fieldset>
+    <!--BeginSectReportRuAttuale-->
+    <table id="elenco_dipendenti">
+        <thead id="elenco_dipendenti_thead">
+            <tr>
+                <th>&nbsp;</th>
+                <th>Cdr</th>
+                <th>Ruolo</th>
+                <th>Qualifica Interna</th>
+                <th>Dipendente</th>
+                <th>% Rapp.<br>lavoro</th>                    
+                <th>CdC</th>
+                <!--BeginSectThRamo-->
+                <th class="tot">Teste<br>Tot</th>
+                <th class="tot">FTE<br>Tot</th>
+                <!--EndSectThRamo-->
+                <th class="tot">Di cui<br>Teste CdR</th>
+                <th class="tot">Di cui<br>FTE CdR</th>                
+            </tr>
+        </thead>
+        <tbody>
+            <!--BeginSectReportCdrRow-->
+                <tr class='cdr livello_{livello_cdr} piano_cdr_figli_{id_cdr_padre}' id='cdr_{id_cdr}'>
+                    <!--BeginSectFigli-->
+                    <td class="cdr_expand " id="{id_cdr}">+</td>
+                    <!--EndSectFigli-->
+                    <!--BeginSectNoFigli-->
+                    <td class="no_cdr_expand ">&nbsp;</td>
+                    <!--EndSectNoFigli-->
+                    <td class="cdr_desc">{indent}{cdr}</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <!--BeginSectTotCdrRamo-->
+                    <td class="tot tot_cdr">{teste_cdr_ramo}</td>
+                    <td class="tot tot_cdr">{fte_cdr_ramo}</td>
+                    <!--EndSectTotCdrRamo-->
+                    <td class="tot tot_cdr">{teste_cdr}</td>
+                    <td class="tot tot_cdr">{fte_cdr}</td>                    
+                </tr>                
+                <!--BeginSectReportRuoloRow-->
+                <tr class='ruolo cdr_{id_cdr}_figli' id='ruolo_{id_cdr}_{id_ruolo}'>
+                    <td class="no_cdr_expand ">&nbsp;</td>
+                    <td class="no_cdr_expand ">{indent}</td>
+                    <td>{ruolo}</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <!--BeginSectTotRuoloRamo-->
+                    <td class="tot tot_ruolo">{teste_ruolo_ramo}</td>
+                    <td class="tot tot_ruolo">{fte_ruolo_ramo}</td>
+                    <!--EndSectTotRuoloRamo-->
+                    <td class="tot tot_ruolo">{teste_ruolo}</td>
+                    <td class="tot tot_ruolo">{fte_ruolo}</td>                    
+                </tr>
+                    <!--BeginSectReportQIRow-->
+                    <tr class='qualifica ruolo_{id_cdr}_{id_ruolo}_figli' id='qualifica_{id_cdr}_{id_ruolo}_{id_qualifica_interna}'>
+                        <td class="no_cdr_expand ">&nbsp;</td>
+                        <td class="no_cdr_expand ">{indent}</td>
+                        <td class="no_cdr_expand ">&nbsp;</td>
+                        <td>{qualifica_interna}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <!--BeginSectTotQIRamo-->
+                        <td class="tot tot_qualifica">{teste_qi_ramo}</td>
+                        <td class="tot tot_qualifica">{fte_qi_ramo}</td>
+                        <!--EndSectTotQIRamo-->
+                        <td class="tot tot_qualifica">{teste_qi}</td>
+                        <td class="tot tot_qualifica">{fte_qi}</td>                        
+                    </tr>
+                        <!--BeginSectReportDipendenteRow-->
+                        <tr class='dipendente qualifica_{id_cdr}_{id_ruolo}_{id_qualifica_interna}_figli {dipendente_diretto_class}'>
+                            <td class="no_cdr_expand ">&nbsp;</td>
+                            <td class="no_cdr_expand ">{indent}</td>
+                            <td class="no_cdr_expand ">&nbsp;</td>
+                            <td class="no_cdr_expand ">&nbsp;</td>
+                            <td>{dipendente}</td>
+                            <td>{perc_rapporto_lavoro}</td>
+                            <td>{cdc}</td>
+                            <!--BeginSectTotDipendenteRamo-->
+                            <td class="tot">&nbsp;</td>
+                            <td class="tot tot_dipendente">{fte_ramo}</td>
+                            <!--EndSectTotDipendenteRamo-->
+                            <td class="tot">&nbsp;</td>
+                            <td class="tot tot_dipendente">{fte}</td>                            
+                        </tr>
+                        <!--EndSectReportDipendenteRow-->
+                    <!--EndSectReportQIRow-->
+                <!--EndSectReportRuoloRow-->                    
+            <!--EndSectReportCdrRow-->            
+        </tbody>
+    </table>
+    <div id="report_ru_back_to_top" class='ui-icon-triangle-1-n'><i class="fa-arrow-up fa"></i></div>
+    <!--EndSectReportRuAttuale-->
+    <!--BeginSectNoReportRuAttuale-->
+    <div>Nessun Dato rilevato</div>
+    <!--EndSectNoReportRuAttuale-->
+</div>
+<!--BeginReportCoan-->
+<script>
+    $(function () {
+        $("#elenco_dipendenti tbody tr").hide();
+        $("#elenco_dipendenti tbody tr.cdr.livello_0").each(function () {
+            $(this).show();
+            $('.ruolo.'+$(this).attr("id")+'_figli').show();
+        });     
+        
+        //visibilità check box
+        if($("input[name='filter_qi[]']:checked").length <= 0){
+            $(".qi_checkbox").hide();
+        }
+        $("#ruoli_multicheck div").click(function () {
+            $(".qi_checkbox").toggle();
+        });
+
+        $("#filter_button").click(function(){
+            event.preventDefault();
+            var selected_qi = []
+            $("input[name='filter_qi[]']:checked").each(function () {
+                selected_qi.push(parseInt($(this).attr("id").substr(19)));
+            });
+            url = window.location.pathname + "?{globals}cdr_ru_select=" + $("#cdr_ru_select").val()
+                    + "&filter_cdr_ramo=" + $("#filter_cdr_ramo").is(':checked')
+                    + "&ruolo_select=" + $("#ruolo_select").val()
+                    + "&filter_qi_ids=" + selected_qi;
+            window.location = url;
+        });
+        $("#ruolo_select").change(function(){
+            event.preventDefault();
+            var selected_qi = []
+            $("input[name='filter_qi[]']:checked").each(function () {
+                selected_qi.push(parseInt($(this).attr("id").substr(19)));
+            });
+            url = window.location.pathname + "?{globals}cdr_ru_select=" + $("#cdr_ru_select").val()
+                    + "&filter_cdr_ramo=" + $("#filter_cdr_ramo").is(':checked')
+                    + "&ruolo_select=" + $("#ruolo_select").val();
+            window.location = url;
+        });
+        $("#cdr_ru_select").change(function(){
+            event.preventDefault();
+            var selected_qi = []
+            $("input[name='filter_qi[]']:checked").each(function () {
+                selected_qi.push(parseInt($(this).attr("id").substr(19)));
+            });
+            url = window.location.pathname + "?{globals}cdr_ru_select=" + $("#cdr_ru_select").val()
+                    + "&filter_cdr_ramo=" + $("#filter_cdr_ramo").is(':checked');
+            window.location = url;
+        });
+        $("#filter_cdr_ramo").change(function(){
+            event.preventDefault();
+            var selected_qi = []
+            $("input[name='filter_qi[]']:checked").each(function () {
+                selected_qi.push(parseInt($(this).attr("id").substr(19)));
+            });
+            url = window.location.pathname + "?{globals}cdr_ru_select=" + $("#cdr_ru_select").val()
+                    + "&filter_cdr_ramo=" + $("#filter_cdr_ramo").is(':checked')
+                    + "&ruolo_select=" + $("#ruolo_select").val()
+                    + "&filter_qi_ids=" + selected_qi;
+            window.location = url;
+        });        
+
+        //apertura livelli
+        $("#elenco_dipendenti tr").not("td.cdr_expand, td.no_cdr_expand").click(function () {
+            cascadeToggle($(this).attr("id"));
+        });
+        $("#elenco_dipendenti tr td.no_cdr_expand").click(function () {
+            event.stopPropagation();
+        });
+        $("#elenco_dipendenti tr td.cdr_expand").click(function () {
+            event.stopPropagation();
+            cdrCascadeToggle($(this).attr("id"));
+        });
+        
+        //back to top
+        $("#report_ru_back_to_top").click(function () {
+            $('html,body').animate({
+                scrollTop: $("#ru_report_attuale").offset().top
+            }, 700);
+        });
+
+        //funzione che permette di variare le proprietà dell'intestazione in base allo scrolling
+        $(window).scroll(function () {
+            //se l'intestazione di tabella supera il limite della pagina viene visualizzata l'intestazione fissa
+            if ($("#elenco_dipendenti").offset().top < $(document).scrollTop())
+            {
+                $("#elenco_dipendenti_thead tr th").css({
+                    "padding-top":"40px"
+                });
+            } else
+            {
+                $("#elenco_dipendenti_thead tr th").css({
+                    "padding-top":"0"
+                });
+            }
+        });
+
+        $(window).resize(function () {
+            $("#elenco_dipendenti_fixed_thead th").each(function (i) {
+                $(this).css({
+                    "width": $(th[i]).width()
+                });
+            });
+        });        
+    });
+
+    function cascadeToggle(id) {
+        //se la classe è visibile (già esplosa) viene chiusa
+        if ($("." + id + "_figli").is(":visible"))
+        {
+            //viene verificato che ci siano figli visibili (esplosi)
+            $("." + id + "_figli").each(function () {
+                primo = 1;
+                cascadeToggle($(this).attr("id"));
+            });
+            $("." + id + "_figli").hide();
+            primo = 0;
+        }
+        //altrimenti viene aperta
+        else if (typeof primo == 'undefined' || primo == 0)
+        {
+            $("." + id + "_figli").show();
+            primo = 0;
+        }
+    }    
+    function cascadeHide(id) {
+        $("." + id + "_figli").each(function () {
+            cascadeHide($(this).attr("id"));
+        });
+        if ($("." + id + "_figli").is(":visible")) {
+            $("." + id + "_figli").hide();
+        }
+    }
+    function cdrCascadeToggle(id) {        
+        //se la classe è visibile (già esplosa) viene chiusa                           
+        if ($('.piano_cdr_figli_'+id).is(":visible")) {             
+            $('.piano_cdr_figli_'+id).each(function () {
+                cdr_primo = 1;      
+                id_cdr = $(this).attr("id").substr(4, $(this).attr("id").length);
+                cdrCascadeToggle(id_cdr);   
+                cascadeHide($(this).attr("id"));
+            });
+            $('.piano_cdr_figli_'+id).hide();                    
+            $('#'+id).html("+");
+            cdr_primo = 0;
+        }
+        //altrimenti viene aperta
+        else if (typeof cdr_primo == 'undefined' || cdr_primo == 0) {
+            $('.piano_cdr_figli_'+id).show();
+            $('#'+id).html("-");
+            cdr_primo = 0;
+        }
+    }
+</script>

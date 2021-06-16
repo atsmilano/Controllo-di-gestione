@@ -1,0 +1,29 @@
+<div id="{tabs_id}">
+    <div id="tabs">
+        <ul>
+            <!--BeginSectTab-->
+            <li><a id="{tab_id}" href="{tab_link}?{tab_params}">{tab_name}</a></li>
+            <!--EndSectTab-->
+        </ul>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#tabs').tabs({
+            beforeLoad: function (event, ui) {
+                ui.panel.html('<div class="loading">Loading...</div>');
+                ui.ajaxSettings.dataFilter = function (data) {
+                    contents_to_load = $.parseJSON(data);
+                    ui.panel.html(contents_to_load.footers);
+                    ui.panel.html(contents_to_load.headers);
+                    ui.panel.html(contents_to_load.html);
+                };
+            }
+            , load: function (event, ui) {
+            }
+        });
+        
+        $("#tabs").tabs({ active: {active_tab} });
+    });        
+</script>

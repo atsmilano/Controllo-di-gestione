@@ -29,7 +29,7 @@ if ($user->hasPrivilege("cdr_view_all")) {
 else {
     $view_all = false; 
     $cdr_selezionato = new Cdr($cm->oPage->globals["cdr"]["value"]->id);
-    $cdr_to_check = array($cdr_selezionato);
+    $cdr_to_check = array();
     foreach ($cdr_selezionato->getGerarchia() as $cdr) {        
         $cdr["cdr"]->responsabile = $cdr["cdr"]->getResponsabile($dateTimeObject);
         $cdr_to_check[] = $cdr["cdr"];
@@ -53,7 +53,7 @@ $sql = "
     WHERE     
         (obiettivi_obiettivo.data_eliminazione is null || obiettivi_obiettivo.data_eliminazione <> '0000-00-00')
         AND
-        (obiettivi_obiettivo_cdr.data_eliminazione is null || obiettivi_obiettivo.data_eliminazione <> '0000-00-00')
+        (obiettivi_obiettivo_cdr.data_eliminazione is null || obiettivi_obiettivo_cdr.data_eliminazione <> '0000-00-00')
         AND
         obiettivi_obiettivo.ID_anno_budget = " . $db->toSql($anno->id);
 $db->query($sql);
@@ -131,13 +131,17 @@ foreach (PersonaleObiettivi::getAll() as $dipendente) {
 }
 //contatore per generare id univoci (non utilizzati)
 $i=0;
+
 foreach ($cdr_to_check as $cdr) {
     //vengono verificati i cdr per l'inserimento nei report
     //vengono considerati solamente i cdr con almeno un dipendente assegnato oppure di responsabilità diretta    
     //recupero del personale cdt        
     $to_check = false;
-    $personale_cdr = $cdr->getPersonaleCdcAfferentiInData($date);   
+    $personale_cdr = $cdr->getPersonaleCdcAfferentiInData($dateTimeObject);   
     if (count($personale_cdr)) {
+        if (count($personale_cdr)) {
+            $to_check = true;
+        }        
         //dal personale vengono eliminati i responsabili e rieffettuato il controllo
         foreach ($personale_cdr as $key => $dipendente_cdr) {
             $is_responsabile = false;
@@ -146,14 +150,11 @@ foreach ($cdr_to_check as $cdr) {
                     $is_responsabile = true;
                     break;
                 }
-            }
+            }            
             if ($is_responsabile){
                 unset($personale_cdr[$key]);
-            }
-        }
-        if (count($personale_cdr)) {
-            $to_check = true;
-        }        
+            }                        
+        }                        
     }
     else {
         //viene verificato che il cdr sia di responsabilità diretta
@@ -419,7 +420,7 @@ $oField->data_source = "cdr_padre";
 $oField->base_type = "Text";
 $oField->extended_type = "Selection";
 $oField->multi_pairs = $cdr_padri_obiettivi_multipairs;
-$oField->label = "Cdr padre";
+$oField->label = "CdR padre";
 $oGrid->addSearchField($oField);
 
 $cm->oPage->addContent($oGrid);
@@ -466,7 +467,7 @@ $oGrid->addContent($oField);
 $oField = ffField::factory($cm->oPage);
 $oField->id = "cdr";
 $oField->base_type = "Text";
-$oField->label = "Cdr";
+$oField->label = "CdR";
 $oGrid->addContent($oField);
 
 //filters
@@ -487,7 +488,7 @@ $oField->data_source = "cdr_padre";
 $oField->base_type = "Text";
 $oField->extended_type = "Selection";
 $oField->multi_pairs = $cdr_padri_peso_multipairs;
-$oField->label = "Cdr padre";
+$oField->label = "CdR padre";
 $oGrid->addSearchField($oField);
 
 $cm->oPage->addContent($oGrid);
@@ -535,7 +536,7 @@ $oGrid->addContent($oField);
 $oField = ffField::factory($cm->oPage);
 $oField->id = "cdr";
 $oField->base_type = "Text";
-$oField->label = "Cdr";
+$oField->label = "CdR";
 $oGrid->addContent($oField);
     
 $oField = ffField::factory($cm->oPage);
@@ -562,7 +563,7 @@ $oField->data_source = "cdr_padre";
 $oField->base_type = "Text";
 $oField->extended_type = "Selection";
 $oField->multi_pairs = $cdr_padri_personale_multipairs;
-$oField->label = "Cdr padre";
+$oField->label = "CdR padre";
 $oGrid->addSearchField($oField);
 
 $oField = ffField::factory($cm->oPage);
@@ -571,7 +572,7 @@ $oField->data_source = "cdr";
 $oField->base_type = "Text";
 $oField->extended_type = "Selection";
 $oField->multi_pairs = $cdr_multipairs;
-$oField->label = "Cdr";
+$oField->label = "CdR";
 $oGrid->addSearchField($oField);
 
 $cm->oPage->addContent($oGrid);

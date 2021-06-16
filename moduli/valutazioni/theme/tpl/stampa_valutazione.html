@@ -12,8 +12,18 @@
     </div>   
     <div id="intestazione">
         <table>
+            <tr><td class="label">Periodo di riferimento</td><td class="val">{date_riferimento_periodo}</td></tr>
             <tr><td class="label">Valutato:</td><td class="val">{valutato}</td></tr>
+            <tr>
+                <td class="label">Cdr afferenza:</td>
+                <td class="val">
+                    <!--BeginSectCdrAssociati-->
+                    {cdr} - {perc_testa}%<br>
+                    <!--EndSectCdrAssociati-->
+                </td>
+            </tr>           
             <tr><td class="label">Tipologia scheda:</td><td class="val">{tipologia_scheda}</td></tr>
+            <tr><td class="label">Valutatore:</td><td class="val">{valutatore}</td></tr>
         </table>
     </div>
     <!--BeginSectAmbito-->

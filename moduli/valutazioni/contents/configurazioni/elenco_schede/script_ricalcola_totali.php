@@ -14,7 +14,7 @@ if (isset($_REQUEST["ID_periodo"])) {
             }            
             $end = new DateTime();
             $interval = $end->diff($start);
-            die("Procedura dio aggiornamento dei totali precalcolati conclusa. Durata [h:min:sec]: ".($interval->h.":".$interval->i.":".$interval->s));
+            die("Procedura di aggiornamento dei totali precalcolati conclusa. Durata [h:min:sec]: ".($interval->h.":".$interval->i.":".$interval->s));
         }
     } catch (Exception $e) {
         die("Impossibile creare il periodo con ID '" . $_REQUEST["ID_periodo"] . "'. Errore: " . $e->getMessage());

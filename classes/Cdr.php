@@ -1,5 +1,5 @@
 <?php
-class Cdr {
+class Cdr extends Entity{
     public $id;
     public $id_anagrafica_cdr;
     public $id_piano_cdr;
@@ -437,7 +437,7 @@ class Cdr {
     }    
     
     //restituisce un array con i dipendenti del cdr alla data
-    public function getPersonaleCdcAfferentiInData($date) {
+    public function getPersonaleCdcAfferentiInData(DateTime $date) {
         $personale_cdc_afferenti = array();
         foreach ($this->getCdc() as $cdc) {
             foreach ($cdc->getPersonaleCdcInData($date) as $cdc_personale) {

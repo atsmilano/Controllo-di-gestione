@@ -137,7 +137,6 @@ $oField->id = "data_apertura_compilazione";
 $oField->base_type = "Date";
 $oField->widget = "datepicker";
 $oField->label = "Data apertura compilazione";
-CoreHelper::disableNonEditableOField($oField, $editable);
 $oRecord->addContent($oField, "periodo_group");
 
 $oField = ffField::factory($cm->oPage);

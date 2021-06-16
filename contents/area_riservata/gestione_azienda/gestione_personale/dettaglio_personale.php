@@ -265,7 +265,7 @@ if ($isEdit) {
     $oField = ffField::factory($cm->oPage);
     $oField->id = "posizione_organizzativa";
     $oField->base_type = "Text";
-    $oField->label = "Posizione organizzativa";
+    $oField->label = "Incarico di funzione";
     $oGrid->addContent($oField);
 
     $oField = ffField::factory($cm->oPage);

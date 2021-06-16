@@ -56,8 +56,9 @@ class CoreHelper {
     public static function includeJqueryUi() {
         $cm = cm::getInstance();        
         $cm->oPage->addContent('
-				<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">				
-				<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+				<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                                <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"</script>
+				<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>                                
             ');
     }
 
@@ -273,6 +274,15 @@ class CoreHelper {
         return $date_str_formatted;
     }        
     
+    //restituisce true se  $anno è compreso nell'intervallo $anno_inizio-$anno_fine
+    //i parametri sono di tipo testuale
+    public function annoInIntervallo($anno, $anno_inizio, $anno_termine) {
+        if ($anno >= $anno_inizio && ($anno_termine == null || $anno <= $anno_termine)) {
+            return true;
+        }
+        return false;
+    }  
+    
     //valore nullo (o 0) ammesso per la fine dell'intervallo
     public static function verificaIntervalloAnni($start, $end) {        
         //viene verificato che i parametri siano anni validi (interi senza decimali)
@@ -322,5 +332,33 @@ class CoreHelper {
     
     public static function stripTagsUTF8Encode($testo) {
         return strip_tags(html_entity_decode($testo, ENT_QUOTES, 'UTF-8'));
+    }
+    
+    //aggiunge ala pagina un elemento tab
+    //l'array tabs contiene le ifnormazioni dei singoli tabs
+    //ogni tab è rappresentato da un array associativo con 4 variabili identificate dalle chiavi: tab_id, tab_link, tab_params, tab_name
+    public static function showTabsPage ($tabs_id, $tabs = array()) {
+        $cm = cm::getInstance();
+        
+        CoreHelper::includeJqueryUi();
+        
+        $tpl = ffTemplate::factory(FF_DISK_PATH.DIRECTORY_SEPARATOR.FF_THEME_DIR.DIRECTORY_SEPARATOR.$cm->oPage->getTheme().DIRECTORY_SEPARATOR."layouts");
+        $tpl->load_file("tabs.html", "main");
+        
+        $tpl->set_var("tabs_id", $tabs_id);
+                
+        foreach($tabs as $tab) {
+            $tpl->set_var("tab_id", $tab["tab_id"]);
+            $tpl->set_var("tab_link", $tab["tab_link"]);
+            $url_params = $tab["tab_params"].(strlen($tab["tab_params"])?"&":"");
+            $tpl->set_var("tab_params", $url_params."ret_url=".urlencode($tab["tab_link"]."?".$url_params));
+            $tpl->set_var("tab_name", $tab["tab_name"]);
+            $tpl->parse("SectTab", true);
+        }
+        $tpl->set_var("active_tab", isset($_REQUEST["gotab"]) ? $_REQUEST["gotab"] : 0);
+
+        //***********************
+        //Adding contents to page
+        $cm->oPage->addContent($tpl);
     }
 }

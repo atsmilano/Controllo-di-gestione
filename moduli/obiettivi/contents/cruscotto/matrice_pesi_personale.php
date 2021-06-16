@@ -54,7 +54,7 @@ if (count($obiettivi_cdr_anno)>0) {
 	//righe della tabella, personale e per ognuno di essi associazione e peso agli obiettivi
 	//ordinamento del personale in base alla categoria dirigente o comparto
 	//viene escluso dall'elenco dei dipendenti il responsabile del cdr
-	$distr_teste_cdr = $cdr->getPersonaleCdcAfferentiInData($date);	
+	$distr_teste_cdr = $cdr->getPersonaleCdcAfferentiInData($dateTimeObject);	
 	$responsabile = $cdr->getResponsabile($dateTimeObject);
 	$personale_peso = array();
 	$obiettivi_modificabili = false;

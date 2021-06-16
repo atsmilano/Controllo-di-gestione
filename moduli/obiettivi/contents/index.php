@@ -9,7 +9,7 @@ $tot_obiettivi_personale = $personale->getPesoTotaleObiettivi($anno);
 try {
     $accettazione_obiettivo = ObiettiviAccettazione::factoryFromDipendenteAnno($personale, $anno);
 
-    if (!isset($_REQUEST["keys[ID_accettazione]"])) {
+    if (!isset($_REQUEST["keys[ID_accettazione]"]) || $_REQUEST["keys[ID_accettazione]"] != $accettazione_obiettivo->id) {
         $url = FF_SITE_PATH . $cm->path_info . "?keys[ID_accettazione]=" . $accettazione_obiettivo->id . "&" . $_SERVER['QUERY_STRING'];
         ffRedirect($url);
         die();
@@ -388,7 +388,7 @@ foreach ($personale->getCodiciCdrResponsabilitaAnno($anno) as $codice_cd_resp) {
             if ($rendicontazione_aziendale !== null) {
                 $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
                 if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
-                    $raggiungimento = $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
+                    $raggiungimento = (int) $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
                 }
             }
             $rendicontazione_cdr = $ob_cdr_resp->getRendicontazionePeriodo($periodo_riferimento);
@@ -422,7 +422,7 @@ foreach ($personale->getCodiciCdrResponsabilitaAnno($anno) as $codice_cd_resp) {
                     $obiettivo->codice . $coreferente,
                     $obiettivo->titolo,
                     $cdr_resp_anno->codice . " - " . $cdr_resp_anno->descrizione,
-                    number_format($peso, 2) . "%",
+                    (int)$peso . "%",
                     $periodo_desc,
                     $raggiungimento,
                 );

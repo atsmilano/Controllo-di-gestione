@@ -1,0 +1,235 @@
+/*contabilità analitica*/
+#ru_report_attuale {
+    white-space: nowrap;
+    overflow-x: scroll;
+}
+
+#ru_report_attuale #filtri {
+    background-color: #89b7db;
+    padding: 15px;
+    text-align: center;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#ru_report_attuale #filtri select, #ru_report_attuale #filtri button {
+    width: 80%;
+    clear: left;
+    margin: 3px;
+    float: left;
+    margin-left: 10%;
+    margin-bottom: 9px;    
+}
+
+#ru_report_attuale #filtri button {
+    margin-top: 15px;
+}
+
+#ru_report_attuale #filtri #cdr_ru_select {
+    width: 60%;    
+}
+
+#ru_report_attuale #filtri #cdr_ramo_div {
+    float: left;
+    width: 20%;
+}
+
+#ru_report_attuale #filtri button {
+    background-color: white;
+    border: solid 2px #1e88e5;
+    height: 30px;
+    color: #1e88e5;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    font-weight: bold;
+}
+
+#ru_report_attuale #filtri button:hover {
+    background-color: #1e88e5;
+    color: white;
+}
+
+#ru_report_attuale #filtri legend {
+    text-align: left;
+    background-color: #263238;
+    color: white;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    width: 20%;
+    text-align: center;
+    font-size: 15px;
+}
+
+#ru_report_attuale #elenco_dipendenti{
+    width: 100%;
+    margin-top: 15px;	
+    background: white; /* Old browsers */
+    background: -moz-linear-gradient(left,  #89b7db 0%, #F5F3E6 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left,  #89b7db 0%,#F5F3E6 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right,  #89b7db 0%,#F5F3E6 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#89b7db', endColorstr='#F5F3E6',GradientType=1 ); /* IE6-9 */
+}
+
+#ru_report_attuale #elenco_dipendenti_thead{
+    height: 15px;
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    margin-top: 30px;    
+}
+
+#ru_report_attuale #elenco_dipendenti #elenco_dipendenti_thead th{	
+    background: #263238; /* Old browsers */
+    background: -moz-linear-gradient(top,  #263238 0%, #263238 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #263238 0%,#263238 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #263238 0%,#263238 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#263238', endColorstr='#263238',GradientType=0 ); /* IE6-9 */
+    border: solid 1px;
+    color: white;
+    padding: 6px;
+    text-align : center;    
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr.dipendente td:hover{
+    cursor: auto;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr.dipendente_diretto{
+    font-weight: bold;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td{
+    padding: 0 9px 0 9px;    
+    border: 1px solid black;
+    line-height: 30px;
+    font-size: 12px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.cdr_expand{    
+    border-left: none;
+    border-right: none;
+    background-color: white;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr.cdr{
+    background-color: white;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.cdr_desc{
+    padding-left: 0;
+    border-left: none;
+    width: 21%;
+    border-top: solid 2px black;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td span.gerarchia_indent {
+    background-color: white;
+    width: 30px;
+    display: inline-block;
+    padding: 0;
+    border-left: solid 2px black;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.cdr_expand{	
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0px;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.tot{	
+    text-align: center;
+    padding: 0px;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.tot_cdr{	
+    color: #000000;
+    font-weight: bold;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.tot_ruolo{	
+    color: #510606;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.tot_qualifica{	
+    color: #920000;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr td.tot_dipendente{    
+    color: #C40001;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr:hover{	
+    background: white; /* Old browsers */
+    background: -moz-linear-gradient(top,  #FFFFFF 0%, #FFFFFF 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #FFFFFF 0%,#FFFFFF 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #FFFFFF 0%,#FFFFFF 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#FFFFFF',GradientType=0 ); /* IE6-9 */
+    cursor: pointer;
+}
+
+#ru_report_attuale #elenco_dipendenti tbody tr .no_cdr_expand{
+    cursor: auto;
+    background-color: white;
+    border: none;
+    padding: 0;
+}
+
+#report_ru_back_to_top {
+    cursor: pointer;
+    display: none;
+    background-color: #1e88e5;
+    border: solid 1px #184A1E;
+    position: fixed;
+    bottom: 45px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-weight: bold;
+    color: white;	
+    -webkit-border-radius: 18px;
+    -moz-border-radius: 18px;
+    border-radius: 18px;	
+}
+
+#report_ru_back_to_top:hover{
+    background-color: #C1DD81;
+    -webkit-box-shadow: 0px 0px 15px 10px rgba(45,130,21,0.6);
+    -moz-box-shadow: 0px 0px 15px 10px rgba(45,130,21,0.6);
+    box-shadow: 0px 0px 15px 10px rgba(45,130,21,0.6);
+}
+
+#ruoli_multicheck {
+    background-color: white;
+    margin: 1%;
+    clear: left;
+    width: 80%;
+    margin-left: 10%;
+    cursor: pointer;
+}
+
+#ruoli_multicheck div{
+    border: solid 1px grey;
+    text-align: left;
+    padding-left: 3px;
+    margin-bottom: 9px;
+}
+
+#ruoli_multicheck label {
+    float: left;
+    margin-left: 9px;    
+    font-weight: normal;
+}
+
+#ruoli_multicheck input {
+    float: left;
+    clear: left;
+    margin-left: 15px;
+}
+

@@ -11,7 +11,7 @@
  Target Server Version : 50731
  File Encoding         : 65001
 
- Date: 27/11/2020 13:58:43
+ Date: 16/06/2021 11:33:53
 */
 
 SET NAMES utf8mb4;
@@ -29,9 +29,9 @@ CREATE TABLE `allegato`  (
   `mime_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `content_lenght` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `createdAt` datetime(0) NULL DEFAULT NULL,
-  `updatedAt` datetime(0) NULL DEFAULT NULL,
-  `deletedAt` datetime(0) NULL DEFAULT NULL,
+  `createdAt` datetime NULL DEFAULT NULL,
+  `updatedAt` datetime NULL DEFAULT NULL,
+  `deletedAt` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -159,7 +159,7 @@ CREATE TABLE `cm_gs`  (
   `from_email` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `reply_to_email` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `created_on` datetime(0) NOT NULL,
+  `created_on` datetime NOT NULL,
   `from_name` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -312,7 +312,7 @@ CREATE TABLE `cm_mod_security_domains`  (
   `owner` int(11) NOT NULL,
   `company_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` int(11) NOT NULL,
-  `creation_date` datetime(0) NOT NULL,
+  `creation_date` datetime NOT NULL,
   `expiration_date` date NOT NULL,
   `time_zone` int(11) NOT NULL,
   `status` int(11) NOT NULL,
@@ -377,9 +377,9 @@ DROP TABLE IF EXISTS `cm_mod_security_profiles`;
 CREATE TABLE `cm_mod_security_profiles`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_time` datetime(0) NOT NULL,
+  `created_time` datetime NOT NULL,
   `created_user` int(11) NOT NULL,
-  `modified_time` datetime(0) NOT NULL,
+  `modified_time` datetime NOT NULL,
   `modified_user` int(11) NOT NULL,
   `enabled` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `order` int(11) NOT NULL,
@@ -490,17 +490,17 @@ CREATE TABLE `cm_mod_security_users`  (
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `level` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `expiration` datetime(0) NOT NULL,
+  `expiration` datetime NOT NULL,
   `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `time_zone` int(11) NOT NULL DEFAULT 0,
   `role` int(11) NOT NULL DEFAULT 0,
-  `created` datetime(0) NOT NULL,
-  `modified` datetime(0) NOT NULL,
-  `password_generated_at` datetime(0) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `password_generated_at` datetime NOT NULL,
   `temp_password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `password_used` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `ID_packages` int(11) NOT NULL DEFAULT 0,
-  `lastlogin` datetime(0) NOT NULL,
+  `lastlogin` datetime NOT NULL,
   `profile` int(11) NOT NULL DEFAULT 0,
   `special` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -607,7 +607,7 @@ CREATE TABLE `cms_home_sezione_allegato`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_allegato` int(11) NULL DEFAULT NULL,
   `ID_sezione` int(11) NULL DEFAULT NULL,
-  `createdAt` datetime(0) NULL DEFAULT NULL,
+  `createdAt` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -843,7 +843,7 @@ CREATE TABLE `ff_international`  (
   `word_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `description` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_new` int(1) NOT NULL DEFAULT 0,
-  `last_update` datetime(0) NOT NULL,
+  `last_update` datetime NOT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   INDEX `ID_lang`(`ID_lang`, `word_code`(191)) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 98 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -3655,8 +3655,8 @@ CREATE TABLE `indicatori_valore_parametro_rilevato`  (
   `codice_cdr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `valore` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `modificabile` tinyint(1) NULL DEFAULT NULL,
-  `data_riferimento` datetime(0) NULL DEFAULT NULL,
-  `data_importazione` datetime(0) NULL DEFAULT NULL,
+  `data_riferimento` datetime NULL DEFAULT NULL,
+  `data_importazione` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -3787,7 +3787,7 @@ CREATE TABLE `investimenti_investimento`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `codice_cdr_creazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `ID_anno_budget` int(11) NULL DEFAULT NULL,
-  `data_creazione` datetime(0) NULL DEFAULT NULL,
+  `data_creazione` datetime NULL DEFAULT NULL,
   `richiesta_codice_cdc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `richiesta_nuova` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `richiesta_matricola_bene_da_sostituire` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
@@ -3801,15 +3801,15 @@ CREATE TABLE `investimenti_investimento`  (
   `richiesta_ID_priorita` int(11) NULL DEFAULT NULL,
   `richiesta_tempi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `richiesta_ubicazione_bene` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `richiesta_data_chiusura` datetime(0) NULL DEFAULT NULL,
+  `richiesta_data_chiusura` datetime NULL DEFAULT NULL,
   `approvazione_ID_parere_direzione_riferimento` int(11) NULL DEFAULT NULL,
   `approvazione_note_parere_direzione_riferimento` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `approvazione_ID_priorita_direzione_riferimento` int(11) NULL DEFAULT NULL,
   `approvazione_ID_tempi_stimati_direzione_riferimento` int(11) NULL DEFAULT NULL,
-  `approvazione_data` datetime(0) NULL DEFAULT NULL,
-  `approvazione_data_scarto_direzione_riferimento` datetime(0) NULL DEFAULT NULL,
+  `approvazione_data` datetime NULL DEFAULT NULL,
+  `approvazione_data_scarto_direzione_riferimento` datetime NULL DEFAULT NULL,
   `istruttoria_ID_categoria_uoc_competente_anno` int(11) NULL DEFAULT NULL,
-  `istruttoria_data_avvio` datetime(0) NULL DEFAULT NULL,
+  `istruttoria_data_avvio` datetime NULL DEFAULT NULL,
   `istruttoria_costo_presunto` float(11, 2) NULL DEFAULT NULL,
   `istruttoria_modalita_acquisizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `istruttoria_ID_tempi_stimati_uoc_competente` int(11) NULL DEFAULT NULL,
@@ -3817,25 +3817,25 @@ CREATE TABLE `investimenti_investimento`  (
   `istruttoria_ID_fonte_finanziamento_proposta` int(11) NULL DEFAULT NULL,
   `istruttoria_ID_categoria_registro_cespiti_proposta` int(11) NULL DEFAULT NULL,
   `istruttoria_non_coerente_piano_investimenti` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `istruttoria_data_chiusura_uoc_competente` datetime(0) NULL DEFAULT NULL,
-  `istruttoria_data_scarto_uoc_competente` datetime(0) NULL DEFAULT NULL,
+  `istruttoria_data_chiusura_uoc_competente` datetime NULL DEFAULT NULL,
+  `istruttoria_data_scarto_uoc_competente` datetime NULL DEFAULT NULL,
   `verifica_copertura_ID_registro_cespiti` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `verifica_copertura_ID_fonte_finanziamento` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `verifica_copertura_data_fine` datetime(0) NULL DEFAULT NULL,
-  `proposta_piano_investimenti_data` datetime(0) NULL DEFAULT NULL,
+  `verifica_copertura_data_fine` datetime NULL DEFAULT NULL,
+  `proposta_piano_investimenti_data` datetime NULL DEFAULT NULL,
   `dg_ID_parere` int(11) NULL DEFAULT NULL,
   `dg_ID_priorita` int(11) NULL DEFAULT NULL,
   `dg_ID_tempi` int(11) NULL DEFAULT NULL,
-  `dg_data_validazione_piano_investimenti` datetime(0) NULL DEFAULT NULL,
-  `dg_data_scarto_piano_investimenti` datetime(0) NULL DEFAULT NULL,
+  `dg_data_validazione_piano_investimenti` datetime NULL DEFAULT NULL,
+  `dg_data_scarto_piano_investimenti` datetime NULL DEFAULT NULL,
   `monitoraggio_importo_definitivo` decimal(11, 0) NULL DEFAULT NULL,
-  `monitoraggio_data` datetime(0) NULL DEFAULT NULL,
+  `monitoraggio_data` datetime NULL DEFAULT NULL,
   `monitoraggio_provvedimento` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `monitoraggio_fatture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `monitoraggio_fornitore` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `monitoraggio_ID_fonte_finanziamento` int(11) NULL DEFAULT NULL,
   `monitoraggio_note` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `monitoraggio_data_chiusura` datetime(0) NULL DEFAULT NULL,
+  `monitoraggio_data_chiusura` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -3991,7 +3991,7 @@ INSERT INTO `investimenti_tempi_uoc_competente` VALUES (2, '2° semestre');
 DROP TABLE IF EXISTS `log_record_operation`;
 CREATE TABLE `log_record_operation`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `date_time` datetime(0) NOT NULL,
+  `date_time` datetime NOT NULL,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `src_table` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `operation` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -4008,7 +4008,7 @@ CREATE TABLE `obiettivi_accettazione`  (
   `matricola_personale` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ID_anno_budget` int(11) NOT NULL,
   `note_dipendente` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `data_accettazione_dipendente` datetime(0) NULL DEFAULT NULL,
+  `data_accettazione_dipendente` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4065,8 +4065,8 @@ CREATE TABLE `obiettivi_obiettivo`  (
   `ID_tipo` int(11) NOT NULL,
   `ID_area_risultato` int(11) NOT NULL,
   `ID_area` int(11) NOT NULL,
-  `data_ultima_modifica` datetime(0) NULL DEFAULT NULL,
-  `data_eliminazione` datetime(0) NULL DEFAULT NULL,
+  `data_ultima_modifica` datetime NULL DEFAULT NULL,
+  `data_eliminazione` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -4086,8 +4086,8 @@ CREATE TABLE `obiettivi_obiettivo_cdr`  (
   `ID_parere_azioni` char(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note_azioni` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `data_chiusura_modifiche` date NULL DEFAULT NULL,
-  `data_ultima_modifica` datetime(0) NULL DEFAULT NULL,
-  `data_eliminazione` datetime(0) NULL DEFAULT NULL,
+  `data_ultima_modifica` datetime NULL DEFAULT NULL,
+  `data_eliminazione` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE,
   INDEX `chiave`(`ID_obiettivo`, `ID_tipo_piano_cdr`, `codice_cdr`(191)) USING BTREE
@@ -4102,9 +4102,9 @@ CREATE TABLE `obiettivi_obiettivo_cdr_personale`  (
   `ID_obiettivo_cdr` int(11) NOT NULL,
   `matricola_personale` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `peso` int(11) NULL DEFAULT NULL,
-  `data_ultima_modifica` datetime(0) NULL DEFAULT NULL,
-  `data_accettazione` datetime(0) NULL DEFAULT NULL,
-  `data_eliminazione` datetime(0) NULL DEFAULT NULL,
+  `data_ultima_modifica` datetime NULL DEFAULT NULL,
+  `data_accettazione` datetime NULL DEFAULT NULL,
+  `data_eliminazione` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE,
   INDEX `chiave`(`ID_obiettivo_cdr`, `matricola_personale`(191)) USING BTREE
@@ -4170,7 +4170,7 @@ CREATE TABLE `obiettivi_rendicontazione`  (
   `perc_raggiungimento` float(11, 2) NULL DEFAULT NULL,
   `perc_nucleo` int(11) NULL DEFAULT NULL,
   `note_nucleo` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_ultima_modifica_referente` datetime(0) NULL DEFAULT NULL,
+  `time_ultima_modifica_referente` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4182,9 +4182,9 @@ CREATE TABLE `obiettivi_rendicontazione_allegato`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `rendicontazione_id` int(11) NOT NULL DEFAULT 0,
   `allegato_id` int(11) NOT NULL DEFAULT 0,
-  `createdAt` datetime(0) NULL DEFAULT NULL,
-  `updatedAt` datetime(0) NULL DEFAULT NULL,
-  `deletedAt` datetime(0) NULL DEFAULT NULL,
+  `createdAt` datetime NULL DEFAULT NULL,
+  `updatedAt` datetime NULL DEFAULT NULL,
+  `deletedAt` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4222,7 +4222,7 @@ CREATE TABLE `obiettivi_valutazione_personale`  (
   `ID_periodo_rendicontazione` int(11) NOT NULL,
   `ID_obiettivo_cdr_personale` int(11) NOT NULL,
   `perc_raggiungimento` int(11) NULL DEFAULT NULL,
-  `time_ultimo_aggiornamento` datetime(0) NULL DEFAULT NULL,
+  `time_ultimo_aggiornamento` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4262,7 +4262,7 @@ CREATE TABLE `progetti_direzione_riferimento_anno`  (
   `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `ID_anno_budget` int(11) NULL DEFAULT NULL,
   `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `time_modifica` datetime NULL DEFAULT NULL,
   `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -4275,7 +4275,7 @@ CREATE TABLE `progetti_libreria_territorio_applicazione`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `descrizione_territorio_applicazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `time_modifica` datetime NULL DEFAULT NULL,
   `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -4289,7 +4289,7 @@ CREATE TABLE `progetti_libreria_tipo_progetto`  (
   `codice_tipo_progetto` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `descrizione_tipo_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `time_modifica` datetime NULL DEFAULT NULL,
   `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -4302,7 +4302,7 @@ CREATE TABLE `progetti_libreria_tipologia_monitoraggio`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `descrizione_tipologia_monitoraggio` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `extend` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `time_modifica` datetime(0) NULL DEFAULT NULL,
+  `time_modifica` datetime NULL DEFAULT NULL,
   `record_attivo` tinyint(4) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -4345,7 +4345,7 @@ CREATE TABLE `progetti_progetto`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `matricola_utente_creazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `codice_cdr_proponente` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `data_creazione` datetime(0) NULL DEFAULT NULL,
+  `data_creazione` datetime NULL DEFAULT NULL,
   `titolo_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `matricola_responsabile_progetto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ID_tipo_progetto` int(11) NULL DEFAULT NULL,
@@ -4384,14 +4384,14 @@ CREATE TABLE `progetti_progetto`  (
   `oracle_erp` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `data_inizio_progetto` date NULL DEFAULT NULL,
   `data_fine_progetto` date NULL DEFAULT NULL,
-  `data_approvazione` datetime(0) NULL DEFAULT NULL,
+  `data_approvazione` datetime NULL DEFAULT NULL,
   `matricola_responsabile_riferimento_approvazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `stato` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '0',
   `note` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `numero_revisione` int(11) NULL DEFAULT 0,
   `validazione_finale` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   `note_validazione_finale` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
-  `data_validazione_finale` datetime(0) NULL DEFAULT NULL,
+  `data_validazione_finale` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4402,8 +4402,8 @@ DROP TABLE IF EXISTS `progetti_progetto_fase_tempo_realizzazione`;
 CREATE TABLE `progetti_progetto_fase_tempo_realizzazione`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `ID_progetto` int(11) NULL DEFAULT NULL,
-  `data_inizio_fase` datetime(0) NULL DEFAULT NULL,
-  `data_fine_fase` datetime(0) NULL DEFAULT NULL,
+  `data_inizio_fase` datetime NULL DEFAULT NULL,
+  `data_fine_fase` datetime NULL DEFAULT NULL,
   `descrizione_fase` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -4561,7 +4561,7 @@ CREATE TABLE `riesame_direzione_riesame`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ID_anno_budget` int(11) NOT NULL,
-  `data_chiusura` datetime(0) NULL DEFAULT NULL,
+  `data_chiusura` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4584,6 +4584,175 @@ CREATE TABLE `riesame_direzione_valore_campo`  (
   `ID_riesame` int(11) NULL DEFAULT NULL,
   `ID_campo` int(11) NULL DEFAULT NULL,
   `valore` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_accettazione
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_accettazione`;
+CREATE TABLE `ru_accettazione`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ID_anno_budget` int(11) NOT NULL,
+  `note` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `data_accettazione` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_cdr_abilitato
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_cdr_abilitato`;
+CREATE TABLE `ru_cdr_abilitato`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `programmazione_strategica` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_dg
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_dg`;
+CREATE TABLE `ru_dg`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_direzione_riferimento
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_direzione_riferimento`;
+CREATE TABLE `ru_direzione_riferimento`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_parere
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_parere`;
+CREATE TABLE `ru_parere`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `esito` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_priorita
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_priorita`;
+CREATE TABLE `ru_priorita`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_richiesta
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_richiesta`;
+CREATE TABLE `ru_richiesta`  (
+  `ID` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `ID_anno_budget` int(11) NOT NULL,
+  `matricola_creazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `codice_cdr_creazione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `data_creazione` datetime NULL DEFAULT NULL,
+  `codice_cdc` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ID_tipo_richiesta` int(11) NOT NULL,
+  `informazioni_aggiuntive_tipologia` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `ID_qualifica_interna` int(11) NULL DEFAULT NULL,
+  `qta` int(11) NULL DEFAULT NULL,
+  `motivazioni` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `data_chiusura` datetime NULL DEFAULT NULL,
+  `ID_parere_cdr_padre` int(11) NULL DEFAULT NULL,
+  `note_parere_cdr_padre` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `ID_priorita_cdr_padre` int(11) NULL DEFAULT NULL,
+  `ID_tempi_cdr_padre` int(11) NULL DEFAULT NULL,
+  `data_approvazione_cdr_padre` datetime NULL DEFAULT NULL,
+  `data_rifiuto_cdr_padre` datetime NULL DEFAULT NULL,
+  `ID_parere_cdr_strategico` int(11) NULL DEFAULT NULL,
+  `note_parere_cdr_strategico` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `ID_priorita_cdr_strategico` int(11) NULL DEFAULT NULL,
+  `ID_tempi_cdr_strategico` int(11) NULL DEFAULT NULL,
+  `data_approvazione_cdr_strategico` datetime NULL DEFAULT NULL,
+  `data_rifiuto_cdr_strategico` datetime NULL DEFAULT NULL,
+  `ID_parere_direzione_riferimento` int(11) NULL DEFAULT NULL,
+  `note_parere_direzione_riferimento` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `ID_priorita_direzione_riferimento` int(11) NULL DEFAULT NULL,
+  `ID_tempi_direzione_riferimento` int(11) NULL DEFAULT NULL,
+  `data_approvazione_direzione_riferimento` datetime NULL DEFAULT NULL,
+  `data_rifiuto_direzione_riferimento` datetime NULL DEFAULT NULL,
+  `ID_parere_dg` int(11) NULL DEFAULT NULL,
+  `note_parere_dg` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `ID_priorita_dg` int(11) NULL DEFAULT NULL,
+  `ID_tempi_dg` int(11) NULL DEFAULT NULL,
+  `data_approvazione_dg` datetime NULL DEFAULT NULL,
+  `data_rifiuto_dg` datetime NULL DEFAULT NULL,
+  `costo_presunto` float(11, 0) NULL DEFAULT NULL,
+  `modalita_acquisizione` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `ID_tempi_uo_competente` int(11) NULL DEFAULT NULL,
+  `anno_soddisfacimento_richiesta` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `fonte_finanziamento_proposta` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `incoerenza_piano_fabbisogni` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `data_approvazione_uo_competente` datetime NULL DEFAULT NULL,
+  `data_rifiuto_uo_competente` datetime NULL DEFAULT NULL,
+  `importo_definitivo` float(11, 0) NULL DEFAULT NULL,
+  `data_acquisizione` datetime NULL DEFAULT NULL,
+  `provvedimento` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `fonte_finanziamento` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `note_monitoraggio` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `data_conferma_acquisizione` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_tempi
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_tempi`;
+CREATE TABLE `ru_tempi`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_tipo_richiesta
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_tipo_richiesta`;
+CREATE TABLE `ru_tipo_richiesta`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `descrizione` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for ru_uo_competente
+-- ----------------------------
+DROP TABLE IF EXISTS `ru_uo_competente`;
+CREATE TABLE `ru_uo_competente`  (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `codice_cdr` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `anno_inizio` int(11) NULL DEFAULT NULL,
+  `anno_termine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -5212,7 +5381,7 @@ CREATE TABLE `valutazioni_ambito_precalcolato`  (
   `ID_ambito` int(11) NOT NULL,
   `ID_valutazione` int(11) NOT NULL,
   `valore` decimal(10, 2) NULL DEFAULT NULL,
-  `time_aggiornamento` datetime(0) NULL DEFAULT NULL,
+  `time_aggiornamento` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
@@ -5284,6 +5453,7 @@ CREATE TABLE `valutazioni_item`  (
   `anno_esclusione` int(11) NULL DEFAULT NULL,
   `ID_area_item` int(11) NOT NULL,
   `ordine_visualizzazione` int(11) NOT NULL,
+  `tipo_visualizzazione` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
@@ -5447,7 +5617,7 @@ CREATE TABLE `valutazioni_totale_precalcolato`  (
   `ID_totale` int(11) NOT NULL,
   `ID_valutazione` int(11) NOT NULL,
   `valore` decimal(10, 2) NULL DEFAULT NULL,
-  `time_aggiornamento` datetime(0) NULL DEFAULT NULL,
+  `time_aggiornamento` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -5460,7 +5630,7 @@ CREATE TABLE `valutazioni_valutazione_ambito`  (
   `ID_valutazione_periodica` int(11) NOT NULL,
   `ID_ambito` int(11) NOT NULL,
   `punteggio` float NOT NULL,
-  `time_ultima_modifica` datetime(0) NULL DEFAULT NULL,
+  `time_ultima_modifica` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE,
   INDEX `key`(`ID_valutazione_periodica`, `ID_ambito`) USING BTREE
@@ -5475,7 +5645,7 @@ CREATE TABLE `valutazioni_valutazione_item`  (
   `ID_valutazione_periodica` int(11) NOT NULL,
   `ID_item` int(11) NOT NULL,
   `punteggio` float NOT NULL,
-  `time_ultima_modifica` datetime(0) NULL DEFAULT NULL,
+  `time_ultima_modifica` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE,
   INDEX `key`(`ID_valutazione_periodica`, `ID_item`) USING BTREE
@@ -5489,15 +5659,15 @@ CREATE TABLE `valutazioni_valutazione_periodica`  (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `matricola_valutatore` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `matricola_valutato` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `data_chiusura_autovalutazione` datetime(0) NULL DEFAULT NULL,
+  `data_chiusura_autovalutazione` datetime NULL DEFAULT NULL,
   `note_valutatore` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `data_ultimo_colloquio` date NULL DEFAULT NULL,
-  `data_firma_valutatore` datetime(0) NULL DEFAULT NULL,
+  `data_firma_valutatore` datetime NULL DEFAULT NULL,
   `note_valutato` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
-  `data_firma_valutato` datetime(0) NULL DEFAULT NULL,
+  `data_firma_valutato` datetime NULL DEFAULT NULL,
   `ID_periodo` int(11) NOT NULL,
   `ID_categoria` int(11) NOT NULL,
-  `date_time_ultima_modifica` datetime(0) NULL DEFAULT NULL,
+  `date_time_ultima_modifica` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE INDEX `ID`(`ID`) USING BTREE,
   INDEX `key`(`matricola_valutatore`(191), `matricola_valutato`(191), `ID_periodo`) USING BTREE

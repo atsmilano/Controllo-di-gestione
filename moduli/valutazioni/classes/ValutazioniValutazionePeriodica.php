@@ -1057,9 +1057,12 @@ class ValutazioniValutazionePeriodica {
             $tpl->set_var ("titolo", "Autovalutazione - " . $periodo->descrizione . " " . $anno_valutazione->descrizione);
         else
             $tpl->set_var ("titolo", "Valutazione - " . $periodo->descrizione . " " . $anno_valutazione->descrizione);
-
+      
         //************
         //intestazione
+        
+        $tpl->set_var ("date_riferimento_periodo", CoreHelper::formatUiDate($periodo->data_inizio) . " - " . CoreHelper::formatUiDate($periodo->data_fine));
+              
         if (!$this->isAutovalutazione()){
             $valutatore = Personale::factoryFromMatricola($this->matricola_valutatore);
             $tpl->set_var("valutatore", $valutatore->cognome." ".$valutatore->nome." (matr. ".$valutatore->matricola.")");
@@ -1068,6 +1071,35 @@ class ValutazioniValutazionePeriodica {
         $valutato = Personale::factoryFromMatricola($this->matricola_valutato);
         $tpl->set_var("valutato", $valutato->cognome." ".$valutato->nome." (matr. ".$valutato->matricola.")");
 
+        //cdr afferenza
+        $cdr_commento = "";
+        $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
+        $cdr_afferenza = $valutato->getCdrAfferenzaInData($tipo_piano_cdr, $periodo->data_fine);      
+        if (count ($cdr_afferenza) == 0) {
+            $cdr_commento = " (ultima afferenza - dipendente cessato nell'anno)";
+            $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
+            $ultimi_cdr_afferenza = $valutato->getCdrUltimaAfferenza($tipo_piano_cdr);
+            if (count ($ultimi_cdr_afferenza) > 0) {
+                foreach ($ultimi_cdr_afferenza as $cdr_aff) {
+                    try {
+                        $cdr_attuale = Cdr::factoryFromCodice($cdr_aff["cdr"]->codice, $piano_cdr);
+                        if ($cdr_attuale->codice == $cdr_aff["cdr"]->codice) {
+                            $cdr_afferenza[] = $cdr_aff;
+                        }
+                    } catch (Exception $ex) {
+
+                    }
+                }
+            }
+        }
+
+        foreach ($cdr_afferenza as $cdr_aff) {  
+            $tipo_cdr = new TipoCdr($cdr_aff["cdr"]->id_tipo_cdr);                        
+            $tpl->set_var("cdr", $tipo_cdr->abbreviazione . " " . $cdr_aff["cdr"]->descrizione . " (" . $cdr_aff["cdr"]->codice .") " . $cdr_commento);
+            $tpl->set_var("perc_testa", $cdr_aff["peso_cdr"]);
+            $tpl->parse("SectCdrAssociati", true);                
+        }
+        
         $categoria = $this->categoria;
         $tpl->set_var("tipologia_scheda", $categoria->descrizione);
 
@@ -1235,7 +1267,7 @@ class ValutazioniValutazionePeriodica {
             }
             $tpl->set_var("note_valutatore", $note_valutatore);
             if ($this->data_firma_valutatore !== null){
-                $data_firma_valutatore = date("d/m/Y - H:m", strtotime($this->data_firma_valutatore));
+                $data_firma_valutatore = CoreHelper::formatUiDate($this->data_firma_valutatore, "Y-m-d H:i:s", "d/m/Y - H:i");
             }
             else {
                 $data_firma_valutatore = "Valutazione non firmata";
@@ -1251,7 +1283,7 @@ class ValutazioniValutazionePeriodica {
                 $note_valutato = "Nessuna";
             }
             if ($this->data_firma_valutato !== null){
-                $data_firma_valutato = date("d/m/Y - H:m", strtotime($this->data_firma_valutato));
+                $data_firma_valutato = CoreHelper::formatUiDate($this->data_firma_valutato, "Y-m-d H:i:s", "d/m/Y - H:i");
             }
             else {
                 $data_firma_valutato = "Valutazione non firmata";

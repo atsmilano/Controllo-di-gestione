@@ -104,6 +104,8 @@ function getUser($oPage)
             }
         }
     }
+    //useSql viene impostato a false perchè il cdr sicuramente utilizzerà il piano istanziato
+    $cdr->useSql = false;
     $cm->oPage->register_globals("cdr", $cdr, false);
     //******************************************************************************************************************************************
     //generazione del menu

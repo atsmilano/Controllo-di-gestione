@@ -126,6 +126,8 @@ class ValutazioniAnnoBudget extends AnnoBudget {
                     $item->anno_esclusione = $db->getField("anno_esclusione", "Number", true);
                 }
                 $item->id_area_item = $db->getField("ID_area_item", "Number", true);
+                $item->ordine_visualizzazione = $db->getField("ordine_visualizzazione", "Number", true);
+                $item->tipo_visualizzazione = $db->getField("tipo_visualizzazione", "Number", true);
 
                 $items_anno[] = $item;
             } while ($db->nextRecord());
