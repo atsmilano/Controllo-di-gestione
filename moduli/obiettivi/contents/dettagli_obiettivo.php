@@ -300,7 +300,8 @@ if ($edit == true) {
 
 //******************************************************************************
 //informazioni relative agli indicatori
-if ($edit == true) {
+$obiettivo_indicatori_associati = $obiettivo->getIndicatoriAssociati($where = array(), $order = array("ordine" => "ASC"));
+if (count ($obiettivo_indicatori_associati)) {                
     $oRecord->addContent(null, true, "indicatori");
     $oRecord->groups["indicatori"]["title"] = "Indicatori";
     //recupero degli indicatori collegati all'obiettivo
@@ -318,7 +319,7 @@ if ($edit == true) {
     } else {
         $cdr_valore_target = $cdr_padre_obiettivo;
     }
-    foreach ($obiettivo->getIndicatoriAssociati($where = array(), $order = array("ordine" => "ASC")) as $indicatore) {
+    foreach ($obiettivo_indicatori_associati as $indicatore) {
         $grid_recordset[] = array(
             $indicatore->obiettivo_indicatore->id,
             $indicatore->obiettivo_indicatore->id_indicatore,
@@ -739,70 +740,72 @@ if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
                     $cdr_figlio->codice,
                     $cdr_figlio->descrizione,
                     $responsabile_cdr_figlio->cognome . " " . $responsabile_cdr_figlio->nome . " (matr. " . $responsabile_cdr_figlio->matricola_responsabile . ")",
-                    $obiettivo_cdr_figlio->peso . " / " . $peso_totale_obiettivi . " (" . number_format(CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi), 2) . "%)",
+                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . number_format(CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi), 2) . "%)",
                 );
             }
         }
-        $oGrid = ffGrid::factory($cm->oPage);
-        $oGrid->id = "obiettivo_cdr_" . $tipo_piano_corrente->id;
-        $oGrid->title = $tipo_piano_corrente->descrizione . " - Elenco CDR ai quali l&acute;obiettivo è stato assegnato";
-        $oGrid->resources[] = "obiettivo-cdr";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
-        $oGrid->order_default = "desc_cdr";
-        $oGrid->record_id = "obiettivo-cdr-modify";
-        $oGrid->order_method = "labels";
-        //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
-        $path_info_parts = explode("/", $cm->path_info);
-        $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
-        $oGrid->record_url = FF_SITE_PATH . $path_info . "dettagli_obiettivo";
-        //parametri aggiuntivi
-        $oGrid->addit_insert_record_param = "id_tipo_piano_cdr=" . $tipo_piano_corrente->id . "&
-                                                                        ID_obiettivo_cdr_origine=" . $obiettivo_cdr->id . "&";
-        $oGrid->display_search = false;        
-        $oGrid->display_navigator = false;
-        $oGrid->use_paging = false;
-        //operazioni consentite in base ai privilegi dell'utente
-        if (!$user_privileges["edit_assegnazioni_cdr_personale"]) {
-            $oGrid->display_new = false;
-            $oGrid->display_edit_url = false;
-            $oGrid->display_delete_bt = false;
+        if (count($grid_recordset) > 0 || $user_privileges["edit_assegnazioni_cdr_personale"]){
+            $oGrid = ffGrid::factory($cm->oPage);
+            $oGrid->id = "obiettivo_cdr_" . $tipo_piano_corrente->id;
+            $oGrid->title = $tipo_piano_corrente->descrizione . " - Elenco CDR ai quali l&acute;obiettivo è stato assegnato";
+            $oGrid->resources[] = "obiettivo-cdr";
+            $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
+            $oGrid->order_default = "desc_cdr";
+            $oGrid->record_id = "obiettivo-cdr-modify";
+            $oGrid->order_method = "labels";
+            //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
+            $path_info_parts = explode("/", $cm->path_info);
+            $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
+            $oGrid->record_url = FF_SITE_PATH . $path_info . "dettagli_obiettivo";
+            //parametri aggiuntivi
+            $oGrid->addit_insert_record_param = "id_tipo_piano_cdr=" . $tipo_piano_corrente->id . "&
+                                                                            ID_obiettivo_cdr_origine=" . $obiettivo_cdr->id . "&";
+            $oGrid->display_search = false;        
+            $oGrid->display_navigator = false;
+            $oGrid->use_paging = false;
+            //operazioni consentite in base ai privilegi dell'utente
+            if (!$user_privileges["edit_assegnazioni_cdr_personale"]) {
+                $oGrid->display_new = false;
+                $oGrid->display_edit_url = false;
+                $oGrid->display_delete_bt = false;
+            }
+
+            // *********** FIELDS ****************
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "ID_obiettivo_cdr";
+            $oField->data_source = "ID";
+            $oField->base_type = "Number";
+            $oField->label = "id";
+            $oGrid->addKeyField($oField);
+
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "codice_cdr";
+            $oField->base_type = "Text";
+            $oField->label = "Codice CDR";
+            $oGrid->addContent($oField);
+
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "desc_cdr";
+            $oField->base_type = "Text";
+            $oField->label = "CDR";
+            $oGrid->addContent($oField);
+
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "responsabile_cdr";
+            $oField->base_type = "Text";
+            $oField->label = "Responsabile CDR";
+            $oGrid->addContent($oField);
+
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "peso";
+            $oField->base_type = "Text";
+            $oField->label = "Peso obiettivo / tot peso obiettivi cdr";
+            $oGrid->addContent($oField);
+
+            // *********** ADDING TO PAGE ****************
+            $oRecord->addContent($oGrid, "cdr_assegnati" . $tipo_piano_corrente->id);
+            $cm->oPage->addContent($oGrid);
         }
-
-        // *********** FIELDS ****************
-        $oField = ffField::factory($cm->oPage);
-        $oField->id = "ID_obiettivo_cdr";
-        $oField->data_source = "ID";
-        $oField->base_type = "Number";
-        $oField->label = "id";
-        $oGrid->addKeyField($oField);
-
-        $oField = ffField::factory($cm->oPage);
-        $oField->id = "codice_cdr";
-        $oField->base_type = "Text";
-        $oField->label = "Codice CDR";
-        $oGrid->addContent($oField);
-
-        $oField = ffField::factory($cm->oPage);
-        $oField->id = "desc_cdr";
-        $oField->base_type = "Text";
-        $oField->label = "CDR";
-        $oGrid->addContent($oField);
-
-        $oField = ffField::factory($cm->oPage);
-        $oField->id = "responsabile_cdr";
-        $oField->base_type = "Text";
-        $oField->label = "Responsabile CDR";
-        $oGrid->addContent($oField);
-
-        $oField = ffField::factory($cm->oPage);
-        $oField->id = "peso";
-        $oField->base_type = "Text";
-        $oField->label = "Peso obiettivo / tot peso obiettivi cdr";
-        $oGrid->addContent($oField);
-
-        // *********** ADDING TO PAGE ****************
-        $oRecord->addContent($oGrid, "cdr_assegnati" . $tipo_piano_corrente->id);
-        $cm->oPage->addContent($oGrid);
     }
 }
 
@@ -833,75 +836,76 @@ if ($edit == true) {
                     $personale->cognome,
                     $personale->nome,
                     $personale->matricola,
-                    $ob_cdr_per->peso . " / " . $peso_tot_personale . " (" . number_format(CoreHelper::percentuale($ob_cdr_per->peso, $peso_tot_personale), 2) . "%)",
+                    number_format($ob_cdr_per->peso) . " / " . $peso_tot_personale . " (" . number_format(CoreHelper::percentuale($ob_cdr_per->peso, $peso_tot_personale), 2) . "%)",
                 );
             } catch (Exception $ex) {
                 
             }
         }
     }
+    if (count($grid_recordset) > 0 || $user_privileges["edit_assegnazioni_cdr_personale"]) {            
+        //visualizzazione della grid dei cdr associati all'obiettivo
+        $oGrid = ffGrid::factory($cm->oPage);
+        $oGrid->id = "obiettivo_cdr_personale";
+        $oGrid->title = "Elenco Personale al quale l&acute;Obiettivo è stato assegnato";
+        $oGrid->resources[] = "obiettivo-cdr-personale";
+        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "personale");
+        $oGrid->order_default = "cognome";
+        $oGrid->record_id = "obiettivo-cdr-personale-modify";
+        $oGrid->order_method = "labels";
+        //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
+        $path_info_parts = explode("/", $cm->path_info);
+        $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
+        $oGrid->record_url = FF_SITE_PATH . $path_info . "assegnazione_obiettivo_personale";
+        //parametri aggiuntivi    
+        $oGrid->full_ajax = true;
+        $oGrid->display_search = false;
+        $oGrid->display_navigator = false;
+        $oGrid->use_paging = false;
 
-    //visualizzazione della grid dei cdr associati all'obiettivo
-    $oGrid = ffGrid::factory($cm->oPage);
-    $oGrid->id = "obiettivo_cdr_personale";
-    $oGrid->title = "Elenco Personale al quale l&acute;Obiettivo è stato assegnato";
-    $oGrid->resources[] = "obiettivo-cdr-personale";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "personale");
-    $oGrid->order_default = "cognome";
-    $oGrid->record_id = "obiettivo-cdr-personale-modify";
-    $oGrid->order_method = "labels";
-    //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
-    $path_info_parts = explode("/", $cm->path_info);
-    $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
-    $oGrid->record_url = FF_SITE_PATH . $path_info . "assegnazione_obiettivo_personale";
-    //parametri aggiuntivi    
-    $oGrid->full_ajax = true;
-    $oGrid->display_search = false;
-    $oGrid->display_navigator = false;
-    $oGrid->use_paging = false;
+        //operazioni consentite in base ai privilegi dell'utente
+        if (!$user_privileges["edit_assegnazioni_cdr_personale"]) {
+            $oGrid->display_new = false;
+            $oGrid->display_edit_url = false;
+            $oGrid->display_delete_bt = false;
+        }
 
-    //operazioni consentite in base ai privilegi dell'utente
-    if (!$user_privileges["edit_assegnazioni_cdr_personale"]) {
-        $oGrid->display_new = false;
-        $oGrid->display_edit_url = false;
-        $oGrid->display_delete_bt = false;
+        // *********** FIELDS ****************
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "ID_obiettivo_cdr_personale";
+        $oField->data_source = "ID";
+        $oField->base_type = "Number";
+        $oField->label = "id";
+        $oGrid->addKeyField($oField);
+
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "cognome";
+        $oField->base_type = "Text";
+        $oField->label = "Cognome";
+        $oGrid->addContent($oField);
+
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "nome";
+        $oField->base_type = "Text";
+        $oField->label = "Nome";
+        $oGrid->addContent($oField);
+
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "matricola";
+        $oField->base_type = "Text";
+        $oField->label = "Matricola";
+        $oGrid->addContent($oField);
+
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "peso";
+        $oField->base_type = "Text";
+        $oField->label = "Peso";
+        $oGrid->addContent($oField);
+
+        // *********** ADDING TO PAGE ****************
+        $oRecord->addContent($oGrid, "personale_assegnato");
+        $cm->oPage->addContent($oGrid);
     }
-
-    // *********** FIELDS ****************
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "ID_obiettivo_cdr_personale";
-    $oField->data_source = "ID";
-    $oField->base_type = "Number";
-    $oField->label = "id";
-    $oGrid->addKeyField($oField);
-
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "cognome";
-    $oField->base_type = "Text";
-    $oField->label = "Cognome";
-    $oGrid->addContent($oField);
-
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "nome";
-    $oField->base_type = "Text";
-    $oField->label = "Nome";
-    $oGrid->addContent($oField);
-
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "matricola";
-    $oField->base_type = "Text";
-    $oField->label = "Matricola";
-    $oGrid->addContent($oField);
-
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "peso";
-    $oField->base_type = "Text";
-    $oField->label = "Peso";
-    $oGrid->addContent($oField);
-
-    // *********** ADDING TO PAGE ****************
-    $oRecord->addContent($oGrid, "personale_assegnato");
-    $cm->oPage->addContent($oGrid);
 
     //**************************************************************************
     //Grid rendicontazione
@@ -934,7 +938,7 @@ if ($edit == true) {
         if ($rendicontazione_aziendale !== null) {
             $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
             if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
-                $ragg_nucleo = $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
+                $ragg_nucleo = (int) $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
             }
         }
         if ($obiettivo_cdr->isCoreferenza()) {
@@ -957,80 +961,80 @@ if ($edit == true) {
             $periodo_rendicontazione->ordinamento_anno
         );
     }
+    if (count($grid_recordset) > 0) {   
+        $cm->oPage->addContent("<div id='rendicontazioni_obiettivo'>");
+        //visualizzazione della grid dei cdr associati all'obiettivo
+        $oGrid = ffGrid::factory($cm->oPage);
+        $oGrid->id = "rendicontazione";
+        $oGrid->title = "Rendicontazione obiettivo anno " . $anno->descrizione;
+        $oGrid->resources[] = "rendicontazione";
+        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_periodo_rendicontazione");
+        $oGrid->order_default = "ordinamento_anno";
+        $oGrid->record_id = "rendicontazione-modify";
+        $oGrid->order_method = "labels";
+        //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
+        $path_info_parts = explode("/", $cm->path_info);
+        $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
+        $oGrid->record_url = FF_SITE_PATH . $path_info . "rendicontazione";
+        $oGrid->display_search = false;
+        $oGrid->display_navigator = false;
+        $oGrid->use_paging = false;
 
-    $cm->oPage->addContent($oGrid);
-    $cm->oPage->addContent("<div id='rendicontazioni_obiettivo'>");
-    //visualizzazione della grid dei cdr associati all'obiettivo
-    $oGrid = ffGrid::factory($cm->oPage);
-    $oGrid->id = "rendicontazione";
-    $oGrid->title = "Rendicontazione obiettivo anno " . $anno->descrizione;
-    $oGrid->resources[] = "rendicontazione";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_periodo_rendicontazione");
-    $oGrid->order_default = "ordinamento_anno";
-    $oGrid->record_id = "rendicontazione-modify";
-    $oGrid->order_method = "labels";
-    //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
-    $path_info_parts = explode("/", $cm->path_info);
-    $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
-    $oGrid->record_url = FF_SITE_PATH . $path_info . "rendicontazione";
-    $oGrid->display_search = false;
-    $oGrid->display_navigator = false;
-    $oGrid->use_paging = false;
+        //la visualizzazione della rendicontazione è sempre possibile per chi ha privilegio di visualizzazione dell'obiettivo a meno che l'obiettivo non risulti chiuso
+        $oGrid->use_order = false;
+        $oGrid->display_new = false;
+        $oGrid->display_delete_bt = false;   
 
-    //la visualizzazione della rendicontazione è sempre possibile per chi ha privilegio di visualizzazione dell'obiettivo a meno che l'obiettivo non risulti chiuso
-    $oGrid->use_order = false;
-    $oGrid->display_new = false;
-    $oGrid->display_delete_bt = false;   
+        // *********** FIELDS ****************
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "ID_rendicontazione";
+        $oField->base_type = "Number";
+        $oGrid->addKeyField($oField);
 
-    // *********** FIELDS ****************
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "ID_rendicontazione";
-    $oField->base_type = "Number";
-    $oGrid->addKeyField($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "ID_periodo";
+        $oField->base_type = "Number";
+        $oGrid->addKeyField($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "ID_periodo";
-    $oField->base_type = "Number";
-    $oGrid->addKeyField($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "ordinamento_anno";
+        $oField->base_type = "Number";
+        $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "ordinamento_anno";
-    $oField->base_type = "Number";
-    $oGrid->addContent($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "descrizione";
+        $oField->base_type = "Text";
+        $oField->label = "Descrizione";
+        $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "descrizione";
-    $oField->base_type = "Text";
-    $oField->label = "Descrizione";
-    $oGrid->addContent($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "data_riferimento_inizio";
+        $oField->base_type = "Date";
+        $oField->label = "Data inizio periodo";
+        $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "data_riferimento_inizio";
-    $oField->base_type = "Date";
-    $oField->label = "Data inizio periodo";
-    $oGrid->addContent($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "data_riferimento_fine";
+        $oField->base_type = "Date";
+        $oField->label = "Data fine periodo";
+        $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "data_riferimento_fine";
-    $oField->base_type = "Date";
-    $oField->label = "Data fine periodo";
-    $oGrid->addContent($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "perc_raggiungimento";
+        $oField->base_type = "Text";
+        $oField->label = "Raggiungimento CDR";
+        $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "perc_raggiungimento";
-    $oField->base_type = "Text";
-    $oField->label = "Raggiungimento CDR";
-    $oGrid->addContent($oField);
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "perc_nucleo";
+        $oField->base_type = "Text";
+        $oField->label = "Raggiungimento Nucleo (NVP) di Dipartimento";
+        $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "perc_nucleo";
-    $oField->base_type = "Text";
-    $oField->label = "Raggiungimento Nucleo (NVP) di Dipartimento";
-    $oGrid->addContent($oField);
-
-    // *********** ADDING TO PAGE ****************
-    $oRecord->addContent($oGrid, "rendicontazioni");
-    $cm->oPage->addContent($oGrid);
+        // *********** ADDING TO PAGE ****************
+        $oRecord->addContent($oGrid, "rendicontazioni");
+        $cm->oPage->addContent($oGrid);    
+    }
 }
 
 // *********** ADDING TO PAGE ****************    

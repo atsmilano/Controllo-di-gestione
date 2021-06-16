@@ -97,7 +97,7 @@ if (isset($obiettivo_cdr_personale)){
 //altrimenti vengono visualizzati i dipendenti del cdr non ancora assegnati
 else {
 	//vengono presi i dipendenti singolarmente (in caso di afferenza multipla su cdc)
-	$personale_cdc_afferente = $cdr->getPersonaleCdcAfferentiInData($date);
+	$personale_cdc_afferente = $cdr->getPersonaleCdcAfferentiInData($dateTimeObject);
 	$responsabile_cdr = $cdr->getResponsabile($dateTimeObject);
 	$personale_cdr = array();
 	foreach ($personale_cdc_afferente as $personale_afferente){	

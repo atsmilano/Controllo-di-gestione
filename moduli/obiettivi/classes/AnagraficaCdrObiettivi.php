@@ -5,7 +5,7 @@ class AnagraficaCdrObiettivi extends AnagraficaCdr {
         $ob_obiettivi_cdr_anno = array();        
         
         $obiettivi_cdr = ObiettiviObiettivoCdr::getAll(array("codice_cdr" => $this->codice));
-        foreach(ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id)) as $obiettivo_anno) {
+        foreach(ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id), array(array("fieldname"=>"codice_incr_anno", "direction"=>"ASC"))) as $obiettivo_anno) {
             foreach($obiettivi_cdr as $obiettivo_cdr) {                                                
                 if ($obiettivo_anno->data_eliminazione == null
                     && $obiettivo_cdr->data_eliminazione == null

@@ -40,7 +40,6 @@ $nuova_richiesta = true;
 $id_stato_avanzamento = 0;
 //vengono replicati i controlli in fase di azioni su record (evento myUpdate)
 if (isset ($_REQUEST["keys[ID]"])) {
-    // Sono in fase di modifica
     $nuova_richiesta = false;
     $investimento = new InvestimentiInvestimento($_REQUEST["keys[ID]"]);
     $id_stato_avanzamento = $investimento->getIdStatoAvanzamento(); 
@@ -163,7 +162,6 @@ else if (!$user->hasPrivilege("investimenti_richieste_view")) {
 }
 
 //******************************************************************************
-// Definisco il record
 $oRecord = ffRecord::factory($cm->oPage);
 $oRecord->id = "investimento";
 $oRecord->title = $nuova_richiesta ? "Nuova richiesta d'investimento" : "Richiesta d'investimento";
@@ -1254,8 +1252,8 @@ if ($tipo_chiusura !== 0){
 	$oBt->label = $label;
 	$oBt->action_type = "submit";
 	$oBt->jsaction = "$('#inactive_body').show();$('#conferma_chiusura').show();";
-    $oBt->aspect = "link";
-    $oBt->class = "fa-edit btn-success";
+        $oBt->aspect = "link";
+        $oBt->class = "fa-edit btn-success";
 	$oRecord->addActionButton($oBt);
 	
 	$oRecord->addHiddenField("tipo_chiusura", new ffData($tipo_chiusura, "Number"));

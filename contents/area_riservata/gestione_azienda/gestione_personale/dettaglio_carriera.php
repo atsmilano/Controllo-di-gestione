@@ -121,7 +121,7 @@ $oField->multi_pairs = array(
     array(new ffData("1", "Number"), new ffData("Si", "Text")),
     array(new ffData("0", "Number"), new ffData("No", "Text")),
 );
-$oField->label = "Posizione organizzativa";
+$oField->label = "Incarico di funzione";
 $oField->required = true;
 $oRecord->addContent($oField);
 

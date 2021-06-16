@@ -293,4 +293,17 @@ class Entity {
         }
         return $tables;
     }
+    
+    //restituisce un oggetto di una classe differente con gli stessi attributi di quello corrente
+    public function cloneAttributesToNewObject ($class){
+        try {
+            $obj = new $class;
+        } catch (Exception $ex) {
+            throw new Exception("Impossibile creare l'istanza della classe: " . $class);
+        }            
+        foreach (get_object_vars($this) as $attribute => $value) {
+            $obj->{$attribute} = $value;
+        }
+        return $obj;
+    }        
 }

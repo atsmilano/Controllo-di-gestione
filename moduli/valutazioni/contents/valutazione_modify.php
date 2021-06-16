@@ -304,7 +304,9 @@ foreach ($periodo->getAmbitiCategoriaPeriodo($categoria) as $ambito) {
                     $oField->id = $nome_campo . $item_valutazione->id;
                     $oField->base_type = "Number";
                     $oField->extended_type = "Selection";
-                    $oField->control_type = "radio";
+                    if ($item_valutazione->tipo_visualizzazione == 0) {
+                        $oField->control_type = "radio";
+                    }
                     $oField->multi_pairs = $punteggio_item;                    
                     $oField->multi_select_one_label = "Nessun punteggio assegnato...";
                     $oField->app_type = "Number";

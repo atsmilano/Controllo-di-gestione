@@ -685,7 +685,7 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
                 $token = get_session('access_token');                
                 //verifica sulla scadenza del token
                 //nel caso in cui il token sia scaduto viene richiesto un nuovo token
-                if ($token->expire_datetime - time() < 0) {
+                if ($token->expire_datetime - time() < 0) {                    
                     unset_session('access_token');
                     $require_token = true;
                 }                                                  
@@ -718,8 +718,11 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
                         //se il token è scaduto o comunque viene prodotto errore elimino la sessione (il token poi verrà rinnovato)                        
                         if (isset($user->{'odata.error'})){
                             unset_session ('access_token');
+                            ffErrorHandler::raise("AD Error: ".$user->{'odata.error'}->message->value, E_USER_ERROR, null, get_defined_vars());
+                            /*
                             $require_token = true;
-                            $user_error = true;
+                            $user_error = true;                            
+                            */
                         }
                         else {
                             $db_username = $user->$user_name_field;
@@ -733,7 +736,7 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
                         $acces_token_json = json_decode(base64_decode($acces_token_array[1]), true);
                         $db_username = $acces_token_json[$user_name_field];
                         $user_matricola = $acces_token_json[$user_matricola_field];
-                    }
+                    }          
                     
                     //se non si sono verificati errori viene verificata l'abilitazione per l'accesso all'aplicativo
                     if ($user_error !== true) {                               

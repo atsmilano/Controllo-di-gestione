@@ -18,7 +18,10 @@ if ($cdr == 0) {
         //viene estratto il CDR di ultima afferenza di livello più alto
         $cdr_afferenza_data = $personale->getCdrUltimaAfferenza($tipo_piano_cdr, $anno)[0];
         if (empty($cdr_afferenza_data)) {
-            ffErrorHandler::raise("Errore: nessun cdr di afferenza nell'anno.");
+            //in caso di utente non attivo per l'anno selezionato (nessuna posizione valida su cdc) viene visualizzata solamente la strategia dell'elemento radice
+            //ffErrorHandler::raise("Errore: nessun cdr di afferenza nell'anno.");
+            $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date->format("Y-m-d"));
+            $cdr = $piano_cdr->getCdrRadice(); 
         } else {
             $cdr = $cdr_afferenza_data["cdr"];
         }

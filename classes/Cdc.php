@@ -134,7 +134,7 @@ class Cdc {
     }
 
     //relazioni	
-    public function getPersonaleCdcInData($date = null) {
+    public function getPersonaleCdcInData(DateTime $date = null) {
         $cdc_personale = array();
         $filters = array(
             "codice_cdc" => $this->codice,
@@ -144,9 +144,9 @@ class Cdc {
             if ($date !== null) {
                 if (
                     (
-                    strtotime($cdc_pers->data_inizio) <= strtotime($date)) &&
+                    strtotime($cdc_pers->data_inizio) <= strtotime($date->format("Y-m-d"))) &&
                     (
-                    strtotime($cdc_pers->data_fine) >= strtotime($date) ||
+                    strtotime($cdc_pers->data_fine) >= strtotime($date->format("Y-m-d")) ||
                     $cdc_pers->data_fine == null
                     )
                 ) {

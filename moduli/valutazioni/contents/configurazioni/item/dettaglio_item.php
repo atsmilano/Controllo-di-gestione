@@ -101,6 +101,19 @@ $oField->required = true;
 CoreHelper::disableNonEditableOField($oField, $editable);
 $oRecord->addContent($oField);
 
+$tipi_visualizzazione_item = array(
+                                    array(new ffData(0, "Number"), new ffData("Radio", "Text")),
+                                    array(new ffData(1, "Number"), new ffData("Box selezione", "Text")),
+                                    );
+$oField = ffField::factory($cm->oPage);
+$oField->id = "tipo_visualizzazione";
+$oField->base_type = "Number";
+$oField->extended_type = "Selection";
+$oField->multi_pairs = $tipi_visualizzazione_item;
+$oField->label = "Tipo di visualizzazione";
+$oField->required = true;
+$oRecord->addContent($oField);
+
 CoreHelper::refreshTabOnDialogClose($oRecord->id);
 
 // ITEM - CATEGORIE

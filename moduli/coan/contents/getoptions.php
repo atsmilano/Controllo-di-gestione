@@ -11,5 +11,5 @@ if (isset($_REQUEST["anno_budget"])) {
     die(json_encode($result));
 }
 else {
-    die("PROBLEMA");
+    throw new Exception("Errore");
 }

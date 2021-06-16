@@ -29,9 +29,7 @@ $allowed_actions["valutazioni"] = array(
 );
 
 $cruscotto_view = true;
-if (FF_ENV == "FF_ENV_PRODUCTION_EXT_INSUBRIA" && !$user->hasPrivilege("valutazioni_admin")){
-    $cruscotto_view = false;
-}
+
 $allowed_actions["cruscotto"] = array(
     "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/cruscotto?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),    
     "icon"   => $cruscotto_view ? "pie-chart" : MODULES_ICONHIDE,

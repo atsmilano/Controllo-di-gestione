@@ -89,21 +89,24 @@ class Personale extends Entity{
         return $cdr_afferenza;
     }
     
-    //restituisce gli ultimi cdr al quale il dipendente risulta afferente
+    //restituisce gli ultimi cdr delle posizioni chiuse (non attive) al quale il dipendente risulta afferente
     //viene restituito un array di array contententi cdr e peso totale su cdr
     //se passato l'anno come parametro restituisce l'ultimo cdr di afferenza nell'anno
     public function getCdrUltimaAfferenza(TipoPianoCdr $tipo_piano_cdr, AnnoBudget $anno = null){
             $cdr_afferenza = array();
             $cdc_personale = CdcPersonale::getAll(array("matricola_personale" => $this->matricola));
             $ultima_data = null;
+            
             //viene recuperata la data di fine assegnazione più recente
             foreach($cdc_personale AS $cdc_dipendente){ 
-                $data_obj = DateTime::createFromFormat("Y-m-d", $cdc_dipendente->data_fine);                
-                if ($anno == null || $anno->descrizione == $data_obj->format("Y")) {
-                    if ($ultima_data == null || strtotime($cdc_dipendente->data_fine) > strtotime($ultima_data)) {
-                        $ultima_data = $cdc_dipendente->data_fine;
-                    }
-                }                                
+                if ($cdc_dipendente->data_fine !== null) {                 
+                    $data_obj = DateTime::createFromFormat("Y-m-d", $cdc_dipendente->data_fine);                
+                    if ($anno == null || $anno->descrizione == $data_obj->format("Y")) {
+                        if ($ultima_data == null || strtotime($cdc_dipendente->data_fine) > strtotime($ultima_data)) {
+                            $ultima_data = $cdc_dipendente->data_fine;
+                        }
+                    } 
+                }
             }
             //se è stata trovata almeno un'occorrenza
             if ($ultima_data !== null){   
