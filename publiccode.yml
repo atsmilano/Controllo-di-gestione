@@ -1,5 +1,5 @@
 # This repository adheres to the publiccode.yml standard by including this 
-# metadata file that makes public oftware easily discoverable.
+# metadata file that makes public software easily discoverable.
 # More info at https://github.com/italia/publiccode.yml
 
 publiccodeYmlVersion: '0.2'
@@ -8,28 +8,41 @@ categories:
   - business-process-management
 description:
   it:
-    apiDocumentation: >-
+    apiDocumentation: |-
       https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Man_Tecnico:Manuale_Tecnico
     documentation: 'https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Manuale_Utente'
     features:
-      - >-
+      - |-
         Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
+
         controllo e valutazione
     genericName: Piattaforma di P&C
-    longDescription: >
+    longDescription: |
       La Piattaforma di Programmazione e Controllo, interamente informatizzata e
+
       resa disponibile via web mediante accessi profilati a tutti gli utenti che
+
       a vario titolo partecipano al processo di programmazione, rappresenta lo
+
       strumento tecnico di comunicazione a disposizione della Direzione
+
       Strategica e del personale per la gestione del processo di programmazione
+
       e controllo. Sulla base del profilo dell'utente (ad es. Direzione,
+
       Responsabile di CDR, Dirigente, Comparto, ecc.), vengono resi disponibili
+
       i moduli abilitati ciascuno dei quali rappresenta uno strumento a supporto
+
       delle singole fasi del processo di programmazione e controllo aziendale.
+
       La predisposizione delle proposte di programmazione da parte dei Centri di
+
       Responsabilità (CDR) segue un percorso logico guidato dalla struttura
-      della scheda di programmazione che propone le seguenti sezioni:
-      - Programmazione 
+
+      della scheda di programmazione che propone le seguenti sezioni: -
+
+      Programmazione 
           - Strategia 
           - Obiettivi 
           - Progetti 
@@ -41,8 +54,9 @@ description:
           - Cruscotto indicatori 
       - Valutazioni 
           - Valutazione della performance individuale
-    shortDescription: >-
+    shortDescription: |-
       Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
+
       controllo e valutazione della performance aziendale ed individuale
 developmentStatus: stable
 intendedAudience:
@@ -73,17 +87,18 @@ localisation:
   availableLanguages:
     - it
   localisationReady: true
-logo: >-
+logo: |-
   https://raw.githubusercontent.com/atsmilano/Controllo-di-gestione/master/themes/ats/images/logo/login.png
 maintenance:
   contacts:
     - email: controllodigestione@ats-milano.it
-      name: >-
+      name: |-
         Antonio Nava, Giovandomenico Violante, Matteo Bonvini, Pasquale
+
         Logiacco, Veronica Apruzzese
   contractors:
     - name: Invisible Farm
-      until: '2021-06-10'
+      until: '2023-06-10'
   type: internal
 name: PP&C- Piattaforma di Programmazione e Controllo  (N.V.B.L.A.)
 platforms:
@@ -91,3 +106,5 @@ platforms:
 releaseDate: '2020-09-15'
 softwareType: standalone/web
 url: 'https://github.com/atsmilano/Controllo-di-gestione'
+usedBy:
+  - Azienda Regionale Diritto allo Studio Universitario della Toscana
