@@ -5,7 +5,7 @@
  * Utilizzo del valore MODULES_ICONHIDE per nascondere le icone del menu nel caso in cui non vi siano i permessi adeguati.
  */
 //acl
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //definizione costanti
 //massimo peso attribuibile ai cdr

@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if (!$user->hasPrivilege("investimenti_approvazione_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");

@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $gestione_azienda_privileges = $user->hasPrivilege("gestione_azienda");
 $configurazione_privileges = $user->hasPrivilege("anni_budget_admin") 
                             || $user->hasPrivilege("moduli_admin")
@@ -9,7 +9,7 @@ $menu["configurazione"] = array(
     "key"     => "configurazione",
     "label"   => "Configurazione",
     "icon"    => "cog",
-    "path"    => "",
+    "path"    => "/area_riservata/configurazione/",
     "redir"   => "/area_riservata/configurazione?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
     "actions" => array(),
     "acl"     => "1,2,3",
@@ -17,13 +17,12 @@ $menu["configurazione"] = array(
 );
 mod_restricted_add_menu_child($menu["configurazione"]);
 
-//if ($user->hasPrivilege("gestione_azienda")) {
 //Gestione azienda**************************************************************
 $menu["gestione_azienda"] = array(
     "key"     => "gestione_azienda",
     "label"   => "Azienda",
     "icon"    => "building-o",
-    "path"    => "",
+    "path"    => "/area_riservata/",
     "redir"   => "/area_riservata/",
     "actions" => array(),
     "acl"     => "1,2,3",

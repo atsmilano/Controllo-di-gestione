@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if (!$user->hasPrivilege("investimenti_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");
@@ -16,12 +16,6 @@ $date = $dateTimeObject->format("Y-m-d");
 //recupero del cdr e del cdc
 $tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
 $piano_cdr = PianoCdr::getAttivoInData ($tipo_piano_cdr, $date);
-
-$cdr_global = $cm->oPage->globals["cdr"]["value"];
-$cdr = null;
-if ($cdr_global->id !== 0){
-    $cdr = new CdrInvestimenti($cdr_global->id);
-}
 
 //amministratore e direzione generale possono visualizzare anche le proposte rifiutate dal dg
 $view_richieste_rifiutate = false;

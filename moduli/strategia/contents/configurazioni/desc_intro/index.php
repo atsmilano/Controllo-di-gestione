@@ -18,7 +18,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "strategia-desc-intro";
 $oGrid->title = "Descrizione Introduttiva";
 $oGrid->resources[] = "desc-intro";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "strategia_descrizione_introduttiva"
 );
 $oGrid->order_default = "anno_introduzione";

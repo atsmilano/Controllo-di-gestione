@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //recupero parametri
 $anno = $cm->oPage->globals["anno"]["value"];
 $date = $cm->oPage->globals["data_riferimento"]["value"];
@@ -334,7 +334,7 @@ if (count ($obiettivo_indicatori_associati)) {
     $oGrid->id = "obiettivo-indicatore";
     $oGrid->title = "Indicatori associati all'obiettivo";
     $oGrid->resources[] = "obiettivo-indicatore";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
     $oGrid->order_default = "nome";
     $oGrid->record_id = "indicatore-modify";
     $oGrid->order_method = "labels";
@@ -554,7 +554,7 @@ if ($edit == true && $user_privileges["view_coreferenti_associati"]) {
         $oGrid = ffGrid::factory($cm->oPage);
         $oGrid->id = "obiettivo-cdr-coreferente";
         $oGrid->resources[] = "obiettivo-cdr-coreferente";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
         $oGrid->order_default = "desc_cdr";
         $oGrid->record_id = "obiettivo-cdr-coreferente-modify";
         $oGrid->order_method = "labels";
@@ -732,7 +732,8 @@ if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
             //se esiste l'obiettivo per il figlio e in caso di assegnazione aziendale non risulta trasversale
             if ($obiettivo_cdr_figlio !== null && !($obiettivo_cdr_figlio->isObiettivoCdrAziendale() && $obiettivo_cdr_figlio->isCoreferenza())) {
                 $anagrafica_figlio = AnagraficaCdrObiettivi::factoryFromCodice($cdr_figlio->codice, $date);
-                $peso_totale_obiettivi = $anagrafica_figlio->getPesoTotaleObiettivi($anno);
+                $peso_totale_obiettivi = $anagrafica_figlio->getPesoTotaleObiettivi($anno);                
+                $perc_peso = CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi);  
                 $responsabile_cdr_figlio = $cdr_figlio->getResponsabile($date);
                 //costruzione record
                 $grid_recordset[] = array(
@@ -740,7 +741,7 @@ if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
                     $cdr_figlio->codice,
                     $cdr_figlio->descrizione,
                     $responsabile_cdr_figlio->cognome . " " . $responsabile_cdr_figlio->nome . " (matr. " . $responsabile_cdr_figlio->matricola_responsabile . ")",
-                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . number_format(CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi), 2) . "%)",
+                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
                 );
             }
         }
@@ -749,7 +750,7 @@ if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
             $oGrid->id = "obiettivo_cdr_" . $tipo_piano_corrente->id;
             $oGrid->title = $tipo_piano_corrente->descrizione . " - Elenco CDR ai quali l&acute;obiettivo è stato assegnato";
             $oGrid->resources[] = "obiettivo-cdr";
-            $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
+            $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
             $oGrid->order_default = "desc_cdr";
             $oGrid->record_id = "obiettivo-cdr-modify";
             $oGrid->order_method = "labels";
@@ -830,13 +831,14 @@ if ($edit == true) {
             try {
                 $personale = PersonaleObiettivi::factoryFromMatricola($ob_cdr_per->matricola_personale);
                 $peso_tot_personale = $personale->getPesoTotaleObiettivi($anno);
+                $perc_peso = CoreHelper::percentuale($ob_cdr_per->peso, $peso_tot_personale);
                 //costruzione record
                 $grid_recordset[] = array(
                     $ob_cdr_per->id,
                     $personale->cognome,
                     $personale->nome,
                     $personale->matricola,
-                    number_format($ob_cdr_per->peso) . " / " . $peso_tot_personale . " (" . number_format(CoreHelper::percentuale($ob_cdr_per->peso, $peso_tot_personale), 2) . "%)",
+                    number_format($ob_cdr_per->peso) . " / " . $peso_tot_personale . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
                 );
             } catch (Exception $ex) {
                 
@@ -849,7 +851,7 @@ if ($edit == true) {
         $oGrid->id = "obiettivo_cdr_personale";
         $oGrid->title = "Elenco Personale al quale l&acute;Obiettivo è stato assegnato";
         $oGrid->resources[] = "obiettivo-cdr-personale";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "personale");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "personale");
         $oGrid->order_default = "cognome";
         $oGrid->record_id = "obiettivo-cdr-personale-modify";
         $oGrid->order_method = "labels";
@@ -968,7 +970,7 @@ if ($edit == true) {
         $oGrid->id = "rendicontazione";
         $oGrid->title = "Rendicontazione obiettivo anno " . $anno->descrizione;
         $oGrid->resources[] = "rendicontazione";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_periodo_rendicontazione");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_periodo_rendicontazione");
         $oGrid->order_default = "ordinamento_anno";
         $oGrid->record_id = "rendicontazione-modify";
         $oGrid->order_method = "labels";
@@ -1045,7 +1047,7 @@ function editRelations($oRecord, $frmAction) {
     switch ($frmAction) {
         case "insert":            
         case "update":
-            $user = LoggedUser::Instance();           
+            $user = LoggedUser::getInstance();           
             //solo in caso di utente amministratore degli obiettivi sarà permessa la modifica
             if ($user->hasPrivilege("obiettivi_aziendali_edit") && isset($oRecord->form_fields["data_accettazione"])) {
                 $obiettivo_cdr = new ObiettiviObiettivoCdr($oRecord->key_fields["ID_obiettivo_cdr"]->value->getValue());

@@ -89,6 +89,12 @@ if (count($cdr_figli) > 0) {
             $tpl->parse("NoExpandTree", false);
             $tpl->set_var("ExpandTree", "");
         }
+        if ($piano_cdr->data_introduzione !== null){
+            $tpl->set_var("EditActions", "");
+        }
+        else {            
+            $tpl->parse("EditActions", false);
+        }        
         $tpl->parse("CdrTree", true);
     }
 } else {

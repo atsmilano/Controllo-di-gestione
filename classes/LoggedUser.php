@@ -1,8 +1,9 @@
 <?php
 
-final class LoggedUser
+final class LoggedUser extends Singleton
 {
-
+    protected static $instance = null;
+    
     public $matricola_utente_collegato;
     public $matricola_utente_selezionato;
     //gruppi utente
@@ -17,18 +18,9 @@ final class LoggedUser
         3 => "Controllo di Gestione",
         4 => "Direzione",
         5 => "Responsabile cdr",
-    );
+    );  
 
-    public static function Instance()
-    {
-        static $inst = null;
-        if ($inst === null) {
-            $inst = new LoggedUser();
-        }
-        return $inst;
-    }
-
-    private function __construct()
+    protected function __construct()
     {
         $cm = cm::getInstance();
         //vengono recuperati i parametri globali della pagina

@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if (!$user->hasPrivilege("investimenti_istruttoria_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");
@@ -18,7 +18,7 @@ $piano_cdr = PianoCdr::getAttivoInData ($tipo_piano_cdr, $date);
 $cdr_global = $cm->oPage->globals["cdr"]["value"];
 $cdr = null;
 if ($cdr_global->id !== 0){
-    $cdr = new CdrInvestimenti($cdr_global->id);
+    $cdr = $cdr_global->cloneAttributesToNewObject("CdrInvestimenti");
 }
 
 foreach (InvestimentiInvestimento::getAll(array("ID_anno_budget" => $anno->id)) as $investimento) {

@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if (isset ($_REQUEST["keys[ID]"])) {
     try {       

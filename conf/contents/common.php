@@ -64,7 +64,7 @@ function getUser($oPage)
         //******************************************************************************************************************************************
         //recupero utente e informazioni correlate
         //******************************************************************************************************************************************
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         //si prova ad istanziare il cdr dal parametro passato in url, in caso contrario si opta per preselezionare il cdr
         if (isset ($_REQUEST["cdr"])) {
             try {
@@ -203,7 +203,7 @@ function getUser($oPage)
 $cm->oPage->addEvent("on_tpl_layer_loaded", "showSelectionFields");
 function showSelectionFields(ffPage_base $oPage){
     if (defined("MOD_SECURITY_SESSION_STARTED")) {	
-		$user = LoggedUser::Instance();
+		$user = LoggedUser::getInstance();
 		if ($user->hasPrivilege("user_selection") || $user->hasPrivilege("delega_accesso")){
 			$dipendente_selection = true;
 		}

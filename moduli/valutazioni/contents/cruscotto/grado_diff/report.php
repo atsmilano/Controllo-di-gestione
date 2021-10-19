@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //recupero dei parametri
 $anno = $cm->oPage->globals["anno"]["value"];

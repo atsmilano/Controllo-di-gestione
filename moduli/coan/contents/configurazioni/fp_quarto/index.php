@@ -22,7 +22,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "fp-quarto";
 $oGrid->title = "Fp quarto livello";
 $oGrid->resources[] = "fp-quarto";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, 
     "coan_fp_quarto"
 );

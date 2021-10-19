@@ -94,7 +94,7 @@ class Entity {
     } 
     
     //getAll
-    //where = array("fieldname"=>"value);
+    //where = array("fieldname"=>"value");
     //order = array(array("fieldname"=>nome_campo, "direction"=>ASC/DESC));
     public static function getAll($where = array(), $order = array()) {
         $result = array();
@@ -263,37 +263,7 @@ class Entity {
         }
         return $result;
     }
-    
-    //metodo per l'estrazione di tutte le tabelle del DB applicativo
-    //viene restituito un array di stringhe rappresentanti i nomi delle tabelle del DB
-    //il parametro include_framework_tables permette di considerare o meno le tabelle del framework nell'estrazione
-    public static function getDbTables ($include__framework_tables=false){
-        $db = ffDB_Sql::factory();
-        $tables = array();
-        $sql = "
-                SELECT 
-                    table_name 
-                FROM 
-                    information_schema.tables 
-                WHERE
-                    table_schema = " . $db->toSql(FF_DATABASE_NAME);
-        $db->query($sql);
-        if ($db->nextRecord()){
-            do {
-                $table_name = $db->getField("table_name", "Text", true);
-                if ($include__framework_tables==true
-                    || (substr($table_name,0,3)!=="cm_"
-                        && substr($table_name,0,3)!=="ff_"
-                        && substr($table_name,0,3)!=="support_"    
-                        )
-                    ){
-                    $tables[] = $table_name;
-                }
-            }while($db->nextRecord());
-        }
-        return $tables;
-    }
-    
+        
     //restituisce un oggetto di una classe differente con gli stessi attributi di quello corrente
     public function cloneAttributesToNewObject ($class){
         try {
@@ -305,5 +275,76 @@ class Entity {
             $obj->{$attribute} = $value;
         }
         return $obj;
-    }        
+    } 
+    
+    //inserimento o modifica dei campi del record (array("nomecampo1", "nomecampo2") corrispondente agli attributi dell'oggetto
+    public function save($fields_names=array()) {
+        $db = ffDb_Sql::factory();
+        
+        $calling_class = static::class;
+        if ($this->id == null) {            
+            $insert_values_sql = "";
+            foreach ($fields_names as $field_name) {
+                if (strlen($insert_sql)>0) {
+                    $insert_sql .= ",";
+                }
+                if (strlen($insert_values_sql)>0) {
+                    $insert_values_sql .= ",";
+                }
+                $insert_sql .= $field_name;
+                $insert_values_sql .= $this->{strtolower($field_name)};
+            }
+            
+            // INSERT
+            $sql = "INSERT INTO ".$calling_class::$tablename." (
+                    ".$insert_sql."
+                ) VALUES (
+                    ".$insert_values_sql."
+                )
+            ";            
+        }
+        else {
+            foreach ($fields_names as $field_name) {
+                $update_sql = "";
+                if (strlen($update_sql)>0) {
+                    $update_sql .= ",";
+                }                
+                $update_sql .= $field_name."=".$db->toSql($this->{strtolower($field_name)});
+            }
+            $sql = "
+                UPDATE ".static::$tablename."
+                SET
+                    ".$update_sql."
+                WHERE
+                    ID = ".$db->toSql($this->id)
+                ;           
+        }
+        if (!$db->execute($sql)) {		
+            throw new Exception("Impossibile aggiornare l'oggetto ".static::class." con ID='".$this->id."' nel DB");
+	}
+    }
+    
+    //Eliminazione del record con fieldname = $this->fieldname (default ID) dal db della tabella rappresentante l'oggetto
+    public function delete($field_name="ID") {
+        $db = ffDb_Sql::factory(); 
+              
+        $calling_class = static::class;        
+        $sql = "DELETE FROM ".$calling_class::$tablename." 
+                WHERE ".$field_name." = ".$db->toSql($this->{strtolower($field_name)}); 
+        if (!$db->execute($sql)) {
+            throw new Exception("Impossibile eliminare il record con ID = ".$this->id." dalla tabella ".$calling_class::$tablename);
+        }        
+    }
+    
+    //selezione di un record in base al valore dei campi
+    //array di selezione "nome_campo"=>valore
+    //restituisce il primo record trovato tramite la selezione
+    public static function getByFields($filters = array()) {
+        $calling_class = static::class;  
+        $recordset = $calling_class::getAll($filters);
+        if (!empty($recordset)) {
+                return $recordset[0];
+        }
+        return null;
+    }
 }

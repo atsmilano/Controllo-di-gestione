@@ -1,6 +1,6 @@
 <?php
 //vengono visualizzati tutti gli obiettivi assegnati all'utente nell'anno
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 $personale = PersonaleObiettivi::factoryFromMatricola($user->matricola_utente_selezionato);
 $anno = $cm->oPage->globals["anno"]["value"];
@@ -135,7 +135,7 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
         $oGrid->id = "obiettivo-cdr-personale";
         $oGrid->title = "Obiettivi individuali assegnati in attesa di presa visione";
         $oGrid->resources[] = "obiettivo-cdr";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset_da_confermare, "obiettivi_obiettivo_cdr");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset_da_confermare, "obiettivi_obiettivo_cdr");
         $oGrid->order_default = "cdr";
         $oGrid->record_id = "obiettivo-cdr-modify";
         $oGrid->order_method = "labels";
@@ -203,7 +203,7 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
         $oGrid->id = "obiettivi-cdr-personale-accettati";
         $oGrid->title = "Obiettivi individuali assegnati";
         $oGrid->resources[] = "obiettivo-cdr";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset_confermati, "obiettivi_obiettivo_cdr");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset_confermati, "obiettivi_obiettivo_cdr");
         $oGrid->order_default = "cdr";
         $oGrid->record_id = "obiettivo-cdr-modify";
         $oGrid->order_method = "labels";
@@ -330,7 +330,7 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
 
     function accettaObiettivoCdrPersonale($oRecord) {
         $cm = cm::getInstance();
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         $personale = PersonaleObiettivi::factoryFromMatricola($user->matricola_utente_selezionato);
         $anno = $cm->oPage->globals["anno"]["value"];
         foreach ($personale->getObiettiviCdrPersonaleAnno($anno) as $ob_personale) {
@@ -361,7 +361,7 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
 }
 
 //******************************************************************************
-//obiettivi dei cdr i quali il dipendente è responsabile
+//obiettivi dei cdr i quali il dipendente è responsabile sul piano selezionato
 $grid_fields = array(
     "ID",
     "codice",
@@ -372,8 +372,10 @@ $grid_fields = array(
     "raggiungimento",
 );
 $grid_recordset_responsabile = array();
-foreach ($personale->getCodiciCdrResponsabilitaAnno($anno) as $codice_cd_resp) {    
-    $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($codice_cd_resp, $dateTimeObject);
+$tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
+$piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date);
+foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $cdr_resp) {         
+    $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $dateTimeObject);
     $peso_tot_obiettivi_cdr = $cdr_resp_anno->getPesoTotaleObiettivi($anno);
     foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {
         //recupero del cdr											
@@ -432,16 +434,11 @@ foreach ($personale->getCodiciCdrResponsabilitaAnno($anno) as $codice_cd_resp) {
 }
 
 if (count($grid_recordset_responsabile) > 0) {
-    //Record_url
-    //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))
-    $path_info_parts = explode("/", $cm->path_info);
-    $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))));
-
     $oGrid = ffGrid::factory($cm->oPage);
     $oGrid->id = "obiettivi-cdr-personale-responsabile";
     $oGrid->title = "Obiettivi (chiusi) assegnati in qualit&aacute; di responsabile di CDR";
     $oGrid->resources[] = "obiettivo-cdr";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset_responsabile, "obiettivi_obiettivo_cdr");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset_responsabile, "obiettivi_obiettivo_cdr");
     $oGrid->order_default = "cdr";
     $oGrid->record_id = "obiettivo-cdr-modify";
     $oGrid->order_method = "labels";

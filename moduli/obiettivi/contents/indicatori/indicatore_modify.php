@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica privilegi utente
 if (!$user->hasPrivilege("indicatori_edit")) {
 	ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione degli indicatori.");	
@@ -194,7 +194,7 @@ if (isset($_REQUEST["keys[ID_indicatore]"])) {
     $oGrid->id = "obiettivo-indicatore";
     $oGrid->title = "Obiettivi";
     $oGrid->resources[] = "obiettivo-indicatore";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo");
     $oGrid->order_default = "codice";
     $oGrid->record_id = "obiettivo-indicatore-modify";
     $oGrid->order_method = "labels";	
@@ -284,7 +284,7 @@ if (isset($_REQUEST["keys[ID_indicatore]"])) {
     $oGrid->id = "valori-target-indicatore";
     $oGrid->title = "Valori Target (" . $tipo_piano_cdr->descrizione . ")";
     $oGrid->resources[] = "valore-target-indicatore";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_valore_target");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_valore_target");
     $oGrid->order_default = "codice_cdr";
     $oGrid->record_id = "valore-target-modify";
     $oGrid->order_method = "labels";	

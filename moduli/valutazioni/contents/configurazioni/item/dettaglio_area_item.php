@@ -95,7 +95,7 @@ if($isEdit) {
     $oGrid = ffGrid::factory($cm->oPage);
     $oGrid->id = "items";    
     $oGrid->resources[] = "item";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_item");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_item");
     $oGrid->order_default = "ID_item";
     $oGrid->record_id = "item-modify";    
     $path_info_parts = explode("/", $cm->path_info);

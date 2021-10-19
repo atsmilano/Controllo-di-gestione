@@ -2,7 +2,7 @@
 if (isset($_GET["table_name"])) {    
     //viene verificato che la tabella sia fra quelle esistenti
     $table_name = null;
-    foreach(Entity::getDbTables() as $table){
+    foreach(CoreHelper::getDbTables() as $table){
         if ($table == $_GET["table_name"]) {
             $table_name = $_GET["table_name"];
         }

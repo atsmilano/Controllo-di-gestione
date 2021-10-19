@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //gruppo programmazione strategica
 $menu["programmazione"] = array(

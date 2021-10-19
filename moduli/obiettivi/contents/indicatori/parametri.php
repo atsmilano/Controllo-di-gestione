@@ -26,7 +26,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "parametri";
 $oGrid->title = "Gestione parametri indicatori";
 $oGrid->resources[] = "indicatore-parametro";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_parametro");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_parametro");
 $oGrid->order_default = "nome";
 $oGrid->record_id = "parametro-modify";
 //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))

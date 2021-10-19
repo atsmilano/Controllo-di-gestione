@@ -1,6 +1,6 @@
 <?php
 $anno_budget = $cm->oPage->globals["anno"]["value"];
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $cm->oPage->addContent("<div id='home_contents'>");
 $sezioni = CmsHomeSezione::getSezioneAnno($anno_budget);
 foreach($sezioni as $sezione) {

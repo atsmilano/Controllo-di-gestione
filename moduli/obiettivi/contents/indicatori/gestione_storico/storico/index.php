@@ -70,7 +70,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "storico";
 $oGrid->title = "Storico parametri";
 $oGrid->resources[] = "storico";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "indicatori_valore_parametro_rilevato"
 );
 $oGrid->order_default = "parametro";

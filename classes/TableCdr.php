@@ -1,5 +1,6 @@
 <?php
 class TableCdr extends Singleton {
+    protected static $instance = null;
     private $piani_cdr = null;
     
     protected function __construct() {      

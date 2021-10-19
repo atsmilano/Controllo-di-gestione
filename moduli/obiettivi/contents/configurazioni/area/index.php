@@ -16,7 +16,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "area";
 $oGrid->title = "Area";
 $oGrid->resources[] = "area";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, 
     $grid_recordset, 
     "obiettivi_area"

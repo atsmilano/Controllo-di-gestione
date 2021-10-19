@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("deleghe_admin")){
     ffErrorHandler::raise("L'utente non possiede i privilegi d'accesso alla pagina");
 }
@@ -31,7 +31,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "delega";
 $oGrid->title = "Deleghe accesso";
 $oGrid->resources[] = "delega";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, 
     $grid_recordset, 
     "delega_accesso"

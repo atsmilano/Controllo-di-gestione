@@ -18,7 +18,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "cdc-standard-regionale";
 $oGrid->title = "Cdc standard regionale";
 $oGrid->resources[] = "cdc-standard-regionale";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "coan_cdc_standard_regionale"
 );
 $oGrid->order_default = "codice";

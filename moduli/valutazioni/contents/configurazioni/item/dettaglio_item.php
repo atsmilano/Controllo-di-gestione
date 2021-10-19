@@ -44,6 +44,7 @@ $oRecord->addContent($oField);
 $oField = ffField::factory($cm->oPage);
 $oField->id = "descrizione";
 $oField->base_type = "Text";
+$oField->extended_type = "Text";
 $oField->label = "Descrizione";
 $oField->required = true;
 $oRecord->addContent($oField);
@@ -170,7 +171,7 @@ if($isEdit) {
     $oGrid = ffGrid::factory($cm->oPage);
     $oGrid->id = "valutazioni_punteggio_item";
     $oGrid->resources[] = "punteggio-item";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_punteggio_item");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_punteggio_item");
     $oGrid->order_default = "ID_punteggio_item";
     $oGrid->record_id = "punteggio-item-modify";    
     $path_info_parts = explode("/", $cm->path_info);

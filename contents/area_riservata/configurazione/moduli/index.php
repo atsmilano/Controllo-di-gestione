@@ -1,5 +1,5 @@
 <?php   
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("moduli_admin")) {
     ffErrorHandler::raise("L'utente non possiede i privilegi d'accesso alla pagina");
 }
@@ -31,7 +31,7 @@ $oGrid->id = "moduli";
 $oGrid->title = "Moduli disponibili";
 $oGrid->resources[] = "obiettivo-cdr";
 //viene passato un parametro fittizio per il nome della tabella per il funzionamento del metodo
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "anno_budget");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "anno_budget");
 $oGrid->order_default = "ID";
 $oGrid->record_id = "modulo-modify";
 $oGrid->order_method = "labels";	

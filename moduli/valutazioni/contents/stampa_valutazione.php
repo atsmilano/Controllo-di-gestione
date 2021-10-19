@@ -6,7 +6,7 @@ else
 	ffRedirect($_GET["ret_url"]);
 
 //*******UTENTE E PRIVILEGI************
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $privilegi_utente = $valutazione->getPrivilegiPersonale($user->matricola_utente_selezionato);
 if ($user->hasPrivilege("valutazioni_admin"))
     $admin_user = true;

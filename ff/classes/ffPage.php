@@ -854,13 +854,14 @@ abstract class ffPage_base extends ffCommon
      */
     function getUrlParams($exclude = array())
     {
-        $params = explode("&", $this->get_script_params());
+        $params = explode("&", $this->get_script_params());        
         $ret = "";
         foreach ($params as $key => $value)
-        {
+        {      
             $parts = explode("=", $value);
-            if (array_search($parts[0], $exclude) === false)
+            if (strlen($value) && array_search($parts[0], $exclude) === false) {               
                 $ret .= $parts[0] . "=" . rawurlencode($parts[1]) . "&";
+            }            
         }
         return $ret;
     }

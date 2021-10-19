@@ -1,11 +1,10 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("investimenti_richieste_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");
 }
 
-$cdr_global = $cm->oPage->globals["cdr"]["value"];
-$cdr = new CdrInvestimenti($cdr_global->id);
+$cdr = $cm->oPage->globals["cdr"]["value"]->cloneAttributesToNewObject("CdrInvestimenti");
 
 $anno = $cm->oPage->globals["anno"]["value"];
 //visualizzazione della grid delle richieste d'investimento effettuate dal cdr

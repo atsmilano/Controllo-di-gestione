@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica che il cdr sia di responsabilità dell'utente
 if (!$user->hasPrivilege("riesame_direzione_view")){
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per visualizzare la pagina");

@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica privilegi utente
 if (!$user->hasPrivilege("obiettivi_aziendali_edit")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione dei periodi di rendicontazione.");
@@ -42,7 +42,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "periodi_rendicontazione";
 $oGrid->title = "Periodi rendicontazione";
 $oGrid->resources[] = "periodo-rendicontazione";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, 
     $grid_recordset, 
     "obiettivi_periodo_rendicontazione"

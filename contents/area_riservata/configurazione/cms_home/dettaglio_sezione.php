@@ -67,7 +67,7 @@ $oRecord->addContent($oField);
 
 if ($isEdit) {
     $oRecord->addContent("<hr>");
-    foreach ($sezione->getTipoField($cm, $anno, LoggedUser::Instance()) as $oField) {
+    foreach ($sezione->getTipoField($cm, $anno, LoggedUser::getInstance()) as $oField) {
         $oRecord->addContent($oField);
     }
     

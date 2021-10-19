@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 foreach ($user->user_groups as $group) {
     if ($group == 1 || $group == 2 || $group == 3){

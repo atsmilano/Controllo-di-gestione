@@ -16,7 +16,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "parere-azioni";
 $oGrid->title = "Parere azioni";
 $oGrid->resources[] = "parere-azioni";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "obiettivi_parere_azioni"
 );
 $oGrid->order_default = "anno_introduzione";

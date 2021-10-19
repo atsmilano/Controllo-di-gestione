@@ -3,7 +3,7 @@
  * hide = true, utente non ha i permessi.
  * Utilizzo del valore MODULES_ICONHIDE per nascondere le icone del menu nel caso in cui non vi siano i permessi adeguati.
  */
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 foreach ($user->user_groups as $group) {
 	if ($group == 1 || $group == 2 || $group == 3) {

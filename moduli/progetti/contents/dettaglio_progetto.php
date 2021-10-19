@@ -1,6 +1,6 @@
 <?php
 $db = ffDb_Sql::factory();
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 $anno = $cm->oPage->globals["anno"]["value"];
 $dateTimeObject = $cm->oPage->globals["data_riferimento"]["value"];

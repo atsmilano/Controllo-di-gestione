@@ -1,6 +1,6 @@
 <?php
 $db = ffDb_Sql::factory();
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 $date = $cm->oPage->globals["data_riferimento"]["value"]->format("Y-m-d");
 

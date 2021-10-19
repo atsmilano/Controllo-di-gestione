@@ -7,12 +7,14 @@
         <!--BeginNoExpandTree-->
                 <i id="expand_image_{id_cdr_figlio}" class="fa-square-o fa-lg fa no_expandable" title="Nessun Figlio"></i>				
         <!--EndNoExpandTree-->			
-        </span>
-        <i class="fa-reorder fa action" title="Sposta"></i>
-        <span class="tree_actions">
+        </span>        
+    <!--BeginEditActions-->
+    <i class="fa-reorder fa action" title="Sposta"></i>     
+    <span class="tree_actions">              
         <i id="add_image_{id_cdr_figlio}" class="fa-plus-square-o fa action" title="Nuovo figlio" onclick="cdrEdit({id_cdr_figlio});"></i>
-        <i id="edit_icon_{id_cdr_figlio}" class="fa-edit fa-lg fa action" title="Modifica Cdr" onclick="cdrEdit({id_cdr_padre},{id_cdr_figlio});"></i>				
+        <i id="edit_icon_{id_cdr_figlio}" class="fa-edit fa-lg fa action" title="Modifica Cdr" onclick="cdrEdit({id_cdr_padre},{id_cdr_figlio});"></i>				        
     </span>
+    <!--EndEditActions-->
     <span id="tree_element_description_{id_cdr_figlio}" class="tree_element_description" title="{descrizione_completa}">																										
         {descrizione}			
     </span>			
