@@ -684,8 +684,8 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
                 //recupero del token
                 $token = get_session('access_token');                
                 //verifica sulla scadenza del token
-                //nel caso in cui il token sia scaduto viene richiesto un nuovo token
-                if ($token->expire_datetime - time() < 0) {                    
+                //nel caso in cui il token sia scaduto viene richiesto un nuovo token                
+                if ($token->expire_datetime - time() < 0) {                  
                     unset_session('access_token');
                     $require_token = true;
                 }                                                  
@@ -714,11 +714,11 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
                     //verifica dellìutilizzo di api o di info nell'access token (Azure AD vs ADFS)
                     if (AD_USERS_URL !== false) {
                         //recupero del nome utente con verifica circa la presenza di errori
-                        $user = apiRequest(AD_USERS_URL);               
+                        $user = apiRequest(AD_USERS_URL);                          
                         //se il token è scaduto o comunque viene prodotto errore elimino la sessione (il token poi verrà rinnovato)                        
-                        if (isset($user->{'odata.error'})){
+                        if (isset($user->error)){
                             unset_session ('access_token');
-                            ffErrorHandler::raise("AD Error: ".$user->{'odata.error'}->message->value, E_USER_ERROR, null, get_defined_vars());
+                            ffErrorHandler::raise("AD Error: ".$user->error->message, E_USER_ERROR, null, get_defined_vars());
                             /*
                             $require_token = true;
                             $user_error = true;                            
@@ -3304,7 +3304,7 @@ function mod_security_accesstoken_revoke($type, $token, $ID_user = null, $ID_dom
 	if ($token === null)
 	{
 		if ($ID_user === null)
-			ffErrorHandler::raise ("ID_user required in order to revoke an unspecified token", E_USER_ERROR, NULL, get_defined_vars());
+			ffErrorHandler::raise ("ID_user required in order to revoke an unspecified token", E_USER_ERROR, null, get_defined_vars());
 		
 		if (MOD_SEC_MULTIDOMAIN && MOD_SEC_MULTIDOMAIN_EXTERNAL_DB && $ID_domain !== null)
 			$db = mod_security_get_db_by_domain($ID_domain);
@@ -4252,7 +4252,7 @@ function mod_security_ldapGetUserInfo ($ldap_server_addr, $username, $password, 
 
 //******************************************************************************
 //MS LOGIN functions
-function apiRequest($url, $post = false, $headers = array()) {    
+function apiRequest($url, $post = false, $headers = array()) {   
     $ch = curl_init($url);    
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -4265,8 +4265,9 @@ function apiRequest($url, $post = false, $headers = array()) {
         $headers[] = 'Authorization: Bearer ' . $token->access_token;
     }
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    //var_dump(curl_getinfo($ch));    
-    $response = curl_exec($ch);    
+    //var_dump(curl_getinfo($ch));
+    $response = curl_exec($ch);
+    //var_dump($response);
     return json_decode($response);    
 }
 

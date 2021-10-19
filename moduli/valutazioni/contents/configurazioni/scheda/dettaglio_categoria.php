@@ -91,7 +91,7 @@ if ($isEdit == true) {
     $oGrid->id = "categoria-regola";
     $oGrid->title = "Regole per l'apertura delle schede";
     $oGrid->resources[] = "categoria-regola";        
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_regola_categoria");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_regola_categoria");
     $oGrid->order_default = "ordine";
     $oGrid->record_id = "categoria-regola-modify";
     $oGrid->order_method = "labels";

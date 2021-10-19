@@ -1,5 +1,6 @@
 <?php
 class TableResponsabileCdr extends Singleton {
+    protected static $instance = null;
     private $respCdrInData = null;
     
     protected function __construct() {

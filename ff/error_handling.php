@@ -292,6 +292,7 @@ EOD
 		self::out('</code></div></td></tr>');
  */
 		// DISPLAY FUNCTION VARIABLES
+/*ADDED-ATS                
 		if (self::$errors_handled[$errstr]["variables"] !== NULL)
 		{
 			if (isset(self::$errors_handled[$errstr]["variables"]["GLOBALS"]))
@@ -317,7 +318,7 @@ EOD
 			self::structPrint(self::$errors_handled[$errstr]["constants"], 0, true);
 			self::out('</div></td></tr>');
 		}
-
+*/
 		// DISPLAY BACKTRACE
 		if (is_array($backtrace) && count($backtrace) > 3)
 		{

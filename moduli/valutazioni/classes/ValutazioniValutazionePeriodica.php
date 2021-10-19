@@ -378,7 +378,7 @@ class ValutazioniValutazionePeriodica {
 
     //salvataggio della valutazione dell'ambito. Ritorna true o false a seconda che il salvataggio sia andato a buon fine o meno
     public function salvaPunteggioAmbito(ValutazioniAmbito $ambito, $punteggio) {
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         $privilegi_utente = $this->getPrivilegiPersonale($user->matricola_utente_selezionato);
         if (
             $user->hasPrivilege("valutazioni_admin") == true ||
@@ -439,7 +439,7 @@ class ValutazioniValutazionePeriodica {
 
     //salvataggio della valutazione dell'item. Ritorna true o false a seconda che il salvataggio sia andato a buon fine o meno
     public function salvaPunteggioItem(ValutazioniItem $item, $punteggio) {
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         $privilegi_utente = $this->getPrivilegiPersonale($user->matricola_utente_selezionato);
         if (
             $user->hasPrivilege("valutazioni_admin") == true ||
@@ -685,38 +685,46 @@ class ValutazioniValutazionePeriodica {
             //viene visualizzato il totale solamente nel caso in cui sia attivo almeno un ambito							
             $totale_sezioni = array();
             //per ogni ambito viene aggiornato il totale della relativa sezione (per poter pesare i risultati)
+            $ambiti_valutati = false;            
             foreach ($totale_val->getAmbitiTotale() as $ambito_totale) {
-                $found = false;
-                for ($i = 0; $i < count($totale_sezioni); $i++) {
-                    if ($ambito_totale->id_sezione == $totale_sezioni[$i]["id_sezione"]) {
-                        $found = true;
-                        $totale_sezioni[$i]["raggiungimento"] += $this->getTotaleRaggiungimentoAmbito($ambito_totale);
-                        $totale_sezioni[$i]["peso"] += $ambito_totale->getPesoAmbitoCategoriaAnno($categoria, $anno_valutazione);
-                        break;
+                //viene verificato che il totale abbia almeno un ambito valutato nel periodo
+                if ($this->isAmbitoValutato($ambito_totale)){
+                    $ambiti_valutati = true;
+                
+                    $found = false;
+                    for ($i = 0; $i < count($totale_sezioni); $i++) {
+                        if ($ambito_totale->id_sezione == $totale_sezioni[$i]["id_sezione"]) {
+                            $found = true;
+                            $totale_sezioni[$i]["raggiungimento"] += $this->getTotaleRaggiungimentoAmbito($ambito_totale);
+                            $totale_sezioni[$i]["peso"] += $ambito_totale->getPesoAmbitoCategoriaAnno($categoria, $anno_valutazione);
+                            break;
+                        }
                     }
-                }
-                if ($found == false) {
-                    $totale_sezioni[] = array(
-                        "id_sezione" => $ambito_totale->id_sezione,
-                        "raggiungimento" => $this->getTotaleRaggiungimentoAmbito($ambito_totale),
-                        "peso" => $ambito_totale->getPesoAmbitoCategoriaAnno($categoria, $anno_valutazione),
-                    );
+                    if ($found == false) {
+                        $totale_sezioni[] = array(
+                            "id_sezione" => $ambito_totale->id_sezione,
+                            "raggiungimento" => $this->getTotaleRaggiungimentoAmbito($ambito_totale),
+                            "peso" => $ambito_totale->getPesoAmbitoCategoriaAnno($categoria, $anno_valutazione),
+                        );
+                    }
                 }
             }
             //calcolo del totale pesato per sezione
-            $totale_raggiungimento = 0;
-            foreach ($totale_sezioni as $totale_sezione) {
-                $sezione = new ValutazioniSezione($totale_sezione["id_sezione"]);
-                if ($totale_sezione["peso"] == 0) {
-                    $totale_raggiungimento = 0;
-                } else {
-                    $totale_raggiungimento += $totale_sezione["raggiungimento"] * $sezione->getPesoAnno($anno_valutazione, $categoria) / $totale_sezione["peso"];
+            if ($ambiti_valutati == true) {
+                $totale_raggiungimento = 0;
+                foreach ($totale_sezioni as $totale_sezione) {
+                    $sezione = new ValutazioniSezione($totale_sezione["id_sezione"]);
+                    if ($totale_sezione["peso"] == 0) {
+                        $totale_raggiungimento = 0;
+                    } else {
+                        $totale_raggiungimento += $totale_sezione["raggiungimento"] * $sezione->getPesoAnno($anno_valutazione, $categoria) / $totale_sezione["peso"];
+                    }
                 }
+                $totali[] = array(
+                    "totale_obj" => $totale_val,
+                    "totale_calcolo" => round($totale_raggiungimento, 2),
+                );
             }
-            $totali[] = array(
-                "totale_obj" => $totale_val,
-                "totale_calcolo" => round($totale_raggiungimento, 2),
-            );
         }
         return $totali;
     }

@@ -181,7 +181,7 @@ class RURichiesta extends Entity
     
     //restituisce true se la richiesta risulta di competenza dell'utente (privilegi per avanzamento) coerentemente con quanto definito nel dettaglio della richiesta 
     public function isApprovazioneCompetenza(CdrRU $cdr, AnnoBudget $anno, Datetime $data_riferimento, PianoCdr $piano_cdr) {
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
                
         $richiesta = $this;   
         $cdr_creazione = Cdr::factoryFromCodice($richiesta->codice_cdr_creazione, $piano_cdr)->cloneAttributesToNewObject("CdrRU");   
@@ -434,7 +434,7 @@ class RURichiesta extends Entity
         $oGrid->id = $grid_id;
         $oGrid->title = $grid_title;
         $oGrid->resources[] = "richiesta";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
             $grid_fields, 
             $grid_recordset, 
             "ru_richiesta"

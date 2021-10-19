@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $anno = $cm->oPage->globals["anno"]["value"];
 $anno = new ValutazioniAnnoBudget($anno->id);
 

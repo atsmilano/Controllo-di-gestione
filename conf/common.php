@@ -4,8 +4,10 @@
 //******************************************************************************************************************************************
 //viene caricata come prima classe la classe Entity per gestire le eventuali estensioni
 require(FF_DISK_PATH . "/classes/Entity.php");
+require(FF_DISK_PATH . "/classes/Singleton.php");
 foreach (glob(FF_DISK_PATH . "/classes/*.php") as $filename){        
-    if ($filename !== FF_DISK_PATH . "/classes/Entity.php"){
+    if ($filename !== FF_DISK_PATH . "/classes/Entity.php"
+        && $filename !== FF_DISK_PATH . "/classes/Singleton.php"){
         require($filename);
     }
 }

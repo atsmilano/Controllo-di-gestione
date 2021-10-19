@@ -28,7 +28,7 @@ else {
 //cdr********
 $cdr = $cm->oPage->globals["cdr"]["value"];
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica che il cdr sia di responsabilità dell'utente
 $programmazione_strategica = false;
 foreach (StrategiaCdrProgrammazioneStrategica::getCdrProgrammazioneStrategicaAnno($anno) as $cdr_programmazione_strategica) {

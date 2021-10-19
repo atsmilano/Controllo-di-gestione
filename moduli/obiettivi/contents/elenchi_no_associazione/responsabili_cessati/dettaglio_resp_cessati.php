@@ -53,7 +53,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "assegnazione-cdr";
 $oGrid->title = "Obiettivi assegnati ai CdR";
 $oGrid->resources[] = "obiettivo-cdr-".$cdr->codice;
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr"
 );
 $oGrid->order_default = "cdr";

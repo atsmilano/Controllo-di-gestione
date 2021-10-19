@@ -1,10 +1,9 @@
 <?php
 $anno = $cm->oPage->globals["anno"]["value"];
 
-$cdr_global = $cm->oPage->globals["cdr"]["value"];
-$cdr = new CdrCostiRicavi($cdr_global->id);
+$cdr = $cm->oPage->globals["cdr"]["value"]->cloneAttributesToNewObject("CdrCostiRicavi");
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //estrazione
 if ($user->hasPrivilege("costi_ricavi_admin")){
     $cm->oPage->addContent("<a id='costi_ricavi_estrazione_link' class='link_estrazione' href='".FF_SITE_PATH . $cm->path_info ."/estrazione_costi_ricavi.php?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."'>"
@@ -303,8 +302,7 @@ function recordInit ($oGrid){
 		$id = "?";
 	
 	$anno = $cm->oPage->globals["anno"]["value"];
-    $cdr_global = $cm->oPage->globals["cdr"]["value"];
-	$cdr = new CdrCostiRicavi($cdr_global->id);
+        $cdr = $cm->oPage->globals["cdr"]["value"]->cloneAttributesToNewObject("CdrCostiRicavi");
 	$fp = new CostiRicaviFp($oGrid->key_fields["ID_fp"]->getValue());	
 	$evidenza = false;
 	foreach ($fp->getContiAssociatiAnno($anno) as $conto) {

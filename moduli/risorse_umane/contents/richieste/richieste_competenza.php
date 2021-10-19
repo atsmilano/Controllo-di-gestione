@@ -10,7 +10,7 @@ $cdr = Cdr::factoryFromCodice($cm->oPage->globals["cdr"]["value"]->codice, $pian
 
 //aggiunta del parametro per la gestione del record
 $accettazione = $cdr->getAccettazioneAnno($anno);
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if ($user->hasPrivilege("ru_admin")) {
     $is_admin = true;
 }
@@ -193,7 +193,7 @@ function updateRichieste($oRecord, $frmAction, $args) {
         $anno = $args["anno"];
         $cdr = $args["cdr"]; 
         $accettazione = $cdr->getAccettazioneAnno($anno);
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         if ($user->hasPrivilege("ru_admin")) {
             $is_admin = true;
         }

@@ -16,7 +16,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "campo_revisione";
 $oGrid->title = "Campo revisione";
 $oGrid->resources[] = "campo-revisione";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, 
     $grid_recordset, 
     "obiettivi_campo_revisione"

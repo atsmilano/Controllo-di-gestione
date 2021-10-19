@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 $date = $cm->oPage->globals["data_riferimento"]["value"];
 $anno = $cm->oPage->globals["anno"]["value"];
@@ -152,7 +152,7 @@ else {
         $oGrid->id = "indicatori_figli";
         $oGrid->title = "";
         $oGrid->resources[] = "indicatore-cruscotto";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
         $oGrid->order_default = "cdr";
         $oGrid->record_id = "";
         $oGrid->order_method = "labels";	        
@@ -250,7 +250,7 @@ else {
         $oGrid->id = "obiettivo-indicatore";
         $oGrid->title = "";
         $oGrid->resources[] = "obiettivo-indicatore";
-        $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo");
+        $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo");
         $oGrid->order_default = "codice";
         $oGrid->record_id = "obiettivo-indicatore-modify";
         $oGrid->order_method = "labels";	        

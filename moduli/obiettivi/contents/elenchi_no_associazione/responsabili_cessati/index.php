@@ -18,7 +18,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "responsabili-cessati";
 $oGrid->title = "Elenco responsabili cessati nell'anno";
 $oGrid->resources[] = "responsabili-cessati";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "responsabile_cdr"
 );
 $oGrid->order_default = "cognome";

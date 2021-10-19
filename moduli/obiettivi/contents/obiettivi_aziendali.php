@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("obiettivi_aziendali_edit")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione degli obiettivi aziendali.");
 }
@@ -63,7 +63,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "obiettivi";
 $oGrid->title = "Obiettivi aziendali anno " . $anno->descrizione;
 $oGrid->resources[] = "obiettivo";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo");
 $oGrid->order_default = "codice";
 $oGrid->record_id = "obiettivo-aziendale-modify";
 $oGrid->order_method = "labels";

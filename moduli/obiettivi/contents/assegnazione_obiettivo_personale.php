@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //solamente il responsabile del cdr ha la possibilità di visualizzare e modificare l'obiettivo se il periodo è aperto
 if (!$user->hasPrivilege("resp_cdr_selezionato") ) {
 	ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina dell'obiettivo.");

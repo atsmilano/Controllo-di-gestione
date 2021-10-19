@@ -56,7 +56,7 @@ abstract class ffDBSource extends ffCommon
 		if (array_key_exists($sName, ffDBSource::$aSources))
 			return ffDBSource::$aSources[$sName];
 		else
-			ffErrorHandler::raise("Source not found", E_USER_ERROR, NULL, get_defined_vars());
+			ffErrorHandler::raise("Source not found", E_USER_ERROR, null, get_defined_vars());
 	}
 	
 	/*static public function factory($sName, $eType)

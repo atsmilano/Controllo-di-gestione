@@ -3,7 +3,7 @@ if (isset($_GET["table_name"])) {
     //viene verificato che la tabella sia fra quelle esistenti
     $table_name = null;
     //verifica della correttezza del nome della tabella
-    foreach(Entity::getDbTables() as $table){
+    foreach(CoreHelper::getDbTables() as $table){
         if ($table == $_GET["table_name"]) {
             $table_name = $_GET["table_name"];
         }

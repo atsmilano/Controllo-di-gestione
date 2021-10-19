@@ -120,7 +120,7 @@ if ($isEdit) {
     $oGrid = ffGrid::factory($cm->oPage);
     $oGrid->id = "valutazioni_periodo_categoria_ambito";    
     $oGrid->resources[] = "periodo-categoria-ambito";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_periodo_categoria_ambito");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "valutazioni_periodo_categoria_ambito");
     $oGrid->order_default = "ID_periodo_categoria_ambito";
     $oGrid->record_id = "periodo-categoria-ambito-modify";    
     $path_info_parts = explode("/", $cm->path_info);

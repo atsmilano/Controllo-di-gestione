@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica privilegi utente
 if (!$user->hasPrivilege("indicatori_edit")) {
 	ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione degli indicatori.");	
@@ -49,7 +49,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "indicatori";
 $oGrid->title = "Indicatori anno ".$anno->descrizione;
 $oGrid->resources[] = "indicatore";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
 $oGrid->order_default = "nome";
 $oGrid->record_id = "indicatore-modify";
 $oGrid->order_method = "labels";	

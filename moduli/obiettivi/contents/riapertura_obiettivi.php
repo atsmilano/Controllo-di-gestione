@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if (!$user->hasPrivilege("obiettivi_aziendali_edit")){
     die(json_encode(array("messaggio" => "Errore: si sta cercando di forzare la riapertura degli obiettivi di un cdr .", "esito" => "error")));	

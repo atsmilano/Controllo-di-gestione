@@ -15,7 +15,7 @@ class Cdr extends Entity{
         if ($id !== null) {
             if (!$this->useSql) {
                 $this->useSql = true;
-                foreach (TableCdr::Instance()->getPianiCdr() as $piani_cdr) {
+                foreach (TableCdr::getInstance()->getPianiCdr() as $piani_cdr) {
                     if (array_key_exists($id, $piani_cdr['cdr'])) {
                         $this->useSql = false;
                         $this->id = $piani_cdr['cdr'][$id]->id;
@@ -71,7 +71,7 @@ class Cdr extends Entity{
     //viene istanziato l'oggetto cdr da codice e piano cdr di riferimento
     public static function factoryFromCodice($codice, PianoCdr $piano_cdr) {
         //lavaoriamo sul piano
-        foreach (TableCdr::Instance()->getPianiCdr() as $piani_cdr) {
+        foreach (TableCdr::getInstance()->getPianiCdr() as $piani_cdr) {
             if ($piani_cdr['piano_cdr']->id == $piano_cdr->id) {
                 foreach ($piani_cdr['cdr'] as $cdr_global) {
                     if ($cdr_global->codice == $codice && $cdr_global->id_piano_cdr == $piano_cdr->id) {
@@ -241,7 +241,7 @@ class Cdr extends Entity{
                     $cdr_figli[] = $cdr_figlio;
             }                        
         } else {
-            foreach (TableCdr::Instance()->getPianiCdr() as $piani_cdr) {
+            foreach (TableCdr::getInstance()->getPianiCdr() as $piani_cdr) {
                 foreach ($piani_cdr['cdr'] as $cdr_global) {
                     if ($cdr_global->id_padre == $this->id) {
                         $cdr_figli[] = $cdr_global;
@@ -263,7 +263,7 @@ class Cdr extends Entity{
                 $result[] = $cdr;
             }
         } else {
-            foreach (TableCdr::Instance()->getPianiCdr() as $piani_cdr) {
+            foreach (TableCdr::getInstance()->getPianiCdr() as $piani_cdr) {
                 if (isset($piani_cdr['cdr'][$this->id])) {
                     $id_padre = $this->id;
                     while ($piani_cdr['cdr'][$id_padre]->id_padre !== 0) {
@@ -336,7 +336,7 @@ class Cdr extends Entity{
         $useSql = true;
         //per ogni codice trovato viene restituita la gerarchia (con esclusione degli altri codici nell'array)
         //controllo se piano passato è in oggetto globale        
-        foreach (TableCdr::Instance()->getPianiCdr() as $piani_cdr) {
+        foreach (TableCdr::getInstance()->getPianiCdr() as $piani_cdr) {
             if ($piani_cdr['piano_cdr']->id == $piano_cdr->id) {
                 $useSql = false;
             }

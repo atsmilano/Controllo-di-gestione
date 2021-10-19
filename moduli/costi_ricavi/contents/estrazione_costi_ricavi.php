@@ -64,10 +64,10 @@ if (isset ($_GET["anno"])) {
                 $record[] = $cdr->descrizione;
                 $record[] = $periodo_anno->descrizione;
                 $record[] = $periodo_anno->id_tipo_periodo;	
-                $record[] = $importo_periodo->campo_1;
-                $record[] = $importo_periodo->campo_2;
-                $record[] = $importo_periodo->campo_3;
-                $record[] = $importo_periodo->campo_4;
+                $record[] = $importo_periodo->campo_1!==null?$importo_periodo->campo_1:0;
+                $record[] = $importo_periodo->campo_2!==null?$importo_periodo->campo_2:0;
+                $record[] = $importo_periodo->campo_3!==null?$importo_periodo->campo_3:0;
+                $record[] = $importo_periodo->campo_4!==null?$importo_periodo->campo_4:0;
                 $record[] = $valutazione_fp[0]->campo_1;
                 $record[] = $valutazione_fp[0]->campo_2;
                 $record[] = $valutazione_fp[0]->campo_3;

@@ -41,7 +41,7 @@ class AllegatoHelper {
     }
 
     private function canDownload($filename_md5){
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         $return = false;
         $permission_token_object = $this->decodePermissions($_COOKIE['p_2_#']);
         if($permission_token_object['user_id'] == $user->matricola_utente_selezionato || 
@@ -59,7 +59,7 @@ class AllegatoHelper {
     }
 
     private function canDelete($filename_md5){
-        $user = LoggedUser::Instance();
+        $user = LoggedUser::getInstance();
         $return = false;
         $permission_token_object = $this->decodePermissions($_COOKIE['p_2_#']);
         if($permission_token_object['user_id'] == $user->matricola_utente_selezionato || 

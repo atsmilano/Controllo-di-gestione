@@ -6,7 +6,7 @@ $anno = $cm->oPage->globals["anno"]["value"];
 $cdr = $cm->oPage->globals["cdr"]["value"];
 if ($cdr == 0) {
     //se l'utente non è responsabile di cdr (cdr = 0) viene recuperato il cdr principale di assegnazione
-    $user = LoggedUser::Instance();
+    $user = LoggedUser::getInstance();
     $personale = Personale::factoryFromMatricola($user->matricola_utente_selezionato);
 
     $tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
@@ -57,7 +57,7 @@ $db = ffDb_Sql::factory();
 
 if (STRATEGIA_CDR_PROGRAMMAZIONE !== false || $cdr->id_padre == 0) {
     //nel caso in cui il cdr partecipi alla programmazione strategica viene data la possibilità di modificare nel caso l'utente sia il responsabile del cdr
-    $user = LoggedUser::Instance();
+    $user = LoggedUser::getInstance();
     $programmazione_strategica = false;
 
     foreach (StrategiaCdrProgrammazioneStrategica::getCdrProgrammazioneStrategicaAnno($anno) as $cdr_programmazione_strategica) {

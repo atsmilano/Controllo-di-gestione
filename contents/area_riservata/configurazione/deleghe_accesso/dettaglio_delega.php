@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("deleghe_admin")){
     ffErrorHandler::raise("L'utente non possiede i privilegi d'accesso alla pagina");
 }

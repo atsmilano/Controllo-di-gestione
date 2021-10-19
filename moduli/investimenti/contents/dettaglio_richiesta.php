@@ -1,12 +1,11 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("investimenti_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");
 }
 
 //recupero globals e info cdr
-$cdr_global = $cm->oPage->globals["cdr"]["value"];
-$cdr = new CdrInvestimenti($cdr_global->id);
+$cdr = $cm->oPage->globals["cdr"]["value"];
 
 $anno = $cm->oPage->globals["anno"]["value"];
 //estrazione del piano cdr

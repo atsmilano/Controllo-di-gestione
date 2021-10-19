@@ -100,7 +100,7 @@ class ffWidget_disclosures extends ffCommon
 
 	static function processButton($obj, $tpl, $widget)
 	{
-		//ffErrorHandler::raise("asd", E_USER_ERROR, NULL, get_defined_vars());
+		//ffErrorHandler::raise("asd", E_USER_ERROR, null, get_defined_vars());
 		if ($obj->widget_discl_enable)
 		{
 			if (!isset($widget->tpl[$obj->id]))

@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //recupero dei parametri
 $anno = $cm->oPage->globals["anno"]["value"];
 $cdr = $cm->oPage->globals["cdr"]["value"];
@@ -131,7 +131,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "indicatori";
 $oGrid->title = "Indicatori anno " . $anno->descrizione;
 $oGrid->resources[] = "indicatore-cruscotto";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "indicatori_indicatore");
 $oGrid->order_default = "nome";
 $oGrid->record_id = "indicatore-cruscotto-modify";
 $oGrid->order_method = "labels";

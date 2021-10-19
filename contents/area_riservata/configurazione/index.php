@@ -5,7 +5,7 @@ CoreHelper::includeJqueryUi();
 $tpl = ffTemplate::factory((__DIR__) . "/tpl");
 $tpl->load_file("configurazione.html", "main");
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if ($user->hasPrivilege("anni_budget_admin")){
     $tpl->parse("SectAnniBudget", false);

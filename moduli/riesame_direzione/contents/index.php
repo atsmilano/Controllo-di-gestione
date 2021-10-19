@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 if (!$user->hasPrivilege("riesame_direzione_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");
@@ -168,7 +168,7 @@ try {
 function recordInit ($oGrid){
     //viene evidenziato il cdr di responsabilità diretta
     $cm = cm::getInstance();
-    $user = LoggedUser::Instance();
+    $user = LoggedUser::getInstance();
     if ($oGrid->grid_fields["matricola_responsabile"]->value->getValue() == $user->matricola_utente_selezionato){
         $oGrid->row_class = "evidenza";
     }

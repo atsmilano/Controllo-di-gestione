@@ -18,7 +18,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "personale";
 $oGrid->title = "Elenco del personale";
 $oGrid->resources[] = "personale";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "personale");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "personale");
 $oGrid->order_default = "cognome";
 $oGrid->record_id = "personale-modify";
 $oGrid->record_url = FF_SITE_PATH . $cm->path_info . "/dettaglio_personale";
@@ -38,6 +38,7 @@ $oField = ffField::factory($cm->oPage);
 $oField->id = "cognome";
 $oField->base_type = "Text";
 $oField->label = "Cognome";
+$oField->order_SQL = "cognome ASC, nome ASC";
 $oGrid->addContent($oField);
 
 $oField = ffField::factory($cm->oPage);

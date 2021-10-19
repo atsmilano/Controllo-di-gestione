@@ -20,7 +20,7 @@ if (isset ($_REQUEST["oracle_erp"])) {
     $_REQUEST["ret_url"] = $url;
 }
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $is_monitoraggio_insert = true;
 if (isset ($_REQUEST["keys[ID]"])) {
     try {        
@@ -306,7 +306,7 @@ function myPrjInsertMonitoraggioIndicatore($oRecord, $frmAction) {
             );
         }
 
-        ProgettiMonitoraggioIndicatore::save($query_values);
+        ProgettiMonitoraggioIndicatore::saveMonitoraggioIndicatore($query_values);
         
         $monitoraggio = new ProgettiMonitoraggio($progetti_monitoraggio_last_id);
         $tipologia_monitoraggio = new ProgettiTipologiaMonitoraggio($monitoraggio->id_tipologia_monitoraggio);

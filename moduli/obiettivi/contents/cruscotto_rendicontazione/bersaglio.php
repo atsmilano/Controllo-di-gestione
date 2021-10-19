@@ -13,7 +13,7 @@ $cm->oPage->tplAddJs("jqplot.pointLabels.js", "jqplot.pointLabels.js", FF_THEME_
 $cm->oPage->tplAddCss("jquery.jqplot.css", array("file" => "jquery.jqplot.css", "path" => FF_THEME_DIR . "/library/jqplot/1.0.9"));
 $cm->oPage->tplAddCss("jquery.jqplot.min.css", array("file" => "jquery.jqplot.min.css", "path" => FF_THEME_DIR . "/library/jqplot/1.0.9"));
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //recupero dei parametri
 //anno***********

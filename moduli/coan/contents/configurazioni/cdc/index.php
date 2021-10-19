@@ -34,7 +34,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "cdc";
 $oGrid->title = "Cdc";
 $oGrid->resources[] = "cdc";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "coan_cdc"
 );
 $oGrid->order_default = "codice";

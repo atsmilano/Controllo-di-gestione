@@ -13,7 +13,7 @@ class ResponsabileCdr {
         
     public function __construct($id = null, $useSql = false){
         if ($id !== null) {
-            foreach(TableResponsabileCdr::Instance()->getRespCdrInData() as $resp_cdr) {
+            foreach(TableResponsabileCdr::getInstance()->getRespCdrInData() as $resp_cdr) {
                 if(array_key_exists($id, $resp_cdr)) {
                     $this->useSql = false;
                     $this->id = $resp_cdr[$id]->id;
@@ -66,7 +66,7 @@ class ResponsabileCdr {
         $dateCm = $cm->oPage->globals["data_riferimento"]["value"];
 
         if(strcmp($date->format('Y-m-d'), $dateCm->format('Y-m-d')) == 0) {
-            foreach(TableResponsabileCdr::Instance()->getRespCdrInData() as $resp_cdr) {                
+            foreach(TableResponsabileCdr::getInstance()->getRespCdrInData() as $resp_cdr) {                
                 if($resp_cdr->codice_cdr == $codice_cdr) {                                                                               
                     $responsabile_cdr = $resp_cdr;
                 }

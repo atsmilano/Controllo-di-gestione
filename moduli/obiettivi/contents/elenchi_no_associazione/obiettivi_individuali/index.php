@@ -14,7 +14,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "personale";
 $oGrid->title = "Elenco personale";
 $oGrid->resources[] = "personale";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "personale"
 );
 $oGrid->order_default = "cognome";

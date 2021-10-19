@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 $anno = $cm->oPage->globals["anno"]["value"];
 if ($cm->oPage->globals["cdr"]["value"]->codice !== null){
@@ -73,7 +73,7 @@ $menu["risorse_umane"] = array(
 mod_restricted_add_menu_child($menu["risorse_umane"]);
 
 $allowed_actions["report"] = array(
-    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/report?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),    
+    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/report",    
     "icon"   => $user->hasPrivilege("ru_view") ? "pie-chart" : MODULES_ICONHIDE,
     "dialog" => false
 );
@@ -82,7 +82,7 @@ $menu["risorse_umane"]["richieste"] = array(
     "subkey"  => "richieste",
     "label"   => "Richieste CDR",
     "icon"	  => "",
-    "path"	  => "/area_riservata".$module->site_path."/richieste?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "path"	  => "/area_riservata".$module->site_path."/richieste",
     "actions" => $allowed_actions,
     "acl"	  => "1,2,3",
     "hide"    => !($user->hasPrivilege("ru_admin") || $user->hasPrivilege("ru_richiesta_edit") || $user->hasPrivilege("ru_programmazione_strategica_edit")),
@@ -95,7 +95,7 @@ $menu["risorse_umane"]["approvazione_direzione"] = array(
     "subkey"  => "approvazione_direzione",
     "label"   => "Approvazione direzione",
     "icon"	  => "",
-    "path"	  => "/area_riservata".$module->site_path."/direzione?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "path"	  => "/area_riservata".$module->site_path."/direzione",
     "actions" => $allowed_actions,
     "acl"	  => "1,2,3",
     "hide"    => !($user->hasPrivilege("ru_admin") || $user->hasPrivilege("ru_direzione_riferimento_edit")),
@@ -107,7 +107,7 @@ $menu["risorse_umane"]["approvazione_dg"] = array(
     "subkey"  => "approvazione_dg",
     "label"   => "Approvazione DG",
     "icon"	  => "",
-    "path"	  => "/area_riservata".$module->site_path."/dg?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "path"	  => "/area_riservata".$module->site_path."/dg",
     "actions" => $allowed_actions,
     "acl"	  => "1,2,3",
     "hide"    => !($user->hasPrivilege("ru_admin") || $user->hasPrivilege("ru_dg_edit")),
@@ -119,7 +119,7 @@ $menu["risorse_umane"]["istruttoria"] = array(
     "subkey"  => "istruttoria",
     "label"   => "Istruttoria e monitograggio",
     "icon"	  => "",
-    "path"	  => "/area_riservata".$module->site_path."/istruttoria?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),
+    "path"	  => "/area_riservata".$module->site_path."/istruttoria",
     "actions" => $allowed_actions,
     "acl"	  => "1,2,3",
     "hide"    => !($user->hasPrivilege("ru_admin") || $user->hasPrivilege("ru_uo_competente_edit")),

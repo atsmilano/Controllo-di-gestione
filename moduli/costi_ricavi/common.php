@@ -3,7 +3,7 @@
  * hide = true, utente non ha i permessi.
  * Utilizzo del valore MODULES_ICONHIDE per nascondere le icone del menu nel caso in cui non vi siano i permessi adeguati.
  */
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 foreach ($user->user_groups as $group) {
 	if ($group == 1 || $group == 2 || $group == 3){
@@ -15,8 +15,8 @@ foreach ($user->user_groups as $group) {
 //recupero cdr, menu visualizzato solamente nel caso di cdr con conti associati o per gli amministratori
 $admin_view = $user->hasPrivilege("costi_ricavi_admin");
 $cdr_global = $cm->oPage->globals["cdr"]["value"];
-if($cdr_global !== null) {
-    $cdr = new CdrCostiRicavi($cdr_global->id);
+if($cdr_global != null) {
+    $cdr = $cdr_global->cloneAttributesToNewObject("CdrCostiRicavi");
     $anno = $cm->oPage->globals["anno"]["value"];
     //se il cdr selezionato è ente acquirente vengono dati i privilegi
     if ($cdr->getContiAnno($anno)>0) {

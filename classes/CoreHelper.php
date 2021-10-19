@@ -1,5 +1,35 @@
 <?php
 class CoreHelper {
+    //metodo per l'estrazione di tutte le tabelle del DB applicativo
+    //viene restituito un array di stringhe rappresentanti i nomi delle tabelle del DB
+    //il parametro include_framework_tables permette di considerare o meno le tabelle del framework nell'estrazione
+    public static function getDbTables ($include_framework_tables=false){
+        $db = ffDB_Sql::factory();
+        $tables = array();
+        $sql = "
+                SELECT 
+                    table_name 
+                FROM 
+                    information_schema.tables 
+                WHERE
+                    table_schema = " . $db->toSql(FF_DATABASE_NAME);
+        $db->query($sql);
+        if ($db->nextRecord()){
+            do {
+                $table_name = $db->getField("table_name", "Text", true);
+                if ($include_framework_tables==true
+                    || (substr($table_name,0,3)!=="cm_"
+                        && substr($table_name,0,3)!=="ff_"
+                        && substr($table_name,0,3)!=="support_"    
+                        )
+                    ){
+                    $tables[] = $table_name;
+                }
+            }while($db->nextRecord());
+        }
+        return $tables;
+    }
+    
     //metodo per restituire la query utilizzabile dalla grid da un array di field associati ai campi specificati nell'array fields
     //fields array(fieldname1,fieldname2 ...)
     //recordset array(
@@ -8,7 +38,7 @@ class CoreHelper {
     //              array(value1,value2 ...) 
     //           )
     //ritorna sempre una stringa
-    public static function GetGridSqlFromArray($grid_fields, $grid_recordset, $table_name) {
+    public static function getGridSqlFromArray($grid_fields, $grid_recordset, $table_name) {
         $db = ffDb_Sql::factory();
 
         $sql = "";
@@ -19,7 +49,8 @@ class CoreHelper {
             $sql .= "SELECT ";
             //fields
             foreach ($record as $key => $field_value) {
-                $sql .= $db->toSql($field_value) . " AS " . $grid_fields[$key] . ",";
+                $field_value=gettype($field_value)!=="integer"?$db->toSql($field_value):$field_value;
+                $sql .=  $field_value . " AS " . $grid_fields[$key] . ",";
             }
             //viene eliminata la virgola dall'ultimo field accodato
             $sql = rtrim($sql, ",");
@@ -283,6 +314,29 @@ class CoreHelper {
         return false;
     }  
     
+    //restituisce tutti gli oggetti di una classe specificata attivi in una data specifica
+    //vengono passati i nomi degli attributi di data inizio e fine per l'oggetto passato
+    public static function getObjectsInData (string $class, DateTime $date, string $attributo_data_inizio, string $attributo_data_fine, $filters = array()) {
+        if (!class_exists(($class))) {
+            throw new Exception($class." non è un tipo di oggetto valido.");
+        }        
+        $objs = array();	             
+        foreach($class::getAll($filters) AS $obj){
+            if (!property_exists($obj, $attributo_data_inizio)) {
+                throw new Exception($attributo_data_inizio." non è un attributo di ".$class);
+            }
+            if (!property_exists($obj, $attributo_data_fine)) {
+                throw new Exception($attributo_data_fine." non è un attributo di ".$class);
+            }
+            //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa
+            if (strtotime($obj->data_inizio) <= strtotime($date->format("Y-m-d")) 
+                && ($obj->data_fine == null || strtotime($obj->data_fine) >= strtotime($date->format("Y-m-d")))){               
+                $objs[] = $obj;                				
+            }
+        }	        
+        return $objs;
+    }
+    
     //valore nullo (o 0) ammesso per la fine dell'intervallo
     public static function verificaIntervalloAnni($start, $end) {        
         //viene verificato che i parametri siano anni validi (interi senza decimali)
@@ -337,6 +391,7 @@ class CoreHelper {
     //aggiunge ala pagina un elemento tab
     //l'array tabs contiene le ifnormazioni dei singoli tabs
     //ogni tab è rappresentato da un array associativo con 4 variabili identificate dalle chiavi: tab_id, tab_link, tab_params, tab_name
+    //hide_ret_url = true se si intende non includere ret_url nel lijnk del tab
     public static function showTabsPage ($tabs_id, $tabs = array()) {
         $cm = cm::getInstance();
         
@@ -349,9 +404,14 @@ class CoreHelper {
                 
         foreach($tabs as $tab) {
             $tpl->set_var("tab_id", $tab["tab_id"]);
-            $tpl->set_var("tab_link", $tab["tab_link"]);
-            $url_params = $tab["tab_params"].(strlen($tab["tab_params"])?"&":"");
-            $tpl->set_var("tab_params", $url_params."ret_url=".urlencode($tab["tab_link"]."?".$url_params));
+            $tpl->set_var("tab_link", $tab["tab_link"]); 
+            if (isset($tab["hide_ret_url"]) && $tab["hide_ret_url"]==true) {
+                $ret_url = "";
+            }
+            else {                
+                $ret_url = "ret_url=".urlencode($tab["tab_link"]."?".$tab["tab_params"]);
+            }
+            $tpl->set_var("tab_params", $tab["tab_params"].(strlen($tab["tab_params"])?(substr($tab["tab_params"], -1)=="&"?"":"&"):"").$ret_url);
             $tpl->set_var("tab_name", $tab["tab_name"]);
             $tpl->parse("SectTab", true);
         }

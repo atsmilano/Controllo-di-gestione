@@ -14,8 +14,8 @@ define("MOD_SEC_USER_AVATAR", false);
 
 define("MOD_SEC_PASSWORD_RECOVER", false);
 
-define("SECURITY_REGISTER_EMAIL_FROM", "");
-define("SECURITY_REGISTER_EMAIL_FROM_NAME", "");
+define("SECURITY_REGISTER_EMAIL_FROM", "info@ats-milano.it");
+define("SECURITY_REGISTER_EMAIL_FROM_NAME", "ATS Milano Città Metropolitana");
 
 define("MOD_SECURITY_REGISTER_PRIVACY", true);
 

@@ -1,10 +1,9 @@
 <?php
 $anno = $cm->oPage->globals["anno"]["value"];
-$cdr_global = $cm->oPage->globals["cdr"]["value"];
-$cdr = new CdrCostiRicavi($cdr_global->id);
+$cdr = $cm->oPage->globals["cdr"]["value"]->cloneAttributesToNewObject("CdrCostiRicavi");
 
 //verifica privilegi utente
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!($user->hasPrivilege("costi_ricavi_view") || $user->hasPrivilege("costi_ricavi_edit"))) {
 	ffErrorHandler::raise("Utente non abilitato alla visualizzazione dei costi e ricavi per il CDR.");
 }

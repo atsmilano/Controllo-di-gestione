@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 define(INVESTIMENTI_LUNGHEZZA_MAX_DESCRIZIONE_RICHIESTA, 30);
 
 //i ruoli previsti dalla scheda sono rigidi rispetto alla struttura aziendale, si implementa una struttura che permetta
@@ -35,8 +35,8 @@ foreach ($user->user_groups as $group) {
 
 $cdr_global = $cm->oPage->globals["cdr"]["value"];
 $anno = $cm->oPage->globals["anno"]["value"];
-if ($cdr_global !== null){
-    $cdr = new CdrInvestimenti($cdr_global->id);
+if ($cdr_global != null){    
+    $cdr = $cdr_global->cloneAttributesToNewObject("CdrInvestimenti");
     if ($cdr->isAbilitatoInvestimentiAnno($anno)) {
         //se il padre è responsabile di un cdr abilitato alla visualizzazione della scheda potrà visualizzare
         if ($user->hasPrivilege("resp_padre_cdr_selezionato") || $user->hasPrivilege("resp_padre_ramo_cdr_selezionato")){
@@ -86,9 +86,8 @@ if ($responsabile_cdr_radice->matricola_responsabile == $user->matricola_utente_
 }
 //vengono verificati i privilegi in base ai cdr di responsabilità nell'anno dell'utente
 $responsabile = Personale::factoryFromMatricola($user->matricola_utente_selezionato);
-foreach($responsabile->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $cdr_resp) {
-    $cdr_inv = new CdrInvestimenti($cdr_resp["cdr"]->id);
-
+foreach($responsabile->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $cdr_resp) {    
+    $cdr_inv = $cdr_resp["cdr"]->cloneAttributesToNewObject("CdrInvestimenti");
     if ($cdr_inv->isDirezioneRiferimentoAnno($anno)) {
         if (!$user->hasPrivilege("investimenti_view")) {
             $user->user_privileges[] = "investimenti_view";

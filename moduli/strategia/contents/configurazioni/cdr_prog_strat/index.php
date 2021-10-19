@@ -24,7 +24,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "strategia-cdr-prog-strategica";
 $oGrid->title = "CdR Programmazione Strategica";
 $oGrid->resources[] = "cdr-prog-strategica";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "strategia_cdr_programmazione_strategica"
 );
 $oGrid->order_default = "codice_cdr";

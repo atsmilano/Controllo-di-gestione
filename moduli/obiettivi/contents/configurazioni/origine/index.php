@@ -16,7 +16,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "origine";
 $oGrid->title = "Origine";
 $oGrid->resources[] = "origine";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "obiettivi_origine"
 );
 $oGrid->order_default = "anno_introduzione";

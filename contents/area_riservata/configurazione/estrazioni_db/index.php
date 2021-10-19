@@ -9,7 +9,7 @@ $tpl->set_var("images_path", FF_SITE_PATH."/themes/ats/images/");
 //viene costruito il multipair per la selezione delle tabelle
 $tables_select = array();
 
-foreach (Entity::getDbTables() as $table) {
+foreach (CoreHelper::getDbTables() as $table) {
     $tables_select[] = array(new ffData ($table, "Text"),
                             new ffData ($table, "Text")
                         );

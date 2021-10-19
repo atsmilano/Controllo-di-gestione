@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //recupero dei parametri
 //anno***********
@@ -214,9 +214,8 @@ foreach ($cdr_to_check as $cdr) {
         if ($add_to_report_obiettivi || $add_to_report_peso || $add_to_report_personale) {
             $record_to_add = array($i);            
             if ($view_all) {
-                //viene recuperato il padre strategico
-                $cdr_padre_strategico = new CdrStrategia($cdr->id);
-                $cdr_padre_strategico = $cdr_padre_strategico->getPadreStrategico($anno);
+                //viene recuperato il padre strategico                
+                $cdr_padre_strategico = $cdr->cloneAttributesToNewObject("CdrStrategia")->getPadreStrategico($anno);
                 $responsabile_cdr_padre_strategico = $cdr_padre_strategico->getResponsabile($dateTimeObject);                
                 $articolazione_organizzativa_to_add = $cdr_padre_strategico->codice
                                     ." - "
@@ -360,7 +359,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "assegnazioni";
 $oGrid->title = "CdR senza obiettivi assegnati";
 $oGrid->resources[] = "cdr"; 
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $cdr_report_obiettivi, "obiettivi_obiettivo_cdr");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $cdr_report_obiettivi, "obiettivi_obiettivo_cdr");
 $oGrid->order_default =$view_all?"padre_strategico":"cdr_padre";    
 //visualizzazione della grid dei cdr associati all'obiettivo       
 $oGrid->record_id = "";
@@ -430,7 +429,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "pesi";
 $oGrid->title = "CdR con peso 0";
 $oGrid->resources[] = "peso";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $cdr_report_peso, "obiettivi_obiettivo_cdr");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $cdr_report_peso, "obiettivi_obiettivo_cdr");
 $view_all?$oGrid->order_default = "padre_strategico":$oGrid->order_default = "cdr_padre";      
 $oGrid->record_id = "";
 $oGrid->order_method = "labels";
@@ -499,7 +498,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "dipendenti";
 $oGrid->title = "Personale senza obiettivi assegnati";
 $oGrid->resources[] = "personale";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $cdr_report_personale, "obiettivi_obiettivo_cdr_personale");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $cdr_report_personale, "obiettivi_obiettivo_cdr_personale");
 $oGrid->order_default = "cdr";        
 $oGrid->record_id = "";
 $oGrid->order_method = "labels";

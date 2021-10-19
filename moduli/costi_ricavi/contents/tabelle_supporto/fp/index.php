@@ -18,7 +18,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "fp";
 $oGrid->title = "Fattori Produttivi";
 $oGrid->resources[] = "fp";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, 
     "costi_ricavi_fp"
 );

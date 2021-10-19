@@ -52,7 +52,7 @@ class ProgettiMonitoraggioIndicatore extends Entity {
         return $results_list;
     }
 
-    public static function save($values = array()) {
+    public static function saveMonitoraggioIndictore($values = array()) {
         $db = ffDB_Sql::factory();
 
         $insert_values = "";

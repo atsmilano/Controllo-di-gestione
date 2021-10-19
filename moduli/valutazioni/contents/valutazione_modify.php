@@ -26,7 +26,7 @@ if (isset($_REQUEST["keys[ID_valutazione]"])) {
 
 
 //*******UTENTE E PRIVILEGI************
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $privilegi_utente = $valutazione->getPrivilegiPersonale($user->matricola_utente_selezionato);
 if ($user->hasPrivilege("valutazioni_admin"))
     $admin_user = true;
@@ -542,7 +542,7 @@ function propagateDelete($oRecord, $frmAction){
 //non viene discriminata la action sul form in quanto l'unica ammessa è update
 function myUpdate($oRecord, $frmAction) {
     $cm = cm::getInstance();
-    $user = LoggedUser::Instance();        
+    $user = LoggedUser::getInstance();        
     if($frmAction !== "delete" && $frmAction !== "confirmdelete") {
         $valutazione = new ValutazioniValutazionePeriodica($oRecord->key_fields["ID_valutazione"]->value->getValue());
         $autovalutazione_collegata = $valutazione->getAutovalutazioneCollegata();

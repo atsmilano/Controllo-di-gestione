@@ -146,8 +146,8 @@ if (isset ($_GET["periodo"])) {
                     else {
                         $record[] = "No";
                     }
-                    $record[] = $rendicontazione->perc_raggiungimento;
-                    $record[] = $rendicontazione->perc_nucleo;
+                    $record[] = (int)$rendicontazione->perc_raggiungimento;
+                    $record[] = (int)$rendicontazione->perc_nucleo;
                     $record[] = $rendicontazione->note_nucleo;
                 }
                 $matrice_dati[] = $record;

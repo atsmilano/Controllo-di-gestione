@@ -1,5 +1,5 @@
 <?php
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("resp_cdr_selezionato")){
 	die(json_encode(array("messaggio" => "Errore: si sta cercando di forzare la chiusura degli obiettivi di un cdr senza responsabilità.", "esito" => "error")));	
 }

@@ -47,7 +47,7 @@ if (count($periodi_valutazione) > 0){
     $tpl->set_var("globals", $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST));    
 		
 	//viene recuperata la matricola dell'utente per la visualizzazione delle schede di competenza
-    $user = LoggedUser::Instance();
+    $user = LoggedUser::getInstance();
 	$periodo_valutazione = new ValutazioniPeriodo($periodo);
 		
 	//vengono estratte tutte le valutazioni per cui l'utente è 

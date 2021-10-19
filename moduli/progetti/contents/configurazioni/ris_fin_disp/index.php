@@ -16,7 +16,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "risorse-finanziarie";
 $oGrid->title = "Risorse Finanziarie Disponibili";
 $oGrid->resources[] = "risorse-finanziarie";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, 
     "progetti_risorse_finanziarie_disponibili"
 );

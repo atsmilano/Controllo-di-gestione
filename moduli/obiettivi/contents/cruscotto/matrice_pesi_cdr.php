@@ -1,6 +1,6 @@
 <?php
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //recupero dei parametri
 //anno***********

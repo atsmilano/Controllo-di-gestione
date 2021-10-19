@@ -1,6 +1,6 @@
 <?php
 $data_riferimento = $cm->oPage->globals["data_riferimento"]["value"];
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica privilegi utente
 if (!$user->hasPrivilege("indicatori_edit")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla modifica del valore storico.");

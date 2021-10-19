@@ -1,6 +1,6 @@
 <?php
 CoreHelper::includeJqueryUi();
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 
 //recupero dei parametri
 //anno***********
@@ -91,7 +91,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "obiettivo-cdr";
 $oGrid->title = "Obiettivi del cdr (peso totale " . $peso_tot_obiettivi . ")";
 $oGrid->resources[] = "obiettivo-cdr";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");
 $oGrid->order_default = "codice";
 $oGrid->record_id = "obiettivo-modify";
 $oGrid->order_method = "labels";

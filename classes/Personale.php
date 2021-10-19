@@ -162,9 +162,8 @@ class Personale extends Entity{
             }
     }		
 
-    //viene restituito un array con i cdr di responsabilità diretta in un anno di budget (anche su piani cdr differenti)
-    //resitutisce un array con oggetti PianoCdr piano_cdr, Cdr cdr, boolean resp_diretta
-    public function getCodiciCdrResponsabilitaAnno(AnnoBudget $anno, TipoPianoCdr $tipo_piano = null){        
+    //viene restituito un array con i cdr di responsabilità diretta in un anno di budget (anche su piani cdr differenti)  
+    public function getCodiciCdrResponsabilitaAnno(AnnoBudget $anno){        
         $elenco_cdr_resp = array();                
         foreach (ResponsabileCdr::getResponsabiliCdrAnno($anno) as $responsabile_anno) {
             if ($responsabile_anno->matricola_responsabile == $this->matricola) {
@@ -190,7 +189,7 @@ class Personale extends Entity{
     
     //viene restituito un array con tutti i cdr visibili in un determinato piano cdr
     function getCdrVisibiliPianoCdr(PianoCdr $piano_cdr, DateTime $date){
-        $user = LoggedUser::Instance();		
+        $user = LoggedUser::getInstance();		
         $cdr_visibili = array();
         if (!($user->hasPrivilege("cdr_view_all") == true)){
             $cdr_responsabilità = $this->getCdrResponsabilitaPiano($piano_cdr, $date);

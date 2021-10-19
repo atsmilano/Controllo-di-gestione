@@ -1,6 +1,6 @@
 <?php
 $isEdit = false;
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica privilegi utente
 if (!$user->hasPrivilege("obiettivi_aziendali_edit")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione dei periodi di rendicontazione.");

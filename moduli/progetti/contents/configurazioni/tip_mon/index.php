@@ -16,7 +16,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "tipologia-monitoraggio";
 $oGrid->title = "Tipologia Monitoraggio";
 $oGrid->resources[] = "tipologia-monitoraggio";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, 
     "progetti_tipologia_monitoraggio"
 );

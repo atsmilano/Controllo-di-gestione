@@ -11,7 +11,7 @@ $tmp2 = $cm->oPage->widgets["dialog"]->process(
     , $cm->oPage // oggetto pagina associato
 );
 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //recupero parametri
 $anno_global = $cm->oPage->globals["anno"]["value"];
 $date = $cm->oPage->globals["data_riferimento"]["value"];

@@ -1,5 +1,5 @@
 <?php 
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 //verifica che il cdr sia di responsabilità dell'utente
 if (!$user->hasPrivilege("riesame_direzione_view")){
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per visualizzare la pagina");
@@ -216,7 +216,7 @@ function myUpdate($oRecord, $frmAction){
         //il cdr dal codice per velocità        
         $cdr_riesame = new Cdr($_REQUEST["keys[ID_cdr]"]);
         $responsabile_cdr_riesame = $cdr_riesame->getResponsabile($dateTimeObject);
-        $user = LoggedUser::Instance();        
+        $user = LoggedUser::getInstance();        
         if ($responsabile_cdr_riesame->matricola_responsabile == $user->matricola_utente_selezionato) {
             $cm = cm::getInstance();
             $anno = $cm->oPage->globals["anno"]["value"];

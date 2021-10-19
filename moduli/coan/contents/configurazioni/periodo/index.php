@@ -26,7 +26,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "periodo";
 $oGrid->title = "Periodi";
 $oGrid->resources[] = "periodo";
-$oGrid->source_SQL = CoreHelper::GetGridSqlFromArray(
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
     $grid_fields, $grid_recordset, "coan_periodo"
 );
 $oGrid->order_default = "anno_budget";

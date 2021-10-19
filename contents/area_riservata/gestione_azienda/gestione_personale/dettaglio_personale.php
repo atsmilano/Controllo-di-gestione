@@ -88,7 +88,7 @@ if ($isEdit) {
     $oGrid->id = "dettaglio-cdc-allocazione";
     $oGrid->title = "Storico delle allocazioni su CdC";
     $oGrid->resources[] = "cdc-allocazione";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "cdc_personale");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "cdc_personale");
     $oGrid->record_id = "cdc-allocazione";
     $oGrid->order_default = "data_inizio";
     $oGrid->order_method = "labels";
@@ -190,7 +190,7 @@ if ($isEdit) {
     $oGrid->id = "dettaglio-carriera-personale";
     $oGrid->title = "Storico degli eventi di carriera";
     $oGrid->resources[] = "carriera-personale";
-    $oGrid->source_SQL = CoreHelper::GetGridSqlFromArray($grid_fields, $grid_recordset, "carriera");
+    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "carriera");
     $oGrid->order_default = "data_inizio";
     $oGrid->record_id = "carriera-personale";
     $oGrid->order_method = "labels";
