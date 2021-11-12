@@ -304,8 +304,8 @@ class Entity {
             ";            
         }
         else {
-            foreach ($fields_names as $field_name) {
-                $update_sql = "";
+            $update_sql = "";
+            foreach ($fields_names as $field_name) {                
                 if (strlen($update_sql)>0) {
                     $update_sql .= ",";
                 }                
