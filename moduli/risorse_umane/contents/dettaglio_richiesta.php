@@ -1243,9 +1243,9 @@ if ($tipo_chiusura !== 0){
 								$('#conferma_no').click(function(){
 									$('#inactive_body').hide();
 									$('#conferma_chiusura').hide();
-									$('#investimento_action_button_".$tipo_chiusura."').prop('disabled', false);
-									$('#investimento_action_button_".$tipo_chiusura."').prop('style', false);
-									$('#investimento_action_button_".$tipo_chiusura."').val('" . $label . "');	
+									$('#richiesta_action_button_".$tipo_chiusura."').prop('disabled', false);
+									$('#richiesta_action_button_".$tipo_chiusura."').prop('style', false);
+									$('#richiesta_action_button_".$tipo_chiusura."').val('" . $label . "');	
 								});
 							</script>
 							");

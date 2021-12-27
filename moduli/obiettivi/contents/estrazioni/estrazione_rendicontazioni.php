@@ -36,20 +36,22 @@ if (isset ($_GET["periodo"])) {
             "note azioni", 
             "periodo", 
             "azioni", 
-            "provvedimenti", 
+            "provvedeimenti (delibere e determinazioni)", 
             "criticità", 
             "misurazione indicatori", 
-            "raggiungibile"
         )
     );
+    if ($periodo->hide_raggiungibile != 1) {
+        $matrice_dati[0][] = "Raggiungibile";
+    }
     if ($periodo->id_campo_revisione != null) {
         $matrice_dati[0][] = $campo_revisione->nome;
     }
     array_push($matrice_dati[0],
         "allegati",
         "%raggiungimento", 
-        "%nucleo", 
-        "note nucleo"
+        "%validata", 
+        "Note validazione raggiungimento"
     );
 
 	
@@ -140,7 +142,9 @@ if (isset ($_GET["periodo"])) {
                             $record[] = $rendicontazione->provvedimenti;
                             $record[] = $rendicontazione->criticita;
                             $record[] = $rendicontazione->misurazione_indicatori;
-                            $record[] = $rendicontazione->raggiungibile == 1?"Si":"No"; 
+                            if ($periodo->hide_raggiungibile != 1) {
+                                $record[] = $rendicontazione->raggiungibile == 1?"Si":"No";
+                            }
                             if ($periodo->id_campo_revisione != null) {
                                 $scelta_campo_revisione = "";
                                 foreach ($scelte_campo_revisione as $scelta) {

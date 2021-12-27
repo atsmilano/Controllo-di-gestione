@@ -116,7 +116,7 @@ $oRecord->addContent($oField, "intestazione");
 
 $link_eliminazione = FF_SITE_PATH
     . $cm->path_info
-    . "?frmAction=valutazione-modify_delete&ret_url=nessunaboh&"
+    . "?frmAction=valutazione-modify_delete&ret_url=&"
     . $cm->query_string;
 
 

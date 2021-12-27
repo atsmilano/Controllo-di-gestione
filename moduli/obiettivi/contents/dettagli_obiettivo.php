@@ -1030,7 +1030,7 @@ if ($edit == true) {
         $oField = ffField::factory($cm->oPage);
         $oField->id = "perc_nucleo";
         $oField->base_type = "Text";
-        $oField->label = "Raggiungimento Nucleo (NVP) di Dipartimento";
+        $oField->label = "Raggiungimento validato";
         $oGrid->addContent($oField);
 
         // *********** ADDING TO PAGE ****************

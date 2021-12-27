@@ -11,7 +11,7 @@
  Target Server Version : 50731
  File Encoding         : 65001
 
- Date: 16/06/2021 11:33:53
+ Date: 27/12/2021 15:28:18
 */
 
 SET NAMES utf8mb4;
@@ -4150,6 +4150,7 @@ CREATE TABLE `obiettivi_periodo_rendicontazione`  (
   `ID_campo_revisione` int(11) NULL DEFAULT NULL,
   `data_termine_responsabile` date NULL DEFAULT NULL,
   `allegati` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
+  `hide_raggiungibile` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
@@ -4648,7 +4649,7 @@ CREATE TABLE `ru_parere`  (
   `anno_inizio` int(11) NULL DEFAULT NULL,
   `anno_termine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ru_priorita
@@ -4660,7 +4661,7 @@ CREATE TABLE `ru_priorita`  (
   `anno_inizio` int(11) NULL DEFAULT NULL,
   `anno_termine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ru_richiesta
@@ -4730,7 +4731,7 @@ CREATE TABLE `ru_tempi`  (
   `anno_inizio` int(11) NULL DEFAULT NULL,
   `anno_termine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ru_tipo_richiesta
@@ -4742,7 +4743,7 @@ CREATE TABLE `ru_tipo_richiesta`  (
   `anno_inizio` int(11) NULL DEFAULT NULL,
   `anno_termine` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`ID`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for ru_uo_competente

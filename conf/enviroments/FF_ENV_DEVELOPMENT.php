@@ -26,11 +26,11 @@ define('USE_MS_ONLINE_LOGIN', true);
 //definizione delle costanti per l'ambiente per l'autenticazione in microsoft login
 define("OAUTH2_CLIENT_ID", "");
 define("OAUTH2_CLIENT_SECRET", "");
-define("OAUTH2_SCOPE", "https://graph.windows.net/offline_access");
+define("OAUTH2_SCOPE", "user.read");
 define("AD_TENANT", "");
 define("AD_AUTH_URL", "https://login.microsoftonline.com/".AD_TENANT."/oauth2/v2.0/authorize");
 define("AD_TOKEN_URL", "https://login.microsoftonline.com/".AD_TENANT."/oauth2/v2.0/token");
-define("AD_USERS_URL", "https://graph.windows.net/".AD_TENANT."/me?api-version=1.6");
+define("AD_USERS_URL", "https://graph.microsoft.com/beta/me");
 define("AD_USER_NAME_FIELD", "");
 define("AD_USER_MATRICOLA_FIELD", "");
 define("MS_LOGIN_REDIRECT_URL", MS_LOGIN_REDIRECT_PROTOCOL . '://' . $_SERVER['SERVER_NAME'] . FF_SITE_PATH);

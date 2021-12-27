@@ -5,7 +5,7 @@ class StrategiaProspettiva extends Entity {
     public static function getProspettiveAnno(AnnoBudget $anno) {
         $prospettive_strategia_anno = array();
         foreach (StrategiaProspettiva::getAll() as $prospettiva) {
-            if ($prospettiva->anno_introduzione <= $anno->descrizione && ($prospettiva->anno_termine == null || $prospettiva->anno_termine >= $anno->descrizione)) {
+            if ($prospettiva->anno_introduzione <= $anno->descrizione && ($prospettiva->anno_termine == 0 || $prospettiva->anno_termine == null || $prospettiva->anno_termine >= $anno->descrizione)) {
                 $prospettive_strategia_anno[] = $prospettiva;
             }
         }

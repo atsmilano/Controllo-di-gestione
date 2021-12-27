@@ -30,11 +30,13 @@
 			<!--BeginSectOptionFascia-->
 				<option value="{fascia_id}" {fascia_selected}>Fascia raggiungimento: {fascia_descrizione}</option>
 			<!--EndSectOptionFascia-->
-		</select>                                                				
+		</select>       
+                <!--BeginSectRaggiungibileSelect-->
 		<span class="filtri_checkbox">
 			<input id="non_raggiungibile" name="filter_non_raggiungibile" value="1" {filter_non_raggiungibile_checked} type="checkbox" >
 			<span>Ritenuti non raggiungibili al 31/12</span>
 		</span>
+                <!--EndSectRaggiungibileSelect-->
                 <input id="applica_filtri" type="button" value="Applica">
                 
 	</div>
@@ -143,7 +145,7 @@
                                 <br>
 				<label>Raggiungimento</label><br>
 					Referente:&nbsp;{raggiungimento_referente}%<br>
-					Nucleo:&nbsp;{raggiungimento_nucleo}%<br>
+					Validato:&nbsp;{raggiungimento_nucleo}%<br>
                                 <br>
 				<a id="link_rendicontazione_{id}" href="javascript:void(0);">Dettagli</a>
                         	<script>
@@ -202,8 +204,8 @@
 		
 	</script>
         <div id="legenda">
-            <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\circle.png'><span>%raggiungimento cdr = %raggiungimento nucleo</span><br>
-            <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\shot.png'><span>%raggiungimento cdr &ne; %raggiungimento nucleo</span>
+            <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\circle.png'><span>%raggiungimento cdr = %raggiungimento validata</span><br>
+            <img id='bersaglio_img' src='{module_theme_path}\images\bersaglio\shot.png'><span>%raggiungimento cdr &ne; %raggiungimento validata</span>
         </div>
         <!--EndBersaglio-->
 </div>

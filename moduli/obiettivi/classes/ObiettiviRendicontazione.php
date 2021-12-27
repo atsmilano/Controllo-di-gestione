@@ -134,7 +134,7 @@ class ObiettiviRendicontazione extends Entity{
                     <span class='form-control readonly'>" . $this->azioni . "</span>
                 </div>    
                 <div class='form-group clearfix padding'>
-                    <label>Provvedimenti</label>
+                    <label>Provvedimenti (delibere e determinazioni)</label>
                     <span class='form-control readonly'>" . $this->provvedimenti . "</span>
                 </div>
                 <div class='form-group clearfix padding'>
@@ -149,18 +149,20 @@ class ObiettiviRendicontazione extends Entity{
                 <div class='form-group clearfix padding'>
                     <label>Percentuale raggiungimento Aziendale</label>
                     <span class='form-control readonly'>" . $this->perc_raggiungimento . "%</span>
-                </div>
+                </div> ";
+        if ($periodo_rendicontazione->hide_raggiungibile != 1) {
+            $html .= "<div class='form-group clearfix padding'>
+                        <label>Si ritiene l&acute;obiettivo raggiungibile al 31/12</label>
+                        <span class='form-control readonly'>" . $raggiungibile . "</span>
+                    </div>";
+        }
+        $html .= $html_campo_revisione . "
                 <div class='form-group clearfix padding'>
-                    <label>Si ritiene l&acute;obiettivo raggiungibile al 31/12</label>
-                    <span class='form-control readonly'>" . $raggiungibile . "</span>
-                </div>
-                " . $html_campo_revisione . "
-                <div class='form-group clearfix padding'>
-                    <label>Raggiungimento Nucleo (NVP) di Dipartimento</label>
+                    <label>Raggiungimento validato</label>
                     <span class='form-control readonly'>" . $ragg_nucleo . "</span>
                 </div>
                 <div class='form-group clearfix padding'>
-                    <label>Note Nucleo</label>
+                    <label>Note validazione rendicontazione</label>
                     <span class='form-control readonly " . $note_nucleo_class . "'>" . $note_nucleo . "</span>
                 </div>
                 ";

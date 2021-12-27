@@ -110,8 +110,8 @@ if (count($obiettivi_cdr_anno) > 0) {
             else {
                 $tpl->set_var("id_rendicontazione", $rendicontazione->id);
                 if ($rendicontazione !== null) {
-                    $tpl->set_var("rendicontazione_obiettivo_cdr", (int)$rendicontazione->perc_raggiungimento . "%" . $trasversale_desc);
-                    if ($rendicontazione->raggiungibile == true) {
+                    $tpl->set_var("rendicontazione_obiettivo_cdr", (int)$rendicontazione->perc_raggiungimento . "%" . $trasversale_desc);                    
+                    if ($periodo->hide_raggiungibile == 1 || $rendicontazione->raggiungibile == true) {
                         $tpl->set_var("azioni_class", "azioni_definite");
                     }
                     else {
@@ -122,7 +122,6 @@ if (count($obiettivi_cdr_anno) > 0) {
                     $tpl->set_var("rendicontazione_obiettivo_cdr", "NR");
                     $tpl->set_var("azioni_class", "");
                 }
-
 
                 $tpl->parse("RendicontazioneObiettivoCdr", false);
                 $tpl->set_var("NoObiettivoCdr", false);
@@ -138,6 +137,10 @@ if (count($obiettivi_cdr_anno) > 0) {
         $tpl->set_var("obiettivi_colspan", $obiettivi_colspan + 2);
         $tpl->parse("NoCdr", true);
     }
+    if ($periodo->hide_raggiungibile != 1) {
+        $tpl->parse("RaggiungibileLegenda", false);
+    }
+    
     $tpl->parse("MatricePesiCdr", true);
 }
 else {

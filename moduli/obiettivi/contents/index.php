@@ -70,15 +70,15 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
                     if ($rendicontazione_aziendale !== null) {
                         $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
                         if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
-                            $raggiungimento = $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
+                            $raggiungimento = (int)$rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
                         }
                     }
                     if ($obiettivo_cdr->isCoreferenza()) {
                         $rendicontazione_cdr = $rendicontazione_aziendale;
                     } else {
                         $rendicontazione_cdr = $obiettivo_cdr->getRendicontazionePeriodo($periodo_riferimento);
-                    }
-                    if ($rendicontazione_cdr !== null) {
+                    }                                       
+                    if ($rendicontazione_cdr !== null && $rendicontazione_cdr->perc_raggiungimento !== null) {                        
                         $raggiungimento .= "*";
                     }
                 } else {
@@ -374,8 +374,10 @@ $grid_fields = array(
 $grid_recordset_responsabile = array();
 $tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
 $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date);
-foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $cdr_resp) {         
+foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $cdr_resp) {     
     $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $dateTimeObject);
+    $cdr_resp_anno_desc = $cdr_resp_anno->codice . " - " . $cdr_resp_anno->descrizione;
+    $grid_recordset_responsabile[$cdr_resp_anno_desc] = array();
     $peso_tot_obiettivi_cdr = $cdr_resp_anno->getPesoTotaleObiettivi($anno);
     foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {
         //recupero del cdr											
@@ -390,13 +392,13 @@ foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $
             if ($rendicontazione_aziendale !== null) {
                 $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
                 if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
-                    $raggiungimento = (int) $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
+                    $raggiungimento = (int)$rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
                 }
             }
-            $rendicontazione_cdr = $ob_cdr_resp->getRendicontazionePeriodo($periodo_riferimento);
-            if ($rendicontazione_cdr !== null) {
+            $rendicontazione_cdr = $ob_cdr_resp->getRendicontazionePeriodo($periodo_riferimento);            
+            if ($rendicontazione_cdr !== null && $rendicontazione_cdr->perc_raggiungimento !== null) {                        
                 $raggiungimento .= "*";
-            }
+            }            
         } else {
             $periodo_desc = "Nessun periodo aperto nell'anno";
         }
@@ -419,86 +421,90 @@ foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $
                     $peso = 100 / $peso_tot_obiettivi_cdr * $ob_cdr_resp->peso;
                 }
 
-                $grid_recordset_responsabile[] = array(
+                $grid_recordset_responsabile[$cdr_resp_anno_desc][] = array(
                     $ob_cdr_resp->id,
                     $obiettivo->codice . $coreferente,
                     $obiettivo->titolo,
-                    $cdr_resp_anno->codice . " - " . $cdr_resp_anno->descrizione,
+                    $cdr_resp_anno_desc,                    
                     (int)$peso . "%",
                     $periodo_desc,
                     $raggiungimento,
-                );
+                );              
             }
         }
     }
 }
+if (count($grid_recordset_responsabile) > 0) {    
+    $i=0;
+    foreach ($grid_recordset_responsabile as $desc=>$records) {       
+        if (count($grid_recordset_responsabile[$desc]) > 0){
+            $oGrid = ffGrid::factory($cm->oPage);
+            $oGrid->id = "obiettivi-cdr-personale-responsabile-".++$i;
+            $oGrid->title = "Obiettivi (chiusi) assegnati in qualit&aacute; di responsabile di CDR: '".$desc."'";
+            $oGrid->resources[] = "obiettivo-cdr";
+            $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $records, "obiettivi_obiettivo_cdr");
+            $oGrid->order_default = "cdr";
+            $oGrid->record_id = "obiettivo-cdr-modify";
+            $oGrid->order_method = "labels";
+            $oGrid->record_url = $record_url;
+            $oGrid->display_navigator = false;
+            $oGrid->use_paging = false;
 
-if (count($grid_recordset_responsabile) > 0) {
-    $oGrid = ffGrid::factory($cm->oPage);
-    $oGrid->id = "obiettivi-cdr-personale-responsabile";
-    $oGrid->title = "Obiettivi (chiusi) assegnati in qualit&aacute; di responsabile di CDR";
-    $oGrid->resources[] = "obiettivo-cdr";
-    $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset_responsabile, "obiettivi_obiettivo_cdr");
-    $oGrid->order_default = "cdr";
-    $oGrid->record_id = "obiettivo-cdr-modify";
-    $oGrid->order_method = "labels";
-    $oGrid->record_url = $record_url;
-    $oGrid->display_navigator = false;
-    $oGrid->use_paging = false;
+            //operazioni di inserimento ed eliminazione non permesse
+            $oGrid->display_new = false;
+            $oGrid->display_delete_bt = false;
 
-    //operazioni di inserimento ed eliminazione non permesse
-    $oGrid->display_new = false;
-    $oGrid->display_delete_bt = false;
+            $oGrid->addEvent("on_before_parse_row", "initGrid");
 
-    $oGrid->addEvent("on_before_parse_row", "initGrid");
+            // *********** FIELDS ****************
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "ID_obiettivo_cdr";
+            $oField->data_source = "ID";
+            $oField->base_type = "Number";
+            $oField->label = "id";
+            $oGrid->addKeyField($oField);
 
-    // *********** FIELDS ****************
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "ID_obiettivo_cdr";
-    $oField->data_source = "ID";
-    $oField->base_type = "Number";
-    $oField->label = "id";
-    $oGrid->addKeyField($oField);
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "codice";
+            $oField->base_type = "Text";
+            $oField->label = "Codice";
+            $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "codice";
-    $oField->base_type = "Text";
-    $oField->label = "Codice";
-    $oGrid->addContent($oField);
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "titolo";
+            $oField->base_type = "Text";
+            $oField->label = "Titolo";
+            $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "titolo";
-    $oField->base_type = "Text";
-    $oField->label = "Titolo";
-    $oGrid->addContent($oField);
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "cdr";
+            $oField->base_type = "Text";
+            $oField->label = "Cdr";
+            $oField->order_SQL = "cdr ASC, codice ASC";
+            $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "cdr";
-    $oField->base_type = "Text";
-    $oField->label = "Cdr";
-    $oField->order_SQL = "cdr ASC, codice ASC";
-    $oGrid->addContent($oField);
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "peso";
+            $oField->base_type = "Text";
+            $oField->label = "Peso";
+            $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "peso";
-    $oField->base_type = "Text";
-    $oField->label = "Peso";
-    $oGrid->addContent($oField);
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "desc_periodo";
+            $oField->base_type = "Text";
+            $oField->label = "Periodo rendicontazione";
+            $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "desc_periodo";
-    $oField->base_type = "Text";
-    $oField->label = "Periodo rendicontazione";
-    $oGrid->addContent($oField);
+            $oField = ffField::factory($cm->oPage);
+            $oField->id = "raggiungimento";
+            $oField->base_type = "Text";
+            $oField->label = "Raggiungimento";
+            $oGrid->addContent($oField);
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "raggiungimento";
-    $oField->base_type = "Text";
-    $oField->label = "Raggiungimento";
-    $oGrid->addContent($oField);
-
-    // *********** ADDING TO PAGE ****************
-    $cm->oPage->addContent($oGrid);
+            // *********** ADDING TO PAGE ****************
+            $cm->oPage->addContent($oGrid);
+        }
+    }            
 }
 
 //viene visualizzata una notifica nel caso in cui al dipendente non sia assegnato nessun obiettivo

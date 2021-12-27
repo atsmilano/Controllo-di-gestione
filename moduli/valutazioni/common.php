@@ -7,7 +7,7 @@ define("VALUTAZIONI_LABEL_GRAFICO_MAX_LEN", 25);
 //directory in download/enviroment di destinazione delle schede di valutazione
 define("VALUTAZIONI_DOWNLOADABLE_EXTRACTIONS_DIR", "schede_valutazione");
 //acl
-$user = LoggedUser::Instance();
+$user = LoggedUser::getInstance();
 $anno = $cm->oPage->globals["anno"]["value"];
         
 foreach ($user->user_groups as $group) {

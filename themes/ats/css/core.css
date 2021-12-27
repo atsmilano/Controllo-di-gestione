@@ -330,7 +330,7 @@ input.radio {
 /*******************************************************************************/
 /*Table*/
 .ffGrid table {
-    text-align: center;
+    
 }
 
 .ffGrid table thead {
@@ -339,7 +339,7 @@ input.radio {
 }
 
 .ffGrid .table thead th {
-    text-align: center;  
+   
     color: white;
 }
 
