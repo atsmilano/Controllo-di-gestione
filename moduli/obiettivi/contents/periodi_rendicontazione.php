@@ -16,13 +16,14 @@ $grid_fields = array(
     "data_riferimento_fine",
     "ordinamento_anno",
     "allegati",
+    "hide_raggiungibile",
     "campo_revisione",
     "data_termine_responsabile",
 );
 
 $grid_recordset = array();
-foreach (ObiettiviPeriodoRendicontazione::getAll(array("ID_anno_budget" => $anno->id)) as $periodo_rendicontazione) {
-    if ($periodo_rendicontazione->id_campo_revisione != null){
+foreach (ObiettiviPeriodoRendicontazione::getAll(array("ID_anno_budget" => $anno->id)) as $periodo_rendicontazione) {    
+    if ($periodo_rendicontazione->id_campo_revisione != 0){
         $campo_revisione = new ObiettiviCampoRevisione($periodo_rendicontazione->id_campo_revisione);
     }     
         
@@ -33,6 +34,7 @@ foreach (ObiettiviPeriodoRendicontazione::getAll(array("ID_anno_budget" => $anno
         $periodo_rendicontazione->data_riferimento_fine,
         $periodo_rendicontazione->ordinamento_anno,
         $periodo_rendicontazione->allegati==1?"Si":"No",
+        $periodo_rendicontazione->hide_raggiungibile==1?"Nascosto":"Visualizzato",
         $periodo_rendicontazione->id_campo_revisione!=null?$campo_revisione->nome:"Nessuno",
         $periodo_rendicontazione->data_termine_responsabile,
     );
@@ -94,6 +96,12 @@ $oField = ffField::factory($cm->oPage);
 $oField->id = "allegati";
 $oField->base_type = "Text";
 $oField->label = "Allegati consentiti";
+$oGrid->addContent($oField);
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "hide_raggiungibile";
+$oField->base_type = "Text";
+$oField->label = "Campo 'Raggiungibile al 31/12'";
 $oGrid->addContent($oField);
 
 $oField = ffField::factory($cm->oPage);

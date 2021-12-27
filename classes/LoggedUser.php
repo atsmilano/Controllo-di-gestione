@@ -56,8 +56,8 @@ final class LoggedUser extends Singleton
                 //visualizzazione di tutti i cdr (se nessun dipendente selezionato)
                 if (!array_search("cdr_view_all", $this->user_privileges, true) && ($cm->oPage->globals["dipendente"]["value"] == null)) {
                     $this->user_privileges[] = "cdr_view_all";
-                }
-
+                }               
+                
                 if (!array_search("user_selection", $this->user_privileges, true)) {
                     $this->user_privileges[] = "user_selection";
                 }
@@ -78,6 +78,9 @@ final class LoggedUser extends Singleton
                     }
                     if (!array_search("anni_budget_admin", $this->user_privileges, true)) {
                         $this->user_privileges[] = "anni_budget_admin";
+                    }
+                    if (!array_search("user_edit", $this->user_privileges, true)) {
+                        $this->user_privileges[] = "user_edit";
                     }
                 }
             }

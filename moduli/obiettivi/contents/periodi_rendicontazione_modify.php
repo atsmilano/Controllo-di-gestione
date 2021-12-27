@@ -75,6 +75,18 @@ $oField->multi_pairs = array(
 $oField->label = "Allegati alla rendicontazione consentiti";
 $oRecord->addContent($oField);
 
+$oField = ffField::factory($cm->oPage);
+$oField->id = "hide_raggiungibile";
+$oField->base_type = "Number";
+$oField->extended_type = "Selection";
+$oField->control_type = "radio";    
+$oField->multi_pairs = array(
+    array(new ffData("1", "Number"), new ffData("Nascosto", "Text")),
+    array(new ffData("0", "Number"), new ffData("Visualizzato", "Text")),
+);
+$oField->label = "Campo 'Raggiungibile al 31/12'";
+$oRecord->addContent($oField);
+
 $multipairs_campo_revisione = array();
 $campi_revisione = ObiettiviCampoRevisione::getAll();
 foreach($campi_revisione as $campo){

@@ -13,7 +13,7 @@ if (isset ($_GET["anno"])) {
             "Fp descrizione",
             "Conto codice",
             "Conto descrizione",
-            "Codicde Cdr",
+            "Codice Cdr",
             "Descrizione Cdr",
             "Periodo",
             "Tipo periodo",	

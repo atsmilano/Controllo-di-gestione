@@ -17,38 +17,32 @@ if (isset ($_GET["periodo"])) {
     //inizializzazione matrice e intestazioni	
     $matrice_dati = array(
         array(
-            "codice obiettivo", 
-            "titolo", 
-            "descrizione", 
-            "indicatori di performance", 
-            "origine", 
-            "tipo obiettivo", 
-            "area_risultato", 
-            "area", 
-            "ID tipo piano", 
-            "descrizione tipo piano",
-            "codice cdr",             
-            "descrizione cdr",
-            "codice cdr coreferenza",
-            "peso", 
-            "azioni", 
-            "parere azioni", 
-            "note azioni", 
-            "periodo", 
-            "azioni", 
-            "provvedimenti", 
-            "criticità", 
-            "misurazione indicatori", 
-            "raggiungibile"    )
+            "Codice obiettivo", 
+            "Titolo", 
+            "Descrizione", 
+            "Indicatori di performance",
+            "Tipo obiettivo", 
+            "CdR",
+            "CdR Referente aziendale dell’obiettivo (se diverso)",            
+            "Peso", 
+            "Azioni programmate", 
+            "Periodo", 
+            "Azioni", 
+            "Provvedimenti (delibere e determinazioni)", 
+            "Criticità", 
+            "Misurazione indicatori", )            
     );
+    if ($periodo->hide_raggiungibile != 1) {
+        $matrice_dati[0][] = "Raggiungibile";
+    }
     if ($periodo->id_campo_revisione != null) {
         $matrice_dati[0][] = $campo_revisione->nome;
     }
     array_push($matrice_dati[0],
         "allegati",
         "%raggiungimento", 
-        "%nucleo", 
-        "note nucleo"
+        "%validata", 
+        "Note validazione raggiungimento"
     );
 	
     // per ogni cdr della gerarchia del cdr selezionato vengono estratti tutti gli obiettivi-cdr
@@ -59,77 +53,41 @@ if (isset ($_GET["periodo"])) {
             foreach($obiettivi_cdr_figlio_anno as $obiettivo_cdr_associato){
                 $record = array();
                 $obiettivo = new ObiettiviObiettivo($obiettivo_cdr_associato->id_obiettivo);
-                //vengono recuperate le descrizioni delle chiavi esterne
-                $origine = new ObiettiviOrigine($obiettivo->id_origine);
-                $tipo = new ObiettiviTipo($obiettivo->id_tipo);
-                $area_risultato = new ObiettiviAreaRisultato($obiettivo->id_area_risultato);
-                $area = new ObiettiviArea($obiettivo->id_area);		                                                
+                $tipo = new ObiettiviTipo($obiettivo->id_tipo);	                                                
 
                 $record[] = $obiettivo->codice;
                 $record[] = $obiettivo->titolo;
                 $record[] = $obiettivo->descrizione;
                 $record[] = $obiettivo->indicatori;
-                $record[] = $origine->descrizione;
                 $record[] = $tipo->descrizione;
-                $record[] = $area_risultato->descrizione;
-                $record[] = $area->descrizione;
-                if ($obiettivo_cdr_associato->isObiettivoCdrAziendale()){
-                    $desc_tipo_piano = "Aziendale";
-                }
-                else {
-                    $desc_tipo_piano = "Cdr";
-                }
+                
                 if ($obiettivo_cdr_associato->isCoreferenza()){
                     $obiettivo_cdr_aziendale = $obiettivo_cdr_associato->getObiettivoCdrAziendale();
                     $rendicontazione = $obiettivo_cdr_aziendale->getRendicontazionePeriodo($periodo);
-                    $azioni = $obiettivo_cdr_aziendale->azioni;
-                    try{
-                        $parere_azioni = new ObiettiviParereAzioni($obiettivo_cdr_aziendale->id_parere_azioni);
-                        $parere_azioni_desc = $parere_azioni->descrizione;
-                    } 				
-                    catch (Exception $ex) {
-                        $parere_azioni_desc = "Non definite";
-                    }
-                    $codice_cdr_coreferenza = $obiettivo_cdr_aziendale->codice_cdr;
+                    $azioni = $obiettivo_cdr_aziendale->azioni;                    
+                    $anagrafica_cdr_coreferenza = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_aziendale->codice_cdr, $date);
+                    $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $anagrafica_cdr_coreferenza->descrizione;
                 }
                 else {
                     $rendicontazione = $obiettivo_cdr_associato->getRendicontazionePeriodo($periodo);
                     $azioni = $obiettivo_cdr_associato->azioni;
-                    try{
-                        $parere_azioni = new ObiettiviParereAzioni($obiettivo_cdr_associato->id_parere_azioni);
-                        $parere_azioni_desc = $parere_azioni->descrizione;
-                    } 				
-                    catch (Exception $ex) {
-                        $parere_azioni_desc = "Non definite";
-                    }
-                    $codice_cdr_coreferenza = "";
-                }
-
-                if ($obiettivo_cdr_associato->id_tipo_piano_cdr == 0) {
-                    $desc_tipo_piano = "Aziendale";
-                }
-                else {
-                    $tipo_piano = new TipoPianoCdr($obiettivo_cdr_associato->id_tipo_piano_cdr);
-                    $desc_tipo_piano = $tipo_piano->descrizione;
+                    $cdr_coreferenza_desc = "";
                 }
                 
-                $record[] = $obiettivo_cdr_associato->id_tipo_piano_cdr;
-                $record[] = $desc_tipo_piano;
-                $record[] = $obiettivo_cdr_associato->codice_cdr;                                
-                $record[] = $cdr_figlio["cdr"]->descrizione;
-                $record[] = $codice_cdr_coreferenza;
+                $record[] = $obiettivo_cdr_associato->codice_cdr . " - " . $cdr_figlio["cdr"]->descrizione;
+                $record[] = $cdr_coreferenza_desc;
                 $record[] = $obiettivo_cdr_associato->peso;
-                $record[] = $azioni;					
-                $record[] = $parere_azioni_desc;
-                $record[] = $obiettivo_cdr_associato->note_azioni;
+                $record[] = $azioni;		
 
                 if ($rendicontazione !== null){
                     $record[] = $periodo->descrizione;
                     $record[] = $rendicontazione->azioni;
                     $record[] = $rendicontazione->provvedimenti;
                     $record[] = $rendicontazione->criticita;
-                    $record[] = $rendicontazione->misurazione_indicatori;
-                    $record[] = $rendicontazione->raggiungibile == 1?"Si":"No";                        
+                    $record[] = $rendicontazione->misurazione_indicatori;                           
+                    if ($periodo->hide_raggiungibile != 1) {
+                        $record[] = $rendicontazione->raggiungibile == 1?"Si":"No";
+                    }
                     if ($periodo->id_campo_revisione != null) {
                         $scelta_campo_revisione = "";
                         foreach ($scelte_campo_revisione as $scelta) {
@@ -146,8 +104,9 @@ if (isset ($_GET["periodo"])) {
                     else {
                         $record[] = "No";
                     }
-                    $record[] = (int)$rendicontazione->perc_raggiungimento;
-                    $record[] = (int)$rendicontazione->perc_nucleo;
+                    
+                    $record[] = $rendicontazione->perc_raggiungimento;
+                    $record[] = $rendicontazione->perc_nucleo;
                     $record[] = $rendicontazione->note_nucleo;
                 }
                 $matrice_dati[] = $record;

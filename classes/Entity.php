@@ -160,10 +160,10 @@ class Entity {
                     }
                     //in caso di valori numerici comunque viene restituito null nel caso in cui il campo non sia definito
                     else if ($app_type == "Number") {
-                        if ($db->getField($field->name, $app_type, true) == null) {
+                        if ($db->getField($field->name, $app_type)->getValue() === null) {
                             $record->{strtolower($field->name)} = null;
-                        } else {
-                            $record->{strtolower($field->name)} = $db->getField($field->name, $app_type, true);
+                        } else {                            
+                            $record->{strtolower($field->name)} = $db->getField($field->name, $app_type)->getValue();
                         }
                     } else if ($app_type == "Boolean") {
                         $record->{strtolower($field->name)} = CoreHelper::getBooleanValueFromDB($db->getField($field->name, "Number", true));
@@ -245,7 +245,7 @@ class Entity {
                     if ($app_type == "Date") {
                         $record->{strtolower($field->name)} = CoreHelper::getDateValueFromDB($db->getField($field->name, $app_type, true));
                     }
-                    //in caso di valori numerici comunque viene restituito null ne lcaso in cui il campo non sia definito
+                    //in caso di valori numerici comunque viene restituito null nel caso in cui il campo non sia definito
                     else if ($app_type == "Number") {
                         if ($db->getField($field->name, $app_type, true) == null) {
                             $record->{strtolower($field->name)} = null;
@@ -292,7 +292,7 @@ class Entity {
                     $insert_values_sql .= ",";
                 }
                 $insert_sql .= $field_name;
-                $insert_values_sql .= $this->{strtolower($field_name)};
+                $insert_values_sql .= $db->toSql($this->{strtolower($field_name)});
             }
             
             // INSERT
@@ -322,6 +322,15 @@ class Entity {
         if (!$db->execute($sql)) {		
             throw new Exception("Impossibile aggiornare l'oggetto ".static::class." con ID='".$this->id."' nel DB");
 	}
+        else {
+            //restituisce l'id dell'elemento salvato
+            if ($this->id == null) {
+                return $db->getInsertID(true);
+            }
+            else {
+                return $this->id;
+            }
+        }
     }
     
     //Eliminazione del record con fieldname = $this->fieldname (default ID) dal db della tabella rappresentante l'oggetto

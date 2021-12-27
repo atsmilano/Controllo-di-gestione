@@ -245,7 +245,7 @@ if ($obiettivo_cdr_padre == null) {
     $oField->id = "provvedimenti";
     $oField->base_type = "Text";
     $oField->extended_type = "Text";
-    $oField->label = "Provvedimenti assunti";
+    $oField->label = "Provvedimenti (delibere e determinazioni)";
     if (!$user_privileges["edit_responsabile"]) {
         $oField->control_type = "label";
         $oField->store_in_db = false;
@@ -649,27 +649,28 @@ if ($periodo_rendicontazione->allegati == 1) {
 if ($obiettivo_cdr_padre == null) {
     $oRecord->addContent(null, true, "raggiungimento");
     $oRecord->groups["raggiungimento"]["title"] = "Raggiungimento obiettivo";
-
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "raggiungibile";    
-    $oField->label = "Si ritiene l'obiettivo raggiungibile al 31-12";
-    if (!$user_privileges["edit_responsabile"]) {
-        $oField->base_type = "Text";
-        $oField->data_type = "";
-        $oField->control_type = "label";
-        $oField->default_value = new ffData($rendicontazione->raggiungibile == 1 ? "Si" : "No", "Text");
-        $oField->store_in_db = false;
-    } else {
-        $oField->base_type = "Number";
-        $oField->extended_type = "Selection";
-        $oField->control_type = "radio";    
-        $oField->multi_pairs = array(
-            array(new ffData("1", "Number"), new ffData("Si", "Text")),
-            array(new ffData("0", "Number"), new ffData("No", "Text")),
-        );
-        $oField->required = true;
+    if ($periodo_rendicontazione->hide_raggiungibile != 1) {
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "raggiungibile";    
+        $oField->label = "Si ritiene l'obiettivo raggiungibile al 31-12";
+        if (!$user_privileges["edit_responsabile"]) {
+            $oField->base_type = "Text";
+            $oField->data_type = "";
+            $oField->control_type = "label";
+            $oField->default_value = new ffData($rendicontazione->raggiungibile == 1 ? "Si" : "No", "Text");
+            $oField->store_in_db = false;
+        } else {
+            $oField->base_type = "Number";
+            $oField->extended_type = "Selection";
+            $oField->control_type = "radio";    
+            $oField->multi_pairs = array(
+                array(new ffData("1", "Number"), new ffData("Si", "Text")),
+                array(new ffData("0", "Number"), new ffData("No", "Text")),
+            );
+            $oField->required = true;
+        }
+        $oRecord->addContent($oField, "raggiungimento");         
     }
-    $oRecord->addContent($oField, "raggiungimento");            
     
     //richieste revisioni
     if ($periodo_rendicontazione->id_campo_revisione != null) {    
@@ -736,7 +737,7 @@ if ($obiettivo_cdr_padre == null) {
     if ($obiettivo_cdr->isObiettivoCdrAziendale() && $rendicontazione !== null) {
         //creazione fieldset referenti
         $oRecord->addContent(null, true, "nucleo");
-        $oRecord->groups["nucleo"]["title"] = "Nucleo di valutazione";
+        $oRecord->groups["nucleo"]["title"] = "Validazione rendicontazione";
 
         $oField = ffField::factory($cm->oPage);
         $oField->id = "perc_nucleo";
@@ -751,14 +752,14 @@ if ($obiettivo_cdr_padre == null) {
             $oField->max_val = "100";
             $oField->step = "1";
         }
-        $oField->label = "Percentuale raggiungimento nucleo di valutazione";
+        $oField->label = "Percentuale raggiungimento validata";
         $oRecord->addContent($oField, "nucleo");
 
         $oField = ffField::factory($cm->oPage);
         $oField->id = "note_nucleo";
         $oField->base_type = "Text";
         $oField->extended_type = "Text";
-        $oField->label = "Note nucleo di valutazione";
+        $oField->label = "Note validazione rendicontazione";
         if (!$user_privileges["edit_nucleo"]) {
             $oField->control_type = "label";
             $oField->store_in_db = false;

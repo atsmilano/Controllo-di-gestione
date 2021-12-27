@@ -171,7 +171,7 @@ class IndicatoriParametro extends Entity {
                         '&storico_periodo_rendicontazione_search_src='+id_periodo_rendicontazione+
                         '&storico_cdr_search_src='+cdr
                     );
-                    // Apro il dialog
+                    // apertura del il dialog
                     ff.ffPage.dialog.doOpen('$dialog_name', url);
                     ff.ffPage.dialog.get('$dialog_name').params.callback = 'location.reload()';
                 }

@@ -118,6 +118,7 @@ class CoreHelper {
         $date_format = 'dd/mm/yyyy';
         
         $first_sheet = true;
+        $max_cell_char = array();
         foreach($fogli_lavoro as $nome_foglio_lavoro => &$matrici) {
             if ($first_sheet == false){
                 $sheet = $objPHPExcel->createSheet();
@@ -126,7 +127,8 @@ class CoreHelper {
                 $first_sheet = false;
             }
             $sheet->setTitle($nome_foglio_lavoro);
-                        
+                           
+            $max_cell_char[$nome_foglio_lavoro] = array();
             foreach ($matrici as $riga => &$record) {
                 $column_index = 0;
                 foreach ($record as &$valore_cella) {
@@ -141,24 +143,43 @@ class CoreHelper {
                     $nome_colonna = PHPExcel_Cell::stringFromColumnIndex($column_index);                    
                     $sheet->SetCellValue($nome_colonna.($riga+1), $valore_cella_xls);
                     
-                    $column_index += 1;
+                    $column_index += 1;      
+                    
+                    if (strlen($valore_cella) > $max_cell_char[$nome_foglio_lavoro][$column_index]){
+                        $max_cell_char[$nome_foglio_lavoro][$column_index] = strlen($valore_cella);
+                    }
                     
                     unset($nome_colonna);
                     unset($valore_cella_xls);
                     unset($valore_cella);                   
                 }
                 unset($record);
-            } 
+            }    
             unset($matrici);
+                        
+            $maxWidth = 62;
+            $sheet->calculateColumnWidths();
+            foreach(range('A',$sheet->getHighestDataColumn()) as $column) {
+                $column_index = PHPExcel_Cell::columnIndexFromString($column);
+                $colDim = $sheet->getColumnDimensionByColumn($column_index-1);                              
+                if ($max_cell_char[$nome_foglio_lavoro][$column_index] > $maxWidth) {         
+                    $col_width = $maxWidth;
+                }
+                else {
+                    $col_width = $max_cell_char[$nome_foglio_lavoro][$column_index];
+                }
+                $colDim->setWidth($col_width);
+            }
         }        
         $objPHPExcel->setActiveSheetIndex(0);
-
+                                                                        
         if ($json == false){
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
             header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
             header('Cache-Control: max-age=0'); //no cache    
         }
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');                                                 
+        
         //download del file        
         if ($json == true ){
             ob_start();
@@ -307,7 +328,7 @@ class CoreHelper {
     
     //restituisce true se  $anno è compreso nell'intervallo $anno_inizio-$anno_fine
     //i parametri sono di tipo testuale
-    public function annoInIntervallo($anno, $anno_inizio, $anno_termine) {
+    public static function annoInIntervallo($anno, $anno_inizio, $anno_termine) {
         if ($anno >= $anno_inizio && ($anno_termine == null || $anno <= $anno_termine)) {
             return true;
         }
@@ -329,8 +350,31 @@ class CoreHelper {
                 throw new Exception($attributo_data_fine." non è un attributo di ".$class);
             }
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa
-            if (strtotime($obj->data_inizio) <= strtotime($date->format("Y-m-d")) 
-                && ($obj->data_fine == null || strtotime($obj->data_fine) >= strtotime($date->format("Y-m-d")))){               
+           if (strtotime($obj->{$attributo_data_inizio}) <= strtotime($date->format("Y-m-d")) 
+                && ($obj->{$attributo_data_fine} == null || strtotime($obj->{$attributo_data_fine}) >= strtotime($date->format("Y-m-d")))){               
+                $objs[] = $obj;                				
+            }
+        }	        
+        return $objs;
+    }
+    
+    //restituisce tutti gli oggetti di una classe specificata attivi in un anno specifico
+    //vengono passati i nomi degli attributi di data inizio e fine per l'oggetto passato
+    public static function getObjectsInAnno (string $class, AnnoBudget $anno_riferimento, string $attributo_data_inizio, string $attributo_data_fine, $filters = array()) {
+        if (!class_exists(($class))) {
+            throw new Exception($class." non è un tipo di oggetto valido.");
+        }        
+        $objs = array();	             
+        foreach($class::getAll($filters) AS $obj){
+            if (!property_exists($obj, $attributo_data_inizio)) {
+                throw new Exception($attributo_data_inizio." non è un attributo di ".$class);
+            }
+            if (!property_exists($obj, $attributo_data_fine)) {
+                throw new Exception($attributo_data_fine." non è un attributo di ".$class);
+            }
+            //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa
+            if (strtotime($obj->{$attributo_data_inizio}) <= strtotime($anno_riferimento->descrizione."-12-31") 
+                && ($obj->{$attributo_data_fine} == null || strtotime($obj->{$attributo_data_fine}) >= strtotime($anno_riferimento->descrizione."-01-01"))){               
                 $objs[] = $obj;                				
             }
         }	        

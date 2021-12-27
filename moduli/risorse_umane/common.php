@@ -117,7 +117,7 @@ mod_restricted_add_menu_sub_element($menu["risorse_umane"]["approvazione_dg"]);
 $menu["risorse_umane"]["istruttoria"] = array(
     "key"     => "risorse_umane",
     "subkey"  => "istruttoria",
-    "label"   => "Istruttoria e monitograggio",
+    "label"   => "Istruttoria e monitoraggio",
     "icon"	  => "",
     "path"	  => "/area_riservata".$module->site_path."/istruttoria",
     "actions" => $allowed_actions,

@@ -202,12 +202,15 @@ if ($n_rendicontazioni_azienda>0)
     $tpl->set_var("media_aziendale_cdr", number_format($raggiungimento_nucleo_azienda/$n_rendicontazioni_azienda, 2));
 else
     $tpl->set_var("media_aziendale_cdr", 0);
-if ($n_obiettivi_non_raggiungibili_azienda > 0)	
-    $tpl->set_var("n_non_raggiungibili", $n_obiettivi_non_raggiungibili_azienda . " obiettivi ritenuti non raggiungibili al 31/12 su un totale di " .
-                    $n_rendicontazioni_azienda . " rendicontati nel periodo (" . floor(number_format(($n_obiettivi_non_raggiungibili_azienda/$n_rendicontazioni_azienda),2)*100) . "%)");	
-else
-    $tpl->set_var("n_non_raggiungibili", "Tutti gli obiettivi rendicontati (" . $n_rendicontazioni_azienda . ") sono ritenuti raggiungibili al 31/12");		
-
+if ($periodo->hide_raggiungibile != 1) {
+    if ($n_obiettivi_non_raggiungibili_azienda > 0){	
+        $tpl->set_var("n_non_raggiungibili", $n_obiettivi_non_raggiungibili_azienda . " obiettivi ritenuti non raggiungibili al 31/12 su un totale di " .
+                        $n_rendicontazioni_azienda . " rendicontati nel periodo (" . floor(number_format(($n_obiettivi_non_raggiungibili_azienda/$n_rendicontazioni_azienda),2)*100) . "%)");	
+    }
+    else {
+        $tpl->set_var("n_non_raggiungibili", "Tutti gli obiettivi rendicontati (" . $n_rendicontazioni_azienda . ") sono ritenuti raggiungibili al 31/12");		
+    }
+}
 $tpl->parse("SectRendicontazioni", true);
 
 //***********************

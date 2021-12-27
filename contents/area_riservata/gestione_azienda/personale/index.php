@@ -67,27 +67,32 @@ $cm->oPage->addContent($oField->process());
 
 //******************************************************************************
 //popolamento della grid tramite array
-$db = ffDb_Sql::factory();
-$personale = Personale::getAll();
-$source_sql = "";
-foreach ($personale as $dipendente) {
+$grid_fields = array(
+    "ID", 
+    "matricola",
+    "cognome",
+    "nome",
+    "cdc_afferenza",
+);
+$grid_recordset = array();
+foreach (Personale::getAll() as $dipendente) {
     //viene visualizzato il dipendente solamente nel caso in cui abbia un'afferenza ad almeno un cdc di quelli attivi per il periodo e il piano
     $cdc_afferenza = $dipendente->getCdcAfferenzaInData($tipo_piano, $db_date);
-    $cdc_sql = "";
-    if (count($cdc_afferenza) > 0) {
-        if (strlen($source_sql))
-            $source_sql .= "UNION ";
-        $source_sql .= "
-            SELECT
-            " . $db->toSql($dipendente->id) . " AS ID,
-            " . $db->toSql($dipendente->matricola) . " AS matricola,
-            " . $db->toSql($dipendente->cognome) . " AS cognome,
-            " . $db->toSql($dipendente->nome) . " AS nome,						
-        ";
-        foreach ($cdc_afferenza as $cdc_dipendente) {
-            $cdc_sql .= $cdc_dipendente["cdc"]->codice . " - " . $cdc_dipendente["cdc"]->descrizione . "(" . $cdc_dipendente["cdc_personale"]->percentuale . "%)\n";
+    $cdc_afferenza_desc = "";
+    foreach ($cdc_afferenza as $cdc) {
+        if (strlen($cdc_afferenza_desc)) {
+            $cdc_afferenza_desc .= "\n";
         }
-        $source_sql .= $db->toSql($cdc_sql) . " AS cdc_afferenza ";
+        $cdc_afferenza_desc .= $cdc["cdc"]->codice." - ".$cdc["cdc"]->descrizione." (".$cdc["cdc_personale"]->percentuale."%)";
+    }
+    if (strlen($cdc_afferenza_desc)) {
+        $grid_recordset[] = array(
+            $dipendente->id,
+            $dipendente->matricola,
+            $dipendente->cognome,
+            $dipendente->nome,
+            $cdc_afferenza_desc,
+        );
     }
 }
 
@@ -95,25 +100,11 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "personale";
 $oGrid->title = "Distribuzione teste";
 $oGrid->resources[] = "personale";
-if (strlen($source_sql) == 0) {
-    $oGrid->source_SQL = "
-        SELECT * 
-        FROM personale 
-        WHERE 0=1 
-        [AND]
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-} else {
-    $oGrid->source_SQL = "
-        SELECT *
-        FROM (" . $source_sql . ") AS personale
-	[WHERE]
-	[HAVING]
-	[ORDER]
-    ";
-}
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
+            $grid_fields,
+            $grid_recordset, 
+            "personale"
+        );
 $oGrid->order_default = "cognome";
 $oGrid->record_id = "personale-modify";
 $oGrid->order_method = "labels";

@@ -2,24 +2,24 @@
 class Personale extends Entity{		
     protected static $tablename = "personale";
     	
-	public static function factoryFromMatricola($matricola) {
-        $calling_class_name = static::class;
-		$db = ffDb_Sql::factory();
+    public static function factoryFromMatricola($matricola) {
+    $calling_class_name = static::class;
+            $db = ffDb_Sql::factory();
 
-        $sql = "
-                SELECT 
-                    ".self::$tablename.".ID
-                FROM
-                    ".self::$tablename."
-                WHERE
-                    ".self::$tablename.".matricola = " . $db->toSql($matricola) 
-                ;
-		$db->query($sql);
-        if ($db->nextRecord()){
-			return new $calling_class_name($db->getField("ID", "Number", true));
-		}
-		throw new Exception("Impossibile creare l'oggetto ".$calling_class_name." con matricola = ".$matricola);
-	}
+    $sql = "
+            SELECT 
+                ".self::$tablename.".ID
+            FROM
+                ".self::$tablename."
+            WHERE
+                ".self::$tablename.".matricola = " . $db->toSql($matricola) 
+            ;
+            $db->query($sql);
+    if ($db->nextRecord()){
+                return new $calling_class_name($db->getField("ID", "Number", true));
+            }
+            throw new Exception("Impossibile creare l'oggetto ".$calling_class_name." con matricola = ".$matricola);
+    }
 	
     //restituisce array con tutti i dipendenti in anagrafica
     public static function getAll($where=array(), $order=array(array("fieldname"=>"cognome", "direction"=>"ASC"),array("fieldname"=>"nome", "direction"=>"ASC"))) {                

@@ -236,15 +236,17 @@ foreach ($fasce_perc_raggiungimento as $fascia) {
 
 //**********************
 //Raggiungibile al 31/12
-if (isset($_REQUEST["filter_non_raggiungibile"]) && $_REQUEST["filter_non_raggiungibile"] == "true") {
-    $tpl->set_var("filter_non_raggiungibile_checked", "checked='checked'");	
-    $no_selection = false;
-    $filter_non_raggiungibile = true;
+if ($periodo->hide_raggiungibile != 1) {
+    if (isset($_REQUEST["filter_non_raggiungibile"]) && $_REQUEST["filter_non_raggiungibile"] == "true") {
+        $tpl->set_var("filter_non_raggiungibile_checked", "checked='checked'");	
+        $no_selection = false;
+        $filter_non_raggiungibile = true;
+    }
+    else {
+        $filter_non_raggiungibile = false;
+    }    
+    $tpl->parse("SectRaggiungibileSelect", true);
 }
-else {
-    $filter_non_raggiungibile = false;
-}
-
 //******************************************************************************
 
 if ($no_selection == true) {
@@ -331,8 +333,8 @@ else {
                         )
                     ) {
                     $show_obiettivo = false;
-                }
-                if ($show_obiettivo == true && $filter_non_raggiungibile == true && $rendicontazione->raggiungibile == true) {
+                }           
+                if ($show_obiettivo == true && ($periodo->hide_raggiungibile != true && $filter_non_raggiungibile == true && $rendicontazione->raggiungibile == true)) {                    
                     $show_obiettivo = false;
                 }
                 //visualizzazione colpi ed elenco obiettivi
@@ -367,13 +369,13 @@ else {
                     $tpl->set_var("cdr_codice", $obiettivo_cdr->codice_cdr.$trasversale_desc);
                     $tpl->set_var("descrizione_obiettivo", CoreHelper::cutText($obiettivo->titolo, 48));
                     $tpl->set_var("raggiungimento_referente", $rendicontazione->perc_raggiungimento);
-                    $tpl->set_var("raggiungimento_nucleo", $rendicontazione->perc_nucleo);
+                    $tpl->set_var("raggiungimento_nucleo", (int)$rendicontazione->perc_nucleo);
                     
                     $tpl->parse("SectObiettivo", true);
                 }
             }
         }
-    }    
+    }  
     $tpl->parse("Bersaglio", true);
 }
 die($tpl->rpparse("main", true));

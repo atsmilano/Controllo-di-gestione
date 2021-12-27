@@ -288,8 +288,7 @@ else {
     $oField->base_type = "Text";
     $tipo_cdr_predefinito = new TipoCdr($cdr_predefinito->id_tipo_cdr);
     $oField->display_value = new ffData($cdr_predefinito->codice." - ". $tipo_cdr_predefinito->abbreviazione . " - " . $cdr_predefinito->descrizione, "Text");
-    $oField->control_type = "label";
-    $oField->store_in_db = false;    
+    $oField->control_type = "label";  
 }
 $oField->data_type = "";
 $oField->default_value = new ffData($cdr_predefinito->id, "Number");
