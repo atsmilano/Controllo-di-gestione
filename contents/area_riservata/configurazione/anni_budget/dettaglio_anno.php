@@ -33,18 +33,52 @@ $oField->required = true;
 $oField->addValidator("number", array(true, 2010, 2099, true, true));
 $oRecord->addContent($oField);
 
+$si_no_multipairs = array (
+                            array(new ffData("1", "Number"), new ffData("Si", "Text")),
+                            array(new ffData("0", "Number"), new ffData("No", "Text")),
+                        );
+
 $oField = ffField::factory($cm->oPage);
 $oField->id = "attivo";
 $oField->base_type = "Number";
 $oField->extended_type = "Selection";
 $oField->control_type = "radio";
-$oField->multi_pairs = array (
-                            array(new ffData("1", "Number"), new ffData("Si", "Text")),
-                            array(new ffData("0", "Number"), new ffData("No", "Text")),
-           );
+$oField->multi_pairs = $si_no_multipairs;
 $oField->label = "Attivo";           
+$oField->default_value = new ffData($anno->attivo==true?"Si":"No", "Text");
+$oField->required = true;
+$oRecord->addContent($oField);
+$oRecord->addEvent("on_done_action", "updatePredefiniti");
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "predefinito";
+$oField->base_type = "Number";
+$oField->extended_type = "Selection";
+$oField->control_type = "radio";
+$oField->multi_pairs = $si_no_multipairs;
+$oField->label = "Predefinito";           
 $oField->default_value = new ffData($anno->attivo==true?"Si":"No", "Text");
 $oField->required = true;
 $oRecord->addContent($oField);
     
 $cm->oPage->addContent($oRecord);
+
+function updatePredefiniti($oRecord, $frmAction) {    
+    //se l'anno viene definito come predefinito viene valorizzato il campo predefinito di tutti gli altri anni a false
+    switch($frmAction)
+    {        
+        case "insert":							                   							
+        case "update":	
+            if($oRecord->form_fields["predefinito"]->getValue() == true) {
+                foreach (AnnoBudget::getAll() as $anno) {
+                    if ($anno->id !== $oRecord->key_fields["ID"]->value->getValue()) {
+                        if ($anno->predefinito == true) {
+                            $anno->predefinito = false;
+                            $anno->save(array("predefinito"));
+                        }
+                    }
+                }
+            }
+        break;	
+    }
+}

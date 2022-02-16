@@ -23,6 +23,18 @@ class AnnoBudget extends Entity{
         }
         return null;
     }
+    
+    //restituisce l'ultimo anno predefinito
+    public static function getPredefinito() {
+        $calling_class = static::class;
+        $anni_budget = $calling_class::getAll();
+        //viene estratto l'anno attivo predefinito
+        foreach ($anni_budget AS $anno) {
+            if ($anno->predefinito == 1)
+                return $anno;
+        }
+        return null;
+    }
 
     //restituisce l'ultimo anno attivo alla data
     public static function ultimoAttivoInData($date = null) {

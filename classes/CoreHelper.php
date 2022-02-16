@@ -159,7 +159,7 @@ class CoreHelper {
                         
             $maxWidth = 62;
             $sheet->calculateColumnWidths();
-            foreach(range('A',$sheet->getHighestDataColumn()) as $column) {
+            for ($column='A'; $column!=$sheet->getHighestDataColumn(); ++$column) {
                 $column_index = PHPExcel_Cell::columnIndexFromString($column);
                 $colDim = $sheet->getColumnDimensionByColumn($column_index-1);                              
                 if ($max_cell_char[$nome_foglio_lavoro][$column_index] > $maxWidth) {         

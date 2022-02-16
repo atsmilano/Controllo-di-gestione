@@ -7,7 +7,8 @@ if (!$user->hasPrivilege("anni_budget_admin")){
 $grid_fields = array(
     "ID",
     "descrizione", 
-    "attivo"
+    "attivo",
+    "predefinito",
 );
 
 $grid_recordset = array();
@@ -15,7 +16,8 @@ foreach (AnnoBudget::getAll() as $anno) {
     $grid_recordset[] = array(
         $anno->id, 
         $anno->descrizione,        
-        $anno->attivo == true ? "Si" : "No"
+        $anno->attivo == true ? "Si" : "No",
+        $anno->predefinito == true ? "Si" : "No",
     );
 }
 
@@ -52,6 +54,12 @@ $oField = ffField::factory($cm->oPage);
 $oField->id = "attivo";
 $oField->base_type = "Text";
 $oField->label = "Attivo";
+$oGrid->addContent($oField);
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "predefinito";
+$oField->base_type = "Text";
+$oField->label = "Predefinito";
 $oGrid->addContent($oField);
 
 $cm->oPage->addContent($oGrid);

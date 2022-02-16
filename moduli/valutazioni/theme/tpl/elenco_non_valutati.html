@@ -158,15 +158,15 @@
             <tbody>
                 <!--BeginSectDettagliPersonaleNonValutato-->											
                 <tr class="{personale_class}">
-                    <td onclick="openDetail({matricola})">{dipendente}</td>									
-                    <td onclick="openDetail({matricola})">
+                    <td onclick="openDetail('{matricola}')">{dipendente}</td>									
+                    <td onclick="openDetail('{matricola}')">
                         <!--BeginSectCdrAssociati-->											
                         {cdr} - {perc_testa}%<br>
                         <!--EndSectCdrAssociati-->
                     </td>	
-                    <td onclick="openDetail({matricola})">{cdr_riferimento}</td>
-                    <td onclick="openDetail({matricola})">{valutatore_suggerito}</td>
-                    <td onclick="openDetail({matricola})">{categoria_dipendente}</td>					                                                
+                    <td onclick="openDetail('{matricola}')">{cdr_riferimento}</td>
+                    <td onclick="openDetail('{matricola}')">{valutatore_suggerito}</td>
+                    <td onclick="openDetail('{matricola}')">{categoria_dipendente}</td>					                                                
                     <td>{anomalie}</td>
                     <td>
                         <input type="checkbox" class="aprimatricola" value="{matricola}" id="open_{matricola}" checked />

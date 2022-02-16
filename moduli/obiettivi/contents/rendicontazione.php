@@ -33,28 +33,7 @@ if (isset($_REQUEST["keys[ID_rendicontazione]"]) && strlen($_REQUEST["keys[ID_re
     if ($periodo_rendicontazione->id_anno_budget !== $anno_global->id) {
         ffErrorHandler::raise("Errore nel passaggio dei parametri: anno selezionato e periodo non corrispondono.");
     }
-    $obiettivo_cdr = new ObiettiviObiettivoCdr($rendicontazione->id_obiettivo_cdr);
-
-    //Privilegi sugli allegati Allegati
-    $allegati = ObiettiviRendicontazioneAllegato::getAll(['rendicontazione_id' => $rendicontazione->id]);
-
-    //START GRANT PERMISSIONS
-    $allegati_permissions = array(
-        'user_id' => $user->matricola_utente_selezionato,
-        'allegati_permissions' => array(
-            'canDownload' => array(),
-            'canDelete' => array()
-        )
-    );
-    foreach ($allegati as $allegato) {
-        $allegati_permissions['allegati_permissions']['canDownload'][] = $allegato->filename_md5;
-        $allegati_permissions['allegati_permissions']['canDelete'][] = $allegato->filename_md5;
-    }
-    $allegati_helper = new AllegatoHelper();
-    $permission_cookie = $allegati_helper->encodePermissions($allegati_permissions);
-    //Call before every output or will not work!!! IMPORTANT
-    setcookie('p_2_#', $permission_cookie, time() + 600, '/');
-    //END GRANT PERMISSIONS
+    $obiettivo_cdr = new ObiettiviObiettivoCdr($rendicontazione->id_obiettivo_cdr);   
 } else if (isset($_REQUEST["keys[ID_periodo]"]) && strlen($_REQUEST["keys[ID_periodo]"])) {
     $periodo_rendicontazione = new ObiettiviPeriodoRendicontazione($_REQUEST["keys[ID_periodo]"]);
 
@@ -210,7 +189,15 @@ if ($obiettivo_cdr->id !== $obiettivo_cdr_aziendale->id) {
 }
 
 //la modifica dell'obiettivo sarÃ  possibile solamente per gli utenti con privilegi di modifica sull'obiettivo o sulle azioni o sui pareri
-if (!$user_privileges["edit_responsabile"] && !$user_privileges["edit_nucleo"]) {
+if ($user_privileges["edit_responsabile"]) {
+    $oRecord->allow_insert = true;
+    $oRecord->allow_update = true;
+}
+else if ($user_privileges["edit_nucleo"]) {
+    $oRecord->allow_insert = false;
+    $oRecord->allow_update = true;
+}
+else {
     $oRecord->allow_insert = false;
     $oRecord->allow_update = false;
 }
@@ -579,8 +566,45 @@ if ($periodo_rendicontazione->allegati == 1) {
     // Ruolo view: solo visualizzazione
     // Ruolo edit_responsabile: visualizzazione download ed eliminazione
     $html = "<label>Allegati</label>";
-    //in fase di inserimento non è possibile allegare file
-    if ($rendicontazione == null) {
+    
+    //Privilegi sugli allegati    
+    $rendicontazione_allegati = null;
+    if ($obiettivo_cdr_padre !== null) {
+        //l'introduzione di una nuova variabile $rendicontazione_allegati è ridondante, basterebbe valorizzare $rendicontazione
+        //perchè comunque verrà utilizzata solo in caso di $obiettivo_cdr_padre = null.
+        //si decide di introdurre comunque una nuova variabile per flessibilità di eventuali future modifiche
+        $rendicontazione_allegati = $obiettivo_cdr_padre->getRendicontazionePeriodo($periodo_rendicontazione);
+    }
+    else if ($rendicontazione !== null){
+        $rendicontazione_allegati = $rendicontazione;
+    }
+    if ($rendicontazione_allegati !== null) {
+        $allegati = ObiettiviRendicontazioneAllegato::getAll(['rendicontazione_id' => $rendicontazione_allegati->id]);
+    }
+    else {
+        $allegati = array();
+    }
+
+    //START GRANT PERMISSIONS
+    $allegati_permissions = array(
+        'user_id' => $user->matricola_utente_selezionato,
+        'allegati_permissions' => array(
+            'canDownload' => array(),
+            'canDelete' => array()
+        )
+    );
+    foreach ($allegati as $allegato) {
+        $allegati_permissions['allegati_permissions']['canDownload'][] = $allegato->filename_md5;
+        $allegati_permissions['allegati_permissions']['canDelete'][] = $allegato->filename_md5;
+    }
+    $allegati_helper = new AllegatoHelper();
+    $permission_cookie = $allegati_helper->encodePermissions($allegati_permissions);
+    //Call before every output or will not work!!! IMPORTANT
+    setcookie('p_2_#', $permission_cookie, time() + 600, '/');
+    //END GRANT PERMISSIONS
+        
+    //in fase di inserimento non è possibile allegare file        
+    if ($rendicontazione_allegati == null) {
         $html .= '<p id="no_allegati_user_friendly">Gli allegati possono essere caricati successivamente al salvataggio della rendicontazione</p><br />';
         $oRecord->addContent($html, "allegati");
     } else {
@@ -631,7 +655,7 @@ if ($periodo_rendicontazione->allegati == 1) {
             $oRecord->addContent(
                 $allegati_helper->getUploadForm(
                     'ObiettiviRendicontazioneAllegato', array(
-                    'rendicontazione_id' => $rendicontazione->id,
+                    'rendicontazione_id' => $rendicontazione_allegati->id,
                     'user_id' => $user->matricola_utente_selezionato,
                     'anno_riferimento' => $anno_global->descrizione
                     )
