@@ -82,7 +82,7 @@ $oField->multi_pairs = $categorie;
 $oRecord->addContent($oField);
 
 $oRecord->insert_additional_fields["ID_periodo"] = new ffData($id_periodo, "Number");
-$oRecord->insert_additional_fields["matricola_valutato"] = new ffData($matricola, "Number");
+$oRecord->insert_additional_fields["matricola_valutato"] = new ffData($matricola, "Text");
 
 $oRecord->addEvent("on_do_action", "checkRelations");
 $oRecord->addEvent("on_done_action", "checkAutovalutazione");

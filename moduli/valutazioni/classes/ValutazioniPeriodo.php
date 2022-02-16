@@ -231,7 +231,7 @@ class ValutazioniPeriodo extends Entity{
         $db = ffDb_Sql::factory();
 
         if ($matricola_valutato !== null) {
-            $where = " AND (matricola_valutato = " . $matricola_valutato . " AND matricola_valutato <> matricola_valutatore)";
+            $where = " AND (matricola_valutato = " . $db->toSql($matricola_valutato) . " AND matricola_valutato <> matricola_valutatore)";
         }
         else {
             $where = "";
