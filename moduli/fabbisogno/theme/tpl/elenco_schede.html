@@ -1,0 +1,22 @@
+<div id="elenco_schede_fabbisogno">    
+    <select name='cdr_select' id='cdr_select'>
+        <option value="0">Tutti i CDR</option>
+        <!--BeginSectOptionCdr-->
+        <option value="{cdr_id}" {cdr_selected}>CDR: {cdr_indent}&nbsp;{cdr_descrizione}</option>                                            
+        <!--EndSectOptionCdr-->
+    </select>  
+</div>
+<script>
+    $("#cdr_select").change(function () {
+        var current_index = $("#tabs").tabs("option", "active");           
+        selected_value = $(this).children(":selected").attr("value");
+        url = $("#schede").attr("href");
+        if (url.search("cdr_select") > 0) {
+            url = url.replace(/(cdr_select=).*?(&|$)/, '$1' + selected_value + '$2');
+        } else {
+            url = url + "cdr_select=" + selected_value;
+        }
+        $("#schede").attr("href", url);
+        $("#tabs").tabs('load', current_index);
+    });        
+</script>

@@ -93,6 +93,44 @@ else {
 }
 $oRecord->addContent($oField, "periodo_group");
 
+$oField = ffField::factory($cm->oPage);
+$oField->id = "visualizzazione_obiettivi";
+$oField->base_type = "Number";
+$oField->label = "Visualizzazione obiettivi inibita";
+if ($editable){
+    $oField->control_type = "checkbox";
+    $oField->checked_value = new ffData("1", "Number", FF_SYSTEM_LOCALE);
+    $oField->unchecked_value = new ffData("0", "Number", FF_SYSTEM_LOCALE);        
+}
+else {
+    $field_value = $periodo->visualizzazione_obiettivi == true?"Si":"No";
+    $oField->base_type = "Text";
+    $oField->default_value = new ffData($field_value, "Text");
+    $oField->data_type = "";
+    $oField->control_type = "label";
+    $oField->store_in_db = false;
+}
+$oRecord->addContent($oField, "periodo_group");
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "visualizzazione_pesi_obiettivi_responsabile";
+$oField->base_type = "Number";
+$oField->label = "Visualizzazione pesi in obiettivi responsabile";
+if ($editable){
+    $oField->control_type = "checkbox";
+    $oField->checked_value = new ffData("1", "Number", FF_SYSTEM_LOCALE);
+    $oField->unchecked_value = new ffData("0", "Number", FF_SYSTEM_LOCALE);        
+}
+else {
+    $field_value = $periodo->visualizzazione_pesi_obiettivi_responsabile == true?"Si":"No";
+    $oField->base_type = "Text";
+    $oField->default_value = new ffData($field_value, "Text");
+    $oField->data_type = "";
+    $oField->control_type = "label";
+    $oField->store_in_db = false;
+}
+$oRecord->addContent($oField, "periodo_group");
+
 $anni_budget = AnnoBudget::getAll();
 $anni_budget_menu = array();
 foreach($anni_budget as $anno_budget) {

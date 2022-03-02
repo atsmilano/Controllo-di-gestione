@@ -64,10 +64,12 @@ $oField->label = "Data fine periodo";
 $oRecord->addContent($oField);
 
 foreach(AnnoBudget::getAll() as $anno_budget) {
-    $anno_budget_select[] = array(
-        new ffData($anno_budget->id, "Number"),
-        new ffData($anno_budget->descrizione, "Text"),
-    );
+    if ($item->attivo == 1){
+        $anno_budget_select[] = array(
+            new ffData($item->id, "Number"),
+            new ffData($item->descrizione, "Text")
+        );
+    } 
 }
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_anno_budget";

@@ -142,8 +142,8 @@ foreach($cdr_obiettivi_aziendali as $cdr) {
     //descrizione cdr
     if ($label_cdr !== false)			
         $label_cdr .= ", ";
-    $label_cdr .= "'" . substr (addslashes($cdr["descrizione_cdr"]), 0, OBIETTIVI_LABEL_GRAFICO_MAX_LEN) ."<br>"
-                        .substr(addslashes($cdr["descrizione_cdr"]), OBIETTIVI_LABEL_GRAFICO_MAX_LEN, OBIETTIVI_LABEL_GRAFICO_MAX_LEN) . "'"; 
+    $label_cdr .= "'" . addslashes(substr ($cdr["descrizione_cdr"], 0, OBIETTIVI_LABEL_GRAFICO_MAX_LEN)) ."<br>"
+                        .addslashes(substr($cdr["descrizione_cdr"], OBIETTIVI_LABEL_GRAFICO_MAX_LEN, OBIETTIVI_LABEL_GRAFICO_MAX_LEN)) . "'"; 
 
     //raggiungimento cdr                
     //raggiungimento nucleo

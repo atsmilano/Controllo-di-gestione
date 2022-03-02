@@ -7,6 +7,7 @@ $grid_fields = array(
     "inibizione_visualizzazione_totali",
     "inibizione_visualizzazione_ambiti_totali",
     "inibizione_visualizzazione_data_colloquio",
+    "visualizzazione_obiettivi",
     "descrizione",
     "data_inizio",
     "data_fine",
@@ -19,6 +20,7 @@ foreach (ValutazioniPeriodo::getAll() as $periodo) {
         $periodo->inibizione_visualizzazione_totali==true?"Si":"No",
         $periodo->inibizione_visualizzazione_ambiti_totali==true?"Si":"No",
         $periodo->inibizione_visualizzazione_data_colloquio==true?"Si":"No",
+        $periodo->visualizzazione_obiettivi==true?"Si":"No",
         $periodo->descrizione,
         $periodo->data_inizio,
         $periodo->data_fine,
@@ -70,6 +72,12 @@ $oField = ffField::factory($cm->oPage);
 $oField->id = "inibizione_visualizzazione_data_colloquio";
 $oField->base_type = "Text";
 $oField->label = "Data colloquio nascosta";
+$oGrid->addContent($oField);
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "visualizzazione_obiettivi";
+$oField->base_type = "Text";
+$oField->label = "Visualizzazione obiettivi";
 $oGrid->addContent($oField);
 
 $oField = ffField::factory($cm->oPage);

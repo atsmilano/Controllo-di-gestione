@@ -1,0 +1,51 @@
+#dettaglio-richiesta input {
+    text-align: left;
+}
+
+.fabbisogno_grid_row .cel-2 {
+    font-weight: bold;
+}
+
+#scheda_fabbisogno_pdf{
+    font-size: 12px;     
+}
+
+#scheda_fabbisogno_pdf #logo {
+    width: 16%;
+    float: left;   
+}
+
+#scheda_fabbisogno_pdf #logo_qualita {
+    width: 10%;
+    float: right;    
+}
+
+#scheda_fabbisogno_pdf #scheda_fabbisogno {
+    clear: left;
+}
+
+#scheda_fabbisogno_pdf #cdr {
+    margin-left: 0;
+    font-weight: bold;
+}
+
+#scheda_fabbisogno_pdf #scheda_fabbisogno h1{
+    color: #2D8215;    
+    font-size: 21px;
+    width: 100%;
+    padding-top: 35px;
+}
+
+#scheda_fabbisogno_pdf #scheda_fabbisogno h2 {
+    color: #2D8215;
+    font-size: 15px;
+}
+
+#scheda_fabbisogno_pdf #scheda_fabbisogno h3 {
+    margin-left: 18px;
+    font-size: 12px;
+}
+
+#scheda_fabbisogno_pdf #scheda_fabbisogno p{
+    margin-left: 18px;
+}

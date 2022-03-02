@@ -61,3 +61,18 @@
 #valutazione-modify .ambito_item > label {
     font-weight: bold;
 }
+
+#valutazione-modify #obiettivi_anno_valutato {
+    width: 98%;
+    margin:1%;
+}
+
+#valutazione-modify #obiettivi_anno_valutato th, #valutazione-modify #obiettivi_anno_valutato td {
+    border: solid 1px #eaeef4;
+    padding: 3px 15px;
+}
+
+#valutazione-modify #obiettivi_anno_valutato th {
+    background-color: #4792db;
+    color: #eaeef4;
+}

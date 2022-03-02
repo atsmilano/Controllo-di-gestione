@@ -29,10 +29,12 @@ foreach (AnnoBudget::getAll() AS $anno_budget) {
     $isAnnoBudgetUnivoco = empty(StrategiaAnno::getAll(["ID_anno_budget" => $anno_budget->id]));
     
     if ($isAnnoBudgetUnivoco || ($anno_budget->id == $anno->id_anno_budget)) {
-        $anno_budget_select[] = array(
-            new ffData ($anno_budget->id, "Number"),
-            new ffData ($anno_budget->descrizione, "Text")
-        );
+        if ($anno_budget->attivo == 1){
+            $anno_budget_select[] = array(
+                new ffData ($anno_budget->id, "Number"),
+                new ffData ($anno_budget->descrizione, "Text")
+            );
+        }
     }
 }
 $oField = ffField::factory($cm->oPage);

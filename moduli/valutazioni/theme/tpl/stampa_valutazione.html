@@ -8,7 +8,7 @@
     </div>
     <!--EndSectLogoQualita-->
     <div id="titolo">
-        <h1>{titolo}</h1>
+        <h1>{titolo}&nbsp;{anno}</h1>
     </div>   
     <div id="intestazione">
         <table>
@@ -26,6 +26,70 @@
             <tr><td class="label">Valutatore:</td><td class="val">{valutatore}</td></tr>
         </table>
     </div>
+    <!--BeginSectObiettivi-->
+    <div id="obiettivi">
+        <h2>Obiettivi assegnati anno {anno}</h2>
+        <!--BeginSectObiettiviIndividualiAnno-->
+        <table>
+            <thead>
+                <tr>
+                    <th>Obiettivo Individuale</th>
+                    <th>Cdr</th>
+                    <th>Peso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--BeginSectObiettivoIndividuale-->
+                <tr>
+                    <td>{obiettivo}</td>
+                    <td>{cdr_obiettivo}</td>
+                    <td>{peso}</td>
+                </tr>
+                <!--EndSectObiettivoIndividuale-->                
+            </tbody>
+        </table>
+        <!--EndSectObiettiviIndividualiAnno-->
+        <!--BeginSectObiettiviCdrResponsabileAnno-->
+        <table>
+            <thead>
+                <tr>
+                    <th>Obiettivo Cdr Responsabilità</th>
+                    <th>Cdr</th>
+                    <th>Peso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--BeginSectObiettivoCdrResponsabile-->
+                <tr>
+                    <td>{obiettivo}</td>
+                    <td>{cdr_obiettivo}</td>
+                    <td>{peso}</td>
+                </tr>
+                <!--EndSectObiettivoCdrResponsabile-->                
+            </tbody>
+        </table>
+        <!--EndSectObiettiviCdrResponsabileAnno-->
+        <!--BeginSectObiettiviResponsabileAnno-->
+        <table>
+            <thead>
+                <tr>
+                    <th>Obiettivo Cdr Responsabilità</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--BeginSectObiettivoResponsabile-->
+                <tr>
+                    <td>{obiettivo}</td>
+                </tr>
+                <!--EndSectObiettivoResponsabile-->                
+            </tbody>
+        </table>
+        <!--EndSectObiettiviResponsabileAnno-->
+        <!--BeginSectNoObiettiviAnno-->
+        <p>Nessun obiettivo assegnato nell'anno</p>
+        <!--EndSectNoObiettiviAnno-->
+    </div>
+    <!--EndSectObiettivi-->
     <!--BeginSectAmbito-->
     <h2>{sezione}</h2>
     <h3>{ambito}</h3>

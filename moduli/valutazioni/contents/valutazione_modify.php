@@ -158,6 +158,103 @@ if ($admin_user == true) {
     $oRecord->addContent($oField, "intestazione");
 }
 
+//*********************RIEPILOGO OBIETTIVI**************************
+if ($periodo->visualizzazione_obiettivi != false) {
+    $oRecord->addContent(null, true, "obiettivi");
+    $oRecord->groups["obiettivi"]["title"] = "Obiettivi " . $anno_valutazione->descrizione;
+    //estrazione degli eventuali obiettivi associati al dipendente
+    $personale_obiettivi = $valutato->cloneAttributesToNewObject("PersonaleObiettivi");
+    $obiettivi_indiviuduali = $personale_obiettivi->getObiettiviCdrPersonaleAnno($anno_valutazione);    
+    if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
+        $obiettivi_cdr_responsabilita = $personale_obiettivi->getObiettiviCdrReponsabilitaData($anno_valutazione, new DateTime(date($periodo->data_fine)), TipoPianoCdr::getPrioritaMassima());
+    }
+    else {
+        $obiettivi_cdr_responsabilita = $personale_obiettivi->getObiettiviReponsabilitaData($anno_valutazione, new DateTime(date($periodo->data_fine)), TipoPianoCdr::getPrioritaMassima());
+    }   
+    $no_obiettivi = true;
+    if (count($obiettivi_indiviuduali)) {    
+        $no_obiettivi = false;
+        $oRecord->addContent("<table id='obiettivi_anno_valutato'><thead><tr><th>Obiettivo Individuale</th><th>Cdr</th><th>Peso</th></tr></thead><tbody>", "obiettivi");
+        $tot_obiettivi_personale = $personale_obiettivi->getPesoTotaleObiettivi($anno_valutazione);
+        foreach ($obiettivi_indiviuduali as $obiettivo_individuale) {
+            $obiettivo_cdr = new ObiettiviObiettivoCdr($obiettivo_individuale->id_obiettivo_cdr);
+            $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);  
+            if ($obiettivo_cdr->id_tipo_piano == 0) {
+                $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
+            }
+            else {
+                $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano);
+            }
+            try {
+                $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
+                $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
+                $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+            } catch (Exception $ex) {
+                $cdr_desc = "Cdr cessato";
+            }
+            if ($tot_obiettivi_personale == 0) {
+                $peso_perc = 0;
+            } else {
+                $peso_perc = 100 / $tot_obiettivi_personale * $obiettivo_individuale->peso;
+            }                                                                                                                                    
+            $obiettivo_desc = "<tr>
+                                    <td>".$obiettivo->codice." - ".$obiettivo->titolo."</td>".
+                                    "<td>".$cdr_desc."</td>".
+                                    "<td>".number_format($peso_perc, 2) . "%</td>
+                                </tr>";
+
+            $oRecord->addContent($obiettivo_desc, "obiettivi");
+        }
+        $oRecord->addContent("</tbody></table>", "obiettivi");
+    }
+    if (count($obiettivi_cdr_responsabilita)){
+        $no_obiettivi = false;
+        if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
+            $oRecord->addContent("<table id='obiettivi_anno_valutato'><thead><tr><th>Obiettivo Cdr Responsabilità</th><th>Cdr</th><th>Peso</th></tr></thead><tbody>", "obiettivi");
+        }
+        else {
+            $oRecord->addContent("<table id='obiettivi_anno_valutato'><thead><tr><th>Obiettivo Cdr Responsabilità</th></tr></thead><tbody>", "obiettivi");
+        }
+        foreach($obiettivi_cdr_responsabilita as $obiettivo_cdr_responsabilita) {                    
+            if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
+                $obiettivo = $obiettivo_cdr_responsabilita["obiettivo"];
+                $cdr_desc = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->codice . " - " . $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->descrizione;
+                $peso_tot_obiettivi_cdr = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->getPesoTotaleObiettivi($anno_valutazione);
+                if ($obiettivo_cdr_responsabilita["obiettivo_cdr"]->isReferenteObiettivoTrasversale()){
+                    $coreferente = " (referente)";
+                }
+                else if ($obiettivo_cdr_responsabilita["obiettivo_cdr"]->isCoreferenza()) {
+                    $coreferente = " (trasversale)";
+                } else {
+                    $coreferente = "";
+                }
+                if ($peso_tot_obiettivi_cdr == 0) {
+                    $peso = 0;
+                } else {
+                    $peso = 100 / $peso_tot_obiettivi_cdr * $obiettivo_cdr_responsabilita["obiettivo_cdr"]->peso;
+                }
+                $obiettivo_desc = "<tr>
+                                        <td>".$obiettivo->codice." - ".$obiettivo->titolo."</td>".
+                                        "<td>".$cdr_desc."</td>".
+                                        "<td>".number_format($peso, 2) . "%</td>
+                                    </tr>";
+
+                $oRecord->addContent($obiettivo_desc, "obiettivi");                        
+            }
+            else {
+                $obiettivo_desc = "<tr>
+                                        <td>".$obiettivo_cdr_responsabilita->codice." - ".$obiettivo_cdr_responsabilita->titolo."</td>
+                                    </tr>";
+                $oRecord->addContent($obiettivo_desc, "obiettivi"); 
+            }
+        }        
+        $oRecord->addContent("</tbody></table>", "obiettivi");    
+    }
+    if ($no_obiettivi == true) {
+        $oRecord->addContent("Nessun obiettivo assegnato nell'anno " . $anno_valutazione->descrizione, "obiettivi");
+    }
+}
+
 //*********************AMBITI***************************************
 //vengono estratti tutti gli ambiti valutati nel periodo per la categoria del valutato
 $categoria = $valutazione->categoria;

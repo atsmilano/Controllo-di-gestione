@@ -3,11 +3,7 @@ class AnnoBudget extends Entity{
     protected static $tablename = "anno_budget";
    
     //restituisce array con tutti gli anni di budget ordinati in maniera decrescente
-    public static function getAll($where=array(), $order=array(array("fieldname"=>"descrizione", "direction"=>"DESC"))) {        
-        //filtro di default
-        if (!isset($where["attivo"])) {
-            $where["attivo"] = 1;
-        }
+    public static function getAll($where=array(), $order=array(array("fieldname"=>"descrizione", "direction"=>"DESC"))) {                
         //metodo classe entity
         return parent::getAll($where, $order);        
     }
