@@ -33,6 +33,7 @@ class ValutazioniPeriodo extends Entity{
                 $periodo->inibizione_visualizzazione_totali = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_totali", "Text", true));
                 $periodo->inibizione_visualizzazione_ambiti_totali = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_ambiti_totali", "Text", true));
                 $periodo->inibizione_visualizzazione_data_colloquio = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_data_colloquio", "Text", true));                
+                $periodo->visualizzazione_obiettivi = CoreHelper::getBooleanValueFromDB($db->getField("visualizzazione_obiettivi", "Text", true));                
                 $periodo->data_inizio = $db->getField("data_inizio", "Date", true);
                 $periodo->data_fine = CoreHelper::getDateValueFromDB($db->getField("data_fine", "Date", true));
                 $periodo->data_apertura_compilazione = CoreHelper::getDateValueFromDB($db->getField("data_apertura_compilazione", "Date", true));

@@ -33,7 +33,7 @@
     font-size: 12px;
 }
 
-#stampa_valutazione #intestazione, #stampa_valutazione #totali, #stampa_valutazione .note{
+#stampa_valutazione #intestazione, #stampa_valutazione #totali, #stampa_valutazione #obiettivi, #stampa_valutazione .note{
     clear:both;
     border: solid 1px #2D8215;
     -webkit-border-radius: 9px;	
@@ -41,15 +41,35 @@
     border-radius: 9px;
     padding: 9px;
     width: 100%;
-}
 
-#stampa_valutazione #totali, #stampa_valutazione .note {
-    margin: 9px;    
+}
+ 
+#stampa_valutazione #totali, #stampa_valutazione, #stampa_valutazione #obiettivi, .note {
+    margin: 9px 0;    
 }
 
 #stampa_valutazione .note p{
     margin-left: 18px;
     font-style: italic;
+}
+
+#stampa_valutazione #obiettivi table {
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#stampa_valutazione #obiettivi table tr th{
+    background-color: #2d8215;
+    border: solid 1px #2d8215; 
+    color: white;
+    text-align: left;    
+    padding: 6px;
+}
+
+#stampa_valutazione #obiettivi table tr td{
+    border: solid 1px #dfe2de; 
+    padding: 6px;
 }
 
 #stampa_valutazione .metodo_1 {
@@ -87,7 +107,7 @@
     -webkit-border-radius: 9px;	
     -moz-border-radius: 9px;	
     border-radius: 9px;
-    padding: 9px;
+    padding: 9px;    
 }
 
 #stampa_valutazione .metodo_2 table td {

@@ -126,21 +126,26 @@ class ValutazioniRegolaCategoria extends Entity{
                     //per poterne verificare la tipologia
                     $max_lvl = "ND";
                     $return = null;
+                    $cdr_resp_max = null;
                     foreach ($codici_cdr_responsabilità as $codice_cdr_resp) {
                         $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $personale->periodo_riferimento->data_fine);
-                        $cdr_resp = Cdr::factoryFromCodice($codice_cdr_resp, $piano_cdr);
-                        //se il livello è quello di radice viene restituito senza continuare la verifica
-                        if ($max_lvl == 0) {
-                            $cdr_resp_max = $cdr_resp;
-                            break;
-                        }
-                        $cdr_resp_lvl = $cdr_resp->getLivelloGerarchico();
-                        if (($max_lvl == "ND") || ($cdr_resp_lvl < $max_lvl)) {
-                            $max_lvl = $cdr_resp_lvl;
-                            $cdr_resp_max = $cdr_resp;
-                        }                        
+                        try {
+                            $cdr_resp = Cdr::factoryFromCodice($codice_cdr_resp, $piano_cdr);
+                            //se il livello è quello di radice viene restituito senza continuare la verifica
+                            if ($max_lvl == 0) {
+                                $cdr_resp_max = $cdr_resp;
+                                break;
+                            }
+                            $cdr_resp_lvl = $cdr_resp->getLivelloGerarchico();
+                            if (($max_lvl == "ND") || ($cdr_resp_lvl < $max_lvl)) {
+                                $max_lvl = $cdr_resp_lvl;
+                                $cdr_resp_max = $cdr_resp;
+                            }
+                        } catch (Exception $ex) {
+
+                        }                                                
                     }    
-                    if ($cdr_resp_max->id_tipo_cdr == $this->valore) {
+                    if ($cdr_resp_max !== null && $cdr_resp_max->id_tipo_cdr == $this->valore) {
                         return true;
                     }
                     return false;

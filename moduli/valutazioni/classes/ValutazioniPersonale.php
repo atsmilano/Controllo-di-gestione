@@ -96,15 +96,19 @@ class ValutazioniPersonale extends Personale{
         //se il dipendente è cessato a fine periodo (nessun cdr afferenza) si recupera l'ultimo CdR di afferenza
         $cessato = false;
         if (count ($this->cdr_afferenza) == 0) {
-            $cessato = true;
-            $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
+            $cessato = true;            
             $ultimi_cdr_afferenza = $this->getCdrUltimaAfferenza($tipo_piano_cdr);
             if (count ($ultimi_cdr_afferenza) > 0) {
+                $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
                 foreach ($ultimi_cdr_afferenza as $cdr_aff) {
-                    $cdr_attuale = Cdr::factoryFromCodice($cdr_aff["cdr"]->codice, $piano_cdr);
-                    if ($cdr_attuale->codice == $cdr_aff["cdr"]->codice) {
-                        $this->cdr_afferenza[] = $cdr_aff;
-                    }
+                    try {
+                        $cdr_attuale = Cdr::factoryFromCodice($cdr_aff["cdr"]->codice, $piano_cdr);
+                        if ($cdr_attuale->codice == $cdr_aff["cdr"]->codice) {
+                            $this->cdr_afferenza[] = $cdr_aff;
+                        }
+                    } catch (Exception $ex) {
+
+                    }                    
                 }                                                                                
             }
         }

@@ -135,7 +135,11 @@ class CoreHelper {
                     //in caso di data viene formattata la cella
                     if (CoreHelper::isDate($valore_cella)) {
                         $sheet->getStyleByColumnAndRow($column_index, ($riga+1))->getNumberFormat()->setFormatCode($date_format);
-                        $valore_cella_xls = PHPExcel_Shared_Date::PHPToExcel(new DateTime($valore_cella));
+                        try {
+                            $valore_cella_xls = PHPExcel_Shared_Date::PHPToExcel(new DateTime($valore_cella));
+                        } catch (Exception $ex) {
+                            $valore_cella_xls = $valore_cella;
+                        }                        
                     }  
                     else {
                         $valore_cella_xls = $valore_cella;

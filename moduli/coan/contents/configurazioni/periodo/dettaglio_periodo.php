@@ -33,10 +33,12 @@ $oRecord->addContent($oField);
 
 $anno_budget = array();
 foreach (AnnoBudget::getAll() as $item) {
-    $anno_budget[] = array(
-        new ffData($item->id, "Number"),
-        new ffData($item->descrizione, "Text")
-    );
+    if ($item->attivo == 1){
+        $anno_budget[] = array(
+            new ffData($item->id, "Number"),
+            new ffData($item->descrizione, "Text")
+        );
+    }
 }
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_anno_budget";

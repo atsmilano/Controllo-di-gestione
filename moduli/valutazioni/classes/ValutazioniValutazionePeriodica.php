@@ -1060,11 +1060,13 @@ class ValutazioniValutazionePeriodica {
         //titolo
         $periodo = new ValutazioniPeriodo($this->id_periodo);
         $anno_valutazione = new ValutazioniAnnoBudget($periodo->id_anno_budget);
+        
+        $tpl->set_var("anno", $anno_valutazione->descrizione);
 
         if ($this->isAutovalutazione())
-            $tpl->set_var ("titolo", "Autovalutazione - " . $periodo->descrizione . " " . $anno_valutazione->descrizione);
+            $tpl->set_var ("titolo", "Autovalutazione - " . $periodo->descrizione);
         else
-            $tpl->set_var ("titolo", "Valutazione - " . $periodo->descrizione . " " . $anno_valutazione->descrizione);
+            $tpl->set_var ("titolo", "Valutazione - " . $periodo->descrizione);
       
         //************
         //intestazione
@@ -1111,6 +1113,94 @@ class ValutazioniValutazionePeriodica {
         $categoria = $this->categoria;
         $tpl->set_var("tipologia_scheda", $categoria->descrizione);
 
+        //*********************RIEPILOGO OBIETTIVI**************************
+        if ($periodo->visualizzazione_obiettivi != false) {           
+            //estrazione degli eventuali obiettivi associati al dipendente
+            $personale_obiettivi = $valutato->cloneAttributesToNewObject("PersonaleObiettivi");
+            $obiettivi_indiviuduali = $personale_obiettivi->getObiettiviCdrPersonaleAnno($anno_valutazione);            
+            if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
+                $obiettivi_cdr_responsabilita = $personale_obiettivi->getObiettiviCdrReponsabilitaData($anno_valutazione, new DateTime(date($periodo->data_fine)), TipoPianoCdr::getPrioritaMassima());
+            }
+            else {
+                $obiettivi_cdr_responsabilita = $personale_obiettivi->getObiettiviReponsabilitaData($anno_valutazione, new DateTime(date($periodo->data_fine)), TipoPianoCdr::getPrioritaMassima());
+            }
+            $no_obiettivi = true;
+            if (count($obiettivi_indiviuduali)) {     
+                $no_obiettivi = false;
+                $tot_obiettivi_personale = $personale_obiettivi->getPesoTotaleObiettivi($anno_valutazione);
+                foreach ($obiettivi_indiviuduali as $obiettivo_individuale) {
+                    $obiettivo_cdr = new ObiettiviObiettivoCdr($obiettivo_individuale->id_obiettivo_cdr);
+                    $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);                
+                    if ($obiettivo_cdr->id_tipo_piano == 0) {
+                        $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
+                    }
+                    else {
+                        $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano);
+                    }
+                    try {
+                        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
+                        $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
+                        $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+                    } catch (Exception $ex) {
+                        $cdr_desc = "Cdr cessato";
+                    }
+                    if ($tot_obiettivi_personale == 0) {
+                        $peso_perc = 0;
+                    } else {
+                        $peso_perc = 100 / $tot_obiettivi_personale * $obiettivo_individuale->peso;
+                    }
+
+                    $tpl->set_var("obiettivo", $obiettivo->codice." - ".$obiettivo->titolo);
+                    $tpl->set_var("cdr_obiettivo", $cdr_desc);
+                    $tpl->set_var("peso", number_format($peso_perc, 2)."%");                    
+
+                    $tpl->parse("SectObiettivoIndividuale", true);
+                }
+                $tpl->parse("SectObiettiviIndividualiAnno", false);
+            }
+            if (count($obiettivi_cdr_responsabilita)) {
+                $no_obiettivi = false;
+                foreach($obiettivi_cdr_responsabilita as $obiettivo_cdr_responsabilita) {                    
+                    if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
+                        $obiettivo = $obiettivo_cdr_responsabilita["obiettivo"];
+                        $cdr_desc = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->codice . " - " . $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->descrizione;
+                        $peso_tot_obiettivi_cdr = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->getPesoTotaleObiettivi($anno_valutazione);
+                        if ($obiettivo_cdr_responsabilita["obiettivo_cdr"]->isReferenteObiettivoTrasversale()){
+                            $coreferente = " (referente)";
+                        }
+                        else if ($obiettivo_cdr_responsabilita["obiettivo_cdr"]->isCoreferenza()) {
+                            $coreferente = " (trasversale)";
+                        } else {
+                            $coreferente = "";
+                        }
+                        if ($peso_tot_obiettivi_cdr == 0) {
+                            $peso = 0;
+                        } else {
+                            $peso = 100 / $peso_tot_obiettivi_cdr * $obiettivo_cdr_responsabilita["obiettivo_cdr"]->peso;
+                        }
+                        $tpl->set_var("obiettivo", $obiettivo->codice." - ".$obiettivo->titolo);
+                        $tpl->set_var("cdr_obiettivo", $cdr_desc);
+                        $tpl->set_var("peso", number_format($peso, 2)."%");                    
+                        $tpl->parse("SectObiettivoCdrResponsabile", true);
+                    }
+                    else {
+                        $tpl->set_var("obiettivo", $obiettivo_cdr_responsabilita->codice." - ".$obiettivo_cdr_responsabilita->titolo);                             
+                        $tpl->parse("SectObiettivoResponsabile", true);
+                    }                                        
+                }        
+                if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
+                    $tpl->parse("SectObiettiviCdrResponsabileAnno", false);
+                }
+                else {
+                    $tpl->parse("SectObiettiviResponsabileAnno", false);
+                }
+            }
+            if ($no_obiettivi == true) {
+                $tpl->parse("SectNoObiettiviAnno", false);
+            }
+            $tpl->parse("SectObiettivi", false);
+        }      
+        
         //****************
         //sezioni e ambiti
         $sezione_prec = -1;

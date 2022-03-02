@@ -52,5 +52,49 @@ class PersonaleObiettivi extends Personale {
         }
         return $peso_totale_personale;
     }
+    
+    //restituisce tutti gli obiettivi nell'anno dei cdr di competenza alla data
+    public function getObiettiviCdrReponsabilitaData (AnnoBudget $anno, DateTime $date, TipoPianoCdr $tipo_piano) {
+        $obiettivi_responsabilità = array();            
+        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano, $date->format("Y-m-d"));
+        foreach ($this->getCdrResponsabilitaPiano($piano_cdr, $date) as $cdr_resp) {     
+            $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $date);            
+            foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {											                
+                //viene verificato che l'obiettivo sia già stato accettato dal dipendente
+                if ($obiettivo_cdr->data_eliminazione == null && $ob_cdr_resp->data_chiusura_modifiche !== null && strtotime(date("Y-m-d")) >= strtotime($ob_cdr_resp->data_chiusura_modifiche)) {
+                    $obiettivi_responsabilità[] = array(
+                                                        "obiettivo" => new ObiettiviObiettivo($ob_cdr_resp->id_obiettivo),
+                                                        "obiettivo_cdr" => $ob_cdr_resp,
+                                                        "anagrafica_cdr_obiettivo" => $cdr_resp_anno,
+                                                        );                                     
+                }                
+            }
+        }
+        return $obiettivi_responsabilità;
+    }
 
+    //restituisce tutti gli obiettivi (univoci) assegnati ai Cdr del responsabile in una data specifica
+    public function getObiettiviReponsabilitaData (AnnoBudget $anno, DateTime $date, TipoPianoCdr $tipo_piano) {
+        $obiettivi_responsabilità = array();            
+        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano, $date->format("Y-m-d"));
+        foreach ($this->getCdrResponsabilitaPiano($piano_cdr, $date) as $cdr_resp) {     
+            $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $date);            
+            foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {											                
+                //vengono considerati solamente gli obiettivi confermati da parte del cdr                
+                if ($obiettivo_cdr->data_eliminazione == null) {
+                    $found = false;
+                    foreach ($obiettivi_responsabilità as $obiettivo_responsabilità) {
+                        if ($ob_cdr_resp->id_obiettivo == $obiettivo_responsabilità->id) {
+                            $found = true;
+                            break;
+                        }
+                    }
+                    if (!($found == true)) {
+                        $obiettivi_responsabilità[] = new ObiettiviObiettivo($ob_cdr_resp->id_obiettivo);
+                    }
+                }
+            }
+        }
+        return $obiettivi_responsabilità;
+    }
 }

@@ -48,6 +48,7 @@ $oField->label = "Attivo";
 $oField->default_value = new ffData($anno->attivo==true?"Si":"No", "Text");
 $oField->required = true;
 $oRecord->addContent($oField);
+$oRecord->addEvent("on_do_action", "checkEsistente");
 $oRecord->addEvent("on_done_action", "updatePredefiniti");
 
 $oField = ffField::factory($cm->oPage);
@@ -62,6 +63,27 @@ $oField->required = true;
 $oRecord->addContent($oField);
     
 $cm->oPage->addContent($oRecord);
+
+function checkEsistente($oRecord, $frmAction) {  
+    switch($frmAction)
+    {        
+        case "insert":	
+            foreach (AnnoBudget::getAll() as $anno) {
+                if ($anno->descrizione == $oRecord->form_fields["descrizione"]->value->getValue()) {
+                    CoreHelper::setError($oRecord, $anno->descrizione . " già presente");               
+                    return true;
+                }
+            }
+        case "update":
+            foreach (AnnoBudget::getAll() as $anno) {
+                if ($anno->id !== $oRecord->key_fields["ID"]->value->getValue() && $anno->descrizione == $oRecord->form_fields["descrizione"]->value->getValue()) {
+                    CoreHelper::setError($oRecord, $anno->descrizione . " già presente");               
+                    return true;
+                }
+            }
+        break;	
+    }
+}
 
 function updatePredefiniti($oRecord, $frmAction) {    
     //se l'anno viene definito come predefinito viene valorizzato il campo predefinito di tutti gli altri anni a false

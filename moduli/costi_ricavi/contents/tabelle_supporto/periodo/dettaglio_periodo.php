@@ -26,10 +26,12 @@ $oRecord->addKeyField($oField);
 
 $anno_budget_select = array();
 foreach(AnnoBudget::getAll() as $item) {
-    $anno_budget_select[] = array(
-        new ffData($item->id, "Number"),
-        new ffData($item->descrizione, "Text")
-    );
+    if ($item->attivo == 1){
+        $anno_budget_select[] = array(
+            new ffData($item->id, "Number"),
+            new ffData($item->descrizione, "Text")
+        );
+    }    
 }
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_anno_budget";
