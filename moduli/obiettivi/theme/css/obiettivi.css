@@ -134,7 +134,20 @@ div#riapertura_obiettivi_confirm_dialog {
     color: red;
 }
 
-
 #periodo-rendicontazione-modify {
     margin-top: 12px;
+}
+
+#azioni_figli {
+    margin-bottom: 9px;    
+}
+
+#azioni_figli #cdr_tabs ul li {
+    padding: 0 9px;    
+    display: inline-flex;
+    width: 49%;
+}
+
+#azioni_figli #cdr_tabs .cdr_tab_content {
+    padding: 0 9px 9px 9px;
 }
