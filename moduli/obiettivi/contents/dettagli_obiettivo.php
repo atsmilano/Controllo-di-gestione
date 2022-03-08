@@ -601,6 +601,53 @@ if ($edit == true && $user_privileges["view_coreferenti_associati"]) {
     }
 }
 
+//vengono estratti gli obiettivi cdr dei figli nel caso ci sia necessità di utilizzare il dato
+if (
+    ($user_privileges["edit_azioni"] && !$obiettivo_cdr->isCoreferenza())
+    || ($edit == true && $user_privileges["view_assegnazioni_cdr"]) 
+    ) {
+    //viene recuperato il cdr su tutti i tipi di piano in cui è presente
+    $obiettivi_cdr_figli = array();
+    $cdr_piani = Cdr::getCdrPianiFromCodice($obiettivo_cdr->codice_cdr, $date->format("Y-m-d"));
+    foreach ($cdr_piani as $cdr_piano) {
+        $tipo_piano_corrente = $cdr_piano["tipo_piano_cdr"];
+        $cdr_piano_corrente = $cdr_piano["cdr"];       
+
+        $grid_fields = array(
+            "ID",
+            "codice_cdr",
+            "desc_cdr",
+            "responsabile_cdr",
+            "peso",
+        );
+        //vengono estratti i figli del cdr per il piano selezionato e verificata l'associazione
+        $grid_recordset = array();
+        foreach ($cdr_piano_corrente->getFigli() as $cdr_figlio) {
+            $obiettivo_cdr_figlio = ObiettiviObiettivoCdr::factoryFromObiettivoCdr($obiettivo, $cdr_figlio);
+            //se esiste l'obiettivo per il figlio e in caso di assegnazione aziendale non risulta trasversale
+            if ($obiettivo_cdr_figlio !== null && !($obiettivo_cdr_figlio->isObiettivoCdrAziendale() && $obiettivo_cdr_figlio->isCoreferenza())) {
+                $anagrafica_figlio = AnagraficaCdrObiettivi::factoryFromCodice($cdr_figlio->codice, $date);
+                $peso_totale_obiettivi = $anagrafica_figlio->getPesoTotaleObiettivi($anno);                
+                $perc_peso = CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi);  
+                $responsabile_cdr_figlio = $cdr_figlio->getResponsabile($date);
+                //costruzione record
+                $grid_recordset[] = array(
+                    $obiettivo_cdr_figlio->id,
+                    $cdr_figlio->codice,
+                    $cdr_figlio->descrizione,
+                    $responsabile_cdr_figlio->cognome . " " . $responsabile_cdr_figlio->nome . " (matr. " . $responsabile_cdr_figlio->matricola_responsabile . ")",
+                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
+                );    
+                $obiettivi_cdr_figli[$tipo_piano_corrente->id]["data"][$obiettivo_cdr_figlio->id]["cdr"] = $cdr_figlio;
+                $obiettivi_cdr_figli[$tipo_piano_corrente->id]["data"][$obiettivo_cdr_figlio->id]["responsabile_cdr"] = $responsabile_cdr_figlio;
+                $obiettivi_cdr_figli[$tipo_piano_corrente->id]["data"][$obiettivo_cdr_figlio->id]["obiettivo_cdr"] = $obiettivo_cdr_figlio;
+            }
+        }
+        $obiettivi_cdr_figli[$tipo_piano_corrente->id]["tipo_piano"] = $tipo_piano_corrente;
+        $obiettivi_cdr_figli[$tipo_piano_corrente->id]["recordset"] = $grid_recordset;
+    }
+}
+
 if ($edit == true) {
     //creazione fieldset azioni
     $oRecord->addContent(null, true, "azioni");
@@ -635,6 +682,36 @@ if ($edit == true) {
         }
     }
     $oRecord->addContent($oField, "azioni");
+    
+    //azioni dei cdr afferenti, visualizzabili se presente priilegio modifica azioni
+    //se cdr referente di obiettivo trasversale
+    //se almeno uno dei figli del cdr è associato all'obiettivo
+    if ($user_privileges["edit_azioni"] && !$obiettivo_cdr->isCoreferenza()) {
+        if (count($obiettivi_cdr_figli)) {
+            $modulo = Modulo::getCurrentModule();
+            $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");                                
+            $tpl->load_file("azioni_cdr_figli.html", "main");            
+            foreach ($obiettivi_cdr_figli as $tipo_piano_figlio) {                
+                foreach($tipo_piano_figlio["data"] as $obiettivo_cdr_figlio) {                                       
+                    $cdr_desc = $obiettivo_cdr_figlio["cdr"]->codice." - ".$obiettivo_cdr_figlio["cdr"]->descrizione;
+                    if (strlen($obiettivo_cdr_figlio["obiettivo_cdr"]->azioni)) {
+                        $cdr_desc .= "*";
+                        $azioni = $obiettivo_cdr_figlio["obiettivo_cdr"]->azioni;
+                    }
+                    else {                        
+                        $azioni = "Non definite";
+                    }
+                    $tpl->set_var("id_cdr", $obiettivo_cdr_figlio["cdr"]->id);                                        
+                    $tpl->set_var("cdr_resp", $obiettivo_cdr_figlio["responsabile_cdr"]->cognome . " " . $obiettivo_cdr_figlio["responsabile_cdr"]->nome . " (matr. " . $obiettivo_cdr_figlio["responsabile_cdr"]->matricola_responsabile . ")");
+                    $tpl->set_var("cdr_desc", $cdr_desc);
+                    $tpl->set_var("azioni", $azioni);
+                    $tpl->parse("IntestazioneCdrTab", true);
+                    $tpl->parse("ContentCdrTab", true);
+                }
+            }
+            $oRecord->addContent($tpl->rpparse("main", true), "azioni");
+        }
+    }                                        
 
     //*************************************
     //parere sulle azioni
@@ -708,43 +785,13 @@ if ($edit == true) {
 //*************************************    
 if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
     //**************************************************************************
-    //Grid assegnazione obiettivo_cdr
-    //viene recuperato il cdr su tutti i tipi di piano in cui è presente
-    $cdr_piani = Cdr::getCdrPianiFromCodice($obiettivo_cdr->codice_cdr, $date->format("Y-m-d"));
-    foreach ($cdr_piani as $cdr_piano) {
-        $tipo_piano_corrente = $cdr_piano["tipo_piano_cdr"];
-        $cdr_piano_corrente = $cdr_piano["cdr"];
-
-        $oRecord->addContent(null, true, "cdr_assegnati" . $tipo_piano_corrente->id);
-        $oRecord->groups["cdr_assegnati" . $tipo_piano_corrente->id]["title"] = $tipo_piano_corrente->descrizione . " - Elenco CDR ai quali l&acute;obiettivo è stato assegnato";
-
-        $grid_fields = array(
-            "ID",
-            "codice_cdr",
-            "desc_cdr",
-            "responsabile_cdr",
-            "peso",
-        );
-        //vengono estratti i figli del cdr per il piano selezionato e verificata l'associazione
-        $grid_recordset = array();
-        foreach ($cdr_piano_corrente->getFigli() as $cdr_figlio) {
-            $obiettivo_cdr_figlio = ObiettiviObiettivoCdr::factoryFromObiettivoCdr($obiettivo, $cdr_figlio);
-            //se esiste l'obiettivo per il figlio e in caso di assegnazione aziendale non risulta trasversale
-            if ($obiettivo_cdr_figlio !== null && !($obiettivo_cdr_figlio->isObiettivoCdrAziendale() && $obiettivo_cdr_figlio->isCoreferenza())) {
-                $anagrafica_figlio = AnagraficaCdrObiettivi::factoryFromCodice($cdr_figlio->codice, $date);
-                $peso_totale_obiettivi = $anagrafica_figlio->getPesoTotaleObiettivi($anno);                
-                $perc_peso = CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi);  
-                $responsabile_cdr_figlio = $cdr_figlio->getResponsabile($date);
-                //costruzione record
-                $grid_recordset[] = array(
-                    $obiettivo_cdr_figlio->id,
-                    $cdr_figlio->codice,
-                    $cdr_figlio->descrizione,
-                    $responsabile_cdr_figlio->cognome . " " . $responsabile_cdr_figlio->nome . " (matr. " . $responsabile_cdr_figlio->matricola_responsabile . ")",
-                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
-                );
-            }
-        }
+    //Grid assegnazione obiettivo_cdr            
+    $oRecord->addContent(null, true, "cdr_assegnati" . $tipo_piano_corrente->id);
+    $oRecord->groups["cdr_assegnati" . $tipo_piano_corrente->id]["title"] = $tipo_piano_corrente->descrizione . " - Elenco CDR ai quali l&acute;obiettivo è stato assegnato";
+        
+    foreach($obiettivi_cdr_figli as $obiettivo_cdr_figlio) {    
+        $tipo_piano_corrente = $obiettivo_cdr_figlio["tipo_piano"];
+        $grid_recordset = $obiettivo_cdr_figlio["recordset"];
         if (count($grid_recordset) > 0 || $user_privileges["edit_assegnazioni_cdr_personale"]){
             $oGrid = ffGrid::factory($cm->oPage);
             $oGrid->id = "obiettivo_cdr_" . $tipo_piano_corrente->id;

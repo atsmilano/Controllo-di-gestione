@@ -1,0 +1,25 @@
+<div id="azioni_figli">	 
+    <label>Azioni definite dai Cdr afferenti (* se definite)</label>
+    <div>          
+        <div id="cdr_tabs">
+                <ul>
+                    <!--BeginIntestazioneCdrTab-->
+                    <li><a href="#tab_cdr_{id_cdr}">{cdr_desc}</a></li>
+                    <!--EndIntestazioneCdrTab-->
+                </ul>
+                <!--BeginContentCdrTab-->
+                <div id="tab_cdr_{id_cdr}" class="cdr_tab_content">  
+                    <h4>{cdr_desc} - {cdr_resp}</h4>
+                    <p>{azioni}</p>         
+                </div>
+                <!--EndContentCdrTab-->
+        </div>
+    </div>      
+</div>
+
+<script>
+    $(function () {        
+        $('#cdr_tabs').tabs({            
+        });
+    });
+</script>
