@@ -263,7 +263,7 @@ class Personale extends Entity{
         foreach (CdcPersonale::getAll(array("matricola_personale" => $this->matricola)) as $cdc_dipendente){
             //se la data inizio è precedente alla data corretnte inclusa e la data fine è successiva alla data corrente inclusa)
             if (
-                    strtotime($cdc_dipendente->data_inizio) <= strtotime($anno->descrizione."-12-01") && 
+                    strtotime($cdc_dipendente->data_inizio) <= strtotime($anno->descrizione."-12-31") && 
                     ($cdc_dipendente->data_fine == null || strtotime($cdc_dipendente->data_fine) >= strtotime($anno->descrizione."-01-01"))
                 ){
                 $attivo = true;
