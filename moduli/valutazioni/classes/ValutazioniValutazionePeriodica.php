@@ -1316,7 +1316,7 @@ class ValutazioniValutazionePeriodica {
                             foreach($item_valutazione->getPunteggi() as $punteggio){
                                 if ($raggiunto_item == $punteggio->punteggio) {                            
                                     if ($visualizzazione_punteggio_categoria_ambito == true){
-                                        $desc_punteggio = $punteggio->punteggio." - ".$punteggio->descrizione;
+                                        $desc_punteggio = (float)$punteggio->punteggio." - ".$punteggio->descrizione;
                                     }
                                     else {
                                         $desc_punteggio = $punteggio->descrizione;
