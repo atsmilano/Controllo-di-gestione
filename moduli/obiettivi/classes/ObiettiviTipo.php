@@ -10,7 +10,7 @@ class ObiettiviTipo extends Entity{
     public static function getAttiviAnno(AnnoBudget $anno) {
         $tipi_obiettivo_anno = array();
         foreach (ObiettiviTipo::getAll() as $tipo_obiettivo) {
-            if ($tipo_obiettivo->anno_introduzione <= $anno->descrizione && ($tipo_obiettivo->anno_termine == null || $tipo_obiettivo->anno_termine >= $anno->descrizione)) {
+            if ($tipo_obiettivo->anno_introduzione <= $anno->descrizione && ($tipo_obiettivo->anno_termine == 0 || $tipo_obiettivo->anno_termine >= $anno->descrizione)) {
                 $tipi_obiettivo_anno[] = $tipo_obiettivo;
             }
         }

@@ -449,7 +449,8 @@ class Cdr extends Entity{
 
     //resituisce il primo responsabile su cdr padre differente dal responsabile del cdr
     //null se non si riesce ad istanziare il responsabile superiore (es cdr radice)
-    public function getPrimoResponsabilePadre(DateTime $date) {
+    //$primo_cdr_padre determina se forzare la restituzione del responsabile del primo cdr padre
+    public function getPrimoResponsabilePadre(DateTime $date, $primo_cdr_padre = false) {
         $cdr = $this;
         $return = null;
         //se non ci si trova all'elemento radice
@@ -457,6 +458,9 @@ class Cdr extends Entity{
             $cdr_padre = new Cdr($cdr->id_padre, $this->useSql);
             $responsabile_cdr = $cdr->getResponsabile($date);
             $responsabile_cdr_padre = $cdr_padre->getResponsabile($date);
+            if ($primo_cdr_padre == true) {
+                return $responsabile_cdr_padre;
+            }
             //viene considerato come responsabile il primo resopnsabile di cdr padre non identico al responsabile del cdr figlio
             while ((($responsabile_cdr->matricola_responsabile == $responsabile_cdr_padre->matricola_responsabile) || $responsabile_cdr_padre->matricola_responsabile == null) && $cdr->id_padre !== 0) {
                 $cdr = $cdr_padre;

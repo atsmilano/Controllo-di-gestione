@@ -5,11 +5,7 @@
 #stampa_valutazione #logo {
     width: 16%;
     float: left;   
-}
-
-#stampa_valutazione #logo_qualita {
-    width: 16%;
-    float: right;    
+    margin-bottom: 9px;
 }
 
 #stampa_valutazione #titolo {
@@ -20,7 +16,7 @@
     text-align: center;
     font-size: 21px;
     width: 100%;
-    padding-top: 35px;
+    padding-top: 20px;
 }
 
 #stampa_valutazione h2 {

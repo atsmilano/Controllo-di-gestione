@@ -10,7 +10,7 @@ class ObiettiviOrigine extends Entity{
     public static function getAttiviAnno(AnnoBudget $anno) {
         $origini_obiettivo_anno = array();
         foreach (ObiettiviOrigine::getAll() as $origine_obiettivo) {
-            if ($origine_obiettivo->anno_introduzione <= $anno->descrizione && ($origine_obiettivo->anno_termine == null || $origine_obiettivo->anno_termine >= $anno->descrizione)) {
+            if ($origine_obiettivo->anno_introduzione <= $anno->descrizione && ($origine_obiettivo->anno_termine == 0 || $origine_obiettivo->anno_termine >= $anno->descrizione)) {
                 $origini_obiettivo_anno[] = $origine_obiettivo;
             }
         }
