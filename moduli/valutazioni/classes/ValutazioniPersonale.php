@@ -135,7 +135,7 @@ class ValutazioniPersonale extends Personale{
             $responsabile_cdr = $this->cdr_riferimento->getResponsabile($data_fineObject);
             if (($responsabile_cdr->matricola_responsabile == $this->matricola) ||
                 $ex_responsabile_cdr_riferimento == true){
-                $this->valutatore_suggerito = $this->cdr_riferimento->getPrimoResponsabilePadre($data_fineObject);
+                $this->valutatore_suggerito = $this->cdr_riferimento->getPrimoResponsabilePadre($data_fineObject, true);
             }                        
             else {
                 $this->valutatore_suggerito = $responsabile_cdr;                

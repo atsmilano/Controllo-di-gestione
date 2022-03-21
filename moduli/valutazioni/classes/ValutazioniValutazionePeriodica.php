@@ -1049,12 +1049,7 @@ class ValutazioniValutazionePeriodica {
         //viene caricato il template specifico per la pagina                
         $tpl = ffTemplate::factory($module->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
         $tpl->load_file("stampa_valutazione.html", "main");
-        $tpl->set_var("logo_stampa_filename", mod_security_get_logo());        
-        $logo_qualita = mod_security_get_logo_qualita(true);
-        if ($logo_qualita !== null) {
-            $tpl->set_var("logo_stampa_qualita_filename", $logo_qualita);
-            $tpl->parse("SectLogoQualita", false);
-        }
+        $tpl->set_var("logo_stampa_filename", mod_security_get_logo());                
 
         //******
         //titolo

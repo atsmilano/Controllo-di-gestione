@@ -10,7 +10,7 @@ class ObiettiviAreaRisultato extends Entity{
     public static function getAttiviAnno(AnnoBudget $anno) {
         $aree_risultato_obiettivo_anno = array();
         foreach (ObiettiviAreaRisultato::getAll() as $area_risultato_obiettivo) {
-            if ($area_risultato_obiettivo->anno_introduzione <= $anno->descrizione && ($area_risultato_obiettivo->anno_termine == null || $area_risultato_obiettivo->anno_termine >= $anno->descrizione)) {
+            if ($area_risultato_obiettivo->anno_introduzione <= $anno->descrizione && ($area_risultato_obiettivo->anno_termine == 0 || $area_risultato_obiettivo->anno_termine >= $anno->descrizione)) {
                 $aree_risultato_obiettivo_anno[] = $area_risultato_obiettivo;
             }
         }

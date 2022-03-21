@@ -10,7 +10,7 @@ class ObiettiviArea extends Entity{
     public static function getAttiviAnno(AnnoBudget $anno) {
         $aree_obiettivo_anno = array();
         foreach (ObiettiviArea::getAll() as $area_obiettivo) {
-            if ($area_obiettivo->anno_introduzione <= $anno->descrizione && ($area_obiettivo->anno_termine == null || $area_obiettivo->anno_termine >= $anno->descrizione)) {
+            if ($area_obiettivo->anno_introduzione <= $anno->descrizione && ($area_obiettivo->anno_termine == 0 || $area_obiettivo->anno_termine >= $anno->descrizione)) {
                 $aree_obiettivo_anno[] = $area_obiettivo;
             }
         }
