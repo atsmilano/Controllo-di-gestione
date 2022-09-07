@@ -1,6 +1,6 @@
 <?php
 class CoanCdcStandardRegionale extends Entity {
-    protected  static $tablename = "coan_cdc_standard_regionale";
+    protected static $tablename = "coan_cdc_standard_regionale";
     
     public static function getAttiviAnno(AnnoBudget $anno) {
         $result = array();

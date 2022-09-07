@@ -1,6 +1,4 @@
 <?php
-$dateTimeObject = $cm->oPage->globals["data_riferimento"]["value"];
-
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory((__DIR__) . "/tpl");
 $tpl->load_file("tree.html", "main");
@@ -34,8 +32,37 @@ try {
 }
 $tpl->set_var("id_piano_cdr", $id_piano_cdr);
 
-//vengono estratti tutti i figli del cdr
+//data riferimento per i responsabili
+$dataCorrenteObj = new DateTime('NOW');                
+$dataDefinizionePianoObj = new DateTime($piano_cdr->data_definizione);
+//se data definizione > (o uguale per evitare operazioni ramo else) data corrente considero la data di definizione del piano
+if ($dataDefinizionePianoObj >= $dataCorrenteObj) {
+    $dataRiferimentoObj = $dataDefinizionePianoObj;
+}
+else {
+    $tipo_piano = new \TipoPianoCdr($piano_cdr->id_tipo_piano_cdr);
+    $piano_attivo_in_data = \PianoCdr::getAttivoInData($tipo_piano, $dataCorrenteObj->format("Y-m-d"));
+    //se il piano è attivo nella data corrente 
+    if ($piano_attivo_in_data->id == $piano_cdr->id) {
+        //viene considerata la data corrente
+        $dataRiferimentoObj = $dataCorrenteObj;
+    }
+    else {
+        //altrimenti viene calcolata l'ultima data del piano attivo (data definizione piano successivo - 1 giorno)
+        $piano_successivo = $piano_cdr->getPianoSuccessivo();
+        if ($piano_successivo !== null) {
+            $dataDefinizioneSuccessivo = new DateTime($piano_successivo->data_definizione);
+            $dataRiferimentoObj = $dataDefinizioneSuccessivo->sub(new DateInterval('P1D'));
+        }   
+        else {
+            //ramo ipoteticamente irraggiungibile aggiunto per robustezza
+            //(se non viene trovato un piano successivo significa che si sarebbe dovuto ricadere nella condizione precedente)            
+            ffErrorHandler::raise("Errore nella determinazione del piano di riferimento");
+        }
+    }               
+}
 
+//vengono estratti tutti i figli del cdr
 if ($cdr_padre != null) {
     //ricerca dei figli tra i piani attivi
     $cdr_padre->useSql = true;
@@ -76,7 +103,7 @@ if (count($cdr_figli) > 0) {
         $tpl->set_var("n_cdc", count($cdr_figlio->getCdc()));
 
         //Responsabile
-        $responsabile = $cdr_figlio->getResponsabile($dateTimeObject);
+        $responsabile = $cdr_figlio->getResponsabile($dataRiferimentoObj);
         
         $short_resp = substr($responsabile->matricola_responsabile . " - " . $responsabile->cognome . " " . $responsabile->nome, 0, RESPLN);
         $tpl->set_var("responsabile", $short_resp);

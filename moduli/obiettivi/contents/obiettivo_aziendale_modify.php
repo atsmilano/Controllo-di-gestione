@@ -370,26 +370,26 @@ if (isset($obiettivo)) {
     ");
     }
 }
-//in caso di inserimento viene creato il codice incrementale riseptto all'anno da attribuire all'obiettivo
+//in caso di inserimento viene creato il codice incrementale rispetto all'anno da attribuire all'obiettivo
 else {
-    $obiettivi_anno = ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id), array(array("fieldname"=>"codice_incr_anno", "direction"=>"ASC")));
-
+    $obiettivi_anno = array();
+    $obiettivi_all = ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id), array(array("fieldname"=>"codice_incr_anno", "direction"=>"ASC")));
+    foreach ($obiettivi_all as $obiettivo_anno){
+        if ( $obiettivo_anno->data_eliminazione == null) {
+            $obiettivi_anno[] = $obiettivo_anno;
+        }        
+    }
     //getall estrae gli obiettivi ordinati per codice in maniera decrementale, per avere l'id da assegnare basta soltanto incrementare di 1 l'ID del primo elemento estratto
     if ($obiettivi_anno == null) {
         $codice_nuovo_obiettivo = 1;
     } else {        
         $ultimo_codice_incrementale = $obiettivi_anno[0]->codice_incr_anno;
         //viene utilizzato il primo codice incrementale libero
-        for ($i=0; $i<count($obiettivi_anno); $i++){
-            if (isset($obiettivi_anno[$i+1]->codice_incr_anno)) {
-                if($obiettivi_anno[$i]->codice_incr_anno + 1 !== $obiettivi_anno[$i+1]->codice_incr_anno) {                
-                    break;
-                }
-                $ultimo_codice_incrementale = $obiettivi_anno[$i+1]->codice_incr_anno;
-            }                            
-            else {
-                $ultimo_codice_incrementale = $obiettivi_anno[$i]->codice_incr_anno;
+        for ($i=1; $i<count($obiettivi_anno); $i++){            
+            if((int)$ultimo_codice_incrementale + 1 !== (int)$obiettivi_anno[$i]->codice_incr_anno) {                  
+                break;
             }
+            $ultimo_codice_incrementale = $obiettivi_anno[$i]->codice_incr_anno;            
         }                
         $codice_nuovo_obiettivo = $ultimo_codice_incrementale + 1;
     }

@@ -469,11 +469,7 @@ class Cdr extends Entity{
             }
             //viene selezionato il responsabile del cdr padre solamente nel caso in cui sia stato trovato con l'ultima iterazione
             //nel caso in cui non si riesca ad istanziare l'oggetto Personale tramite la matricola del responsabile viene restituito null
-            try {
-                $return = $responsabile_cdr_padre;
-            } catch (Exception $e) {
-                
-            }
+            $return = $responsabile_cdr_padre;
         }
         return $return;
     }

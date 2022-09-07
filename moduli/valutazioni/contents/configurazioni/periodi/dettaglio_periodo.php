@@ -155,18 +155,22 @@ $oRecord->addContent($oField, "periodo_group");
 $oField = ffField::factory($cm->oPage);
 $oField->id = "data_inizio";
 $oField->base_type = "Date";
-$oField->widget = "datepicker";
 $oField->label = "Data inizio";
-$oField->required = true;
+if ($editable){
+    $oField->widget = "datepicker";    
+    $oField->required = true;
+}
 CoreHelper::disableNonEditableOField($oField, $editable);
 $oRecord->addContent($oField, "periodo_group");
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "data_fine";
 $oField->base_type = "Date";
-$oField->widget = "datepicker";
 $oField->label = "Data fine";
-$oField->required = true;
+if ($editable){
+    $oField->widget = "datepicker";    
+    $oField->required = true;
+}
 CoreHelper::disableNonEditableOField($oField, $editable);
 $oRecord->addContent($oField, "periodo_group");
 
@@ -279,14 +283,15 @@ function checkRelations($oRecord, $frmAction) {
 
     switch($frmAction) {
         case "insert":
-        case "update":
+        case "update":                        
             $record_update_error_msg = "Il periodo selezionato non può essere modificato.";
             if($frmAction == "update" && !$periodo->canDelete()) {
                 $non_editable_fields = array(
                     "descrizione" => $periodo->descrizione,
                     "ID_anno_budget" => $periodo->id_anno_budget,
                     "data_inizio" => $periodo->data_inizio,
-                    "data_apertura_compilazione" => $periodo->data_apertura_compilazione,
+                    "data_fine" => $periodo->data_fine,
+                    //"data_apertura_compilazione" => $periodo->data_apertura_compilazione,
                 );
 
                 if (CoreHelper::isNonEditableFieldUpdated($oRecord, $non_editable_fields)) {
@@ -298,7 +303,7 @@ function checkRelations($oRecord, $frmAction) {
             $data_fine_form = $oRecord->form_fields["data_fine"]->value->getValue();
             $data_inizio = DateTime::createFromFormat("d/m/Y", $data_inizio_form);
             $data_fine = DateTime::createFromFormat("d/m/Y", $data_fine_form);
-
+            
             // Verifica della coerenza periodo di date, valutare se > o >=
             if($data_fine_form != "" && $data_inizio > $data_fine) {
                 return CoreHelper::setError($oRecord, "La data fine deve essere successiva o uguale alla data di inizio.");

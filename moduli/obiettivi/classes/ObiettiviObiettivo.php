@@ -118,9 +118,7 @@ class ObiettiviObiettivo extends Entity{
         return true;
     }
     
-    public static function checkVincoliAnniConfigurazioni(
-        $anno_introduzione, $anno_termine, $obiettivi) {
-
+    public static function checkVincoliAnniConfigurazioni($anno_introduzione, $anno_termine, $obiettivi) {
         foreach($obiettivi as $obiettivo) {
             $anno_budget_obiettivo = new AnnoBudget($obiettivo->id_anno_budget);
 

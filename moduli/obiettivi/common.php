@@ -8,8 +8,8 @@
 $user = LoggedUser::getInstance();
 
 //definizione costanti
-//massimo peso attribuibile ai cdr
-define("OBIETTIVI_MIN_PESO", 15);
+//minimo e max peso attribuibile ai cdr
+define("OBIETTIVI_MIN_PESO", 10);
 define("OBIETTIVI_MAX_PESO", 1000);
 define("OBIETTIVI_NOTE_NUCLEO_DEFAULT", "Si conferma il grado di raggiungimento espresso dal referente per il periodo di rendicontazione.");
 define("OBIETTIVI_LABEL_GRAFICO_MAX_LEN", 25);
@@ -44,6 +44,21 @@ $allowed_actions["config_crud"] = array(
     "icon" => $obiettivi_aziendali_edit ? "table" : MODULES_ICONHIDE,
     "dialog" => false
 );
+
+if (!isset($menu["programmazione"])) {
+    $menu["programmazione"] = array(
+        "key"           => "programmazione"
+        , "label"       => "Programmazione"
+        , "icon"		=> ""
+        , "path"		=> ""
+        , "redir"		=> ""
+        , "actions"     => array()
+        , "acl"			=> "1,2,3"
+        , "hide"        => 0
+    );
+    mod_restricted_add_menu_child($menu["programmazione"]);
+}
+
 $menu["programmazione"]["obiettivi_aziendali"] = array(
     "key"     => "programmazione",
     "subkey"  => "obiettivi_aziendali",
@@ -88,6 +103,20 @@ $allowed_actions["cruscotto_rendicontazione"] =  array(
     "icon" => /*$cdr_resp_view ?*/ "pie-chart" /*: MODULES_ICONHIDE*/,
     "dialog" => false
 );
+
+if (!isset($menu["controllo"])) {
+        $menu["controllo"] = array(
+        "key"     => "controllo",
+        "label"   => "Controllo",
+        "icon"	  => "",
+        "path"	  => "",
+        "redir"	  => "",
+        "actions" => array(),
+        "acl"	  => "1,2,3",
+        "hide"    => 0,
+    );
+    mod_restricted_add_menu_child($menu["controllo"]);
+}
 
 $menu["controllo"]["obiettivi_individuali"] = array(
     "key"     => "controllo",

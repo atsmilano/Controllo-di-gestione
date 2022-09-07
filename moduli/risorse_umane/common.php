@@ -73,7 +73,7 @@ $menu["risorse_umane"] = array(
 mod_restricted_add_menu_child($menu["risorse_umane"]);
 
 $allowed_actions["report"] = array(
-    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/report",    
+    "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/report?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),    
     "icon"   => $user->hasPrivilege("ru_view") ? "pie-chart" : MODULES_ICONHIDE,
     "dialog" => false
 );

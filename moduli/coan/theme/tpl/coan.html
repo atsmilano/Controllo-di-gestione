@@ -256,9 +256,8 @@
         enableSpinner();
         
         const periodo_selected = $("#periodo_select option:selected");
-        const anno_budget = periodo_selected.attr("class");
         
-        const data = { anno_budget: anno_budget };
+        const data = { periodo_select: periodo_selected.val() };
         
         const request = $.ajax({
             url: window.location.pathname + '/getoptions?{globals}',

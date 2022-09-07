@@ -54,8 +54,19 @@ foreach (AnagraficaCdrObiettivi::getCdrObiettiviAziendali($anno) as $anagrafica_
     foreach ($anagrafica_cdr->getObiettiviCdrAnno($anno) as $obiettivo_cdr) {
         //viene estratta la rendicontazione dell'obiettivo_cdr padre per considerare anche le coreferenze
         $obiettivo_cdr_aziendale = $obiettivo_cdr->getObiettivoCdrAziendale();
-        $rendicontazione = $obiettivo_cdr_aziendale->getRendicontazionePeriodo($periodo);
-        
+        $rendicontazione = null;
+        if ($obiettivo_cdr->isCoreferenza()) {
+            $rendicontazione = $obiettivo_cdr->getRendicontazionePeriodo($periodo);
+            if ($rendicontazione !== null) {
+                $rendicontazione->perc_nucleo = $rendicontazione->perc_raggiungimento;
+                $rendicontazione->raggiungibile = true;
+                $n_obiettivi_azienda++;
+            }
+        }
+        if ($rendicontazione == null) {            
+            $rendicontazione = $obiettivo_cdr_aziendale->getRendicontazionePeriodo($periodo);
+        }
+                
         $cdr_rendicontazione["n_obiettivi_cdr"]++; 
         
         if (!$obiettivo_cdr->isCoreferenza()) {            
@@ -71,8 +82,8 @@ foreach (AnagraficaCdrObiettivi::getCdrObiettiviAziendali($anno) as $anagrafica_
             if (!$obiettivo_cdr->isCoreferenza()) {
                 $n_azioni_azienda++;
             }
-        }                                
-        
+        }   
+            
         if ($rendicontazione !== null) {    
             if (!$obiettivo_cdr->isCoreferenza()) {
                 $n_rendicontazioni_azienda++;

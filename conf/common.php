@@ -92,23 +92,29 @@ function routingRulesGen()
 
     $cm->oPage->register_globals("anno", $anno_selezionato, false);
     $cm->oPage->register_globals("modules", Modulo::getActiveModulesFromDisk($anno_selezionato), false);
-
+    
     //******************************************************************************************************************************************
     //******************************************************************************************************************************************
-    //generazione dellle regole di routing per ogni modulo (anche non attivi)
+    //generazione dellle regole di routing per ogni modulo e valorizzazione delle costanti dall'enviroment
     //******************************************************************************************************************************************		
     foreach ($cm->oPage->globals["modules"]["value"] as $module) {
+        //regola routing
         $cm->router->addXMLRule("
-									<rule id='" . $module->site_path . "'>                                                                                
-										<priority>NORMAL</priority>
-										<source>/area_riservata" . $module->site_path . "(.*)</source>
-										<destination>
-											<url>/moduli" . $module->site_path . "/contents/$1</url>
-										</destination>
-										<reverse>/area_riservata" . $module->site_path . "</reverse>
-										<index>100</index>
-										<accept_path_info />
-									</rule>									
-							");
+                                                                        <rule id='" . $module->site_path . "'>                                                                                
+                                                                                <priority>NORMAL</priority>
+                                                                                <source>/area_riservata" . $module->site_path . "(.*)</source>
+                                                                                <destination>
+                                                                                        <url>/moduli" . $module->site_path . "/contents/$1</url>
+                                                                                </destination>
+                                                                                <reverse>/area_riservata" . $module->site_path . "</reverse>
+                                                                                <index>100</index>
+                                                                                <accept_path_info />
+                                                                        </rule>									
+                                                        ");
+        //costanti
+        foreach ($module->getEnvConstants() as $const =>$value){
+            define($const, $value);
+            
+        }
     }
 }

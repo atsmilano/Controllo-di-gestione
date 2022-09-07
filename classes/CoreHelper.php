@@ -300,7 +300,6 @@ class CoreHelper {
             } else {
                 $oField->properties["disabled"] = "disabled";
             }
-
             $oField->store_in_db = false;
         }
     }
@@ -310,10 +309,17 @@ class CoreHelper {
         foreach ($fields as $key => $value) {
             $oRecordField = $oRecord->form_fields[$key];
             //Valore attuale != valore originale
-            if ($oRecordField->value->getValue() != $oRecordField->value_ori->getValue()) {
+            if ($oRecordField->base_type == "Date") {
+                $value_ori = CoreHelper::formatUiDate($oRecordField->value_ori->getValue());
+            }
+            else {
+                $value_ori = $oRecordField->value_ori->getValue();
+            }
+                        
+            if ($oRecordField->value->getValue() != $value_ori) {
                 $error = true;
-                //Ripristino i valori presi da db
-                $oRecord->form_fields[$key]->value->setValue($value);
+                //Ripristino dei valori originali
+                $oRecord->form_fields[$key]->value = $oRecordField->value_ori;
             }
         }
         return $error;

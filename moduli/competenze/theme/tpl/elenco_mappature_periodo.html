@@ -1,0 +1,28 @@
+<div id="elenco_mappature_periodo">    
+    <div id="selezione_periodi" class="selezione_parametri">
+        <h2>Selezione del periodo di riferimento</h2>
+        <!--BeginSectSelezionePeriodi-->
+        <div>	
+                <label>Periodo:&nbsp;</label>
+                <select name='periodo_select' id='periodo_select'>					
+                        <!--BeginSectOptionPeriodi-->
+                                <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                        <!--EndSectOptionPeriodi-->
+                </select>
+        </div>
+        <!--EndSectSelezionePeriodi-->
+        <!--BeginSectNoPeriodi-->
+            <p class='error'>Nessun periodo di riferimento definito.</p>
+        <!--EndSectNoPeriodi-->
+    </div>   
+        <!--BeginSectNoPersonale-->
+        <p>Nessuna mappatura prevista per il periodo</p>
+        <!--EndSectNoPersonale-->
+</div>
+<script>
+    $("#periodo_select").change(function () {
+        event.preventDefault();        
+        url = window.location.pathname + "?{globals}periodo_select=" + $(this).children(":selected").attr("value");
+        window.location = url;
+    });       
+</script>

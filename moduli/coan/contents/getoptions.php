@@ -1,10 +1,10 @@
 <?php
-if (isset($_REQUEST["anno_budget"])) {
-    $id_anno_budget = $_REQUEST["anno_budget"];
-    $anno_budget = new AnnoBudget($id_anno_budget);
+if (isset($_REQUEST["periodo_select"])) {
+    $periodo_coan = new CoanPeriodo($_REQUEST["periodo_select"]);
+    $anno_budget = new AnnoBudget($periodo_coan->id_anno_budget);
     
     $result = array();
-    $result["cdr"] = CoanCdc::getCdrAssociatiCdc($anno_budget);
+    $result["cdr"] = CoanCdc::getCdrAssociatiCdc($periodo_coan);
     $result["cdc_standard_regionali"] = CoanCdcStandardRegionale::getAttiviAnno($anno_budget);
     $result["distretti"] = CoanDistretto::getAttiviAnno($anno_budget);
     

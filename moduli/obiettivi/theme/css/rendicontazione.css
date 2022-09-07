@@ -138,3 +138,42 @@ div.parametri_indicatore div.internal_left_indicatore div {
     border-color: #a04545;
     color: black;
 }
+
+/*Rendicontazioni cdr afferenti*/
+.fa-action_button_rendicontazioni_figli {
+    color: #1e88e5;
+    float: left;
+}
+
+#rendicontazioni_figli {
+    display: none;
+    z-index: 9999;
+    padding: 1%;
+    background-color: white;
+    border: solid 1px #1e88e5;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    width: 75%;
+    height: 75%;
+    position: fixed;
+    overflow: scroll;
+}
+
+#rendicontazioni_figli #close_rendicontazioni_figli {
+    color: #1e88e5;    
+    border: solid 1px white;
+    position: sticky;
+    top: 0px;
+    float: right;
+    cursor: pointer;
+}
+
+#rendicontazioni_figli h4{
+    font-size: 14px;
+    padding: 3px 0;
+    cursor: pointer;
+}
+
+#rendicontazioni_figli .ui-icon{
+    float: left;
+}

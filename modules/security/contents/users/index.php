@@ -1,8 +1,8 @@
 <?php
 $user = LoggedUser::getInstance();
-if (!$user->hasPrivilege("user_edit")) {
+/*if (!$user->hasPrivilege("user_edit")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione degli utenti.");	
-}
+}*/
 
 $db = ffDB_Sql::factory();
 

@@ -28,6 +28,20 @@ $allowed_actions["progetti_crud"] =  array(
     "dialog" => false
 );
 
+if (!isset($menu["programmazione"])) {
+    $menu["programmazione"] = array(
+        "key"           => "programmazione"
+        , "label"       => "Programmazione"
+        , "icon"		=> ""
+        , "path"		=> ""
+        , "redir"		=> ""
+        , "actions"     => array()
+        , "acl"			=> "1,2,3"
+        , "hide"        => 0
+    );
+    mod_restricted_add_menu_child($menu["programmazione"]);
+}
+
 $menu["programmazione"]["progetti"] = array(
     "key"     => "programmazione",
     "subkey"  => "progetti",

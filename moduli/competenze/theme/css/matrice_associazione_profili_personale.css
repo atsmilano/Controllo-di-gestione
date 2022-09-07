@@ -1,0 +1,65 @@
+#matrice_associazione_profili_personale {
+    width: 100%;    
+}
+
+#matrice_associazione_profili_personale table {
+    border: solid 1px black;
+    padding: 3px;
+}
+
+#matrice_associazione_profili_personale table thead{
+    
+}
+
+#matrice_associazione_profili_personale table thead tr{
+    padding: 6px;
+}
+
+#matrice_associazione_profili_personale table thead tr th{
+    border: solid 1px;
+    padding: 6px;
+    background-color: #1e88e5;
+}
+#matrice_associazione_profili_personale table tbody{
+    
+}
+
+#matrice_associazione_profili_personale table tbody tr{
+    
+}
+
+#matrice_associazione_profili_personale table tbody tr td{
+    border: solid 1px;
+    padding: 6px;
+    text-align: center;
+}
+
+/*loading image*/
+#matrice_associazione_profili_personale #loading_image{
+    display: none;
+    width: 100%;    
+    position: fixed;
+    left: 50%;
+}
+
+/*notifiche*/
+#matrice_associazione_profili_personale .notifiche {
+	display: none;
+	padding: 6px;
+	border: solid 1px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+}
+
+#matrice_associazione_profili_personale .notifiche.success{
+	background-color: #8bd28a;
+	border-color: #2b5b2a;
+	color: #2b5b2a;
+}
+
+#matrice_associazione_profili_personale .notifiche.error{
+	background-color: #d87f7f;
+	border-color: #a04545;
+	color: #a04545;
+}

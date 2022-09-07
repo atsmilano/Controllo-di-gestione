@@ -177,33 +177,35 @@ if ($periodo->visualizzazione_obiettivi != false) {
         $oRecord->addContent("<table id='obiettivi_anno_valutato'><thead><tr><th>Obiettivo Individuale</th><th>Cdr</th><th>Peso</th></tr></thead><tbody>", "obiettivi");
         $tot_obiettivi_personale = $personale_obiettivi->getPesoTotaleObiettivi($anno_valutazione);
         foreach ($obiettivi_indiviuduali as $obiettivo_individuale) {
-            $obiettivo_cdr = new ObiettiviObiettivoCdr($obiettivo_individuale->id_obiettivo_cdr);
-            $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);  
-            if ($obiettivo_cdr->id_tipo_piano == 0) {
-                $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
-            }
-            else {
-                $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano);
-            }
-            try {
-                $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
-                $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
-                $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
-            } catch (Exception $ex) {
-                $cdr_desc = "Cdr cessato";
-            }
-            if ($tot_obiettivi_personale == 0) {
-                $peso_perc = 0;
-            } else {
-                $peso_perc = 100 / $tot_obiettivi_personale * $obiettivo_individuale->peso;
-            }                                                                                                                                    
-            $obiettivo_desc = "<tr>
-                                    <td>".$obiettivo->codice." - ".$obiettivo->titolo."</td>".
-                                    "<td>".$cdr_desc."</td>".
-                                    "<td>".number_format($peso_perc, 2) . "%</td>
-                                </tr>";
+            if ($obiettivo_individuale->data_eliminazione == null) {
+                $obiettivo_cdr = new ObiettiviObiettivoCdr($obiettivo_individuale->id_obiettivo_cdr);
+                $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);  
+                if ($obiettivo_cdr->id_tipo_piano == 0) {
+                    $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
+                }
+                else {
+                    $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano);
+                }
+                try {
+                    $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
+                    $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
+                    $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+                } catch (Exception $ex) {
+                    $cdr_desc = "Cdr cessato";
+                }
+                if ($tot_obiettivi_personale == 0) {
+                    $peso_perc = 0;
+                } else {
+                    $peso_perc = 100 / $tot_obiettivi_personale * $obiettivo_individuale->peso;
+                }                                                                                                                                    
+                $obiettivo_desc = "<tr>
+                                        <td>".$obiettivo->codice." - ".$obiettivo->titolo."</td>".
+                                        "<td>".$cdr_desc."</td>".
+                                        "<td>".number_format($peso_perc, 2) . "%</td>
+                                    </tr>";
 
-            $oRecord->addContent($obiettivo_desc, "obiettivi");
+                $oRecord->addContent($obiettivo_desc, "obiettivi");
+            }
         }
         $oRecord->addContent("</tbody></table>", "obiettivi");
     }

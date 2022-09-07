@@ -136,7 +136,6 @@ class IndicatoriIndicatore extends Entity{
         $calcolo_risultato = true;
         $parametri_calcolo = array();
         $valore_target_indicatore = $this->getValoreTargetAnno($anno, $cdr);
-        $calcolo_raggiungimento = true;
         $raggiungimento_indicatore = null;
         
         foreach ($this->getParametri() as $parametro) {

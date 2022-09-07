@@ -2,7 +2,6 @@
 
 class Modulo
 {
-
     public $id;
     public $dir_path;
     public $site_path;
@@ -16,6 +15,7 @@ class Modulo
     public $module_theme_full_path;
     public $module_css_path;
     public $module_css_dir;
+    private $env_constants = array();       
 
     public function __construct($directory)
     {
@@ -37,27 +37,46 @@ class Modulo
             $this->module_theme_full_path = FF_SITE_PATH . "/" . MODULES_DIR . $this->module_theme_path;
             $this->module_css_dir = MODULES_DISK_PATH . $this->dir_path . DIRECTORY_SEPARATOR . MODULES_CSS_DIR;
             $this->module_css_path = $this->site_path . "/" . MODULES_CSS_PATH;
-
-            if (isset($config_data->attivazione)) {
-                //se è presente una configurazione specifica per la distribuzione viene utilizzata quella altrimenti quella generica
-                $env = FF_ENV;
-                if (isset($config_data->attivazione->$env)) {
-                    $anno_inizio = (int) $config_data->attivazione->$env->anno_inizio;
-                    $anno_fine = $config_data->attivazione->$env->anno_fine;
-                } else {
-                    $anno_inizio = (int) $config_data->attivazione->anno_inizio;
-                    $anno_fine = $config_data->attivazione->anno_fine;
-                }
-                $this->anno_inizio = $anno_inizio;
-                if ((int) $anno_fine !== 0) {
-                    $this->anno_fine = (int) $anno_fine;
-                } else {
-                    $this->anno_fine = null;
+          
+            //se è presente una configurazione specifica per la distribuzione viene utilizzata quella altrimenti quella generica
+            $env = FF_ENV;
+            //viene verificato che esistano configurazione specifiche per l'enviroment
+            if (defined("MODULI_CONF")) {
+                foreach (MODULI_CONF as $modulo_conf) {
+                    if ($this->id == $modulo_conf["id_modulo"]) {
+                        if (isset($modulo_conf["anno_inizio"])) {
+                            $anno_inizio = (int) $modulo_conf["anno_inizio"];
+                        }
+                        if (isset($modulo_conf["anno_fine"])) {
+                            $anno_fine = (int) $modulo_conf["anno_fine"];
+                        }
+                        //impostazione dei parametri dell'enviroment          
+                        foreach ($modulo_conf["constants"] as $constant => $value) {
+                            $this->env_constants[$constant] = $value;
+                        }
+                        break;
+                    }
                 }
             }
+            //in caso non ci siano configurazioni specifiche vengono usate quelle generiche del modulo
+            if (!isset($anno_inizio) || !isset($anno_fine)) {
+                $anno_inizio = (int) $config_data->attivazione->anno_inizio;
+                $anno_fine = $config_data->attivazione->anno_fine;
+            }
+            
+            $this->anno_inizio = $anno_inizio;
+            if ((int) $anno_fine !== 0) {
+                $this->anno_fine = (int) $anno_fine;
+            } else {
+                $this->anno_fine = null;
+            }    
         } else {
             throw new Exception("File '" . $mod_config_file . "' non trovato.");
         }
+    }
+    
+    public function getEnvConstants() {
+        return $this->env_constants;
     }
 
     //vengono restituiti i moduli attivi in un anno di budget
@@ -65,7 +84,7 @@ class Modulo
     {
         $di = new RecursiveDirectoryIterator(MODULES_DISK_PATH);
         foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
-            if (substr($filename, -14) == MODULES_CONFIG_FILE || substr($filename, -10) == MODULES_COMMON_FILE) {
+            if (substr($filename, -strlen(MODULES_CONFIG_FILE)) == MODULES_CONFIG_FILE || substr($filename, -strlen(MODULES_COMMON_FILE)) == MODULES_COMMON_FILE) {
                 //estrazione del nome del modulo
                 $module_path_parts = explode(DIRECTORY_SEPARATOR, dirname($filename));
                 $module_i = null;
@@ -89,10 +108,10 @@ class Modulo
                     $module_i = count($modules) - 1;
                 }
                 //viene aggiornato l'array in base al file trovato
-                if (substr($filename, -14) == MODULES_CONFIG_FILE) {
+                if (substr($filename, -strlen(MODULES_CONFIG_FILE)) == MODULES_CONFIG_FILE) {
                     $modules[$module_i]["config_file"] = true;
                 }
-                if (substr($filename, -10) == MODULES_COMMON_FILE) {
+                if (substr($filename, -strlen(MODULES_COMMON_FILE)) == MODULES_COMMON_FILE) {
                     $modules[$module_i]["common_file"] = true;
                 }
             }
