@@ -1,0 +1,120 @@
+<div id="matrice_associazione_profili_personale">
+    <div id="loading_image"><img src="{module_theme_path}\images\loader.gif"> Loading...</div>
+    <div id="notifiche_matrice_associazione_personale" class="notifiche"></div>
+    <div id="selezione_periodi" class="selezione_parametri">
+        <h2>Selezione del periodo di riferimento</h2>
+        <!--BeginSectSelezionePeriodi-->
+        <div>	
+                <label>Periodo:&nbsp;</label>
+                <select name='periodo_select' id='periodo_select'>					
+                        <!--BeginSectOptionPeriodi-->
+                                <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                        <!--EndSectOptionPeriodi-->
+                </select>
+        </div>
+        <!--EndSectSelezionePeriodi-->
+        <!--BeginSectNoPeriodi-->
+            <p class='error'>Nessun periodo di riferimento definito.</p>
+        <!--EndSectNoPeriodi-->
+    </div>
+    <!--BeginSectMatriceAssegnazione-->
+    <div id="actions">
+        <!--BeginSectAssegnazioneActions-->
+        <button id="assegnazione_button" type="button">Salvataggio assegnazioni profilo personale</button>
+        <script>
+            $("#assegnazione_button").click(function(){
+		//vengono recuperati tutti i profili-personale variati
+		var profili_personale = [];
+                                
+		$(".profilo_personale:checked").each(function(){
+                    id_parts = $(this).attr("id").split("_");
+                    profili_personale.push({idpe: id_parts[2], idpr: id_parts[3]});
+                });		
+                $("#loading_image").modal("show");
+
+                
+                var data = {
+                        pp: profili_personale,
+                        id_periodo: $("#periodo_select").children(":selected").attr("value"),
+                };
+
+                var request = $.ajax({
+                                url: window.location.pathname + '/associazione_profili/save_mappatura_responsabile.php?{globals}',
+                                type: 'GET',
+                                data: data,									
+                                cache: false,
+                                contentType: false,
+                });
+                request.done(function(data) {				
+                        response = JSON.parse(data);						                        
+                        $("#notifiche_matrice_associazione_personale").removeClass("error");
+                        $("#notifiche_matrice_associazione_personale").removeClass("success");
+                        $("#notifiche_matrice_associazione_personale").addClass(response.esito);
+                        $("#notifiche_matrice_associazione_personale").html(response.messaggio);
+
+                });
+                request.fail(function() {						
+                        $("#notifiche_matrice_associazione_personale").removeClass("success");
+                        $("#notifiche_matrice_associazione_personale").addClass("error");
+                        $("#notifiche_matrice_associazione_personale").html("Errore durante il salvataggio delle associazioni.");
+                })
+                request.always(function(){
+                        $("#notifiche_matrice_associazione_personale").show("blind");       
+                        $("#loading_image").modal("hide");
+                        $("#notifiche_matrice_associazione_personale").delay(5000).hide("blind"); 
+                });
+            });
+        </script>            
+        <!--EndSectAssegnazioneActions-->
+    </div>
+    <div id="matrice_assegnazione">
+        <table>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <!--BeginSectProfili-->             
+                    <th>{profilo_descrizione}</th>
+                    <!--EndSectProfili--> 
+                </tr>
+            </thead>
+            <tbody>
+                <!--BeginSectPersonale-->                    
+                    <tr>
+                        <td class="">{personale_nome}</td>    
+                        <!--BeginSectAssegnazione-->                        
+                        <td>
+                            <input type="checkbox" id="profilo_personale_{id_personale}_{id_profilo}" class="profilo_personale personale_{id_personale} profilo_{id_profilo}" {profilo_personale_checked} title=""/>
+                        </td>
+                        <!--EndSectAssegnazione-->
+                    </tr>                    
+                <!--EndSectPersonale-->
+            </tbody>
+        </table>
+    </div>   
+    <!--EndSectMatriceAssegnazione-->
+    <!--BeginSectNoMatriceAssegnazione-->
+        <p class='error'>Nessun dato.</p>
+    <!--EndSectNoMatriceAssegnazione-->
+</div>
+<script>
+    $("#periodo_select").change(function () {
+        var current_index = $("#tabs").tabs("option", "active");           
+        selected_value = $(this).children(":selected").attr("value");
+        url = $("#associazione_profili").attr("href");
+        if (url.search("periodo_select") > 0) {
+            url = url.replace(/(periodo_select=).*?(&|$)/, '$1' + selected_value + '$2');
+        } else {
+            url = url + "periodo_select=" + selected_value;
+        }
+        $("#associazione_profili").attr("href", url);
+        $("#tabs").tabs('load', current_index);
+    });
+    
+    $('.profilo_personale').click (function() {
+        id_mappatura = $(this).attr("id");
+        id_parts = id_mappatura.split("_");
+        var id_personale = id_parts[2];                
+        $('.personale_'+id_personale+':not(#'+$(this).attr("id")+'):checked').attr('checked', false);        
+    });
+        
+</script>

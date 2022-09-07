@@ -299,9 +299,15 @@ else {
                         $found = false;
                         foreach ($obiettivi_visibili_cdr_filter as $obiettivo_cdr_filter) {
                             //se l'obiettivo è di coreferenza vie erecuperato l'obiettivo_aziendale e visualizzata la rendicontazione nel caso sia relativa a quello
-                            if ($obiettivo_cdr_filter->isCoreferenza()) {                                
+                            if ($obiettivo_cdr_filter->isCoreferenza()) {   
                                 $obiettivo_cdr_coreferenza = $obiettivo_cdr_filter->getObiettivoCdrAziendale();
-                                if ($obiettivo_cdr_coreferenza->id == $obiettivo_cdr->id) {
+                                if ($obiettivo_cdr_coreferenza->id == $obiettivo_cdr->id) {                                    
+                                    $rendicontazione_cdr_selezionato = ObiettiviRendicontazione::factoryFromObiettivoCdrPeriodo($obiettivo_cdr_filter, $periodo);
+                                    if ($rendicontazione_cdr_selezionato !== null) {
+                                       $rendicontazione = $rendicontazione_cdr_selezionato;
+                                       $rendicontazione->perc_nucleo = $rendicontazione->perc_raggiungimento;
+                                       $rendicontazione->raggiungibile = true;
+                                    } 
                                     $trasversale_desc = " (trasversale al cdr selezionato)";
                                     $found = true;
                                     break;
@@ -338,7 +344,7 @@ else {
                     $show_obiettivo = false;
                 }
                 //visualizzazione colpi ed elenco obiettivi
-                if ($show_obiettivo == true) {
+                if ($show_obiettivo == true) {                                      
                     //visualizzazione del colpo sul bersaglio
                     //calcolo della posizione della valutazione
                     //calcolo della distanza dal centro
@@ -368,7 +374,7 @@ else {
                     //visualizzazione in elenco
                     $tpl->set_var("cdr_codice", $obiettivo_cdr->codice_cdr.$trasversale_desc);
                     $tpl->set_var("descrizione_obiettivo", CoreHelper::cutText($obiettivo->titolo, 48));
-                    $tpl->set_var("raggiungimento_referente", $rendicontazione->perc_raggiungimento);
+                    $tpl->set_var("raggiungimento_referente", (int)$rendicontazione->perc_raggiungimento);
                     $tpl->set_var("raggiungimento_nucleo", (int)$rendicontazione->perc_nucleo);
                     
                     $tpl->parse("SectObiettivo", true);

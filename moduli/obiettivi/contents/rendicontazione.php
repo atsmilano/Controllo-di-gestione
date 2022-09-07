@@ -108,7 +108,8 @@ if ($periodo_rendicontazione->data_termine_responsabile == null || (strtotime(da
 $user_privileges = array(
     "view" => false,
     "edit_responsabile" => false,
-    "edit_nucleo" => false
+    "edit_nucleo" => false,
+    "edit_coreferenza" => false
 );       
 $user_privileges["view"] = true;
 
@@ -126,6 +127,9 @@ if ($resp_cdr_selezionato) {
 }
 if ($user->hasPrivilege("nucleo_di_valutazione")) {
     $user_privileges["edit_nucleo"] = true;
+    if($obiettivo_cdr->isCoreferenza()) {
+        $user_privileges["edit_coreferenza"] = true;
+    }
 }
 
 if (!$user_privileges["view"]) {
@@ -135,6 +139,11 @@ if (!$user_privileges["view"]) {
 if (isset($_REQUEST["no_actions"]) && $_REQUEST["no_actions"] == 1) {
     $user_privileges["edit_responsabile"] = false;
     $user_privileges["edit_nucleo"] = false;
+    $user_privileges["edit_coreferenza"] = false;
+    $show_rendicontazione_figli = false;
+}
+else {
+    $show_rendicontazione_figli = true;
 }
 //******************************************************************************
 //definizione del record
@@ -189,7 +198,7 @@ if ($obiettivo_cdr->id !== $obiettivo_cdr_aziendale->id) {
 }
 
 //la modifica dell'obiettivo sarÃ  possibile solamente per gli utenti con privilegi di modifica sull'obiettivo o sulle azioni o sui pareri
-if ($user_privileges["edit_responsabile"]) {
+if ($user_privileges["edit_responsabile"] || $user_privileges["edit_coreferenza"]) {
     $oRecord->allow_insert = true;
     $oRecord->allow_update = true;
 }
@@ -202,18 +211,17 @@ else {
     $oRecord->allow_update = false;
 }
 
-//******************************************************************************
-if ($obiettivo_cdr_padre == null) {
-    //creazione fieldset referenti
-    $oRecord->addContent(null, true, "referente");
-    $oRecord->groups["referente"]["title"] = "Rendicontazione";
+//*****************************************************************************
+//creazione fieldset referenti
+$oRecord->addContent(null, true, "referente");
+$oRecord->groups["referente"]["title"] = "Rendicontazione";
 
-    $oField = ffField::factory($cm->oPage);
-    $oField->id = "ID_rendicontazione";
-    $oField->data_source = "ID";
-    $oField->base_type = "Number";
-    $oRecord->addKeyField($oField, "referente");
-
+$oField = ffField::factory($cm->oPage);
+$oField->id = "ID_rendicontazione";
+$oField->data_source = "ID";
+$oField->base_type = "Number";
+$oRecord->addKeyField($oField, "referente");
+if (!$obiettivo_cdr->isCoreferenza()) {   
     $oField = ffField::factory($cm->oPage);
     $oField->id = "azioni";
     $oField->base_type = "Text";
@@ -437,11 +445,12 @@ if (count($indicatori_associati)) {
             //in caso di coreferenza i valori da proporre sono quelli del referente
             //la seconda condizione ($obiettivo_cdr_padre!==null) viene introdotta per gestire l'arrivo dal bersaglio (in cui viene passato l'id della rendicontazione del padre)
             //e quindi l'id_obiettivo_cdr che ne viene ricavato è quello aziendale
-            if ($obiettivo_cdr->isCoreferenza() && $obiettivo_cdr_padre !== null) {
+            //EDIT vengono sempre recuperati i parametri per il cdr
+            /*if ($obiettivo_cdr->isCoreferenza() && $obiettivo_cdr_padre !== null) {
                 $obiettivo_cdr_valore_parametro = $obiettivo_cdr_padre;
-            } else {
+            } else {*/
                 $obiettivo_cdr_valore_parametro = $obiettivo_cdr;
-            }
+            //}
             //viene recuperato il valore del parametro
             $valore_parametro = $parametro->parametro_indicatore->getValoreParametroIndicatoreRendicontazione($periodo_rendicontazione, $obiettivo_cdr_valore_parametro);
             $valore_parametro_rilevato = "";
@@ -670,7 +679,7 @@ if ($periodo_rendicontazione->allegati == 1) {
 
 //******************************************************************************
 //se l'obiettivo è di coreferenza non vengono visualizzati i campi di raggiungimento obiettivo e nucleo
-if ($obiettivo_cdr_padre == null) {
+if (!$obiettivo_cdr->isCoreferenza()) {
     $oRecord->addContent(null, true, "raggiungimento");
     $oRecord->groups["raggiungimento"]["title"] = "Raggiungimento obiettivo";
     if ($periodo_rendicontazione->hide_raggiungibile != 1) {
@@ -730,12 +739,13 @@ if ($obiettivo_cdr_padre == null) {
         $oField->class = "richiesta_revisione";
         $oRecord->addContent($oField, "raggiungimento");                
     }
-
+}
+if (!$obiettivo_cdr->isCoreferenza() || ($obiettivo_cdr->isCoreferenza() && $rendicontazione !== null) || $user_privileges["edit_coreferenza"]) {
     $oField = ffField::factory($cm->oPage);
     $oField->id = "perc_raggiungimento";
     $oField->base_type = "Number";
-    //raggiungimento non modificabile se l'utente non ne ha i privilegi
-    if (!$user_privileges["edit_responsabile"]) {
+    //raggiungimento non modificabile se l'utente non ne ha i privilegi   
+    if (!($user_privileges["edit_responsabile"] || $user_privileges["edit_coreferenza"])) {
         if ($obiettivo_cdr->perc_raggiungimento === null) {
             $oField->default_value = new ffData("0", "Number");
         }
@@ -802,6 +812,55 @@ function preloadNoteNucleo($oRecord) {
     if ($oRecord->form_fields["note_nucleo"]->getValue() !== OBIETTIVI_NOTE_NUCLEO_DEFAULT) {
         $oRecord->form_fields["note_nucleo"]->class = "nucleo_non_favorevole";
     }
+}
+
+//******************************************************************************
+//se sono presenti assegnazioni ai cdr figli viene visualizzato un button per l'apertura del dialog
+
+if ($show_rendicontazione_figli == true){
+    $cdr_figli = $cdr->getFigli();
+    if (count($cdr_figli)) {                        
+        //viene caricato il template specifico per le rendicontazioni dei cdr afferenti
+        $modulo = Modulo::getCurrentModule();
+        $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
+        $tpl->load_file("rendicontazioni_cdr_afferenti.html", "main");   
+        $show_rendicontazione_figli = false;
+        foreach($cdr_figli as $cdr_figlio) {
+            $obiettivo_cdr_figlio = ObiettiviObiettivoCdr::factoryFromObiettivoCdr($obiettivo, $cdr_figlio);
+            if ($obiettivo_cdr_figlio !== null && $obiettivo_cdr_figlio->id_tipo_piano_cdr != 0) {
+                if ( $show_rendicontazione_figli == false) {
+                    $show_rendicontazione_figli = true;
+                }
+                $cdr_figlio_desc = $cdr_figlio->codice." - ".$cdr_figlio->descrizione;                                                
+                $rendicontazione_figlio_periodo = $obiettivo_cdr_figlio->getRendicontazionePeriodo($periodo_rendicontazione);                
+                if ($rendicontazione_figlio_periodo !== null) {
+                    $cdr_figlio_desc .= " - ".$rendicontazione_figlio_periodo->perc_raggiungimento."%";
+                    $rendicontazione_figlio = $rendicontazione_figlio_periodo->showHtmlInfo();                     
+                } 
+                else {
+                    $cdr_figlio_desc .= " - NC";
+                    $rendicontazione_figlio = "Rendicontazione non compilata";                     
+                }
+                $tpl->set_var("cdr_figlio", $cdr_figlio_desc);
+                $tpl->set_var("rendicontazione", $rendicontazione_figlio);
+                $tpl->parse("RendicontazioneCdrAfferente", false);
+                $tpl->parse("CdrAfferente", true);
+            }                      
+        }
+        $cm->oPage->addContent($tpl->rpparse("main", true));
+
+        if ($show_rendicontazione_figli == true) {
+            //visualizzazione button
+            $oBt = ffButton::factory($cm->oPage);
+            $oBt->id = "action_button_rendicontazioni_figli";
+            $oBt->label = "Rendicontazioni CdR afferenti";
+            $oBt->action_type = "submit";
+            $oBt->jsaction = "$('#inactive_body').show();$('#rendicontazioni_figli').show();";
+            $oBt->aspect = "link";
+            $oBt->class = "fa-sitemap";
+            $oRecord->addActionButton($oBt);
+        }
+    }   
 }
 
 //campi aggiuntivi in inserimento

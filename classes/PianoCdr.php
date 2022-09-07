@@ -20,7 +20,7 @@ class PianoCdr extends Entity{
             }
         }
         return null;
-    }
+    }        
     
     public static function getPianiCdrCodice($codice, $class) {
        $calling_class = static::class;
@@ -63,6 +63,23 @@ class PianoCdr extends Entity{
         if (!$db->execute($sql)) {
             throw new Exception("Impossibile eliminare l'oggetto ".static::class." con ID = " . $this->id . " dal DB");
         }
+    }
+    
+    //restituisce l'eventuale piano successivo a quello corrente, null se nessun piano
+    public function getPianoSuccessivo (){        
+        $piano_successivo = null;
+        //vengono ciclati tutti i piani cdr (di default in ordine di data decrescente) dello stesso tipo del piano
+        $last = null;        
+        foreach (\PianoCdr::getAll(array("ID_tipo_piano_cdr"=>$this->id_tipo_piano_cdr)) as $piano_cdr) {           
+            if ($piano_cdr->id == $this->id) {
+                if ($last !== null) {
+                    $piano_successivo = $last;
+                }
+                break;
+            }
+            $last = $piano_cdr;            
+        }
+        return $piano_successivo;
     }
 
     public function introduzionePiano() {

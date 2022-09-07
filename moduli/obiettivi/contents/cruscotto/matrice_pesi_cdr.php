@@ -57,7 +57,11 @@ if (count($obiettivi_cdr_anno) > 0) {
     $riga++;
     //righe della tabella, cdr e per ognuno di essi associazione e peso agli obiettivi
     $cdr_figli = array($cdr);
-    $cdr_figli = array_merge($cdr_figli, $cdr->getFigli());
+    $cdr_figli = array_merge($cdr_figli, $cdr->getFigli());   
+    function cmp($a, $b) {
+        return strcmp($a->codice, $b->codice);
+    }
+    usort($cdr_figli, "cmp");
     $obiettivi_modificabili = false;
     foreach ($cdr_figli as $cdr_figlio) {
         $tpl->set_var("codice_cdr", $cdr_figlio->codice);

@@ -61,19 +61,38 @@ if (isset ($_GET["periodo"])) {
                 $record[] = $obiettivo->indicatori;
                 $record[] = $tipo->descrizione;
                 
-                if ($obiettivo_cdr_associato->isCoreferenza()){
+                $is_coreferenza = $obiettivo_cdr_associato->isCoreferenza();
+                $rendicontazione = $obiettivo_cdr_associato->getRendicontazionePeriodo($periodo);
+                if ($is_coreferenza) {                    
                     $obiettivo_cdr_aziendale = $obiettivo_cdr_associato->getObiettivoCdrAziendale();
-                    $rendicontazione = $obiettivo_cdr_aziendale->getRendicontazionePeriodo($periodo);
-                    $azioni = $obiettivo_cdr_aziendale->azioni;                    
+                    $rendicontazione_aziendale = $obiettivo_cdr_aziendale->getRendicontazionePeriodo($periodo);
                     $anagrafica_cdr_coreferenza = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_aziendale->codice_cdr, $date);
                     $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $anagrafica_cdr_coreferenza->descrizione;
+                    $azioni = $obiettivo_cdr_aziendale->azioni;
+                    if ($rendicontazione !== null){
+                        $rendicontazione->raggiungibile = true;
+                        $rendicontazione->perc_nucleo = $rendicontazione->perc_raggiungimento;
+                        $rendicontazione->note_nucleo = "Raggiungimento obiettivo trasversale specifico per il CdR";
+                        $rendicontazione_aziendale !== null?$rendicontazione->note_nucleo.=" (Raggiungimento CdR Referente: ".$rendicontazione_aziendale->perc_nucleo."% ).":$rendicontazione->note_nucleo.=" (Raggiungimento referente non ancora validato).";                                                                            
+                    }
+                    else {
+                        $rendicontazione = $rendicontazione_aziendale;
+                    }  
                 }
-                else {
-                    $rendicontazione = $obiettivo_cdr_associato->getRendicontazionePeriodo($periodo);
+                else { 
+                    if ($is_coreferenza) {                       
+                        $anagrafica_cdr_coreferenza = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_aziendale->codice_cdr, $date);
+                        $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $anagrafica_cdr_coreferenza->descrizione;
+                    }                                                       
                     $azioni = $obiettivo_cdr_associato->azioni;
-                    $cdr_coreferenza_desc = "";
-                }
-                
+                    try {
+                        $parere_azioni = new ObiettiviParereAzioni($obiettivo_cdr_associato->id_parere_azioni);
+                        $parere_azioni_desc = $parere_azioni->descrizione;
+                    } catch (Exception $ex) {
+                        $parere_azioni_desc = "Non definite";
+                    }
+                    $codice_cdr_coreferenza = "";
+                }                
                 $record[] = $obiettivo_cdr_associato->codice_cdr . " - " . $cdr_figlio["cdr"]->descrizione;
                 $record[] = $cdr_coreferenza_desc;
                 $record[] = $obiettivo_cdr_associato->peso;

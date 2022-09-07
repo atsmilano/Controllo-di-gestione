@@ -70,14 +70,24 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
                     if ($rendicontazione_aziendale !== null) {
                         $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
                         if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
-                            $raggiungimento = (int)$rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
+                            $raggiungimento_nucleo = $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo;
                         }
                     }
-                    if ($obiettivo_cdr->isCoreferenza()) {
-                        $rendicontazione_cdr = $rendicontazione_aziendale;
-                    } else {
-                        $rendicontazione_cdr = $obiettivo_cdr->getRendicontazionePeriodo($periodo_riferimento);
-                    }                                       
+                    $coreferenza_desc = "";    
+                    $rendicontazione_cdr = $obiettivo_cdr->getRendicontazionePeriodo($periodo_riferimento);
+                    if ($obiettivo_cdr->isCoreferenza()) {                        
+                        if ($rendicontazione_cdr !== null) {                       
+                            $coreferenza_desc = " (ragg. referente validato: " . (int)$raggiungimento_nucleo . "%)";                                                                                            
+                            $raggiungimento = (int)$rendicontazione_cdr->perc_raggiungimento. "%";                           
+                        }
+                        else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo !== null) {     
+                            $raggiungimento = (int)$raggiungimento_nucleo . "%";
+                        }      
+                        $raggiungimento .= $coreferenza_desc;
+                    }     
+                    else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                        $raggiungimento = (int)$raggiungimento_nucleo . "%";
+                    }
                     if ($rendicontazione_cdr !== null && $rendicontazione_cdr->perc_raggiungimento !== null) {                        
                         $raggiungimento .= "*";
                     }
@@ -392,13 +402,33 @@ foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $
             if ($rendicontazione_aziendale !== null) {
                 $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
                 if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
-                    $raggiungimento = (int)$rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo . "%";
+                    $raggiungimento_nucleo = $rendicontazione_valutata_nucleo["rendicontazione"]->perc_nucleo;
                 }
-            }
-            $rendicontazione_cdr = $ob_cdr_resp->getRendicontazionePeriodo($periodo_riferimento);            
+            }       
+            $coreferenza_desc = "";            
+            $rendicontazione_cdr = $ob_cdr_resp->getRendicontazionePeriodo($periodo_riferimento);
+            if ($ob_cdr_resp->isCoreferenza()) {
+                if ($rendicontazione_cdr !== null) {                    
+                    $coreferenza_desc = " (ragg. referente validato: ";                                                                                            
+                    if ($rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                        $coreferenza_desc .= (int)$raggiungimento_nucleo . "%)";
+                    }
+                    else{
+                        $coreferenza_desc .= "NV)";
+                    }     
+                    $raggiungimento = (int)$rendicontazione_cdr->perc_raggiungimento. "%";                           
+                }
+                else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                    $raggiungimento = (int)$raggiungimento_nucleo . "%";
+                }        
+                $raggiungimento .= $coreferenza_desc;
+            }     
+            else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                $raggiungimento = (int)$raggiungimento_nucleo . "%";
+            }  
             if ($rendicontazione_cdr !== null && $rendicontazione_cdr->perc_raggiungimento !== null) {                        
                 $raggiungimento .= "*";
-            }            
+            }                     
         } else {
             $periodo_desc = "Nessun periodo aperto nell'anno";
         }

@@ -44,7 +44,7 @@ class ObiettiviRendicontazione extends Entity{
     }
 
     //metodo per la visualizzazione delle informazioni dell'obiettivo_cdr in html
-    public function showHtmlInfo() {
+    public function showHtmlInfo($hide_nucleo=false) {
         $obiettivo_cdr = new ObiettiviObiettivoCdr($this->id_obiettivo_cdr);
         $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);
         if ($this->raggiungibile == 1) {
@@ -147,7 +147,12 @@ class ObiettiviRendicontazione extends Entity{
                 </div>
                 " . $html_indicatori . "
                 <div class='form-group clearfix padding'>
-                    <label>Percentuale raggiungimento Aziendale</label>
+                    <label>Percentuale raggiungimento";
+        if ($hide_nucleo == true) {
+            $html .= " Aziendale";
+        }    
+        $html .= "
+                    </label>
                     <span class='form-control readonly'>" . $this->perc_raggiungimento . "%</span>
                 </div> ";
         if ($periodo_rendicontazione->hide_raggiungibile != 1) {
@@ -156,17 +161,19 @@ class ObiettiviRendicontazione extends Entity{
                         <span class='form-control readonly'>" . $raggiungibile . "</span>
                     </div>";
         }
-        $html .= $html_campo_revisione . "
-                <div class='form-group clearfix padding'>
-                    <label>Raggiungimento validato</label>
-                    <span class='form-control readonly'>" . $ragg_nucleo . "</span>
-                </div>
-                <div class='form-group clearfix padding'>
-                    <label>Note validazione rendicontazione</label>
-                    <span class='form-control readonly " . $note_nucleo_class . "'>" . $note_nucleo . "</span>
-                </div>
-                ";
-
+        if ($hide_nucleo == true) {
+            $html .= $html_campo_revisione . "
+                    <div class='form-group clearfix padding'>
+                        <label>Raggiungimento validato</label>
+                        <span class='form-control readonly'>" . $ragg_nucleo . "</span>
+                    </div>
+                    <div class='form-group clearfix padding'>
+                        <label>Note validazione rendicontazione</label>
+                        <span class='form-control readonly " . $note_nucleo_class . "'>" . $note_nucleo . "</span>
+                    </div>
+                    ";
+        }
+        
         return $html;
     }
 

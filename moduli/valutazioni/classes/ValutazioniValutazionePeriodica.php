@@ -916,7 +916,7 @@ class ValutazioniValutazionePeriodica {
         $db->execute($sql);
     }
     
-    public static function getAmbitiPrecalcolatiPunteggiValutazione($id_anno, $id_periodo, $ids_categoria, $id_sezione = -1, $id_tipo_cdr = null) {        
+    public static function getAmbitiPrecalcolatiPunteggiValutazione($id_anno, $id_periodo, $ids_categoria, $id_sezione = -1) {        
         $db = ffDb_Sql::factory();
         $condizione_periodo = "valutazioni_valutazione_periodica.ID_periodo = ".$db->toSql($id_periodo);
         
@@ -1124,32 +1124,34 @@ class ValutazioniValutazionePeriodica {
                 $no_obiettivi = false;
                 $tot_obiettivi_personale = $personale_obiettivi->getPesoTotaleObiettivi($anno_valutazione);
                 foreach ($obiettivi_indiviuduali as $obiettivo_individuale) {
-                    $obiettivo_cdr = new ObiettiviObiettivoCdr($obiettivo_individuale->id_obiettivo_cdr);
-                    $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);                
-                    if ($obiettivo_cdr->id_tipo_piano == 0) {
-                        $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
-                    }
-                    else {
-                        $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano);
-                    }
-                    try {
-                        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
-                        $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
-                        $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
-                    } catch (Exception $ex) {
-                        $cdr_desc = "Cdr cessato";
-                    }
-                    if ($tot_obiettivi_personale == 0) {
-                        $peso_perc = 0;
-                    } else {
-                        $peso_perc = 100 / $tot_obiettivi_personale * $obiettivo_individuale->peso;
-                    }
+                    if ($obiettivo_individuale->data_eliminazione == null) {
+                        $obiettivo_cdr = new ObiettiviObiettivoCdr($obiettivo_individuale->id_obiettivo_cdr);
+                        $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);                
+                        if ($obiettivo_cdr->id_tipo_piano == 0) {
+                            $tipo_piano_cdr = TipoPianoCdr::getPrioritaMassima();
+                        }
+                        else {
+                            $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano);
+                        }
+                        try {
+                            $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
+                            $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
+                            $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+                        } catch (Exception $ex) {
+                            $cdr_desc = "Cdr cessato";
+                        }
+                        if ($tot_obiettivi_personale == 0) {
+                            $peso_perc = 0;
+                        } else {
+                            $peso_perc = 100 / $tot_obiettivi_personale * $obiettivo_individuale->peso;
+                        }
 
-                    $tpl->set_var("obiettivo", $obiettivo->codice." - ".$obiettivo->titolo);
-                    $tpl->set_var("cdr_obiettivo", $cdr_desc);
-                    $tpl->set_var("peso", number_format($peso_perc, 2)."%");                    
+                        $tpl->set_var("obiettivo", $obiettivo->codice." - ".$obiettivo->titolo);
+                        $tpl->set_var("cdr_obiettivo", $cdr_desc);
+                        $tpl->set_var("peso", number_format($peso_perc, 2)."%");                    
 
-                    $tpl->parse("SectObiettivoIndividuale", true);
+                        $tpl->parse("SectObiettivoIndividuale", true);
+                    }
                 }
                 $tpl->parse("SectObiettiviIndividualiAnno", false);
             }

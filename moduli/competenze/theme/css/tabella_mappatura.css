@@ -1,0 +1,157 @@
+#tabella_mappatura_competenze {
+    width: 100%;    
+}
+
+#tabella_mappatura_competenze #info_mappatura{
+    margin: 6px 0;
+    padding: 9px;
+    border: solid 1px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+}
+
+#tabella_mappatura_competenze #actions{
+    background-color: #c7d4e2;
+    position: fixed;
+    bottom: 21px;
+    width: 83.3%;
+    right: 0;
+    z-index: 990;
+    width: calc(100% - 250px);
+    height: 48px;
+}
+
+/*actions*/
+#tabella_mappatura_competenze #actions button{
+    position: relative;
+    float: right;
+    width: auto;
+    border: none;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    margin: 9px;    
+    background-color: #1e88e5;
+    color: white; 
+    padding: 6px;
+}
+
+#tabella_mappatura_competenze #actions button:hover{
+    background-color: #12badb;
+}
+
+#tabella_mappatura_competenze #actions a {
+    float: right;
+    margin: 15px;
+}
+
+/*table*/
+#tabella_mappatura_competenze table {
+    border: solid 1px #263238;
+    padding: 3px;
+}
+
+#tabella_mappatura_competenze table thead{
+    
+}
+
+#tabella_mappatura_competenze table thead tr{
+    padding: 6px;
+}
+
+#tabella_mappatura_competenze table thead tr th{
+    border: solid 1px #263238;
+    padding: 6px;
+    background-color: #263238;
+    text-align: center;
+    font-size: 15px;
+    color:white;
+}
+#tabella_mappatura_competenze table tbody{
+    
+}
+
+#tabella_mappatura_competenze table tbody tr{
+    
+}
+
+#tabella_mappatura_competenze table tbody tr.sezione_competenze{
+    background-color: #1e88e5;
+    font-weight: bold;
+    color: white;    
+}
+
+#tabella_mappatura_competenze table tbody tr.sezione_competenze:hover{
+    pointer-events: none;
+}
+
+#tabella_mappatura_competenze table tbody tr td{
+    border: solid 1px #263238;
+    padding: 6px;   
+    vertical-align: middle;
+}
+
+#tabella_mappatura_competenze table tbody tr td.nome_sezione{
+    text-align: center;
+    font-weight: bold;
+}
+
+#tabella_mappatura_competenze table tbody tr td.nome_competenza{
+    text-align: center;
+    font-weight: bold;
+    width:5%;
+}
+
+#tabella_mappatura_competenze table tbody tr td.descrizione_competenza{
+    text-align: center;
+    width:45%;
+}
+
+#tabella_mappatura_competenze table tbody tr td.valore_competenza{
+    text-align: center;
+}
+
+/*select*/
+#tabella_mappatura_competenze table tbody tr td select {
+    background-color: white;
+    border: solid 1px #263238;
+    text-align: center;
+}
+
+#tabella_mappatura_competenze table tbody tr td select option {
+    background-color: white;
+}
+
+/*loading image*/
+#tabella_mappatura_competenze #loading_image{
+    display: none;
+    margin: 15px;
+    float: left;
+}
+
+/*notifiche*/
+#tabella_mappatura_competenze .notifiche {
+    float: left;
+    width: 50%;
+    display: none;
+    padding: 3px;
+    margin: 12px;
+    border: solid 1px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    text-align: center;
+}
+
+#tabella_mappatura_competenze .notifiche.success{
+    background-color: #8bd28a;
+    border-color: #2b5b2a;
+    color: #2b5b2a;
+}
+
+#tabella_mappatura_competenze .notifiche.error{
+    background-color: #d87f7f;
+    border-color: #a04545;
+    color: #a04545;
+}

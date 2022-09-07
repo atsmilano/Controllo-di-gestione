@@ -1,0 +1,169 @@
+<div id="tabella_mappatura_competenze">        
+    <!--BeginSectIntestazione-->
+    <h2>Mappatura periodo "{desc_periodo}": {desc_tipo_mappatura}</h2>
+    <div id="info_mappatura">
+        <b>Valutatore:</b>&nbsp;{desc_valutatore}<br>
+        <b>Valutato:</b>&nbsp;{desc_valutato}
+    </div>   
+    <!--EndSectIntestazione-->
+    <div id="actions">
+        <div id="loading_image"><img src="{module_theme_path}\images\loader.gif"></div>
+        <div id="notifiche" class="notifiche"></div>
+        <div><a href="{ret_url}">Indietro</a></div>
+        <!--BeginSectValoriAttesiActions-->        
+        <button id="valori_attesi_button" type="button">Salvataggio valori attesi</button>
+        <script>
+            $("#valori_attesi_button").click(function(){
+		//vengono recuperati tutti i valori attesi variati delle competenze trasversali e di quelle specifiche
+		var valori_attesi_variati_ct = [];
+                var valori_attesi_variati_cs = [];
+                                
+		$(".valori_attesi_select").each(function(){
+                    var id_valore_atteso = $(this).val().replace("valore_atteso_","");
+                    
+                    if ($(this).attr("id").startsWith("valori_attesi_select_competenza_trasversale_")) {
+                        var id_competenza = $(this).attr("id").replace("valori_attesi_select_competenza_trasversale_","");
+                        valori_attesi_variati_ct.push({idc: id_competenza, idva: id_valore_atteso});                        
+                    }
+                    else if ($(this).attr("id").startsWith("valori_attesi_select_competenza_specifica_")) {
+                        var id_competenza = $(this).attr("id").replace("valori_attesi_select_competenza_specifica_","");
+                        valori_attesi_variati_cs.push({idc: id_competenza, idva: id_valore_atteso});
+                    }
+                });		
+                $("#loading_image").modal("show");
+
+                var data = {
+                        ct: valori_attesi_variati_ct,
+                        cs: valori_attesi_variati_cs,
+                };
+
+                var request = $.ajax({
+                                url: window.location.pathname + '/valori_attesi_profilo/save_valori_attesi.php?{globals}keys[ID_profilo]={id_profilo}',
+                                type: 'GET',
+                                data: data,									
+                                cache: false,
+                                contentType: false,
+                });
+                request.done(function(data) {				
+                        response = JSON.parse(data);						                        
+                        $("#notifiche").removeClass("error");
+                        $("#notifiche").removeClass("success");
+                        $("#notifiche").addClass(response.esito);
+                        $("#notifiche").html(response.messaggio);
+                                                                                                              
+                })
+                request.fail(function() {						
+                        $("#notifiche").removeClass("success");
+                        $("#notifiche").addClass("error");
+                        $("#notifiche").html("Errore durante il salvataggio dei valori attesi.");
+                })
+                request.always(function(){
+                        $("#notifiche").show("blind");       
+                        $("#loading_image").modal("hide");
+                        $("#notifiche").delay(5000).hide("blind"); 
+                })
+            });
+        </script>            
+        <!--EndSectValoriAttesiActions-->
+        <!--BeginSectMappaturaActions-->
+        <button id="mappatura_button" type="button">Salvataggio mappatura</button>
+        <script>
+            $("#mappatura_button").click(function(){
+		//vengono recuperati tutti i valori della mappatura variati delle competenze trasversali e di quelle specifiche
+		var valori_mappatura_variati_ct = [];
+                var valori_mappatura_variati_cs = [];
+                                
+		$(".valori_mappatura_select").each(function(){
+                    var id_valore_mappatura = $(this).val().replace("valore_mappatura_","");
+                    
+                    if ($(this).attr("id").startsWith("valori_mappatura_select_competenza_trasversale_")) {
+                        var id_competenza = $(this).attr("id").replace("valori_mappatura_select_competenza_trasversale_","");
+                        valori_mappatura_variati_ct.push({idc: id_competenza, idva: id_valore_mappatura});                        
+                    }
+                    else if ($(this).attr("id").startsWith("valori_mappatura_select_competenza_specifica_")) {
+                        var id_competenza = $(this).attr("id").replace("valori_mappatura_select_competenza_specifica_","");
+                        valori_mappatura_variati_cs.push({idc: id_competenza, idva: id_valore_mappatura});
+                    }
+                });		
+                $("#loading_image").modal("show");
+
+                var data = {
+                        ct: valori_mappatura_variati_ct,
+                        cs: valori_mappatura_variati_cs,
+                };
+
+                var request = $.ajax({
+                                url: window.location.pathname + '/save_valori_mappatura.php?{globals}keys[ID_mappatura_periodo]={id_mappatura_periodo}',
+                                type: 'GET',
+                                data: data,									
+                                cache: false,
+                                contentType: false,
+                });
+                request.done(function(data) {				
+                        response = JSON.parse(data);console.log(response);						                        
+                        $("#notifiche").removeClass("error");
+                        $("#notifiche").removeClass("success");
+                        $("#notifiche").addClass(response.esito);
+                        $("#notifiche").html(response.messaggio);
+                                                                                                              
+                })
+                request.fail(function() {						
+                        $("#notifiche").removeClass("success");
+                        $("#notifiche").addClass("error");
+                        $("#notifiche").html("Errore durante il salvataggio della mappatura.");
+                })
+                request.always(function(){
+                        $("#notifiche").show("blind");       
+                        $("#loading_image").modal("hide");
+                        $("#notifiche").delay(5000).hide("blind"); 
+                })
+            });
+        </script>            
+        <!--EndSectMappaturaActions-->
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">Competenza</th>                
+                <th>Valore Atteso</th>
+                <!--BeginSectMappaturaIntestazione-->
+                <th>Valore mappatura</th>
+                <!--EndSectMappaturaIntestazione-->
+            </tr>
+        </thead>
+        <tbody>
+            <!--BeginSectSezione-->
+                <tr class="sezione_competenze">
+                    <td colspan="{colspan_sezione}" class="nome_sezione">{nome_sezione}</td>
+                </tr>            
+                <!--BeginSectCompetenza-->
+                <tr>
+                    <td class="nome_competenza">{nome_competenza}</td>
+                    <td class="descrizione_competenza">{descrizione_competenza}</td>
+                    <td class="valore_competenza">
+                        <!--BeginSectValoriAttesiEdit-->
+                        <select class="valori_attesi_select" name='valori_attesi_select_{id_competenza}' id='valori_attesi_select_{id_competenza}'>
+                            <!--BeginSectOptionsValoriAttesi-->                                
+                                <option value="valore_atteso_{valore_atteso_id}" {valore_atteso_selected}>{valore_atteso_valore} - {valore_atteso_descrizione}</option>
+                            <!--EndSectOptionsValoriAttesi-->
+                        </select>
+                        <!--EndSectValoriAttesiEdit-->
+                        <!--BeginSectValoriAttesiView-->
+                        {valore_atteso_valore} - {valore_atteso_descrizione}
+                        <!--EndSectValoriAttesiView-->
+                    </td>
+                    <td class="valore_competenza">
+                        <!--BeginSectValoriMappaturaEdit-->
+                        <select class="valori_mappatura_select" name='valori_mappatura_select_competenza_{tipo_competenza}_{id_competenza}' id='valori_mappatura_select_{id_competenza}'>
+                            <!--BeginSectOptionsValoriMappatura-->                                
+                                <option value="valore_mappatura_{valore_mappatura_id}" {valore_mappatura_selected}>{valore_mappatura_valore} - {valore_mappatura_descrizione}</option>
+                            <!--EndSectOptionsValoriMappatura-->
+                        </select>
+                        <!--EndSectValoriMappaturaEdit-->
+                    </td>
+                </tr>
+                <!--EndSectCompetenza-->
+            <!--EndSectSezione-->
+        </tbody>
+    </table>    
+</div>

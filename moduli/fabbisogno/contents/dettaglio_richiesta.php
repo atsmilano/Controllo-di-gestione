@@ -123,9 +123,48 @@ if ($privilegi_utente["view_richiesta"] == false) {
 }
 //******************************************************************************
 $modulo = Modulo::getCurrentModule();
-$cm->oPage->addContent("<a id='fabbisogni_estrazione_link' class='link_estrazione' href='".FF_SITE_PATH . "/area_riservata" . $modulo->site_path."/estrazioni/scheda_fabbisogno.php?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."ID=".$richiesta->id."' target='_blank'>"
-            . "<div id='fabbisogni_estrazione' class='estrazione link_estrazione'>Estrazione scheda .pdf</div></a><br>");
-
+$allow_edit = false;
+$allow_riapertura = false;
+if ($privilegi_utente["edit_richiesta"]) {
+    if ($richiesta == null || $richiesta->data_chiusura == null){
+        $allow_edit = true;
+    }
+    else if ($privilegi_utente["edit_data_chiusura"] && $richiesta->data_chiusura !== null) {
+        $allow_riapertura = true;
+    }
+}
+if (isset($richiesta)) {
+    $cm->oPage->addContent("<a id='fabbisogni_estrazione_link' class='link_estrazione' href='".FF_SITE_PATH . "/area_riservata" . $modulo->site_path."/estrazioni/scheda_fabbisogno.php?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."ID=".$richiesta->id."' target='_blank'>"
+                . "<div id='fabbisogni_estrazione' class='estrazione link_estrazione'>Estrazione scheda .pdf</div></a><br>");
+    //estrazione modulo programma consentita solamente se la richiesta è chiusa
+    if ($allow_edit == false) {
+        if ($richiesta->id_tipologia == 10){
+            $cm->oPage->addContent("
+                <label>Scelta della tipologia per l'estrazione del modulo:&nbsp;</label>
+                <select id='scelta_modulo' name='scelta_modulo'>
+                    <option value='1'>Evento residenziale</option>
+                    <option value='2'>Formazione sul campo</option>
+                    <option value='3'>Formazione a distanza</option>
+                </select>
+                <script>                    
+                    $('#programma_modulo_link').click(function () {
+                        selected_value = $('#scelta_modulo :selected').attr('value');
+                        url = $('#programma_modulo_link').attr('href');
+                        if (url.search('ID_modulo') > 0) {
+                            url = url.replace(/(ID_modulo=).*?(&|$)/, '$1' + selected_value + '$2');
+                        } else {
+                            url = url + '&ID_modulo=' + selected_value;
+                        }                         
+                        $('#programma_modulo_link').attr('href', url);
+                    });
+                </script> 
+                ");
+        }
+        $cm->oPage->addContent("<a id='programma_modulo_link' class='link_estrazione' href='".FF_SITE_PATH . "/area_riservata" . $modulo->site_path."/estrazioni/modulo_programma.php?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."ID=".$richiesta->id."' target='_blank'>"
+                    . "<div id='programma_modulo' class='estrazione link_modulo'>Estrazione modulo programma .doc</div></a><br>");
+    }        
+}
+    
 $si_no_multipairs = array(
                         array(new ffData(1, "Number"),new ffData("Si", "Text")),
                         array(new ffData(0, "Number"),new ffData("No", "Text")),
@@ -137,16 +176,6 @@ $oRecord->title = $richiesta !== null ? "Modifica ": "Nuova "."richiesta fabbiso
 $oRecord->resources[] = "richiesta";
 $oRecord->src_table  = "fabbisogno_richiesta";
 
-$allow_edit = false;
-$allow_riapertura = false;
-if ($privilegi_utente["edit_richiesta"]) {
-    if ($richiesta == null || $richiesta->data_chiusura == null){
-        $allow_edit = true;
-    }
-    else if ($privilegi_utente["edit_data_chiusura"] && $richiesta->data_chiusura !== null) {
-        $allow_riapertura = true;
-    }
-}
 if (!$allow_edit && !$allow_riapertura) {
     $oRecord->allow_update = false;
 }

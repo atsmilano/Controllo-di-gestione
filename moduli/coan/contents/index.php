@@ -57,9 +57,8 @@ if (count($periodi_anno) > 0) {
     //generazione dei filtri su cdr che hanno conti per nell'anno        
     //$cdr_associati_anno = CoanCdc::getCdrAssociatiAnno($anno); 
        
-    //considerando l'anno corrente viene recuperata la data di riferimento dai globals
-    $date = $cm->oPage->globals["data_riferimento"]["value"]->format("Y-m-d");
-    $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $date);
+    //considerando l'anno corrente viene recuperata la data di riferimento dai globals     
+    $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $periodo->data_fine);    
     $cdr_radice_piano = $piano_cdr->getCdrRadice();
     $cdr_anno = $cdr_radice_piano->getGerarchia();
 

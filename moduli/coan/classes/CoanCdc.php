@@ -36,15 +36,14 @@ class CoanCdc extends Entity {
         return $item_anno;
     }
 
-    public static function getCdrAssociatiCdc(AnnoBudget $anno) {
+    public static function getCdrAssociatiCdc(CoanPeriodo $periodo_coan) {
         $result = array();
-
-        $cm = Cm::getInstance();
-        $date = $cm->oPage->globals["data_riferimento"]["value"];
-        $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $date->format("Y-m-d"));
+        $anno = new AnnoBudget($periodo_coan->id_anno_budget);
+        
+        $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $periodo_coan->data_fine);
         $cdr_radice_piano = $piano_cdr->getCdrRadice();
         $cdr_anno = $cdr_radice_piano->getGerarchia();
-
+   
         foreach (CoanCdc::getAttiviAnno($anno) as $cdc) {
             foreach ($cdr_anno as $cdr_associato) {
                 if ($cdc->codice_cdr == $cdr_associato["cdr"]->codice && !in_array($cdr_associato, $result)) {

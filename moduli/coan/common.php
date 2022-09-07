@@ -49,6 +49,21 @@ $allowed_actions["coan_crud"] = array(
     "icon" => $coan_admin ? "table" : MODULES_ICONHIDE,
     "dialog" => false
 );
+
+if (!isset($menu["controllo"])) {
+        $menu["controllo"] = array(
+        "key"     => "controllo",
+        "label"   => "Controllo",
+        "icon"	  => "",
+        "path"	  => "",
+        "redir"	  => "",
+        "actions" => array(),
+        "acl"	  => "1,2,3",
+        "hide"    => 0,
+    );
+    mod_restricted_add_menu_child($menu["controllo"]);
+}
+
 //gruppo coan
 $menu["controllo"]["coan"] = array(
     "key" => "controllo",

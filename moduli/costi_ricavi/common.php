@@ -55,6 +55,20 @@ $allowed_actions["costi_ricavi_crud"] =  array(
     "dialog" => false
 );
 
+if (!isset($menu["programmazione"])) {
+    $menu["programmazione"] = array(
+        "key"           => "programmazione"
+        , "label"       => "Programmazione"
+        , "icon"		=> ""
+        , "path"		=> ""
+        , "redir"		=> ""
+        , "actions"     => array()
+        , "acl"			=> "1,2,3"
+        , "hide"        => 0
+    );
+    mod_restricted_add_menu_child($menu["programmazione"]);
+}
+
 //gruppo costi_ricavi
 $menu["programmazione"]["costi_ricavi"] = array(
     "key"     => "programmazione",

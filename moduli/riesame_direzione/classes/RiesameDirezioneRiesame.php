@@ -1,6 +1,6 @@
 <?php
 class RiesameDirezioneRiesame extends Entity{		
-	protected static $tablename = "riesame_direzione_riesame";
+    protected static $tablename = "riesame_direzione_riesame";
 	
     public static $stati_riesame = array	(
                                                 array(  "ID" => 0,

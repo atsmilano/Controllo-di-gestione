@@ -23,7 +23,7 @@ class IndicatoriTipoParametro {
         }
     }        
     
-    public function getAll() {
+    public static function getAll() {
         $tipi_parametro = array();
         foreach (self::$tipi_parametro as $tipo_par) {
             $tipo_parametro = new IndicatoriTipoParametro;

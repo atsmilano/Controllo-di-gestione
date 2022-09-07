@@ -1,0 +1,27 @@
+<div id='inactive_body'></div>
+<div id='rendicontazioni_figli' class='rendicontazioni_figli'>    
+    <a id='close_rendicontazioni_figli' onclick="$('#inactive_body').hide();$('#rendicontazioni_figli').hide();">        
+        <i class='fa fa-window-close' aria-hidden='true'></i>
+    </a>
+    <h2>Rendicontazioni CdR Afferenti</h2>
+    <div id="rendicontazioni_figli_accordion">
+        <!--BeginCdrAfferente-->    
+        <h4>{cdr_figlio}</h4>
+        <div>
+            <!--BeginRendicontazioneCdrAfferente-->             
+                {rendicontazione}           
+            <!--EndRendicontazioneCdrAfferente-->   
+        </div>
+        <!--EndCdrAfferente-->
+    </div>
+</div>
+<script>
+    $( function() {
+        $( "#rendicontazioni_figli_accordion" ).accordion({
+            heightStyle: "content",
+            active: false,
+            collapsible: true,
+            header: "h4"
+        });
+    } );
+</script>

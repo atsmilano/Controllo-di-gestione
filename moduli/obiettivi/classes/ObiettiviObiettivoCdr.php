@@ -70,7 +70,7 @@ class ObiettiviObiettivoCdr extends Entity{
     }    
     
     //restituisce l'obiettivo_cdr (se non eliminato logicamente) assegnato a ID_obiettivo e codice_cdr
-    static public function factoryFromObiettivoCdr(ObiettiviObiettivo $obiettivo, Cdr $cdr) {
+    public static function factoryFromObiettivoCdr(ObiettiviObiettivo $obiettivo, Cdr $cdr) {
         if ($obiettivo->data_eliminazione !== null) {
             return null;
         }
@@ -183,7 +183,7 @@ class ObiettiviObiettivoCdr extends Entity{
     }
 
     //restituisce true se l'assegnazione è aziendale e l'assegnazione al cdr non è coreferenza
-    //skip coreferenza impone che non venga valutato se l'obiettivo cdr sia di coreferenza ma
+    //skip coreferenza impone che non venga valutato se l'obiettivo cdr sia di coreferenza ma    
     //viene considerato sempre e comunque aziendale se id_tipo piano = 0
     public function isObiettivoCdrAziendale($skip_coreferenza = false) {
         if ($this->id_tipo_piano_cdr == null) {

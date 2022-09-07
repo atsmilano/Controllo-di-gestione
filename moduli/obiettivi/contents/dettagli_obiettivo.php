@@ -984,6 +984,7 @@ if ($edit == true) {
             $id_rendicontazione = $rendicontazione_periodo->id;
         }
         $ragg_nucleo = "NV";
+        $ragg_nucleo_desc = "";
         if ($rendicontazione_aziendale !== null) {
             $rendicontazione_valutata_nucleo = $rendicontazione_aziendale->getValutazioneNucleo();
             if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
@@ -991,18 +992,36 @@ if ($edit == true) {
             }
         }
         if ($obiettivo_cdr->isCoreferenza()) {
-            $coreferenza_desc = " (trasversale)";
-            $ragg_cdr = $rendicontazione_aziendale->perc_raggiungimento . "%";
+            if ($rendicontazione_periodo !== null) {
+                $coreferenza_desc = " (trasversale - ragg. referente: ";
+                if ($rendicontazione_aziendale !== null) {
+                    $coreferenza_desc .= $rendicontazione_aziendale->perc_raggiungimento . "%)";
+                }
+                else{
+                    $coreferenza_desc .= "NV)";
+                }                     
+                $ragg_cdr = (int) $rendicontazione_periodo->perc_raggiungimento . "%";
+                $ragg_nucleo_desc = " (ragg. referente validato: ".$ragg_nucleo.")";
+                $ragg_nucleo = $ragg_cdr;
+            }
+            else {
+                $coreferenza_desc = " (trasversale)";
+                if ($rendicontazione_aziendale !== null && $rendicontazione_aziendale->perc_raggiungimento !== null) {
+                    $ragg_cdr = (int) $rendicontazione_aziendale->perc_raggiungimento . "%";
+                }
+            }            
         } else {
             $coreferenza_desc = "";
-            $ragg_cdr = (int) $rendicontazione_periodo->perc_raggiungimento . "%";
+            if ($rendicontazione_periodo !== null && $rendicontazione_periodo->perc_raggiungimento !== null) {
+                $ragg_cdr = (int) $rendicontazione_periodo->perc_raggiungimento . "%";
+            }
         }
 
         //costruzione record
         $grid_recordset[] = array(
             $id_rendicontazione,
             $ragg_cdr . $coreferenza_desc,
-            $ragg_nucleo,
+            $ragg_nucleo . $ragg_nucleo_desc,
             $periodo_rendicontazione->id,
             $periodo_rendicontazione->descrizione,
             $periodo_rendicontazione->data_riferimento_inizio,
