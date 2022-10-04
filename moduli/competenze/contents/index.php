@@ -56,11 +56,12 @@ foreach (\MappaturaCompetenze\MappaturaPeriodo::getAll(array("ID_periodo"=>$peri
     $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);    
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
                 $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
                 $profilo_desc,
-                $cdr->codice . "-" . $cdr->descrizione,
+                $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
     );
 }
@@ -78,11 +79,12 @@ if ($mappatura !== null) {
     $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
                 $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
                 $profilo_desc,
-                $cdr->codice . "-" . $cdr->descrizione,
+                $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
     );
     $grid_mappature[] = array("ID_tipo_mappatura"=>2, "title"=>"Autovalutazione", "grid_mappatura"=>$grid_mappatura);
@@ -95,11 +97,12 @@ foreach (\MappaturaCompetenze\MappaturaPeriodo::getAll(array("ID_periodo"=>$peri
     $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
                 $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
                 $profilo_desc,
-                $cdr->codice . "-" . $cdr->descrizione,
+                $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
     );
 }
@@ -116,11 +119,12 @@ foreach (\MappaturaCompetenze\MappaturaPeriodo::getAll(array("ID_periodo"=>$peri
     $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
                 $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
                 $profilo_desc,
-                $cdr->codice . "-" . $cdr->descrizione,
+                $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
     );
 }

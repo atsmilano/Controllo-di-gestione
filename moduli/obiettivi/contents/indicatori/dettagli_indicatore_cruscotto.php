@@ -18,7 +18,8 @@ if (isset ($_REQUEST["keys[ID_indicatore_cruscotto]"])) {
     }
 }
 else {
-    $record_desc = "Nuovo indicatore cruscotto anno " . $anno->descrizione ." per il CDR: '".$cdr->codice." - ".$cdr->descrizione."'";
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+    $record_desc = "Nuovo indicatore cruscotto anno " . $anno->descrizione ." per il CDR: '". $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione."'";
 }
 
 //definizione del record

@@ -30,8 +30,8 @@ foreach($schede_da_aprire as $matricola) {
     if (!count($periodo_valutazione->getValutazioniAttivePeriodo($matricola))) {
         $valutazione = new ValutazioniValutazionePeriodica();
         if (!strlen($personale->anomalie)) {
-            //viene verificato che non ci sia già una valutazione presente
-            if (!count($periodo_valutazione->getValutazioniAttivePeriodo($personale->matricola))) {
+            //viene verificato che non ci sia già una valutazione presente e che valutatore e valutato non coincidano
+            if (!count($periodo_valutazione->getValutazioniAttivePeriodo($personale->matricola)) && ($personale->valutatore_suggerito->matricola_responsabile !== $personale->matricola)) {
                 $valutazione->matricola_valutatore = $personale->valutatore_suggerito->matricola_responsabile;
                 $valutazione->matricola_valutato = $personale->matricola;
                 $valutazione->id_periodo = $periodo_valutazione->id;

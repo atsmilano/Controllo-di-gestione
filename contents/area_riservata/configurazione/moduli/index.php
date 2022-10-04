@@ -5,7 +5,7 @@ if (!$user->hasPrivilege("moduli_admin")) {
 }
 
 $anno = $cm->oPage->globals["anno"]["value"];
-$moduli = Modulo::getActiveModulesFromDisk($anno);
+$moduli = Modulo::getActiveModulesFromDisk();
 
 //recupero degli indicatori collegati all'obiettivo
 $grid_fields = array(

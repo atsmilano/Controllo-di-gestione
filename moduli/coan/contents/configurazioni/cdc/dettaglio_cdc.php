@@ -58,6 +58,7 @@ $oRecord->addContent($oField);
 $cdr_select = array();
 $order = array(array("fieldname"=>"codice", "direction"=>"ASC"));
 foreach(AnagraficaCdr::getAll(array(), $order) as $cdr) {
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $intervallo_validita = " (valido dal ".CoreHelper::formatUiDate($cdr->data_introduzione);
     if ($cdr->data_termine !== null) {
         $intervallo_validita .= " al ".CoreHelper::formatUiDate($cdr->data_termine);
@@ -66,7 +67,7 @@ foreach(AnagraficaCdr::getAll(array(), $order) as $cdr) {
     
     $cdr_select[] = array(
         new ffData($cdr->codice, "Text"),
-        new ffData($cdr->codice ." - ".$cdr->descrizione.$intervallo_validita, "Text")
+        new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione.$intervallo_validita, "Text")
     );
 }
 $oField = ffField::factory($cm->oPage);

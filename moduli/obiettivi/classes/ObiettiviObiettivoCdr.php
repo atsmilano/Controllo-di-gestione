@@ -415,8 +415,9 @@ class ObiettiviObiettivoCdr extends Entity{
                 $cdr_padre = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_padre->codice_cdr, $date);
                 $tot_pesi_obiettivi_cdr_padre = $cdr_padre->getPesoTotaleObiettivi($anno);
                 $peso_perc = CoreHelper::percentuale($obiettivo_cdr_padre->peso, $tot_pesi_obiettivi_cdr_padre);
+                $tipo_cdr = new TipoCdr($cdr_padre->id_tipo_cdr);
                 $html .= "  <div class='form-group clearfix padding'>
-                                <label>Azioni CDR '" . $cdr_padre->codice . " - " . $cdr_padre->descrizione . "' (" . $tipo_piano_cdr->descrizione . ")"
+                                <label>Azioni CDR '" . $cdr_padre->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_padre->descrizione . "' (" . $tipo_piano_cdr->descrizione . ")"
                     . "(peso obiettivo = " . $obiettivo_cdr_padre->peso . "/" . $tot_pesi_obiettivi_cdr_padre . " => " . number_format($peso_perc, 2) . "%)</label>
                                 <span class='form-control readonly'>" . $obiettivo_cdr_padre->azioni . "</span>
                             </div>";
@@ -457,7 +458,8 @@ class ObiettiviObiettivoCdr extends Entity{
             }
             $piano_cdr = PianoCdr::getAttivoInData($tipo_piano, $date->format("Y-m-d"));
             $cdr_padre_obiettivo = Cdr::factoryFromCodice($obiettivo_cdr_padre->codice_cdr, $piano_cdr);
-            $desc_cdr_padre = ": '" . $cdr_padre_obiettivo->codice . " - " . $cdr_padre_obiettivo->descrizione . " (referente obiettivo trasversale)'";
+            $tipo_cdr = new TipoCdr($cdr_padre_obiettivo->id_tipo_cdr);
+            $desc_cdr_padre = ": '" . $cdr_padre_obiettivo->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_padre_obiettivo->descrizione . " (referente obiettivo trasversale)'";
         }
         $html .= "
                     <div class='form-group clearfix padding'>

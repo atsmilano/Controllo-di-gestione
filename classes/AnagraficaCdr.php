@@ -32,6 +32,7 @@ class AnagraficaCdr extends Entity {
                     )) {
                     break;
                 }
+                $cdr_anagrafica = null;
             } while ($db->nextRecord());
         }
 

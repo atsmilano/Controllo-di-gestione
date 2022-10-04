@@ -52,9 +52,10 @@ if ($valore_target !== null) {
     else {
         $date = $cm->oPage->globals["data_riferimento"]["value"];
         $anagrafica_cdr = AnagraficaCdr::factoryFromCodice($valore_target->codice_cdr, $date);    
+        $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
         $cdr_piano[] = array(
                 new ffData($anagrafica_cdr->codice, "Text"),
-                new ffData($anagrafica_cdr->codice . " - " . $anagrafica_cdr->descrizione, "Text"),
+                new ffData($anagrafica_cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione, "Text"),
         );
     }
 }
@@ -64,9 +65,10 @@ else {
         //vengono esclusi dall'elenco tutti i cdr per i quali è già definito un valore target
         $valore_target = $indicatore->getValoreTargetAnno($anno, $cdr, true);
         if ($valore_target == null) {            
+            $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
             $cdr_piano[] = array(
                 new ffData($cdr->codice, "Text"),
-                new ffData($cdr->codice . " - " . $cdr->descrizione, "Text"),
+                new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione, "Text"),
             );
         }
     }

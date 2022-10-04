@@ -40,7 +40,7 @@ class CdrGestione extends \Cdr
         }
         foreach($this->getGerarchia(null, 0, null, $cdr_abilitati_in_data) as $cdr_abilitato) { 
             //se il cdr è abilitato e non è un Cdr di gestione
-            $cdr_gestione_ramo[] = $cdr_abilitato["cdr"]->cloneAttributesToNewObject("CdrRU");            
+            $cdr_gestione_ramo[] = $cdr_abilitato["cdr"]->cloneAttributesToNewObject(__NAMESPACE__."\CdrGestione");            
         }
         return $cdr_gestione_ramo;        
     }

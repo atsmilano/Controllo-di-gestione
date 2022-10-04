@@ -1100,7 +1100,7 @@ class ValutazioniValutazionePeriodica {
 
         foreach ($cdr_afferenza as $cdr_aff) {  
             $tipo_cdr = new TipoCdr($cdr_aff["cdr"]->id_tipo_cdr);                        
-            $tpl->set_var("cdr", $tipo_cdr->abbreviazione . " " . $cdr_aff["cdr"]->descrizione . " (" . $cdr_aff["cdr"]->codice .") " . $cdr_commento);
+            $tpl->set_var("cdr", $cdr_aff["cdr"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_aff["cdr"]->descrizione . $cdr_commento);
             $tpl->set_var("perc_testa", $cdr_aff["peso_cdr"]);
             $tpl->parse("SectCdrAssociati", true);                
         }
@@ -1136,7 +1136,8 @@ class ValutazioniValutazionePeriodica {
                         try {
                             $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo->data_fine);
                             $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
-                            $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+                            $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+                            $cdr_desc = $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
                         } catch (Exception $ex) {
                             $cdr_desc = "Cdr cessato";
                         }
@@ -1160,7 +1161,8 @@ class ValutazioniValutazionePeriodica {
                 foreach($obiettivi_cdr_responsabilita as $obiettivo_cdr_responsabilita) {                    
                     if ($periodo->visualizzazione_pesi_obiettivi_responsabile) {
                         $obiettivo = $obiettivo_cdr_responsabilita["obiettivo"];
-                        $cdr_desc = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->codice . " - " . $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->descrizione;
+                        $tipo_cdr = new TipoCdr($obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->id_tipo_cdr);
+                        $cdr_desc = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->descrizione;
                         $peso_tot_obiettivi_cdr = $obiettivo_cdr_responsabilita["anagrafica_cdr_obiettivo"]->getPesoTotaleObiettivi($anno_valutazione);
                         if ($obiettivo_cdr_responsabilita["obiettivo_cdr"]->isReferenteObiettivoTrasversale()){
                             $coreferente = " (referente)";

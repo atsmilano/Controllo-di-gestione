@@ -43,9 +43,10 @@ foreach (ObiettiviObiettivoCdrPersonale::getAll(array("matricola_personale" => $
             $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);                       
             if (empty($obiettivo->data_eliminazione) && $obiettivo->id_anno_budget == $anno_budget->id) {
                 // Vengono aggiunti gli obiettivi che NON sono stati eliminati e che appartengono all'anno budget
+                $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
                 $grid_recordset[] = array(
                     $obiettivo_cdr_personale->id, 
-                    $anagrafica_cdr->codice . " - " . $anagrafica_cdr->descrizione,
+                    $anagrafica_cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione,
                     $anno_budget->descrizione."-".str_pad($obiettivo->codice_incr_anno, 4, "0", STR_PAD_LEFT),
                     $obiettivo->titolo,                    
                     $obiettivo_cdr->peso,

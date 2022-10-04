@@ -52,7 +52,7 @@ $oField->default_value = new ffData($valutazioni_personale->valutatore_suggerito
 $valutatori = array();
 
 foreach (Personale::getAll() as $dipendente) {
-    if ($dipendente->isAttivoInData($data_riferimento->format("Y-m-d"))) {
+    if ($dipendente->isAttivoInData($data_riferimento->format("Y-m-d")) && $dipendente->matricola !== $valutazioni_personale->matricola) {
         $valutatori[] = array(
             new ffData($dipendente->matricola, "Number"),
             new ffData($dipendente->cognome . " " . $dipendente->nome . " (matr. " . $dipendente->matricola . ")", "Text"),

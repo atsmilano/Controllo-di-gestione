@@ -221,7 +221,8 @@ else {
     $oField->store_in_db = false;
     $oField->data_type = "";
     $cdr_richiesta = AnagraficaCdr::factoryFromCodice($richiesta->codice_cdr, $date);
-    $oField->default_value = new ffData($cdr_richiesta->codice." - ".$cdr_richiesta->descrizione, "Text");
+    $tipo_cdr = new TipoCdr($cdr_richiesta->id_tipo_cdr);
+    $oField->default_value = new ffData($cdr_richiesta->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_richiesta->descrizione, "Text");
 }
 $oRecord->addContent($oField);
 

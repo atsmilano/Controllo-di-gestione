@@ -44,7 +44,8 @@ foreach(IndicatoriValoreParametroRilevato::getAll(
     }
     if (!empty($item->codice_cdr)) {
         $cdr = AnagraficaCdr::factoryFromCodice($item->codice_cdr, $data_riferimento);
-        $cdr_txt = $cdr->codice." - ".$cdr->descrizione;
+        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+        $cdr_txt = $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
     }
     else {
         $cdr_txt = "";
@@ -220,9 +221,10 @@ $oGrid->addSearchField($oField);
 
 $cdr_select = array();
 foreach(AnagraficaCdr::getAnagraficaInData($data_riferimento) as $cdr) {
+    $tipo_cdr = new TipoCdr($cdr_creazione->id_tipo_cdr);
     $cdr_select[] = array(
         new ffData($cdr->codice, "Number"),
-        new ffData($cdr->codice . " - " . $cdr->descrizione, "Text")
+        new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione, "Text")
     );
 }
 $oField = ffField::factory($cm->oPage);

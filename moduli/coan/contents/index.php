@@ -83,7 +83,8 @@ if (count($periodi_anno) > 0) {
                 $indent .= "----";
             }
             $tpl->set_var("cdr_coan_indent", $indent);
-            $tpl->set_var("cdr_coan_descrizione", $cdr_associato["cdr"]->codice . " - " . $cdr_associato["cdr"]->descrizione);
+            $tipo_cdr = new TipoCdr($cdr_associato["cdr"]->id_tipo_cdr);
+            $tpl->set_var("cdr_coan_descrizione", $cdr_associato["cdr"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_associato["cdr"]->descrizione);
             $tpl->parse("SectOptionCdrCoan", true);
         }
     } else {

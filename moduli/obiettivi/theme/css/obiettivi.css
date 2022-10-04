@@ -142,12 +142,12 @@ div#riapertura_obiettivi_confirm_dialog {
     margin-bottom: 9px;    
 }
 
-#azioni_figli #cdr_tabs ul li {
+#azioni_figli .cdr_tabs_azioni_figli ul li {
     padding: 0 9px;    
     display: inline-flex;
     width: 49%;
 }
 
-#azioni_figli #cdr_tabs .cdr_tab_content {
+#azioni_figli .cdr_tabs_azioni_figli .cdr_tab_content {
     padding: 0 9px 9px 9px;
 }

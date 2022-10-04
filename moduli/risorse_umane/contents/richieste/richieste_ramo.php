@@ -13,7 +13,7 @@ foreach ($cdr->getRichiesteCompetenzaRamoCdrAnno($anno) as $richiesta) {
     $qualifica = new QualificaInterna($richiesta->id_qualifica_interna);
     $ruolo = new Ruolo($qualifica->id_ruolo);
     $tipologia = new RUTipoRichiesta($richiesta->id_tipo_richiesta);
-
+    $tipo_cdr = new TipoCdr($cdr_creazione->id_tipo_cdr);
     $id_stato_avanzamento = $richiesta->getIdStatoAvanzamento();
     $stati_avanzamento = RURichiesta::getStatiAvanzamento();
     $index_stato_avanzamento = array_search($id_stato_avanzamento, array_column($stati_avanzamento, 'ID'));        
@@ -21,7 +21,7 @@ foreach ($cdr->getRichiesteCompetenzaRamoCdrAnno($anno) as $richiesta) {
     if ($stato_avanzamento["esito"] !== "ko") {
         $record = array(
             $richiesta->id,
-            $cdr_creazione->codice." - ".$cdr_creazione->descrizione,
+            $cdr_creazione->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_creazione->descrizione,
             $ruolo->descrizione,
             $qualifica->descrizione,
             $richiesta->qta,

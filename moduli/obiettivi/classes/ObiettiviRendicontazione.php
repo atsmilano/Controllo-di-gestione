@@ -148,7 +148,7 @@ class ObiettiviRendicontazione extends Entity{
                 " . $html_indicatori . "
                 <div class='form-group clearfix padding'>
                     <label>Percentuale raggiungimento";
-        if ($hide_nucleo == true) {
+        if ($hide_nucleo !== true) {
             $html .= " Aziendale";
         }    
         $html .= "
@@ -161,7 +161,7 @@ class ObiettiviRendicontazione extends Entity{
                         <span class='form-control readonly'>" . $raggiungibile . "</span>
                     </div>";
         }
-        if ($hide_nucleo == true) {
+        if ($hide_nucleo !== true) {
             $html .= $html_campo_revisione . "
                     <div class='form-group clearfix padding'>
                         <label>Raggiungimento validato</label>

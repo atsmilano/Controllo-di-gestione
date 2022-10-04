@@ -69,8 +69,9 @@ if (count($cdr_ramo) > 0) {
         for ($i = 0; $i < $cdr_figlio_ramo["livello"]; $i++) {
             $indent .= "----";
         }
+        $tipo_cdr = new TipoCdr($cdr_figlio_ramo["cdr"]->id_tipo_cdr);
         $tpl->set_var("cdr_ru_indent", $indent);
-        $tpl->set_var("cdr_ru_descrizione", $cdr_figlio_ramo["cdr"]->codice . " - " . $cdr_figlio_ramo["cdr"]->descrizione);
+        $tpl->set_var("cdr_ru_descrizione", $cdr_figlio_ramo["cdr"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_figlio_ramo["cdr"]->descrizione);
         $tpl->parse("SectOptionCdrRU", true);
     }
     if ($cdr_selezionato == null) {
@@ -321,7 +322,8 @@ foreach ($report as $id_cdr => $cdr_personale) {
             }
             $tpl->set_var("SectReportQIRow", null);
         }     
-        $tpl->set_var("cdr", $cdr["cdr"]->codice." - ".$cdr["cdr"]->descrizione);
+        $tipo_cdr = new TipoCdr($cdr["cdr"]->id_tipo_cdr);
+        $tpl->set_var("cdr", $cdr["cdr"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr["cdr"]->descrizione);
         $tpl->set_var("teste_cdr", $cdr_personale["tot_teste"]);
         $tpl->set_var("fte_cdr", $cdr_personale["tot_fte"]!==(int)$cdr_personale["tot_fte"]?number_format($cdr_personale["tot_fte"], 2):$cdr_personale["tot_fte"]);
         if ($cdr_ramo_select == false) {

@@ -37,12 +37,12 @@ foreach($personale_cdr_responsabilita as $cdr_responsabilita) {
         $obiettivi_cdr_associati = $item->getObiettivoCdrPersonaleAssociati($personale->matricola);
         if (empty($obiettivi_cdr_associati)) {
             $obiettivo = new ObiettiviObiettivo($item->id_obiettivo);
-
+            $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
             $grid_recordset[] = array(
                 $item->id,
                 $anno_budget->descrizione."-".str_pad($obiettivo->codice_incr_anno, 4, "0", STR_PAD_LEFT),
                 $obiettivo->titolo,
-                $cdr->codice." - ".$cdr->descrizione,
+                $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $item->peso
             );
         }

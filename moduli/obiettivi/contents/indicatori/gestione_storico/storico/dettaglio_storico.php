@@ -21,7 +21,8 @@ if (isset($_REQUEST["keys[ID_indicatori_valore_parametro_rilevato]"])) {
         }
         if (!empty($valore_parametro_rilevato->codice_cdr)) {
             $cdr = AnagraficaCdr::factoryFromCodice($valore_parametro_rilevato->codice_cdr, $data_riferimento);
-            $cdr_txt = $cdr->codice." - ".$cdr->descrizione;
+            $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+            $cdr_txt = $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
         }
         else {
             $cdr_txt = "";

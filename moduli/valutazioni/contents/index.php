@@ -156,7 +156,7 @@ if (count($periodi_valutazione) > 0) {
 
                     foreach ($cdr_afferenza as $cdr_aff) {
                         $tipo_cdr = new TipoCdr($cdr_aff["cdr"]->id_tipo_cdr);
-                        $tpl->set_var("cdr", $tipo_cdr->abbreviazione . " " . $cdr_aff["cdr"]->descrizione . " (" . $cdr_aff["cdr"]->codice . ") " . $cdr_commento);
+                        $tpl->set_var("cdr", $cdr_aff["cdr"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_aff["cdr"]->descrizione . $cdr_commento);
                         $tpl->set_var("perc_testa", $cdr_aff["peso_cdr"]);
                         $tpl->parse("SectCdrAssociati", true);
                     }

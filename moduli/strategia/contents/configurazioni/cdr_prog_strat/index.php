@@ -11,10 +11,10 @@ $grid_fields = array(
 $grid_recordset = array();
 foreach (StrategiaCdrProgrammazioneStrategica::getAll() as $item) {
     $cdr = AnagraficaCdr::factoryFromCodice($item->codice_cdr, $date);
-    
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_recordset[] = array(
         $item->id,
-        $item->codice_cdr ." - ".$cdr->descrizione,
+        $item->codice_cdr . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
         $item->anno_inizio,
         $item->anno_fine
     );

@@ -23,10 +23,10 @@ foreach (RURichiesta::getAll(array("ID_anno_budget"=>$anno->id)) as $richiesta) 
         $qualifica = new QualificaInterna($richiesta->id_qualifica_interna);
         $ruolo = new Ruolo($qualifica->id_ruolo);
         $tipologia = new RUTipoRichiesta($richiesta->id_tipo_richiesta);
-
+        $tipo_cdr = new TipoCdr($cdr_creazione->id_tipo_cdr);
         $record = array(
             $richiesta->id,
-            $cdr_creazione->codice." - ".$cdr_creazione->descrizione,
+            $cdr_creazione->codice . " - " . $tipo_cdr->abbreviazione . $cdr_creazione->descrizione,
             $ruolo->descrizione,
             $qualifica->descrizione,
             $richiesta->qta,

@@ -405,12 +405,14 @@ if ($edit == false) {
             $cdr_selezionabili[$key] = new AnagraficaCdr($value->id_anagrafica_cdr);
         }
         $oRecord->insert_additional_fields["ID_tipo_piano_cdr"] = new ffData($tipo_piano->id, "Number");
-    }
+    }   
+    usort($cdr_selezionabili, "cmp");     
     foreach ($cdr_selezionabili as $anagrafica_cdr) {
         if (!$obiettivo->isCdrAssociato($anagrafica_cdr)) {
+            $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
             $cdr_multipair[] = array(
                     new ffData($anagrafica_cdr->codice),
-                    new ffData($anagrafica_cdr->codice . " - " . $tipo_cdr->abbreviazione . " - " . $anagrafica_cdr->descrizione, "Number"),
+                    new ffData($anagrafica_cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione, "Number"),
             );
         }
     }
@@ -418,13 +420,17 @@ if ($edit == false) {
 //in modifica viene semplicemente recuperato il cdr selezionato
 else {
     $anagrafica_cdr = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr->codice_cdr, $date);
+    usort($anagrafica_cdr, "cmp");
     $tot_peso_cdr = $anagrafica_cdr->getPesoTotaleObiettivi($anno, $obiettivo);
+    $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
     $cdr_multipair[] = array(
             new ffData($anagrafica_cdr->codice),
-            new ffData($anagrafica_cdr->codice . " - " . $anagrafica_cdr->descrizione, "Number"),
+            new ffData($anagrafica_cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione, "Number"),
     );
 }
-
+function cmp($a, $b) {
+    return strcmp($a->codice, $b->codice);
+}
 //*************************************
 $oField = ffField::factory($cm->oPage);
 $oField->id = "codice_cdr";
@@ -532,7 +538,8 @@ if ($edit == true && $user_privileges["view_coreferenti_associati"]) {
             //recupero descrizione cdr dal piano attivo del tipo di piano con priorità più alta
             try {
                 $anagrafica_cdr_coreferente = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_coreferente->codice_cdr, $date);
-                $cdr_coreferente_desc = $anagrafica_cdr_coreferente->codice . " - " . $anagrafica_cdr_coreferente->descrizione;
+                $tipo_cdr = new TipoCdr($anagrafica_cdr_coreferente->id_tipo_cdr);
+                $cdr_coreferente_desc = $anagrafica_cdr_coreferente->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr_coreferente->descrizione;
                 //nel caso in cui il cdr sia referente per l'obiettivo viene specificato                
                 if ($obiettivo_cdr_padre == $obiettivo_cdr_coreferente) {
                     $cdr_coreferente_desc .= " (referente)";
@@ -630,11 +637,12 @@ if (
                 $peso_totale_obiettivi = $anagrafica_figlio->getPesoTotaleObiettivi($anno);                
                 $perc_peso = CoreHelper::percentuale($obiettivo_cdr_figlio->peso, $peso_totale_obiettivi);  
                 $responsabile_cdr_figlio = $cdr_figlio->getResponsabile($date);
+                $tipo_cdr = new TipoCdr($cdr_figlio->id_tipo_cdr);
                 //costruzione record
                 $grid_recordset[] = array(
                     $obiettivo_cdr_figlio->id,
                     $cdr_figlio->codice,
-                    $cdr_figlio->descrizione,
+                    $tipo_cdr->abbreviazione . " " . $cdr_figlio->descrizione,
                     $responsabile_cdr_figlio->cognome . " " . $responsabile_cdr_figlio->nome . " (matr. " . $responsabile_cdr_figlio->matricola_responsabile . ")",
                     number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
                 );    
@@ -661,7 +669,8 @@ if ($edit == true) {
 
     //se il cdr è coreferente vengono visualizzate le azioni del padre
     if ($obiettivo_cdr->isCoreferenza()) {
-        $oField->label = "Azioni definite dal CDR: '" . $cdr_padre_obiettivo->codice . " - " . $cdr_padre_obiettivo->descrizione . "' (referente obiettivo trasversale)";
+        $tipo_cdr = new TipoCdr($cdr_padre_obiettivo->id_tipo_cdr);    
+        $oField->label = "Azioni definite dal CDR: '" . $cdr_padre_obiettivo->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_padre_obiettivo->descrizione . "' (referente obiettivo trasversale)";
         $oField->control_type = "label";
         $oField->store_in_db = false;
         $oField->data_type = "";
@@ -686,14 +695,21 @@ if ($edit == true) {
     //azioni dei cdr afferenti, visualizzabili se presente priilegio modifica azioni
     //se cdr referente di obiettivo trasversale
     //se almeno uno dei figli del cdr è associato all'obiettivo
-    if ($user_privileges["edit_azioni"] && !$obiettivo_cdr->isCoreferenza()) {
-        if (count($obiettivi_cdr_figli)) {
-            $modulo = Modulo::getCurrentModule();
-            $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");                                
-            $tpl->load_file("azioni_cdr_figli.html", "main");            
-            foreach ($obiettivi_cdr_figli as $tipo_piano_figlio) {                
-                foreach($tipo_piano_figlio["data"] as $obiettivo_cdr_figlio) {                                       
-                    $cdr_desc = $obiettivo_cdr_figlio["cdr"]->codice." - ".$obiettivo_cdr_figlio["cdr"]->descrizione;
+    if ($user_privileges["edit_azioni"] && !$obiettivo_cdr->isCoreferenza()) {        
+        $first_ob_cdr = true;           
+        foreach ($obiettivi_cdr_figli as $tipo_piano_figlio) {               
+            if (count($tipo_piano_figlio["data"])) {
+                if ($first_ob_cdr == true) {
+                    $modulo = Modulo::getCurrentModule();
+                    $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");                                
+                    $tpl->load_file("azioni_cdr_figli.html", "main");
+                    $first_ob_cdr = false;
+                }                
+                $tpl->set_var("id_tipo_piano", $tipo_piano_figlio["tipo_piano"]->id);
+                $tpl->set_var("tipo_piano_desc", $tipo_piano_figlio["tipo_piano"]->descrizione);
+                foreach($tipo_piano_figlio["data"] as $obiettivo_cdr_figlio) { 
+                    $tipo_cdr = new TipoCdr($obiettivo_cdr_figlio["cdr"]->id_tipo_cdr);
+                    $cdr_desc = $obiettivo_cdr_figlio["cdr"]->codice . " - " . $tipo_cdr->abbreviazione . " " . $obiettivo_cdr_figlio["cdr"]->descrizione;
                     if (strlen($obiettivo_cdr_figlio["obiettivo_cdr"]->azioni)) {
                         $cdr_desc .= "*";
                         $azioni = $obiettivo_cdr_figlio["obiettivo_cdr"]->azioni;
@@ -707,10 +723,12 @@ if ($edit == true) {
                     $tpl->set_var("azioni", $azioni);
                     $tpl->parse("IntestazioneCdrTab", true);
                     $tpl->parse("ContentCdrTab", true);
-                }
+                }                
+                
+                $tpl->parse("DivCdrTab", false);
+                $oRecord->addContent($tpl->rpparse("main", false), "azioni");
             }
-            $oRecord->addContent($tpl->rpparse("main", true), "azioni");
-        }
+        }                
     }                                        
 
     //*************************************
@@ -729,7 +747,8 @@ if ($edit == true) {
     $oField->multi_select_one_label = "Nessun parere espresso...";
     //se il cdr è coreferente vengono visualizzate le azioni del padre
     if ($obiettivo_cdr->isCoreferenza()) {
-        $oField->label = "Parere sulle azioni del CDR: '" . $cdr_padre_obiettivo->codice . " - " . $cdr_padre_obiettivo->descrizione . "' (referente obiettivo trasversale)";
+        $tipo_cdr = new TipoCdr($cdr_padre_obiettivo->id_tipo_cdr);
+        $oField->label = "Parere sulle azioni del CDR: '" . $cdr_padre_obiettivo->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_padre_obiettivo->descrizione . "' (referente obiettivo trasversale)";
         $oField->control_type = "label";
         $oField->store_in_db = false;
         $oField->data_type = "";
@@ -750,7 +769,8 @@ if ($edit == true) {
     $oField->extended_type = "Text";
     //se il cdr è coreferente vengono visualizzate le azioni del padre
     if ($obiettivo_cdr->isCoreferenza()) {
-        $oField->label = "Note Azioni del CDR: '" . $cdr_padre_obiettivo->codice . " - " . $cdr_padre_obiettivo->descrizione . "' (referente obiettivo trasversale)";
+        $tipo_cdr = new TipoCdr($cdr_padre_obiettivo->id_tipo_cdr);
+        $oField->label = "Note Azioni del CDR: '" . $cdr_padre_obiettivo->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_padre_obiettivo->descrizione . "' (referente obiettivo trasversale)";
         $oField->control_type = "label";
         $oField->store_in_db = false;
         $oField->data_type = "";

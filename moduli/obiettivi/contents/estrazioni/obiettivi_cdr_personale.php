@@ -102,11 +102,11 @@ if (isset($_GET["anno"])) {
                         }
                         $piano_cdr = PianoCdr::getAttivoInData($tipo_piano, $data_riferimento->format("Y-m-d"));
                         $cdr = Cdr::factoryFromCodice($obiettivo_cdr_associato->codice_cdr, $piano_cdr);
-
+                        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
                         $record[] = $obiettivo_cdr_associato->id_tipo_piano_cdr;
                         $record[] = $desc_tipo_piano;
                         $record[] = $obiettivo_cdr_associato->codice_cdr;
-                        $record[] = $cdr->descrizione;
+                        $record[] = $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
                         $record[] = $codice_cdr_coreferenza;
                         $record[] = $obiettivo_cdr_associato->peso;
                         $record[] = $azioni;

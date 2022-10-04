@@ -67,7 +67,8 @@ if (isset ($_GET["periodo"])) {
                     $obiettivo_cdr_aziendale = $obiettivo_cdr_associato->getObiettivoCdrAziendale();
                     $rendicontazione_aziendale = $obiettivo_cdr_aziendale->getRendicontazionePeriodo($periodo);
                     $anagrafica_cdr_coreferenza = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_aziendale->codice_cdr, $date);
-                    $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $anagrafica_cdr_coreferenza->descrizione;
+                    $tipo_cdr = new TipoCdr($anagrafica_cdr_coreferenza->id_tipo_cdr);
+                    $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr_coreferenza->descrizione;
                     $azioni = $obiettivo_cdr_aziendale->azioni;
                     if ($rendicontazione !== null){
                         $rendicontazione->raggiungibile = true;
@@ -80,9 +81,11 @@ if (isset ($_GET["periodo"])) {
                     }  
                 }
                 else { 
+                    $cdr_coreferenza_desc = "";
                     if ($is_coreferenza) {                       
                         $anagrafica_cdr_coreferenza = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_aziendale->codice_cdr, $date);
-                        $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $anagrafica_cdr_coreferenza->descrizione;
+                        $tipo_cdr = new TipoCdr($anagrafica_cdr_coreferenza->id_tipo_cdr);
+                        $cdr_coreferenza_desc = $anagrafica_cdr_coreferenza->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr_coreferenza->descrizione;
                     }                                                       
                     $azioni = $obiettivo_cdr_associato->azioni;
                     try {
@@ -92,8 +95,9 @@ if (isset ($_GET["periodo"])) {
                         $parere_azioni_desc = "Non definite";
                     }
                     $codice_cdr_coreferenza = "";
-                }                
-                $record[] = $obiettivo_cdr_associato->codice_cdr . " - " . $cdr_figlio["cdr"]->descrizione;
+                }       
+                $tipo_cdr = new TipoCdr($cdr_figlio["cdr"]->id_tipo_cdr);
+                $record[] = $obiettivo_cdr_associato->codice_cdr . " - " . $tipo_cdr->abbreviazione . " " . $cdr_figlio["cdr"]->descrizione;
                 $record[] = $cdr_coreferenza_desc;
                 $record[] = $obiettivo_cdr_associato->peso;
                 $record[] = $azioni;		

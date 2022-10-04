@@ -67,17 +67,17 @@ if (count($obiettivi_cdr_anno) > 0) {
     }
     $riga++;
     //righe della tabella, cdr e per ognuno di essi associazione e rendicontazione agli obiettivi
-    $cdr_figli = array();
-    $cdr_figli[] = $cdr;
-    $cdr_figli = array_merge($cdr_figli, $cdr->getFigli());
+    $cdr_figli = $cdr->getFigli();
+    usort($cdr_figli, "cmp");
+    $cdr_figli = array_merge(array($cdr), $cdr_figli);   
     function cmp($a, $b) {
         return strcmp($a->codice, $b->codice);
     }
-    usort($cdr_figli, "cmp");
     $obiettivi_modificabili = false;
     foreach ($cdr_figli as $cdr_figlio) {
+        $tipo_cdr = new TipoCdr($cdr_figlio->id_tipo_cdr);
         $tpl->set_var("codice_cdr", $cdr_figlio->codice);
-        $tpl->set_var("desc_cdr", $cdr_figlio->descrizione);
+        $tpl->set_var("desc_cdr", $tipo_cdr->abbreviazione . " " . $cdr_figlio->descrizione);
         $tpl->set_var("riga", $riga++);
         $colonna = 1;
         $cdr_figlio_obiettivo = new Cdr($cdr_figlio->id);

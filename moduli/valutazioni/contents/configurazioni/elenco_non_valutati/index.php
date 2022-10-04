@@ -76,7 +76,8 @@ if (count($periodi_valutazione) > 0) {
                 $tpl->set_var("perc_testa", $dipendente->cdr_afferenza["peso_cdr"]);
                 $tpl->parse("SectCdrAssociati", true);
             }
-            $tpl->set_var("cdr_riferimento", $dipendente->cdr_riferimento->codice . " - " . $dipendente->cdr_riferimento->descrizione);
+            $tipo_cdr = new TipoCdr($dipendente->cdr_riferimento->id_tipo_cdr);
+            $tpl->set_var("cdr_riferimento", $dipendente->cdr_riferimento->codice . " - " . $tipo_cdr->abbreviazione . " " . $dipendente->cdr_riferimento->descrizione);
             $tpl->set_var("valutatore_suggerito", $dipendente->valutatore_suggerito->cognome . " " . $dipendente->valutatore_suggerito->nome . " (" . $dipendente->valutatore_suggerito->matricola_responsabile . ")");
             $tpl->set_var("categoria_dipendente", $dipendente->categoria->descrizione);
             $tpl->set_var("anomalie", $dipendente->anomalie);

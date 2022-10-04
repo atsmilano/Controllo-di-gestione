@@ -64,9 +64,10 @@ foreach(AnagraficaCdr::getAll(array(), $order) as $cdr) {
     }
     $intervallo_validita .= ")";
     
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $cdr_select[] = array(
         new ffData($cdr->codice, "Text"),
-        new ffData($cdr->codice ." - ".$cdr->descrizione.$intervallo_validita, "Text")
+        new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione.$intervallo_validita, "Text")
     );
 }
 $oField = ffField::factory($cm->oPage);

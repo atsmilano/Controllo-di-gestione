@@ -147,6 +147,7 @@ if (isset($tipo_piano_cdr_selezionato))
 	$oField->properties["onchange"] = "submit();";
 	$oField->setValue($piano_cdr_selezionato->id);
 	$oField->parent_page = array(&$cm->oPage);
+        $oField->multi_select_one = false;
 	$tpl->set_var("piano_cdr_sel", $oField->process());
 
 	//**************************************************************************

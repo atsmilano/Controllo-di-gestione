@@ -41,3 +41,23 @@ define("APPID", "PECNVBLA");
 
 // session name
 session_name("PHPSESSPECNVBLA");
+
+/*
+//esempio sovrascrittura (non obbligatoria) dei parametri dei moduli (file xml di configurazione modulo)
+define ("MODULI_CONF",
+        array(
+            array("id_modulo"=>ID_MODULO,
+                    "constants"=>array("NOME_COSTANTE_MODULO"=>VALORE_COSTANTE_MODULO),
+            ),
+            array("id_modulo"=>ID_MODULO,
+                    "anno_inizio"=>ANNO_INIZIO,
+                    "anno_fine"=>ANNO_FINE (0 se nessuno),
+                    "constants"=>array("NOME_COSTANTE_MODULO"=>VALORE_COSTANTE_MODULO),
+            ),
+            array("id_modulo"=>ID_MODULO,
+                    "anno_inizio"=>ANNO_INIZIO,
+                    "anno_fine"=>ANNO_FINE (0 se nessuno),
+            ),
+        )
+    );
+ */
