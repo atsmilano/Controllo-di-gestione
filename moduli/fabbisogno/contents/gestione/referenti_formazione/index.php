@@ -22,10 +22,11 @@ $grid_recordset = array();
 foreach (FabbisognoFormazione\ReferenteCdr::getAll() as $referente_cdr) {
     $personale = Personale::factoryFromMatricola($referente_cdr->matricola_personale);
     $cdr = Cdr::factoryFromCodice($referente_cdr->codice_cdr, $piano_cdr);
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_recordset[] = array(
         $referente_cdr->id,
         $personale->cognome." ".$personale->nome." (matr.".$personale->matricola.")",
-        $cdr->codice." - ".$cdr->descrizione,
+        $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
         $referente_cdr->data_introduzione,
         $referente_cdr->data_termine,
     );

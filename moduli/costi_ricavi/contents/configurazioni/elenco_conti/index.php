@@ -265,9 +265,10 @@ if (count($periodi) > 0) {
     //CDR		
     foreach (CdrCostiRicavi::getCodiciCdrAssociatiContoAnno($anno) AS $codice_cdr_anno) {
         $cdr = AnagraficaCdr::factoryFromCodice($codice_cdr_anno, $dateTimeObject);
+        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
         $cdr_anno_select[] = array(
             new ffData($cdr->codice, "Number"),
-            new ffData($cdr->codice . " - " . $cdr->descrizione, "Text")
+            new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione, "Text")
         );
     }
     $oField = ffField::factory($cm->oPage);

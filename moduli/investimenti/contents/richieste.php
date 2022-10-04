@@ -28,10 +28,11 @@ foreach ($cdr->getInvestimentiAnno($anno) as $investimento) {
     $categoria_bene = new InvestimentiCategoria ($investimento->richiesta_id_categoria);
     //priorita intervento
     $priorita_intervento = new InvestimentiPrioritaIntervento($investimento->richiesta_id_priorita);   
+    $tipo_cdr_richiesta = new TipoCdr($cdr_richiesta->id_tipo_cdr);
     $source_sql .= "
         SELECT 
             " . $db->toSql($investimento->id) . " AS ID,
-            " . $db->toSql($cdr_richiesta->codice . " - " . $cdr_richiesta->descrizione) . " AS cdr_richiesta,
+            " . $db->toSql($cdr_richiesta->codice . " - " . $tipo_cdr_richiesta->abbreviazione . " " . $cdr_richiesta->descrizione) . " AS cdr_richiesta,
             " . $db->toSql($categoria_bene->descrizione) . " AS categoria_bene,
             " . $db->toSql(CoreHelper::cutText($investimento->richiesta_descrizione_bene, INVESTIMENTI_LUNGHEZZA_MAX_DESCRIZIONE_RICHIESTA)) . " AS descrizione_bene,
             " . $db->toSql($investimento->istruttoria_costo_presunto) . " AS costo_presunto,

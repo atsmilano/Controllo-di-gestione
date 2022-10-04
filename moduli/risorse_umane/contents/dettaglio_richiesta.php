@@ -207,7 +207,7 @@ if ($privilegi_utente["view_richiesta"]) {
         $oField->id = "cdr_creazione";
         $oField->base_type = "Text";    
         $oField->label = "Cdr creazione";
-        $oField->default_value = new ffData($cdr_creazione->codice." - ".(strlen($cdr_creazione->abbreviazione)>0?$cdr_creazione->abbreviazione." - ":"").$cdr_creazione->descrizione, "Text");
+        $oField->default_value = new ffData($cdr_creazione->codice." - ".$cdr_creazione->abbreviazione . " " . $cdr_creazione->descrizione, "Text");
         $oField->data_type = "";
         $oField->control_type = "label";
         $oField->store_in_db = false;
@@ -272,7 +272,7 @@ if ($privilegi_utente["view_richiesta"]) {
             $cdr_multipairs[] =
                     array(
                             new ffData ($cdr_figlio->id, "Number"),
-                            new ffData ($cdr_figlio->codice." - ". $tipo_cdr->abbreviazione . " - " . $cdr_figlio->descrizione, "Text"),						
+                            new ffData ($cdr_figlio->codice." - ". $tipo_cdr->abbreviazione . " " . $cdr_figlio->descrizione, "Text"),						
                             );
             foreach ($cdr_figlio->getCdc() as $cdc) {
                 //preselezione del cdr                 
@@ -305,7 +305,7 @@ if ($privilegi_utente["view_richiesta"]) {
     else {
         $oField->base_type = "Text";
         $tipo_cdr_predefinito = new TipoCdr($cdr_predefinito->id_tipo_cdr);
-        $oField->display_value = new ffData($cdr_predefinito->codice." - ". $tipo_cdr_predefinito->abbreviazione . " - " . $cdr_predefinito->descrizione, "Text");
+        $oField->display_value = new ffData($cdr_predefinito->codice." - ". $tipo_cdr_predefinito->abbreviazione . " " . $cdr_predefinito->descrizione, "Text");
         $oField->control_type = "label";
         $oField->store_in_db = false;    
     }

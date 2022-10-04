@@ -85,7 +85,7 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
                         }      
                         $raggiungimento .= $coreferenza_desc;
                     }     
-                    else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                    else if ($rendicontazione_aziendale !== null && strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
                         $raggiungimento = (int)$raggiungimento_nucleo . "%";
                     }
                     if ($rendicontazione_cdr !== null && $rendicontazione_cdr->perc_raggiungimento !== null) {                        
@@ -113,21 +113,23 @@ if (count($obiettivi_cdr_personale_anno) > 0) {
                     //viene verificato che l'obiettivo sia già stato accettato dal dipendente
                     if (($ob_personale->data_accettazione == null) &&
                         ($obiettivo_cdr->data_chiusura_modifiche !== null && strtotime(date("Y-m-d")) >= strtotime($obiettivo_cdr->data_chiusura_modifiche))) {
+                        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
                         $grid_recordset_da_confermare[] = array(
                             $obiettivo_cdr->id,
                             $obiettivo->codice . $coreferente,
                             $obiettivo->titolo,
-                            $cdr->codice . " - " . $cdr->descrizione,
+                            $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                             number_format($peso_perc, 2) . "%",
                             $periodo_desc,
                             $raggiungimento,
                         );
                     } else if ($ob_personale->data_accettazione !== null) {
+                        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
                         $grid_recordset_confermati[] = array(
                             $obiettivo_cdr->id,
                             $obiettivo->codice . $coreferente,
                             $obiettivo->titolo,
-                            $cdr->codice . " - " . $cdr->descrizione,
+                            $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                             number_format($peso_perc, 2) . "%",
                             $periodo_desc,
                             $raggiungimento,
@@ -386,7 +388,8 @@ $tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
 $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date);
 foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $cdr_resp) {     
     $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $dateTimeObject);
-    $cdr_resp_anno_desc = $cdr_resp_anno->codice . " - " . $cdr_resp_anno->descrizione;
+    $tipo_cdr = new TipoCdr($cdr_resp_anno->id_tipo_cdr);
+    $cdr_resp_anno_desc = $cdr_resp_anno->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_resp_anno->descrizione;
     $grid_recordset_responsabile[$cdr_resp_anno_desc] = array();
     $peso_tot_obiettivi_cdr = $cdr_resp_anno->getPesoTotaleObiettivi($anno);
     foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {
@@ -410,7 +413,7 @@ foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $
             if ($ob_cdr_resp->isCoreferenza()) {
                 if ($rendicontazione_cdr !== null) {                    
                     $coreferenza_desc = " (ragg. referente validato: ";                                                                                            
-                    if ($rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                    if (strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
                         $coreferenza_desc .= (int)$raggiungimento_nucleo . "%)";
                     }
                     else{
@@ -418,12 +421,12 @@ foreach ($personale->getCdrResponsabilitaPiano($piano_cdr, $dateTimeObject) as $
                     }     
                     $raggiungimento = (int)$rendicontazione_cdr->perc_raggiungimento. "%";                           
                 }
-                else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+                else if ($rendicontazione_aziendale !== null && strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
                     $raggiungimento = (int)$raggiungimento_nucleo . "%";
                 }        
                 $raggiungimento .= $coreferenza_desc;
             }     
-            else if ($rendicontazione_aziendale !== null && $rendicontazione_valutata_nucleo["rendicontazione"] !== null) {
+            else if ($rendicontazione_aziendale !== null && strlen($rendicontazione_valutata_nucleo["rendicontazione"]->note_nucleo) > 0) {
                 $raggiungimento = (int)$raggiungimento_nucleo . "%";
             }  
             if ($rendicontazione_cdr !== null && $rendicontazione_cdr->perc_raggiungimento !== null) {                        

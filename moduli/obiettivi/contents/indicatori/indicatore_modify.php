@@ -268,7 +268,8 @@ if (isset($_REQUEST["keys[ID_indicatore]"])) {
         try {            
             $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $cm->oPage->globals["data_riferimento"]["value"]->format('Y-m-d'));
             $cdr = Cdr::factoryFromCodice($valore_target->codice_cdr, $piano_cdr);
-            $descrizione_cdr = $cdr->codice . " - " . $cdr->descrizione;
+            $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+            $descrizione_cdr = $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
         } catch (Exception $ex) {
             $descrizione_cdr = "Aziendale";
         }        

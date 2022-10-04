@@ -6,6 +6,8 @@ define("VALUTAZIONI_DIFF_ORA_RICALCOLO", "24 hours");
 define("VALUTAZIONI_LABEL_GRAFICO_MAX_LEN", 25);
 //directory in download/enviroment di destinazione delle schede di valutazione
 define("VALUTAZIONI_DOWNLOADABLE_EXTRACTIONS_DIR", "schede_valutazione");
+//visibilità del cruscotto per i dipendenti
+define("VALUTAZIONI_CRUSCOTTO_VIEW_DIPENDENTI", true);
 //acl
 $user = LoggedUser::getInstance();
 $anno = $cm->oPage->globals["anno"]["value"];
@@ -29,7 +31,9 @@ $allowed_actions["valutazioni"] = array(
 );
 
 $cruscotto_view = true;
-
+if (VALUTAZIONI_CRUSCOTTO_VIEW_DIPENDENTI == false && !$user->hasPrivilege("valutazioni_admin")){
+    $cruscotto_view = false;
+}
 $allowed_actions["cruscotto"] = array(
     "path" => FF_SITE_PATH . "/area_riservata".$module->site_path."/cruscotto?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST),    
     "icon"   => $cruscotto_view ? "pie-chart" : MODULES_ICONHIDE,

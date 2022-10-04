@@ -2,26 +2,31 @@
 //predisposizione dati per la grid	
 //popolamento della grid tramite array		
 $db = ffDb_Sql::factory();
-$source_sql = "";
 
-//vengono estratti tutte le categorie
-foreach (AnagraficaCdr::getAll() as $anagrafica_cdr) {
-    if (strlen($source_sql)) {
-        $source_sql .= "UNION ";
-    }
-    
+$grid_fields = array(
+    "ID",
+    "codice",
+    "descrizione",    
+    "abbreviazione",
+    "ID_tipo_cdr",
+    "descrizione_tipo_cdr",
+    "data_introduzione",
+    "data_termine",
+);
+
+$grid_recordset = array();
+foreach (AnagraficaCdc::getAll() as $anagrafica_cdr) {
     $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
-
-    $source_sql .= "SELECT			
-        " . $db->toSql($anagrafica_cdr->id) . " AS ID,
-        " . $db->toSql($anagrafica_cdr->codice) . " AS codice,
-        " . $db->toSql($anagrafica_cdr->descrizione) . " AS descrizione,
-        " . $db->toSql($anagrafica_cdr->abbreviazione) . " AS abbreviazione,
-        " . $db->toSql($anagrafica_cdr->id_tipo_cdr) . " AS ID_tipo_cdr,
-        " . $db->toSql($tipo_cdr->descrizione ." (" . $tipo_cdr->abbreviazione . ")") ." AS descrizione_tipo_cdr,
-        " . $db->toSql($anagrafica_cdr->data_introduzione) . " AS data_introduzione,
-        " . $db->toSql($anagrafica_cdr->data_termine) . " AS data_termine
-    ";
+    $grid_recordset[] = array(
+        $anagrafica_cdr->id,
+        $anagrafica_cdr->codice,
+        $anagrafica_cdr->descrizione,
+        $anagrafica_cdr->abbreviazione,
+        $anagrafica_cdr->id_tipo_cdr,
+        $anagrafica_cdr->descrizione,
+        $anagrafica_cdr->data_introduzione,
+        $anagrafica_cdr->data_termine,
+    );
 }
 
 //visualizzazione della grid delle categorie
@@ -29,33 +34,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "anagrafica-cdr";
 $oGrid->title = "Anagrafe dei CdR";
 $oGrid->resources[] = "anagrafica-cdr";
-if (strlen($source_sql) > 0) {
-    $oGrid->source_SQL = "	
-        SELECT *
-        FROM (" . $source_sql . ") AS anagrafica_cdr
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-} else {
-    $oGrid->source_SQL .= "
-        SELECT			
-            '' AS ID,
-            '' AS codice,
-            '' AS descrizione,
-            '' AS abbreviazione,
-            '' AS ID_tipo_cdr,
-            '' AS descrizione_tipo_cdr,
-            '' AS data_introduzione,
-            '' AS data_termine
-        FROM anagrafica_cdr
-        WHERE 1=0
-        [AND]
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-}
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "anagrafica_cdr");
 $oGrid->order_default = "ID_tipo_cdr";
 $oGrid->record_id = "anagrafica-cdr-modify";
 $path_info_parts = explode("/", $cm->path_info);

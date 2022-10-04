@@ -34,7 +34,8 @@ foreach (ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id)) as $ob
             if ($obiettivo_cdr_associato->data_eliminazione == null && $obiettivo_cdr_associato->isObiettivoCdrAziendale()) {
                 try {
                     $cdr = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_associato->codice_cdr, $date);
-                    $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+                    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+                    $cdr_desc = $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
                 } catch (Exception $ex) {
                     $cdr_desc = $obiettivo_cdr_associato->codice_cdr . " (codice cdr non valido / obsoleto)";
                 }

@@ -46,9 +46,10 @@ if (count($periodi)>0){
 	$cm->oPage->addContent($oField->process());
 
 	//visualizzazione fp
+        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
 	$oGrid = ffGrid::factory($cm->oPage);
 	$oGrid->id = "fp";
-	$oGrid->title = "Fattori produttivi associati a '".$cdr->codice." - ".$cdr->descrizione."'";
+	$oGrid->title = "Fattori produttivi associati a '". $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione."'";
 	$oGrid->resources[] = "costi-ricavi-fp";
 	
 	//costruzione della query

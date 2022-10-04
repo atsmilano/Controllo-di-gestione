@@ -37,7 +37,7 @@ if (isset($_GET["periodo"])) {
             "note azioni",
             "periodo",
             "azioni",
-            "provvedeimenti (delibere e determinazioni)",
+            "provvedimenti (delibere e determinazioni)",
             "criticità",
             "misurazione indicatori",
         )
@@ -125,11 +125,11 @@ if (isset($_GET["periodo"])) {
                         }
 
                         $anagrafica_cdr = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_associato->codice_cdr, $data_riferimento);
-
+                        $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
                         $record[] = $obiettivo_cdr_associato->id_tipo_piano_cdr;
                         $record[] = $desc_tipo_piano;
                         $record[] = $obiettivo_cdr_associato->codice_cdr;
-                        $record[] = $anagrafica_cdr->descrizione;
+                        $record[] = $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione;
                         $record[] = $codice_cdr_coreferenza;
                         $record[] = $obiettivo_cdr_associato->peso;
                         $record[] = $azioni;

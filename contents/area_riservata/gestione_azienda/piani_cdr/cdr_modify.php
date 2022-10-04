@@ -94,11 +94,12 @@ if (isset($piano_cdr->data_introduzione)) {
 $oRecord->addEvent("on_do_action", "checkRelations");
 
 $anagrafiche = getAnagrafiche($piano_cdr, $cdr_padre, $id_cdr, true);
+$tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
 //Viene considerato nelle opzioni anche il cdr.
 if ($id_cdr != 0) {
     $anagrafiche[] = array(
         new ffData($cdr->id_anagrafica_cdr, "Number"),
-        new ffData($cdr->codice . " - " . $cdr->descrizione, "Text"),
+        new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione, "Text"),
     );
 }
 

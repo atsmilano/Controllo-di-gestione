@@ -18,48 +18,31 @@ if ((int) $id_cdr_padre !== 0 && ($cdr_padre->id_piano_cdr !== $cdr->id_piano_cd
 }
 
 //visualizzazione della grid dei cdc associati
-$source_sql = "";
 $db = ffDb_Sql::factory();
+
+$grid_fields = array(
+    "ID",
+    "codice",
+    "descrizione",    
+    "abbreviazione",
+);
+
+$grid_recordset = array();
 foreach ($cdr->getCdc() as $cdc) {
-    if (strlen($source_sql)) {
-        $source_sql .= " UNION ";
-    }
-    $source_sql .= "
-        SELECT 
-            " . $db->toSql($cdc->id) . " AS ID,
-            " . $db->toSql($cdc->codice) . " AS codice,
-            " . $db->toSql($cdc->descrizione) . " AS descrizione,
-            " . $db->toSql($cdc->abbreviazione) . " AS abbreviazione
-    ";
+    $grid_recordset[] = array(
+        $cdc->id,
+        $cdc->codice,
+        $cdc->descrizione,
+        $cdc->abbreviazione,
+    );
 }
 
+$tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
 $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "cdc";
-$oGrid->title = "Centri di costo del Cdr<br>" . $cdr->codice . " - " . $cdr->descrizione;
+$oGrid->title = "Centri di costo del Cdr<br>" . $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
 $oGrid->resources[] = "cdc";
-if (strlen($source_sql) > 0) {
-    $oGrid->source_SQL = "
-        SELECT *
-        FROM (" . $source_sql . ") AS cdc                          
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-} else {
-    $oGrid->source_SQL = "
-        SELECT
-            '' AS ID,
-            '' AS codice,              
-            '' AS descrizione,
-            '' AS abbreviazione
-        FROM cdc
-        WHERE 1=0
-        [AND]
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-}
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "cdc");
 $oGrid->order_default = "descrizione";
 $oGrid->record_id = "cdc-modify";
 //costruzione dell'url del record (viene selelezionata la directory corrente con substr (path - ultima_parte_del_path))

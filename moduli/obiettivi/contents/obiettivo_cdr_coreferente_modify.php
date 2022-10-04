@@ -74,10 +74,11 @@ $cdr_multipair = array();
 if ($obiettivo_cdr_coreferente == null) {
     foreach (AnagraficaCdrObiettivi::getAnagraficaInData($date) as $anagrafica_cdr){
         if (!$obiettivo->isCdrAssociato($anagrafica_cdr)) {
+            $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
             $cdr_multipair[] =
             array(
                 new ffData ($anagrafica_cdr->codice),
-                new ffData ($anagrafica_cdr->codice." - ". $tipo_cdr->abbreviazione . " - " . $anagrafica_cdr->descrizione, "Number"),						
+                new ffData ($anagrafica_cdr->codice." - ". $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione, "Number"),						
             );
         }
     }
@@ -86,10 +87,11 @@ if ($obiettivo_cdr_coreferente == null) {
 else {   
     $anagrafica_cdr = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo_cdr_coreferente->codice_cdr, $date);
     $tot_peso_cdr = $anagrafica_cdr->getPesoTotaleObiettivi($anno, $obiettivo);
+    $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
     $cdr_multipair[] =
         array(
             new ffData ($anagrafica_cdr->codice),
-            new ffData ($anagrafica_cdr->codice." - " . $anagrafica_cdr->descrizione, "Number"),						
+            new ffData ($anagrafica_cdr->codice." - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione, "Number"),						
             );  
 }
 $oField = ffField::factory($cm->oPage);

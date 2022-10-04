@@ -263,7 +263,8 @@ if (isset($obiettivo)) {
                 $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date->format("Y-m-d"));
                 try {
                     $cdr = Cdr::factoryFromCodice($obiettivo_cdr->codice_cdr, $piano_cdr);
-                    $cdr_desc = $cdr->codice . " - " . $cdr->descrizione;
+                    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+                    $cdr_desc = $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione;
                 } catch (Exception $ex) {
                     $cdr_desc = "Codice cdr non valido / obsoleto";
                 }

@@ -90,10 +90,11 @@ foreach (FabbisognoFormazione\Richiesta::getAll(array("ID_anno_budget"=>$anno->i
         }
         else {
             $referente_desc = "Non definito";
-        }        
+        }       
+        $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
         $grid_recordset[] = array(
             $richiesta->id,
-            $cdr->codice." - ".$cdr->descrizione,
+            $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
             $responsabile_scientifico_desc,
             $referente_desc,
             $richiesta->titolo,

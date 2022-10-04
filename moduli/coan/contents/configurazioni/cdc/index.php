@@ -13,20 +13,21 @@ $grid_fields = array(
 );
 
 $grid_recordset = array();
-foreach (CoanCdc::getAll() as $item) {
-    $cdc_standard_regionale = new CoanCdcStandardRegionale($item->id_cdc_standard_regionale);
-    $distretto = new CoanDistretto($item->id_distretto);
-    $cdr = AnagraficaCdr::factoryFromCodice($item->codice_cdr, $date);
-    
+foreach (CoanCdc::getAll() as $cdc) {
+    $cdc_standard_regionale = new CoanCdcStandardRegionale($cdc->id_cdc_standard_regionale);
+    $cdr = AnagraficaCdr::factoryFromCodice($cdc->codice_cdr, $date);
+    $distretto = new CoanDistretto($cdc->id_distretto);
+    //var_dump($cdr).die;
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_recordset[] = array(
-        $item->id,
-        $item->codice,
-        $item->descrizione,
+        $cdc->id,
+        $cdc->codice,
+        $cdc->descrizione,
         $cdc_standard_regionale->codice." - ".$cdc_standard_regionale->descrizione,
-        $item->codice_cdr ." - ".$cdr->descrizione,
+        $cdc->codice_cdr . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
         $distretto->codice." - ".$distretto->descrizione,
-        $item->anno_introduzione,
-        $item->anno_termine
+        $cdc->anno_introduzione,
+        $cdc->anno_termine
     );
 }
 
@@ -103,6 +104,6 @@ $cm->oPage->addContent($oGrid);
 
 function checkRelations($oGrid) {
     $id = $oGrid->key_fields["ID_cdc"]->value->getValue();
-    $item = new CoanCdc($id);
-    $oGrid->display_delete_bt = $item->canDelete();
+    $cdc = new CoanCdc($id);
+    $oGrid->display_delete_bt = $cdc->canDelete();
 }

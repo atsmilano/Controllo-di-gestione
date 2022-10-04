@@ -1,14 +1,15 @@
+<!--BeginDivCdrTab-->
 <div id="azioni_figli">	 
-    <label>Azioni definite dai Cdr afferenti (* se definite)</label>
+    <label>Azioni definite per l'obiettivo dai CDR afferenti su {tipo_piano_desc} (* se definite)</label>
     <div>          
-        <div id="cdr_tabs">
+        <div id="cdr_tabs_{id_tipo_piano}" class='cdr_tabs_azioni_figli'>
                 <ul>
                     <!--BeginIntestazioneCdrTab-->
                     <li><a href="#tab_cdr_{id_cdr}">{cdr_desc}</a></li>
                     <!--EndIntestazioneCdrTab-->
                 </ul>
                 <!--BeginContentCdrTab-->
-                <div id="tab_cdr_{id_cdr}" class="cdr_tab_content">  
+                <div id="tab_cdr_{id_cdr}" class="cdr_tabs_azioni_figli">  
                     <h4>{cdr_desc} - {cdr_resp}</h4>
                     <p>{azioni}</p>         
                 </div>
@@ -19,7 +20,8 @@
 
 <script>
     $(function () {        
-        $('#cdr_tabs').tabs({            
+        $('#cdr_tabs_{id_tipo_piano}').tabs({            
         });
     });
 </script>
+<!--EndDivCdrTab-->

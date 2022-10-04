@@ -149,7 +149,8 @@ else {
 //definizione del record
 $oRecord = ffRecord::factory($cm->oPage);
 $oRecord->id = "rendicontazione-modify";
-$oRecord->title = "Rendicontazione obiettivo per il CDR '" . $cdr->codice . " - " . $cdr->descrizione . "'";
+$tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
+$oRecord->title = "Rendicontazione obiettivo per il CDR '" . $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione . "'";
 $oRecord->resources[] = "rendicontazione";
 $oRecord->src_table = "obiettivi_rendicontazione";
 //vengono sempre inibiti eliminazione ed insarimento
@@ -187,7 +188,8 @@ $anagrafica_cdr_aziendale = AnagraficaCdrObiettivi::factoryFromCodice($obiettivo
 //nel caso in cui venga trovata una rendicontazione aziendale differente da quella corrente
 if ($obiettivo_cdr->id !== $obiettivo_cdr_aziendale->id) {
     $oRecord->addContent(null, true, "riepilogo_rendicontazione_aziendale");
-    $oRecord->groups["riepilogo_rendicontazione_aziendale"]["title"] = "Rendicontazione aziendale dell'obiettivo " . $anagrafica_cdr_aziendale->codice . " - " . $anagrafica_cdr_aziendale->descrizione . $desc_referente;
+    $tipo_cdr = new TipoCdr($anagrafica_cdr_aziendale->id_tipo_cdr);
+    $oRecord->groups["riepilogo_rendicontazione_aziendale"]["title"] = "Rendicontazione aziendale dell'obiettivo " . $anagrafica_cdr_aziendale->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr_aziendale->descrizione . $desc_referente;
 
     if ($rendicontazione_aziendale_obiettivo !== null) {
         $oRecord->addContent($rendicontazione_aziendale_obiettivo->showHtmlInfo(), "riepilogo_rendicontazione_aziendale");
@@ -689,8 +691,8 @@ if (!$obiettivo_cdr->isCoreferenza()) {
         if (!$user_privileges["edit_responsabile"]) {
             $oField->base_type = "Text";
             $oField->data_type = "";
-            $oField->control_type = "label";
-            $oField->default_value = new ffData($rendicontazione->raggiungibile == 1 ? "Si" : "No", "Text");
+            $oField->control_type = "label";           
+            $oField->default_value = new ffData($rendicontazione->raggiungibile == 1 ? "Si" : ($rendicontazione->raggiungibile === null ? "ND" : "No"), "Text");
             $oField->store_in_db = false;
         } else {
             $oField->base_type = "Number";
@@ -819,7 +821,7 @@ function preloadNoteNucleo($oRecord) {
 
 if ($show_rendicontazione_figli == true){
     $cdr_figli = $cdr->getFigli();
-    if (count($cdr_figli)) {                        
+    if (count($cdr_figli) && !$obiettivo_cdr->isCoreferenza()) {                        
         //viene caricato il template specifico per le rendicontazioni dei cdr afferenti
         $modulo = Modulo::getCurrentModule();
         $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
@@ -831,7 +833,8 @@ if ($show_rendicontazione_figli == true){
                 if ( $show_rendicontazione_figli == false) {
                     $show_rendicontazione_figli = true;
                 }
-                $cdr_figlio_desc = $cdr_figlio->codice." - ".$cdr_figlio->descrizione;                                                
+                $tipo_cdr = new TipoCdr($cdr_figlio->id_tipo_cdr);
+                $cdr_figlio_desc = $cdr_figlio->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_figlio->descrizione;                                                
                 $rendicontazione_figlio_periodo = $obiettivo_cdr_figlio->getRendicontazionePeriodo($periodo_rendicontazione);                
                 if ($rendicontazione_figlio_periodo !== null) {
                     $cdr_figlio_desc .= " - ".$rendicontazione_figlio_periodo->perc_raggiungimento."%";

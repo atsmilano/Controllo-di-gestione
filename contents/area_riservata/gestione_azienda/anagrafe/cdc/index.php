@@ -2,21 +2,26 @@
 //predisposizione dati per la grid	
 //popolamento della grid tramite array		
 $db = ffDb_Sql::factory();
-$source_sql = "";
 
-//vengono estratte tutte le categorie
+$grid_fields = array(
+    "ID",
+    "codice",
+    "descrizione",    
+    "abbreviazione",
+    "data_introduzione",
+    "data_termine",
+);
+
+$grid_recordset = array();
 foreach (AnagraficaCdc::getAll() as $anagrafica_cdc) {
-    if (strlen($source_sql)) {
-        $source_sql .= "UNION ";
-    }
-    $source_sql .= "SELECT			
-        " . $db->toSql($anagrafica_cdc->id) . " AS ID,
-        " . $db->toSql($anagrafica_cdc->codice) . " AS codice,
-        " . $db->toSql($anagrafica_cdc->descrizione) . " AS descrizione,
-        " . $db->toSql($anagrafica_cdc->abbreviazione) . " AS abbreviazione,
-        " . $db->toSql($anagrafica_cdc->data_introduzione) . " AS data_introduzione,
-        " . $db->toSql($anagrafica_cdc->data_termine) . " AS data_termine
-    ";
+    $grid_recordset[] = array(
+        $anagrafica_cdc->id,
+        $anagrafica_cdc->codice,
+        $anagrafica_cdc->descrizione,
+        $anagrafica_cdc->abbreviazione,
+        $anagrafica_cdc->data_introduzione,
+        $anagrafica_cdc->data_termine,
+    );
 }
 
 //visualizzazione della grid delle categorie
@@ -24,31 +29,7 @@ $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "anagrafica-cdc";
 $oGrid->title = "Anagrafe dei CdC";
 $oGrid->resources[] = "anagrafica-cdc";
-if (strlen($source_sql) > 0) {
-    $oGrid->source_SQL = "	
-        SELECT *
-        FROM (" . $source_sql . ") AS anagrafica_cdc
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-} else {
-    $oGrid->source_SQL .= "
-        SELECT			
-            '' AS ID,
-            '' AS codice,
-            '' AS descrizione,
-            '' AS abbreviazione,
-            '' AS data_introduzione,
-            '' AS data_termine
-        FROM anagrafica_cdc
-        WHERE 1=0
-        [AND]
-        [WHERE]
-        [HAVING]
-        [ORDER]
-    ";
-}
+$oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "anagrafica_cdc");
 $oGrid->order_default = "codice";
 $oGrid->record_id = "anagrafica-cdc-modify";
 $path_info_parts = explode("/", $cm->path_info);

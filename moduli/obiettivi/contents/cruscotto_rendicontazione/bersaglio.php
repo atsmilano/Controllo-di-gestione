@@ -78,8 +78,9 @@ $tpl->set_var("filter_cdr_codice", 0);
 $tpl->set_var("filter_cdr_descrizione", "Tutti i CDR");
 $tpl->parse("SectOptionCdr", true);
 foreach ($cdr_obiettivi_aziendali as $cdr_obiettivo_anno) {
+    $tipo_cdr = new TipoCdr($cdr_obiettivo_anno->id_tipo_cdr);
     $tpl->set_var("filter_cdr_codice", $cdr_obiettivo_anno->codice);
-	$tpl->set_var("filter_cdr_descrizione", $cdr_obiettivo_anno->codice." - ".$cdr_obiettivo_anno->descrizione);
+    $tpl->set_var("filter_cdr_descrizione", $cdr_obiettivo_anno->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_obiettivo_anno->descrizione);
     
     if ($cdr_obiettivo_anno->codice == $cdr_selezionato) {
         $tpl->set_var("filter_cdr_selected", "selected='selected'");
@@ -318,17 +319,17 @@ else {
                             $show_obiettivo = false;
                         }                                                                        
                     }                    
-                }  
-                if ($show_obiettivo == true && $filter_origine !== null && $filter_origine->id !== $obiettivo->id_origine) {
+                }
+                if ($show_obiettivo == true && $filter_origine !== null && $filter_origine->id != $obiettivo->id_origine) {
                     $show_obiettivo = false;
                 }
-                if ($show_obiettivo == true && $filter_area_obiettivo !== null && $filter_area_obiettivo->id !== $obiettivo->id_area) {
+                if ($show_obiettivo == true && $filter_area_obiettivo !== null && $filter_area_obiettivo->id != $obiettivo->id_area) {
                     $show_obiettivo = false;
                 }
-                if ($show_obiettivo == true && $filter_area_risultato !== null && $filter_area_risultato->id !== $obiettivo->id_area_risultato) {
+                if ($show_obiettivo == true && $filter_area_risultato !== null && $filter_area_risultato->id != $obiettivo->id_area_risultato) {
                     $show_obiettivo = false;
                 }
-                if ($show_obiettivo == true && $filter_tipo_obiettivo !== null && $filter_tipo_obiettivo->id !== $obiettivo->id_tipo) {
+                if ($show_obiettivo == true && $filter_tipo_obiettivo !== null && $filter_tipo_obiettivo->id != $obiettivo->id_tipo) {
                     $show_obiettivo = false;
                 }
                 if ($show_obiettivo == true 

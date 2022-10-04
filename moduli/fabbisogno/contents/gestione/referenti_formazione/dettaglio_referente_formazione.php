@@ -60,9 +60,10 @@ $oField->default_value = new ffData($referente_cdr->codice_cdr, "Text");
 $cdrs = array();
 foreach (AnagraficaCdr::getAll() as $cdr) {
     //if ($dipendente->isAttivoInData($date->format("Y-m-d"))) {
-        $cdrs[] = array(
+    $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);    
+    $cdrs[] = array(
             new ffData($cdr->codice, "Text"),
-            new ffData($cdr->codice . " - " . $cdr->descrizione, "Text"),
+            new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione, "Text"),
         );
     //}
 }

@@ -41,9 +41,10 @@ $raggiungimento_nucleo_azienda = 0;
 //predisposizione dei dati
 foreach (AnagraficaCdrObiettivi::getCdrObiettiviAziendali($anno) as $anagrafica_cdr) {                  
     //variabili cdr
+    $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
     $cdr_rendicontazione = array(       
                                 "codice_cdr" => $anagrafica_cdr->codice,
-                                "descrizione_cdr" => $anagrafica_cdr->descrizione, 
+                                "descrizione_cdr" => $tipo_cdr->abbreviazione . " " . $anagrafica_cdr->descrizione, 
                                 "n_obiettivi_cdr" => 0,
                                 "n_obiettivi_trasversali" => 0,
                                 "n_azioni_cdr" => 0,

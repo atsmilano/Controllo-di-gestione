@@ -251,7 +251,7 @@ if ($id_stato_avanzamento > 1) {
     $oField->id = "cdr_creazione";
     $oField->base_type = "Text";    
     $oField->label = "Cdr creazione";
-    $oField->default_value = new ffData($cdr_creazione->codice." - ".(strlen($cdr_creazione->abbreviazione)>0?$cdr_creazione->abbreviazione." - ":"").$cdr_creazione->descrizione, "Text");
+    $oField->default_value = new ffData($cdr_creazione->codice." - ". $cdr_creazione->abbreviazione . " " .$cdr_creazione->descrizione, "Text");
     $oField->data_type = "";
     $oField->control_type = "label";
     $oField->store_in_db = false;

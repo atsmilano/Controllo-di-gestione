@@ -56,11 +56,13 @@ foreach (InvestimentiInvestimento::getAll(array("ID_anno_budget" => $anno->id)) 
             if (strlen($source_sql)){
                 $source_sql .= " UNION ";
             }
+            $tipo_cdr_creazione = new TipoCdr($cdr_creazione->id_tipo_cdr);
+            $tipo_cdr_richiesta = new TipoCdr($cdr_richiesta->id_tipo_cdr);
             $source_sql .= "
                 SELECT 
                     " . $db->toSql($investimento->id) . " AS ID,
-                    " . $db->toSql($cdr_creazione->codice . " - " . $cdr_creazione->descrizione) . " AS cdr_creazione,
-                    " . $db->toSql($cdr_richiesta->codice . " - " . $cdr_richiesta->descrizione) . " AS cdr_richiesta,
+                    " . $db->toSql($cdr_creazione->codice . " - " . $tipo_cdr_creazione->abbreviazione . " " . $cdr_creazione->descrizione) . " AS cdr_creazione,
+                    " . $db->toSql($cdr_richiesta->codice . " - " . $tipo_cdr_richiesta->abbreviazione . " " . $cdr_richiesta->descrizione) . " AS cdr_richiesta,
                     " . $db->toSql($categoria_bene->descrizione) . " AS categoria_bene,
                     " . $db->toSql(CoreHelper::cutText($investimento->richiesta_descrizione_bene, INVESTIMENTI_LUNGHEZZA_MAX_DESCRIZIONE_RICHIESTA)) . " AS descrizione_bene,
                     " . $db->toSql($investimento->istruttoria_costo_presunto) . " AS costo_presunto,

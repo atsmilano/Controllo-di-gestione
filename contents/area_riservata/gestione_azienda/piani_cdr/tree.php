@@ -55,9 +55,9 @@ else {
             $dataRiferimentoObj = $dataDefinizioneSuccessivo->sub(new DateInterval('P1D'));
         }   
         else {
-            //ramo ipoteticamente irraggiungibile aggiunto per robustezza
-            //(se non viene trovato un piano successivo significa che si sarebbe dovuto ricadere nella condizione precedente)            
-            ffErrorHandler::raise("Errore nella determinazione del piano di riferimento");
+            //se nessuna delle precedenti condizioni è verificata significa che esiste un piano
+            //temporaneo successivo ma non considerato da \PianoCdr::getAttivoInData in quanto non ancora introdotto
+            $dataRiferimentoObj = $dataCorrenteObj;
         }
     }               
 }
@@ -91,7 +91,7 @@ if (count($cdr_figli) > 0) {
         //tipo cdr
         $tipo_cdr = new TipoCdr($cdr_figlio->id_tipo_cdr);
         //descrizione
-        $desc = $tipo_cdr->abbreviazione . " " . $cdr_figlio->codice . " - " . $cdr_figlio->descrizione;
+        $desc = $cdr_figlio->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr_figlio->descrizione;
         $short_desc = substr($desc, 0, DESCLN);
         if (strlen($desc) > DESCLN) {
             $short_desc .= "...";

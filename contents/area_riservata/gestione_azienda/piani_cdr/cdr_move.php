@@ -68,8 +68,8 @@ $tipo_cdr_padre = new tipoCdr($cdr_padre->id_tipo_cdr);
 
 //viene verificato che il cdr padre non sià già il padre attuale
 if ($cdr->id_padre == $cdr_padre->id)
-    die(json_encode(array('messaggio' => "Il cdr '" . $tipo_cdr_padre->abbreviazione . " " . $cdr_padre->codice . " - " . $cdr_padre->descrizione .
-        "' risulta già padre del cdr '" . $tipo_cdr->abbreviazione . " " . $cdr->codice . " - " . $cdr->descrizione . "'",
+    die(json_encode(array('messaggio' => "Il cdr '" . $cdr_padre->codice . " - " . $tipo_cdr_padre->abbreviazione . " " . $cdr_padre->descrizione .
+        "' risulta già padre del cdr '" . $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione . "'",
         'esito' => "error")));
 
 //viene verificato che il tipo cdr di destinazione sia definibile come padre del cdr che si sta spostando
@@ -88,8 +88,8 @@ $found = false;
 foreach ($cdr->getGerarchia() as $figlio) {
     if ($figlio["cdr"]->id_padre == $cdr_padre->id) {
         die(json_encode(array('messaggio' => "Non è possibile spostare il cdr '"
-            . $tipo_cdr->abbreviazione . " " . $cdr->codice . " - " . $cdr->descrizione . "' come figlio del figlio sul ramo gerarchico '"
-            . $tipo_cdr_padre->abbreviazione . " " . $cdr_padre->codice . " - " . $cdr_padre->descrizione . "'",
+            . $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione . "' come figlio del figlio sul ramo gerarchico '"
+            . $cdr_padre->codice . " - " . $tipo_cdr_padre->abbreviazione . " " . $cdr_padre->descrizione . "'",
             'esito' => "error")));
     }
 }
@@ -98,6 +98,6 @@ foreach ($cdr->getGerarchia() as $figlio) {
 $cdr->id_padre = $cdr_padre->id;
 $cdr->save();
 
-die(json_encode(array('messaggio' => "'" . $tipo_cdr->abbreviazione . " " . $cdr->codice . " - " . $cdr->descrizione .
-    "' spostato correttamente come figlio di '" . $tipo_cdr_padre->abbreviazione . " " . $cdr_padre->codice . " - " . $cdr_padre->descrizione . "'",
+die(json_encode(array('messaggio' => "'" . $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione .
+    "' spostato correttamente come figlio di '" . $cdr_padre->codice . " - " . $tipo_cdr_padre->abbreviazione . " " . $cdr_padre->descrizione . "'",
     'esito' => "success")));

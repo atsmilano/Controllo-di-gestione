@@ -97,7 +97,7 @@ if (STRATEGIA_CDR_PROGRAMMAZIONE !== false || $cdr->id_padre == 0) {
             $oGrid = ffGrid::factory($cm->oPage);
             $oGrid->id = "strategiaCdr";
             $oGrid->class .= " strategiaCdrGrid";
-            $oGrid->title = "Strategia di '" . $tipo_cdr->abbreviazione . " - " . $cdr->descrizione . "'";
+            $oGrid->title = "Strategia di '" . $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione . "'";
             if ($user->hasPrivilege("resp_cdr_selezionato")) {
                 $oGrid->title .= " (modificabile dall'utente)";
             }
@@ -194,7 +194,7 @@ if ($cdr->id_padre !== 0) {
         if (strlen($source_sql) > 0) {
             $oGrid = ffGrid::factory($cm->oPage);
             $oGrid->id = "strategiaPadre_" . $cdr_padre_strategico->id;
-            $oGrid->title = "Strategia definita da '" . $tipo_cdr_padre_strategico->abbreviazione . " - " . $cdr_padre_strategico->descrizione . "'";
+            $oGrid->title = "Strategia definita da '" . $cdr_padre_strategico->codice . " - " . $tipo_cdr_padre_strategico->abbreviazione . " " . $cdr_padre_strategico->descrizione . "'";
             $oGrid->class .= " strategiaCdrGrid";
             $oGrid->resources[] = "strategia";
             $oGrid->source_SQL = "	SELECT *

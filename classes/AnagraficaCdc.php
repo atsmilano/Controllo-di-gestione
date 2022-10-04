@@ -33,6 +33,7 @@ class AnagraficaCdc extends Entity{
                     && ($cdc_anagrafica->data_termine == null || strtotime($cdc_anagrafica->data_termine) >= strtotime($date->format("Y-m-d")))){
                     break;
                 }
+                $cdc_anagrafica = null;
             } while ($db->nextRecord());
         }
         

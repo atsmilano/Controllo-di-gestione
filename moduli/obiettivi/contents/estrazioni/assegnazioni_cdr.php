@@ -99,10 +99,11 @@ foreach($cdr_obiettivi as $cdr_assegnazione){
                 $tipo_piano = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano_cdr);
                 $desc_tipo_piano = $tipo_piano->descrizione;
             }
+            $tipo_cdr = new TipoCdr($cdr_assegnazione->id_tipo_cdr);
             $record[] = $obiettivo_cdr->id_tipo_piano_cdr;
             $record[] = $desc_tipo_piano;
             $record[] = $obiettivo_cdr->codice_cdr;                                
-            $record[] = $cdr_assegnazione->descrizione;                
+            $record[] = $tipo_cdr->abbreviazione . " " . $cdr_assegnazione->descrizione;                
             $record[] = $codice_cdr_coreferenza;
             $record[] = $obiettivo_cdr->peso;
             $record[] = $azioni;					
