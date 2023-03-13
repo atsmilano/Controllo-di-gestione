@@ -1045,12 +1045,19 @@ class ValutazioniValutazionePeriodica {
     //generazione del pdf per la stampa delle schede.
     //viene restituito il codice html per l'estrazione della scheda
     public function generazioneHtmlStampa() {        
-        $module = Modulo::getCurrentModule();
+        $module = core\Modulo::getCurrentModule();
         //viene caricato il template specifico per la pagina                
         $tpl = ffTemplate::factory($module->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
         $tpl->load_file("stampa_valutazione.html", "main");
-        $tpl->set_var("logo_stampa_filename", mod_security_get_logo());                
-
+        //$tpl->set_var("logo_stampa_filename", mod_security_get_logo());  
+        $tpl->set_var("logo_stampa_filename", FF_DISK_PATH
+                                                .DIRECTORY_SEPARATOR.FF_THEME_DIR
+                                                .DIRECTORY_SEPARATOR."ats"
+                                                .DIRECTORY_SEPARATOR."images"
+                                                .DIRECTORY_SEPARATOR."logo"
+                                                .DIRECTORY_SEPARATOR.LOGO_RESTRICTED_FILENAME
+                                                );         
+        
         //******
         //titolo
         $periodo = new ValutazioniPeriodo($this->id_periodo);

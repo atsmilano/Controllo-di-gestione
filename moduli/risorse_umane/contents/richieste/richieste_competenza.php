@@ -219,7 +219,7 @@ function updateRichieste($oRecord, $frmAction, $args) {
         $accettazione->note = $oRecord->form_fields["note"]->value->getValue();
         $accettazione->save();
         $cm = cm::getInstance();
-        $module = Modulo::getCurrentModule();
+        $module = core\Modulo::getCurrentModule();
         ffRedirect(FF_SITE_PATH . "/area_riservata".$module->site_path."/richieste/richieste_competenza?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST));
     }
 }

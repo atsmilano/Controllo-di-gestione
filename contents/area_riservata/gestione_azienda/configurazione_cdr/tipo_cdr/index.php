@@ -68,5 +68,5 @@ function getRelations($oGrid){
 	$oGrid->grid_fields["padri"]->setValue($tipi_cdr_padre);	
     
     $tipo_cdr = new TipoCdr($oGrid->key_fields["ID"]->value->getValue());	
-    $oGrid->display_delete_bt = $tipo_cdr->canDelete();
+    $oGrid->display_delete_bt = $tipo_cdr->isDeletable();
 }

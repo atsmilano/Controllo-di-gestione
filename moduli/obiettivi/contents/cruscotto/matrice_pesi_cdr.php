@@ -12,7 +12,7 @@ $date = $cm->oPage->globals["data_riferimento"]["value"];
 $anagrafica_cdr = AnagraficaCdrObiettivi::factoryFromCodice($cdr->codice, $date);
 $peso_tot_obiettivi = $anagrafica_cdr->getPesoTotaleObiettivi($anno);
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
@@ -27,7 +27,9 @@ $tpl->set_var("globals", $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST));
 if ($cdr->id_padre !== 0) {
     $tpl->parse("LinkEstrazione", false);
 }
-
+function cmp($a, $b) {
+    return strcmp($b->codice, $a->codice);
+}
 //intestazione della tabella, obiettivi del cdr
 $colonna = 1;
 $riga = 0;
@@ -57,11 +59,8 @@ if (count($obiettivi_cdr_anno) > 0) {
     $riga++;
     //righe della tabella, cdr e per ognuno di essi associazione e peso agli obiettivi    
     $cdr_figli = $cdr->getFigli();
-    usort($cdr_figli, "cmp");
-    $cdr_figli = array_merge(array($cdr), $cdr_figli);   
-    function cmp($a, $b) {
-        return strcmp($a->codice, $b->codice);
-    }
+    usort($cdr_figli, "cmp");    
+    $cdr_figli = array_merge(array($cdr), $cdr_figli);       
     $obiettivi_modificabili = false;
     foreach ($cdr_figli as $cdr_figlio) {
         $tpl->set_var("codice_cdr", $cdr_figlio->codice);

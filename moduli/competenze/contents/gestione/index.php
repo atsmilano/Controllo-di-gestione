@@ -1,5 +1,5 @@
 <?php
-$module = Modulo::getCurrentModule();
+$module = core\Modulo::getCurrentModule();
 $tab_params = $cm->oPage->getUrlParams(array("ret_url"));
 $user = LoggedUser::getInstance();
 $tabs = array();

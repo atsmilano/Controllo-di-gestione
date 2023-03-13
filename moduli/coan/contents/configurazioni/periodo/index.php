@@ -84,5 +84,5 @@ $cm->oPage->addContent($oGrid);
 function checkRelations($oGrid) {
     $id = $oGrid->key_fields["ID_periodo"]->value->getValue();
     $item = new CoanPeriodo($id);
-    $oGrid->display_delete_bt = $item->canDelete();
+    $oGrid->display_delete_bt = $item->isDeletable();
 }

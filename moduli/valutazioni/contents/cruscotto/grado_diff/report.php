@@ -7,7 +7,7 @@ $valutazioni_anno_budget = new ValutazioniAnnoBudget($anno->id);
 $data_riferimento = $cm->oPage->globals["data_riferimento"]["value"];
 
 //viene caricato il template specifico per la pagina
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("grado_differenziazione.html", "main");

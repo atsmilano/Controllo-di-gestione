@@ -6,7 +6,7 @@ $user = LoggedUser::getInstance();
 $anno = $cm->oPage->globals["anno"]["value"];
 
 //viene caricato il template specifico per la pagina
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("matrice_pesi.html", "main");

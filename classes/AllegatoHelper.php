@@ -44,9 +44,7 @@ class AllegatoHelper {
         $user = LoggedUser::getInstance();
         $return = false;
         $permission_token_object = $this->decodePermissions($_COOKIE['p_2_#']);
-        if($permission_token_object['user_id'] == $user->matricola_utente_selezionato || 
-            $permission_token_object['user_id'] == $_SESSION['matricola_utente_selezionato']){
-
+        if($permission_token_object['user_id'] == $user->matricola_utente_selezionato) {
             foreach ($permission_token_object['allegati_permissions']['canDownload'] as $key => $md5) {
                 if (strcmp($md5, $filename_md5) == 0) {
                     $return = true; 
@@ -62,9 +60,7 @@ class AllegatoHelper {
         $user = LoggedUser::getInstance();
         $return = false;
         $permission_token_object = $this->decodePermissions($_COOKIE['p_2_#']);
-        if($permission_token_object['user_id'] == $user->matricola_utente_selezionato || 
-            $permission_token_object['user_id'] == $_SESSION['matricola_utente_selezionato'] ){
-                
+        if($permission_token_object['user_id'] == $user->matricola_utente_selezionato) {                
             foreach ($permission_token_object['allegati_permissions']['canDelete'] as $key => $md5) {
                 if (strcmp($md5, $filename_md5) == 0) {
                     $return = true; 
@@ -76,12 +72,12 @@ class AllegatoHelper {
     }
 
     public function getDownloadLink($filename_md5, $filename_plain){
-        $cm = Cm::getInstance();
+        $cm = cm::getInstance();
         return '<a href="'.FF_SITE_PATH.DIRECTORY_SEPARATOR.area_riservata.DIRECTORY_SEPARATOR.'download.php?file='.$filename_md5.'&'.$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST).'">'.$filename_plain.'</a>';
     }
 
     public function getDeleteLink($filename_md5, $filename_plain, $use_hard_delete = false){
-        $cm = Cm::getInstance();
+        $cm = cm::getInstance();
         return '<a href="'.FF_SITE_PATH.DIRECTORY_SEPARATOR.'area_riservata'.DIRECTORY_SEPARATOR.'delete.php?hd='.$use_hard_delete.'&file='.$filename_md5.'&'.$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST).'">'.$filename_plain.'</a>';
     }
 

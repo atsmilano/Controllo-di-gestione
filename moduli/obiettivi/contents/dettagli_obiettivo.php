@@ -700,7 +700,7 @@ if ($edit == true) {
         foreach ($obiettivi_cdr_figli as $tipo_piano_figlio) {               
             if (count($tipo_piano_figlio["data"])) {
                 if ($first_ob_cdr == true) {
-                    $modulo = Modulo::getCurrentModule();
+                    $modulo = core\Modulo::getCurrentModule();
                     $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");                                
                     $tpl->load_file("azioni_cdr_figli.html", "main");
                     $first_ob_cdr = false;

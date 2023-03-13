@@ -122,7 +122,7 @@ if ($privilegi_utente["view_richiesta"] == false) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla richiesta di fabbisogno.");
 }
 //******************************************************************************
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $allow_edit = false;
 $allow_riapertura = false;
 if ($privilegi_utente["edit_richiesta"]) {

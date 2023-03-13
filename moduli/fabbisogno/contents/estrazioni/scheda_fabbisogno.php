@@ -1,5 +1,5 @@
 <?php
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $user = LoggedUser::getInstance();
 $anno = $cm->oPage->globals["anno"]["value"];
 $date = $cm->oPage->globals["data_riferimento"]["value"];
@@ -248,7 +248,7 @@ require_once(FF_DISK_PATH.DIRECTORY_SEPARATOR."library".DIRECTORY_SEPARATOR."mpd
 
 //generazione pdf
 $mpdf = new mPDF();
-$module = Modulo::getCurrentModule();
+$module = core\Modulo::getCurrentModule();
 $stylesheet = file_get_contents($module->module_theme_dir.DIRECTORY_SEPARATOR ."css".DIRECTORY_SEPARATOR."fabbisogno.css");
 $mpdf->WriteHTML($stylesheet,1);
 $mpdf->WriteHTML($tpl->rpparse("main", false),2);

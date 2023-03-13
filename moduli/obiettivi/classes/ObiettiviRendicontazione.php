@@ -45,6 +45,7 @@ class ObiettiviRendicontazione extends Entity{
 
     //metodo per la visualizzazione delle informazioni dell'obiettivo_cdr in html
     public function showHtmlInfo($hide_nucleo=false) {
+        $cm = cm::getInstance();
         $obiettivo_cdr = new ObiettiviObiettivoCdr($this->id_obiettivo_cdr);
         $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);
         if ($this->raggiungibile == 1) {
@@ -90,8 +91,7 @@ class ObiettiviRendicontazione extends Entity{
                     }
                     $html_parametri .= "</ul>";
                 }
-                $risultato_calcolo_indicatore = $indicatore->calcoloRisultatoIndicatore($parametri_calcolo)["risultato"];
-                $cm = cm::getInstance();
+                $risultato_calcolo_indicatore = $indicatore->calcoloRisultatoIndicatore($parametri_calcolo)["risultato"];                
                 $date = $cm->oPage->globals["data_riferimento"]["value"];
                 if ($obiettivo_cdr->id_tipo_piano_cdr != null) {
                     $tipo_piano = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano_cdr);
@@ -161,6 +161,62 @@ class ObiettiviRendicontazione extends Entity{
                         <span class='form-control readonly'>" . $raggiungibile . "</span>
                     </div>";
         }
+        
+        //allegati
+        if ($periodo_rendicontazione->allegati == 1) {            
+            $allegati = ObiettiviRendicontazioneAllegato::getAll(['rendicontazione_id' => $this->id]);
+            $allegati_helper = new AllegatoHelper(); 
+            
+            $user = LoggedUser::getInstance();
+            if (!isset($cm->oPage->globals["allegati_permissions"]["value"])) {
+                $allegati_permissions = array(
+                                        'user_id' => $user->matricola_utente_selezionato,
+                                        'allegati_permissions' => array(
+                                            'canDownload' => array(),
+                                            'canDelete' => array()
+                                        )
+                                    ); 
+                $cm->oPage->register_globals("allegati_permissions", $allegati_permissions);
+            }
+             
+            $allegati_permissions = $cm->oPage->globals["allegati_permissions"]["value"];
+            
+            if ($allegati_permissions['user_id'] == $user->matricola_utente_selezionato) {
+                foreach ($allegati as $allegato) {
+                    $allegati_permissions['allegati_permissions']['canDownload'][] = $allegato->filename_md5;                    
+                }
+            }
+            $cm->oPage->register_globals("allegati_permissions", $allegati_permissions);
+            
+            //messaggio in caso non ci siano allegati
+            if (count($allegati) == 0) {
+                $html .= '<p id="no_allegati_user_friendly">Nessun allegato caricato per il periodo di rendicontazione</p><br />';
+            } else {
+                $html .= '
+                <table id="allegati-ajax-table" class="table table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th class="cel-1 text-nowrap ffField text active">Allegati</th>
+                        </tr>
+                    </thead>
+                ';
+                $html .= "<tbody>";
+                $key_allegato = 0;
+                foreach ($allegati as $allegato) {                    
+                    $html .= '<tr id="al-' . $key_allegato . '" >';
+                    $html .= "<td>" . $allegati_helper->getDownloadLink($allegato->filename_md5, $allegato->filename_plain) . "</td>";
+                    $html .= '</tr>';
+                    
+                    $key_allegato++;
+                }
+            }
+            $html .= "</tbody>";
+            $html .= "</table>";            
+        } else {
+            $html .= "<label>Allegati non previsti per il periodo di rendicontazione</label><br><br>";
+        }
+    
+        //nucleo
         if ($hide_nucleo !== true) {
             $html .= $html_campo_revisione . "
                     <div class='form-group clearfix padding'>
@@ -172,8 +228,7 @@ class ObiettiviRendicontazione extends Entity{
                         <span class='form-control readonly " . $note_nucleo_class . "'>" . $note_nucleo . "</span>
                     </div>
                     ";
-        }
-        
+        }        
         return $html;
     }
 

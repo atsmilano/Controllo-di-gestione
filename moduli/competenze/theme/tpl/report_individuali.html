@@ -1,0 +1,58 @@
+<div id="report_individuali">     
+    <div id="report_selezione_periodi" class="selezione_parametri">
+        <!--BeginSectSelezionePeriodi-->
+        <div>	
+            <label>Periodo:&nbsp;</label>
+            <select name='periodo_select' id='periodo_select'>					
+                    <!--BeginSectOptionPeriodi-->
+                            <option value="{periodo_id}" {periodo_selected}>{periodo_descrizione}</option>
+                    <!--EndSectOptionPeriodi-->
+            </select>
+        </div>
+        <!--EndSectSelezionePeriodi-->
+        <!--BeginSectNoPeriodi-->
+            <p class='error'>Nessun periodo di riferimento definito.</p>
+        <!--EndSectNoPeriodi-->
+    </div>     
+    <div id="spinner_periodi" style="display: none"><img src='{module_img_path}/loader.gif' alt='Loading...'></div>
+    <div id="valutati"></div>
+    
+    <script>
+        $( document ).ready(function() {
+            const periodo_selected = $("#periodo_select option:selected").val();
+            loadValutati(periodo_selected);
+            $("#spinner_periodi").modal("hide");
+        });
+        
+        $("#periodo_select").change(function () {   
+            const periodo_selected = $(this).children(":selected").attr("value");
+            loadValutati(periodo_selected);
+        });
+        
+        function loadValutati(periodo_selected) {
+            $("#valutati").empty();
+            $("#spinner_periodi").modal("show");
+            
+            const data = { periodo_select: periodo_selected};
+            const request = $.ajax({
+                url: window.location.pathname + '/individuali/elenco_valutati?{globals}',
+                type: 'GET',
+                data: data,
+                cache: false,
+                contentType: false
+            });
+
+            request.done(function (data) {
+                $("#valutati").html(data);                
+            });
+
+            request.fail(function () {
+                console.log("Errore durante il caricamento dei valutati");                
+            });
+            
+            request.always(function(){
+                $("#spinner_periodi").modal("hide");       
+            });
+        };  
+    </script>   
+</div>

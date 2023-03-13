@@ -50,6 +50,7 @@ try {
     $row_error = array();
     $id_periodi_coan = array();
     foreach ($worksheet->getRowIterator() AS $row) {
+        
         $current_row = $row->getRowIndex();
         
         $consuntivo = new CoanConsuntivoPeriodo();
@@ -155,12 +156,14 @@ try {
     if (empty($row_error)) {
         //vengono eliminati i dati per il periodo/i selezionato/i        
         foreach($id_periodi_coan as $id_periodo_coan) {
-            CoanConsuntivoPeriodo::deleteDatiPeriodo($id_periodo_coan);
+            foreach (CoanConsuntivoPeriodo::getAll(["ID_periodo_coan" => $id_periodo_coan]) as $consuntivo_periodo) {
+                $consuntivo_periodo->delete();
+            }
         }        
         //vengono salvati i dati
         foreach ($row_save as $cons_periodo) {
-            $cons_periodo->save();
-        }
+            $cons_periodo->save(["ID_conto", "ID_cdc_coan", "ID_periodo_coan", "budget", "consuntivo"]);
+        }                
         
         $result[] = [
             "status" => true,

@@ -45,10 +45,10 @@ class Profilo extends \Entity
         return \MappaturaCompetenze\ProfiloCompetenzaSpecifica::getAll($filters);
     }
     
-    //restituisce tutti valori attesi utilizzabili con le date di validità del profilo 
+    //restituisce tutti valori attesi utilizzabili con le date di validità del profilo, ordinati in ordine crescente 
     public function getValoriAssegnabili() {
         $valori_attesi = array();
-        foreach (\MappaturaCompetenze\Valore::getAll() as $valore_atteso) {
+        foreach (\MappaturaCompetenze\Valore::getAll(array(), array(array("fieldname"=>"valore", "direction"=>"ASC"))) as $valore_atteso) {
             if (!\CoreHelper::verificaNonSovrapposizioneIntervalliAnno($valore_atteso->data_introduzione, $valore_atteso->data_termine, $this->data_introduzione, $this->data_termine)) {
                 $valori_attesi[] = $valore_atteso;
             }

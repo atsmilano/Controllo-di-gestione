@@ -1,8 +1,17 @@
 <?php
-class CoanPeriodo extends Entity {
+
+class CoanPeriodo extends Entity
+{
+
     protected static $tablename = "coan_periodo";
-    
-    public function canDelete() {
-        return empty(CoanConsuntivoPeriodo::getAll(["ID_periodo_coan" => $this->id]));
-    }
+    protected static $relations = array(
+        "relation" => array("target_class" => "CoanConsuntivoPeriodo",
+            "keys" => array(
+                "ID_periodo_coan" => "ID",
+            ),
+            "allow_delete" => false,
+            "propagate_delete" => false,
+        )
+    );
+
 }

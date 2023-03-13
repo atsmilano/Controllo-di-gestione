@@ -1,7 +1,7 @@
 <?php
 $user = LoggedUser::getInstance();
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("elenco_mappature_periodo.html", "main");
 
@@ -47,19 +47,21 @@ $cm->oPage->addContent($tpl);
 
 //grid mappature
 $date_time_fine_periodo = new DateTime(date($periodo->data_riferimento_fine));
+$personale = MappaturaCompetenze\Personale::factoryFromMatricola($user->matricola_utente_selezionato);
+
 $grid_mappature = array();
 //Mappature dall'alto di competenza
 //viene estratto tutto il personale profilato di competenza del responsabile del cdr
 $grid_mappatura = array();
-foreach (\MappaturaCompetenze\MappaturaPeriodo::getAll(array("ID_periodo"=>$periodo->id , "ID_tipo_mappatura"=>1, "matricola_valutatore"=>$user->matricola_utente_selezionato)) as $mappatura){
+foreach ($personale->getMappatureRuoloValutatore($periodo, 1) as $mappatura){
     $profilo = new \MappaturaCompetenze\Profilo($mappatura->id_profilo);    
-    $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);    
+    $valutato = \Personale::factoryFromMatricola($mappatura->matricola_personale);    
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
     $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
-                $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
+                $valutato->cognome . " - " . $valutato->nome . " (matr." . $valutato->matricola . ")",
                 $profilo_desc,
                 $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
@@ -69,20 +71,21 @@ if (count($grid_mappatura) > 0) {
     $grid_mappature[] = array("ID_tipo_mappatura"=>1, "title"=>"Mappatura periodica", "grid_mappatura"=>$grid_mappatura);
 }
 
-//TODO mappatura periodica con ruolo valutato
+//mappatura periodica con ruolo valutato
 
 //autovalutazione
 $grid_mappatura = array();
-$mappatura = \MappaturaCompetenze\MappaturaPeriodo::getByFields(array("ID_periodo"=>$periodo->id , "ID_tipo_mappatura"=>2, "matricola_valutatore"=>$user->matricola_utente_selezionato, "matricola_personale"=>$user->matricola_utente_selezionato));
+$mappatura = $personale->getMappatureRuoloValutatore($periodo, 2)[0];
+//$mappatura = \MappaturaCompetenze\MappaturaPeriodo::getByFields(array("ID_periodo"=>$periodo->id , "ID_tipo_mappatura"=>2, "matricola_valutatore"=>$user->matricola_utente_selezionato, "matricola_personale"=>$user->matricola_utente_selezionato));
 if ($mappatura !== null) {
     $profilo = new \MappaturaCompetenze\Profilo($mappatura->id_profilo);    
-    $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);
+    $valutato = \Personale::factoryFromMatricola($mappatura->matricola_personale);
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
     $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
-                $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
+                $valutato->cognome . " - " . $valutato->nome . " (matr." . $valutato->matricola . ")",
                 $profilo_desc,
                 $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
@@ -92,15 +95,15 @@ if ($mappatura !== null) {
 
 //mappature dal basso di competenza
 $grid_mappatura = array();
-foreach (\MappaturaCompetenze\MappaturaPeriodo::getAll(array("ID_periodo"=>$periodo->id , "ID_tipo_mappatura"=>3, "matricola_valutatore"=>$user->matricola_utente_selezionato)) as $mappatura){
+foreach ($personale->getMappatureRuoloValutatore($periodo, 3) as $mappatura){
     $profilo = new \MappaturaCompetenze\Profilo($mappatura->id_profilo);    
-    $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);
+    $valutato = \Personale::factoryFromMatricola($mappatura->matricola_personale);
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
     $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
-                $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
+                $valutato->cognome . " - " . $valutato->nome . " (matr." . $valutato->matricola . ")",
                 $profilo_desc,
                 $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
@@ -114,15 +117,15 @@ if (count($grid_mappatura) > 0) {
 
 //mappature tra pari di competenza
 $grid_mappatura = array();
-foreach (\MappaturaCompetenze\MappaturaPeriodo::getAll(array("ID_periodo"=>$periodo->id , "ID_tipo_mappatura"=>4, "matricola_valutatore"=>$user->matricola_utente_selezionato)) as $mappatura){
+foreach ($personale->getMappatureRuoloValutatore($periodo, 4) as $mappatura){
     $profilo = new \MappaturaCompetenze\Profilo($mappatura->id_profilo);    
-    $personale = \Personale::factoryFromMatricola($mappatura->matricola_personale);
+    $valutato = \Personale::factoryFromMatricola($mappatura->matricola_personale);
     $profilo_desc = $profilo->descrizione;
     $cdr = \AnagraficaCdr::factoryFromCodice($profilo->codice_cdr, $date_time_fine_periodo);
     $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_mappatura[] = array(
                 $mappatura->id,
-                $personale->cognome . " - " . $personale->nome . " (matr." . $personale->matricola . ")",
+                $valutato->cognome . " - " . $valutato->nome . " (matr." . $valutato->matricola . ")",
                 $profilo_desc,
                 $cdr->codice . "-" . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
                 $mappatura->datetime_ultimo_salvataggio,
@@ -132,7 +135,7 @@ if (count($grid_mappatura) > 0) {
     $grid_mappature[] = array("ID_tipo_mappatura"=>4, "title"=>"Mappatura tra pari", "grid_mappatura"=>$grid_mappatura);
 }
 
-//TODO mappature tra pari con ruolo valutat
+//TODO mappature tra pari con ruolo valutato
 
 if (count($grid_mappature) > 0) {
     foreach ($grid_mappature as $grid_mappatura) {

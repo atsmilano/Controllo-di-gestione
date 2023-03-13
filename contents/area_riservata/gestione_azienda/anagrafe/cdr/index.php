@@ -15,7 +15,7 @@ $grid_fields = array(
 );
 
 $grid_recordset = array();
-foreach (AnagraficaCdc::getAll() as $anagrafica_cdr) {
+foreach (AnagraficaCdr::getAll() as $anagrafica_cdr) {
     $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
     $grid_recordset[] = array(
         $anagrafica_cdr->id,
@@ -23,7 +23,7 @@ foreach (AnagraficaCdc::getAll() as $anagrafica_cdr) {
         $anagrafica_cdr->descrizione,
         $anagrafica_cdr->abbreviazione,
         $anagrafica_cdr->id_tipo_cdr,
-        $anagrafica_cdr->descrizione,
+        $tipo_cdr->descrizione,
         $anagrafica_cdr->data_introduzione,
         $anagrafica_cdr->data_termine,
     );

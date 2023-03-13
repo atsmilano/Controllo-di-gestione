@@ -5,7 +5,7 @@ if (!$user->hasPrivilege("investimenti_view")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina.");
 }
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");

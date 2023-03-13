@@ -1,4 +1,5 @@
 <?php
+namespace core;
 
 class Modulo
 {
@@ -80,10 +81,10 @@ class Modulo
     }
 
     //vengono restituiti i moduli attivi in un anno di budget
-    public static function getActiveModulesFromDisk($anno_selezionato = null)
+    public static function getActiveModulesFromDisk(\AnnoBudget $anno_selezionato = null)
     {
-        $di = new RecursiveDirectoryIterator(MODULES_DISK_PATH);
-        foreach (new RecursiveIteratorIterator($di) as $filename => $file) {
+        $di = new \RecursiveDirectoryIterator(MODULES_DISK_PATH);        
+        foreach (new \RecursiveIteratorIterator($di) as $filename => $file) {
             if (substr($filename, -strlen(MODULES_CONFIG_FILE)) == MODULES_CONFIG_FILE || substr($filename, -strlen(MODULES_COMMON_FILE)) == MODULES_COMMON_FILE) {
                 //estrazione del nome del modulo
                 $module_path_parts = explode(DIRECTORY_SEPARATOR, dirname($filename));
@@ -124,7 +125,7 @@ class Modulo
             if ($module["config_file"] == true && $module["common_file"]) {
                 //viene creato l'oggetto modulo per ogni modulo valido e attivo nell'anno
                 try {
-                    $cur_module = new Modulo($module["dir"]);
+                    $cur_module = new \core\Modulo($module["dir"]);
                     if ($anno_selezionato == null || ($cur_module->anno_inizio <= $anno_selezionato->descrizione && ($cur_module->anno_fine == 0 || $cur_module->anno_fine >= $anno_selezionato->descrizione))) {
                         $active_modules[] = $cur_module;
                     }
@@ -156,7 +157,7 @@ class Modulo
     //viene identificato il modulo corrente dal percorso della pagina
     public static function getCurrentModule($path = null, AnnoBudget $anno_selezionato = null)
     {
-        $cm = Cm::getInstance();
+        $cm = \Cm::getInstance();
         if ($path == null) {
             $path = parse_url($_SERVER["REQUEST_URI"])["path"];
         }
@@ -184,7 +185,7 @@ class Modulo
     //viene recuperato il percorso di menu corrente per l'url
     public static function getCurrentModuleMenuItem($url, $privilegesCheck = true)
     {
-        $cm = Cm::getInstance();
+        $cm = \Cm::getInstance();
         $found = array();
         $path = self::parseModuleUrl($url);
 
@@ -230,7 +231,7 @@ class Modulo
     //$subkey string sottochiave dell'elemento nell'array delle voci di menu
     public static function initializeUniqueClass($class, $key, $subkey)
     {
-        $cm = Cm::getInstance();
+        $cm = \Cm::getInstance();
         $uniqueKeyClass = strlen($class) > 0 ? " " : "";
         if (isset($subkey)) {
             $uniqueKeyClass .= "menu-" . $key . "-" . $subkey;
@@ -289,8 +290,7 @@ class Modulo
     //caricamento dei file css di un modulo specifico
     public static function loadCss($currentModule)
     {
-
-        $cm = Cm::getInstance();
+        $cm = \Cm::getInstance();
         $n = 0;
         //regola in htaccess
         foreach (glob($currentModule->module_css_dir . DIRECTORY_SEPARATOR . "*.css") as $filename) {

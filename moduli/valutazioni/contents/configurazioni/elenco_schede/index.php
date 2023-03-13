@@ -18,7 +18,7 @@ $tmp = $cm->oPage->widgets["dialog"]->process(
 $cm->oPage->tplAddCss("ff.css", array("file" => "ff.css", "path" => FF_THEME_DIR . "/responsive/css"));
 $cm->oPage->tplAddCss("ff-skin.css", array("file" => "ff-skin.css", "path" => FF_THEME_DIR . "/responsive/css"));
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("elenco_schede_valutazione.html", "main");
 $globals = $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST);

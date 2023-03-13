@@ -11,7 +11,7 @@ if(!isset($_REQUEST["titolo_grafico"]) || !isset($_REQUEST["left"]) || !isset($_
 }
 
 $cm = Cm::getInstance();
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $anno = $cm->oPage->globals["anno"]["value"];
 error_reporting(0);
 

@@ -16,7 +16,7 @@ $oRecord->id = "conto-modify";
 $oRecord->title = ($isEdit ? "Modifica" : "Nuovo") . " Conto";
 $oRecord->resources[] = "conto";
 $oRecord->src_table  = "coan_conto";
-$oRecord->allow_delete = !$isEdit || ($isEdit && $conto->canDelete());
+$oRecord->allow_delete = !$isEdit || ($isEdit && $conto->isDeletable());
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_conto";
@@ -98,8 +98,11 @@ function validateInput($oRecord, $frmAction) {
             $id_conto = $oRecord->key_fields["ID_conto"]->value->getValue();
             $conto = new CoanConto($id_conto);
             
-            if (!$conto->delete()) {
+            if (!$conto->isDeletable()) {
                 CoreHelper::setError($oRecord, "Conto utilizzato in consuntivo periodo: impossibile eliminare.");   
+            }
+            else {
+                $conto->delete();
             }
             
             $oRecord->skip_action = true;

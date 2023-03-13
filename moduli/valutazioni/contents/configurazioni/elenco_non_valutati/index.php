@@ -14,7 +14,7 @@ $tmp2 = $cm->oPage->widgets["dialog"]->process(
 
 ini_set("max_execution_time", VALUTAZIONI_MAX_EXECUTION_TIME);
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("elenco_non_valutati.html", "main");
 

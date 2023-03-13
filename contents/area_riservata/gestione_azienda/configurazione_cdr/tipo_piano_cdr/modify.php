@@ -15,7 +15,7 @@ if(isset($_REQUEST["keys"]["ID"])) {
 		ffErrorHandler::raise($ex->getMessage());
 	}
 	
-    if (!$tipo_piano_cdr->canDelete()){
+    if (!$tipo_piano_cdr->isDeletable()){
         $oRecord->allow_delete = false;
     }
 }
@@ -61,7 +61,7 @@ function checkRelations($oRecord, $frmAction) {
         case "delete":
         case "confirmdelete":
         $tipo_piano_cdr = new TipoPianoCdr($oRecord->key_fields["ID"]->value->getValue());
-        if(!$tipo_piano_cdr->canDelete()){
+        if(!$tipo_piano_cdr->isDeletable()){
             $oRecord->tplDisplayError("Il tipo piano è utilizzato per almeno un piano CdR: impossibile eliminare.");
             return true;
         }

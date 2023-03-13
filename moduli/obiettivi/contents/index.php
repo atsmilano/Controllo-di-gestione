@@ -29,7 +29,7 @@ $cm->oPage->addContent("<div id='obiettivi_individuali'>");
 $db = ffDb_Sql::factory();
 $accettazione_permessa = false;
 $obiettivi_cdr_personale_anno = $personale->getObiettiviCdrPersonaleAnno($anno);
-$currentModule = Modulo::getCurrentModule();
+$currentModule = core\Modulo::getCurrentModule();
 $record_url = MODULES_SITE_PATH . $currentModule->site_path . "/dettagli_obiettivo";
 
 if (count($obiettivi_cdr_personale_anno) > 0) {

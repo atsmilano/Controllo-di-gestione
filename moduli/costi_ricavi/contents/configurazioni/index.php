@@ -1,6 +1,6 @@
 <?php
 CoreHelper::includeJqueryUi();
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("configurazioni.html", "main");
 

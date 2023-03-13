@@ -1,4 +1,5 @@
 <?php
+
 $isEdit = false;
 if (isset($_REQUEST["keys[ID_distretto]"])) {
     $isEdit = true;
@@ -15,8 +16,8 @@ $oRecord = ffRecord::factory($cm->oPage);
 $oRecord->id = "distretto-modify";
 $oRecord->title = ($isEdit ? "Modifica" : "Nuovo") . " Distretto";
 $oRecord->resources[] = "distretto";
-$oRecord->src_table  = "coan_distretto";
-$oRecord->allow_delete = !$isEdit || ($isEdit && $distretto->canDelete());
+$oRecord->src_table = "coan_distretto";
+$oRecord->allow_delete = !$isEdit || ($isEdit && $distretto->isDeletable());
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_distretto";
@@ -42,39 +43,40 @@ $oRecord->addEvent("on_do_action", "validateInput");
 
 $cm->oPage->addContent($oRecord);
 
-function validateInput($oRecord, $frmAction) {
+function validateInput($oRecord, $frmAction)
+{
     switch ($frmAction) {
         case "insert":
             $codice = $oRecord->form_fields["codice"]->value->getValue();
             $descrizione = $oRecord->form_fields["descrizione"]->value->getValue();
-            
+
             if (!empty(CoanDistretto::getAll(["codice" => $codice, "descrizione" => $descrizione]))) {
                 CoreHelper::setError($oRecord, "Codice e descrizione già in uso.");
             }
-            
+
             break;
         case "update":
             $id_distretto = $oRecord->key_fields["ID_distretto"]->value->getValue();
-            
+
             $codice = $oRecord->form_fields["codice"]->value->getValue();
             $descrizione = $oRecord->form_fields["descrizione"]->value->getValue();
-            
-            foreach(CoanDistretto::getAll(["codice" => $codice, "descrizione" => $descrizione]) as $item) {
+
+            foreach (CoanDistretto::getAll(["codice" => $codice, "descrizione" => $descrizione]) as $item) {
                 if ($id_distretto != $item->id) {
                     CoreHelper::setError($oRecord, "Codice e descrizione già in uso.");
                 }
             }
-            
+
             break;
         case "delete":
         case "confirmdelete":
             $id_distretto = $oRecord->key_fields["ID_distretto"]->value->getValue();
             $distretto = new CoanDistretto($id_distretto);
-            
-            if (!$distretto->canDelete()) {
-                CoreHelper::setError($oRecord, "Impossibile eliminare Distretto perché in uso.");   
+
+            if (!$distretto->isDeletable()) {
+                CoreHelper::setError($oRecord, "Impossibile eliminare Distretto perché in uso.");
             }
-            
+
             break;
     }
 }

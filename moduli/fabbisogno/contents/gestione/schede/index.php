@@ -11,7 +11,7 @@ $date = $cm->oPage->globals["data_riferimento"]["value"];
 $tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
 $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $date->format("Y-m-d"));
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("elenco_schede.html", "main");
@@ -120,7 +120,7 @@ $oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
 );
 $oGrid->order_default = "titolo";
 $oGrid->record_id = "dettaglio-richiesta";
-$module = Modulo::getCurrentModule();
+$module = core\Modulo::getCurrentModule();
 $oGrid->record_url = FF_SITE_PATH . "/area_riservata" . $module->site_path . "/dettaglio_richiesta";
 $oGrid->order_method = "labels";
 $oGrid->full_ajax = true;

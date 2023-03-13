@@ -24,7 +24,7 @@ require_once(FF_DISK_PATH.DIRECTORY_SEPARATOR."library".DIRECTORY_SEPARATOR."mpd
 
 //generazione pdf
 $mpdf = new mPDF();
-$module = Modulo::getCurrentModule();
+$module = core\Modulo::getCurrentModule();
 $stylesheet = file_get_contents($module->module_theme_dir.DIRECTORY_SEPARATOR ."css".DIRECTORY_SEPARATOR."stampa.css");
 $mpdf->WriteHTML($stylesheet,1);
 $mpdf->WriteHTML($valutazione->generazioneHtmlStampa(),2);

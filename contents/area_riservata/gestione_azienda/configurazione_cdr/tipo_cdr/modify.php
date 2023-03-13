@@ -17,7 +17,7 @@ if(isset($_REQUEST["keys"]["ID"]))
 		ffErrorHandler::raise($ex->getMessage());
 	}
 	
-	if (!$tipo_cdr->canDelete()){
+	if (!$tipo_cdr->isDeletable()){
         $oRecord->allow_delete = false;
     }
 }
@@ -102,7 +102,7 @@ function checkRelations($oRecord, $frmAction) {
         case "delete":
         case "confirmdelete":
         $tipo_cdr = new TipoCdr($oRecord->key_fields["ID"]->value->getValue());
-        if(!$tipo_cdr->canDelete()){
+        if(!$tipo_cdr->isDeletable()){
             $oRecord->tplDisplayError("Il tipo CdR è utilizzato per almeno un CdR: impossibile eliminare.");
             return true;
         }

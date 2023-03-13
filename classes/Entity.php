@@ -1,6 +1,24 @@
 <?php
 class Entity {
     protected static $tablename;
+    protected static $relations=null;
+    /* $relations esplicita le relazioni dell'entitÃƒÂ  sul db rappresentate dall'array    
+    "relation" indica la relazione, definita su una classe target tramite corrispondenza dei campi definiti
+    "propagate_delete" definisce se propagare l'eliminazione alle entitÃƒÂ  in relazione
+    "allow_delete" definisce se gli oggetti nella relazione vincolano l'eliminazione o meno (true se l'oggetto corrente puÃƒÂ² essere eliminato nonostante siano presenti relazioni)
+    in caso di "allow_delete" true e propagate_delete true, viene verificato che tutte le propagazioni possano essere eliminate
+     * array(
+        "relation" =>array("target_class" => "NomeOggetto",
+                            "keys" => array(
+                                            "field" => "id_oggetto",
+                                            "target_field" => "id",                                             
+                                            ),   
+                            "allow_delete" = false,
+                            "propagate_delete" = false
+            )
+    );
+    */        
+            
     //array di gestione delle corrispondenze fra tipologie del db e applicative
     private static $db_types = array(
         /* numerici */
@@ -59,9 +77,8 @@ class Entity {
                 do {
                     $record = new $calling_class();
                     foreach ($db->fields as $field) {
-                        //viene recuperato il tipo di campo per recuperare il valore corretto                     
-                        $found = array_search($field->type, array_column(Entity::$db_types, "id_db_type"));
-                        $app_type = Entity::$db_types[$found]["app_type"];
+                        //viene recuperato il tipo di campo per recuperare il valore corretto                                             
+                        $app_type = $calling_class::getAppTypeFromDbField($field);
                         //vengono inizializzati i dati in base al tipo di campo                    
                         if ($app_type == "Date") {
                             $record->{strtolower($field->name)} = CoreHelper::getDateValueFromDB($db->getField($field->name, $app_type, true));
@@ -92,6 +109,12 @@ class Entity {
             }
         } 
     } 
+    
+    //restituisce l'app type dal campo del db
+    public static function getAppTypeFromDbField($field) {        
+        $found = array_search($field->type, array_column(Entity::$db_types, "id_db_type"));
+        return Entity::$db_types[$found]["app_type"];
+    }
     
     //getAll
     //where = array("fieldname"=>"value");
@@ -152,8 +175,7 @@ class Entity {
                 $record = new $calling_class();
                 foreach ($db->fields as $field) {
                     //viene recuperato il tipo di campo per recuperare il valore corretto                     
-                    $found = array_search($field->type, array_column(Entity::$db_types, "id_db_type"));
-                    $app_type = Entity::$db_types[$found]["app_type"];
+                    $app_type = $calling_class::getAppTypeFromDbField($field);
                     //vengono inizializzati i dati in base al tipo di campo                    
                     if ($app_type == "Date") {
                         $record->{strtolower($field->name)} = CoreHelper::getDateValueFromDB($db->getField($field->name, $app_type, true));
@@ -175,6 +197,18 @@ class Entity {
             } while ($db->nextRecord());
         }
         return $result;
+    }
+    
+    //selezione di un record in base al valore dei campi
+    //array di selezione "nome_campo"=>valore
+    //restituisce il primo record trovato tramite la selezione
+    public static function getByFields($filters = array()) {
+        $calling_class = static::class;  
+        $recordset = $calling_class::getAll($filters);
+        if (!empty($recordset)) {
+            return $recordset[0];
+        }
+        return null;
     }
         
     //metodo per la generazione di una matrice dati rappresentante una collezione di oggetti della classe, con intestazione
@@ -232,15 +266,15 @@ class Entity {
         }
 
         $calling_class = static::class;
-        $sql = "SHOW FULL COLUMNS FROM ".$table_name." $where_sql";
+        $sql = "SHOW FULL COLUMNS FROM ".$table_name." $where_sql";        
         $db->query($sql);
         if ($db->nextRecord()) {
             do {
                 $record = new stdClass();
                 foreach ($db->fields as $field) {
                     //viene recuperato il tipo di campo per recuperare il valore corretto                     
-                    $found = array_search($field->type, array_column(Entity::$db_types, "id_db_type"));
-                    $app_type = Entity::$db_types[$found]["app_type"];
+                    $app_type = $calling_class::getAppTypeFromDbField($field);$found = array_search($field->type, array_column(Entity::$db_types, "id_db_type"));                    
+                    
                     //vengono inizializzati i dati in base al tipo di campo                    
                     if ($app_type == "Date") {
                         $record->{strtolower($field->name)} = CoreHelper::getDateValueFromDB($db->getField($field->name, $app_type, true));
@@ -333,27 +367,84 @@ class Entity {
         }
     }
     
-    //Eliminazione del record con fieldname = $this->fieldname (default ID) dal db della tabella rappresentante l'oggetto
-    public function delete($field_name="ID") {
-        $db = ffDb_Sql::factory(); 
-              
-        $calling_class = static::class;        
-        $sql = "DELETE FROM ".$calling_class::$tablename." 
-                WHERE ".$field_name." = ".$db->toSql($this->{strtolower($field_name)}); 
-        if (!$db->execute($sql)) {
-            throw new Exception("Impossibile eliminare il record con ID = ".$this->id." dalla tabella ".$calling_class::$tablename);
-        }        
+    //Verifica eliminazione del record con fieldname = $this->fieldname (default ID) dal db della tabella rappresentante l'oggetto
+    public function isDeletable () {  
+        $calling_class = static::class;
+        $relations = $calling_class::$relations;
+        
+        $deletable = true;
+        if ($relations !== null) {
+            //per ogni relazione trovata
+            foreach ($relations as $relation) {
+                $target_class = $relation["target_class"];
+                
+                if (!isset($relation["allow_delete"]) || !isset($relation["propagate_delete"])) {
+                    throw new Exception("Relazioni dell'oggetto '" . $calling_class . "' non configurate correttamente");
+                }
+                
+                $where = array();
+                foreach ($relation["keys"] as $target_field => $key) {
+                    $where[$target_field] = $this->{strtolower($key)};
+                }
+                $target_objects = $target_class::getAll($where);
+ 
+                //se vengono trovati oggetti in relazione
+                if (count($target_objects)>0) {
+                    //se non viene permessa l'eliminazione in caso di relazioni
+                    //l'oggetto non può essere elimnato
+                    if ($relation["allow_delete"] !== true) {
+                        $deletable = false;
+                    }
+                    //altrimenti
+                    else {
+                        //per ogni oggetto in relazione
+                        foreach ($target_objects as $target_obj) { 
+                            //se l'eliminazione viene propagata
+                            //viene verificato che l'oggetto sia eliminabile
+                            if ($relation["propagate_delete"] == true) {                    
+                                $deletable = $target_obj->isDeletable();                                                 
+                            }
+                            if ($deletable == false) {
+                                break;
+                            } 
+                        } 
+                    }  
+                }
+                //E' sufficiente un vincolo per rendere l'oggetto non eliminabile
+                if ($deletable == false) {
+                    break;
+                }       
+            }   
+        }
+        return $deletable;
     }
     
-    //selezione di un record in base al valore dei campi
-    //array di selezione "nome_campo"=>valore
-    //restituisce il primo record trovato tramite la selezione
-    public static function getByFields($filters = array()) {
-        $calling_class = static::class;  
-        $recordset = $calling_class::getAll($filters);
-        if (!empty($recordset)) {
-                return $recordset[0];
+    //Eliminazione del record con fieldname = $this->fieldname (default ID) dal db della tabella rappresentante l'oggetto
+    public function delete() {
+        $db = ffDb_Sql::factory(); 
+                                              
+        $calling_class = static::class;       
+        $relations = $calling_class::$relations;
+        
+        $sql = "DELETE FROM ".$calling_class::$tablename." 
+                WHERE ID = " . $this->id; 
+        if (!$db->execute($sql)) {
+            throw new Exception("Impossibile eliminare il record con ID = ".$this->id." dalla tabella ".$calling_class::$tablename);
+        }    
+        
+        if ($relations !== null) {
+            foreach ($relations as $relation) {
+                $target_class = $relation["target_class"];
+                if ($relation["propagate_delete"] == true) {
+                    $where = array();
+                    foreach ($relation["keys"] as $target_field => $key) {
+                        $where[$target_field] = $this->{strtolower($key)};
+                    }
+                    foreach ($target_class::getAll($where) as $target_obj) {                    
+                        $target_obj->delete();
+                    }
+                }
+            }
         }
-        return null;
-    }
+    }         
 }
