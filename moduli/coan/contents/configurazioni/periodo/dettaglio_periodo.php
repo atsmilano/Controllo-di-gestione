@@ -1,4 +1,5 @@
 <?php
+
 $isEdit = false;
 if (isset($_REQUEST["keys[ID_periodo]"])) {
     $isEdit = true;
@@ -15,8 +16,8 @@ $oRecord = ffRecord::factory($cm->oPage);
 $oRecord->id = "periodo-modify";
 $oRecord->title = ($isEdit ? "Modifica" : "Nuovo") . " Periodo";
 $oRecord->resources[] = "periodo";
-$oRecord->src_table  = "coan_periodo";
-$oRecord->allow_delete = !$isEdit || ($isEdit && $periodo->canDelete());
+$oRecord->src_table = "coan_periodo";
+$oRecord->allow_delete = !$isEdit || ($isEdit && $periodo->isDeletable());
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_periodo";
@@ -33,7 +34,7 @@ $oRecord->addContent($oField);
 
 $anno_budget = array();
 foreach (AnnoBudget::getAll() as $item) {
-    if ($item->attivo == 1){
+    if ($item->attivo == 1) {
         $anno_budget[] = array(
             new ffData($item->id, "Number"),
             new ffData($item->descrizione, "Text")
@@ -76,32 +77,33 @@ $oRecord->addEvent("on_do_action", "validateInput");
 
 $cm->oPage->addContent($oRecord);
 
-function validateInput($oRecord, $frmAction) {
+function validateInput($oRecord, $frmAction)
+{
     switch ($frmAction) {
         case "insert":
         case "update":
             $id_periodo = $oRecord->key_fields["ID_periodo"]->value->getValue();
             $periodo = new CoanPeriodo($id_periodo);
-            
+
             $id_anno_budget = $oRecord->form_fields["ID_anno_budget"]->value->getValue();
             $ordinamento_anno = $oRecord->form_fields["ordinamento_anno"]->value->getValue();
-            
+
             foreach (CoanPeriodo::getAll(["ID_anno_budget" => $id_anno_budget, "ordinamento_anno" => $ordinamento_anno]) as $item) {
                 if ($item->id != $id_periodo) {
-                    CoreHelper::setError($oRecord, "Ordinamento anno già utilizzato nell'anno di budget.");       
+                    CoreHelper::setError($oRecord, "Ordinamento anno già utilizzato nell'anno di budget.");
                 }
             }
-            
+
             break;
         case "delete":
         case "confirmdelete":
             $id_periodo = $oRecord->key_fields["ID_periodo"]->value->getValue();
             $periodo = new CoanPeriodo($id_periodo);
-            
-            if (!$periodo->canDelete()) {
+
+            if (!$periodo->isDeletable()) {
                 CoreHelper::setError($oRecord, "Impossibile eliminare Periodo perché in uso.");
             }
-            
+
             break;
     }
 }

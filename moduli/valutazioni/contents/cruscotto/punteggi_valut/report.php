@@ -10,7 +10,7 @@ else {
     $tipo_cdr_list[0] = -1;
 }
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR ."tpl");
 $tpl->load_file("punteggi_valutazione.html", "main");
 $tpl->set_var("module_theme_path", $modulo->module_theme_dir . DIRECTORY_SEPARATOR);

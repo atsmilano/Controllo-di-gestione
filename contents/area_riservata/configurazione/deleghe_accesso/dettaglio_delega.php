@@ -63,7 +63,7 @@ $oField->data_type = "callback";
 $oField->data_source = "preload_relations";
 $oField->base_type = "Text";
 $oField->extended_type = "Selection";
-$moduli = Modulo::getActiveModulesFromDisk(null);
+$moduli = \core\Modulo::getActiveModulesFromDisk();
 if (count($moduli) > 0)
 {
 	foreach($moduli as $modulo)	{

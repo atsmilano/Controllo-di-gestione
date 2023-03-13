@@ -1,4 +1,5 @@
 <?php
+
 $grid_fields = array(
     "ID_distretto",
     "codice",
@@ -19,8 +20,8 @@ $oGrid->id = "distretto";
 $oGrid->title = "Distretto";
 $oGrid->resources[] = "distretto";
 $oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
-    $grid_fields, $grid_recordset, 
-    "coan_distretto"
+                $grid_fields, $grid_recordset,
+                "coan_distretto"
 );
 $oGrid->order_default = "codice";
 $oGrid->record_id = "distretto-modify";
@@ -30,7 +31,7 @@ $oGrid->full_ajax = true;
 $oGrid->display_new = true;
 $oGrid->display_search = false;
 $oGrid->use_search = false;
-$oGrid->fixed_post_content = '<script>jQuery("#'.$oGrid->id.'").jTableFullClick();</script>';
+$oGrid->fixed_post_content = '<script>jQuery("#' . $oGrid->id . '").jTableFullClick();</script>';
 
 //**************************************************************************
 // *********** FIELDS ****************
@@ -56,8 +57,9 @@ $oGrid->addEvent("on_before_parse_row", "checkRelations");
 // *********** ADDING TO PAGE ****************
 $cm->oPage->addContent($oGrid);
 
-function checkRelations($oGrid) {
+function checkRelations($oGrid)
+{
     $id = $oGrid->key_fields["ID_distretto"]->value->getValue();
     $item = new CoanDistretto($id);
-    $oGrid->display_delete_bt = $item->canDelete();
+    $oGrid->display_delete_bt = $item->isDeletable();
 }

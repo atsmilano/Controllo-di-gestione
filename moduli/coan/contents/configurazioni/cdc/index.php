@@ -105,5 +105,5 @@ $cm->oPage->addContent($oGrid);
 function checkRelations($oGrid) {
     $id = $oGrid->key_fields["ID_cdc"]->value->getValue();
     $cdc = new CoanCdc($id);
-    $oGrid->display_delete_bt = $cdc->canDelete();
+    $oGrid->display_delete_bt = $cdc->isDeletable();
 }

@@ -16,7 +16,7 @@ $cm->oPage->tplAddCss("jquery.jqplot.min.css", array("file" => "jquery.jqplot.mi
 
 CoreHelper::includeJqueryUi();
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");

@@ -38,6 +38,12 @@ class AnagraficaCdr extends Entity {
 
         return $cdr_anagrafica;
     }
+    
+    //restituisce la descrizione estesa del cdr
+    public function getDescrizioneEstesa() {
+        $tipo_cdr = new TipoCdr($this->id_tipo_cdr);
+        return $this->codice . " - " . $tipo_cdr->abbreviazione . " " . $this->descrizione;
+    }
 
     //restituisce tutti i record dell'anagrafica attivi in una data specifica
     public static function getAnagraficaInData(DateTime $date) {

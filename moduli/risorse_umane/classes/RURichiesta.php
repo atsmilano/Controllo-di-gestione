@@ -419,7 +419,7 @@ class RURichiesta extends Entity
     //il recordset deve rispettare il tracciato specificato nell'array grid_fields
     public static function getGridRichieste($grid_id, $grid_title, $grid_recordset, $include_fullclick=null) {   
         $cm = cm::getInstance();
-        $module = Modulo::getCurrentModule();
+        $module = core\Modulo::getCurrentModule();
         $grid_fields = array(
             "ID", 
             "cdr_creazione", 

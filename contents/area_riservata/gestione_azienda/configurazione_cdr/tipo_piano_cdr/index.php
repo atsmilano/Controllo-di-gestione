@@ -51,6 +51,6 @@ $oGrid->addContent($oField);
 $cm->oPage->addContent($oGrid);
 
 function checkRelations($oGrid){
-	$tipo_piano_cdr = new TipoPianoCdr($oGrid->key_fields["ID"]->value->getValue());	
-    $oGrid->display_delete_bt = $tipo_piano_cdr->canDelete();
+    $tipo_piano_cdr = new TipoPianoCdr($oGrid->key_fields["ID"]->value->getValue());	
+    $oGrid->display_delete_bt = $tipo_piano_cdr->isDeletable();
 }

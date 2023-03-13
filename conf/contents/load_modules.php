@@ -9,17 +9,17 @@ foreach ($cm->oPage->globals["modules"]["value"] as $module) {
     //in caso di utente non amministratore con matricola selezionata differente da quella dell'utente collegato (selezione dipendente)
     //viene verificato che l'utente abbia la delega per quel modulo
     $view_module = true;
+    foreach (glob(MODULES_DISK_PATH.$module->dir_path.DIRECTORY_SEPARATOR.MODULES_CLASSES_DIR.DIRECTORY_SEPARATOR."*.php") as $filename){
+        require($filename);
+    } 
     if ($user->hasPrivilege("user_selection") == false && $user->hasPrivilege("delega_accesso") == true 
             && ($user->matricola_utente_collegato !== $user->matricola_utente_selezionato)){        
         if(!$user->hasDelegaModuloAnno($module)) {
             $view_module = false;
         }
     }    
-    if ($view_module == true) {
-        foreach (glob(MODULES_DISK_PATH.DIRECTORY_SEPARATOR.$module->dir_path.DIRECTORY_SEPARATOR.MODULES_CLASSES_DIR.DIRECTORY_SEPARATOR."*.php") as $filename){
-            require($filename);
-        }        
+    if ($view_module == true) {             
         //inclusione file common
         require(MODULES_DISK_PATH.$module->dir_path.DIRECTORY_SEPARATOR.MODULES_COMMON_FILE);               
-    }
+    }      
 }

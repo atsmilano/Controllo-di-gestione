@@ -1,0 +1,156 @@
+<!--BeginSectChartCanvas-->
+<div id="chart_container">    
+    <canvas id="radar_mappatura_individuale"></canvas>
+    <script>
+        const ctx = document.getElementById('radar_mappatura_individuale');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: [
+                        <!--BeginSectLabelsCompetenze-->
+                        "{nome_competenza}",
+                        <!--EndSectLabelsCompetenze-->
+                        ],
+                datasets: 
+                [
+                <!--BeginSectDatasetTipologie--> 
+                {
+                    label: "{label_tipo_mappatura}",
+                    data: [
+                        <!--BeginSectDataCompetenze-->
+                        {valore_tipologia_competenza},
+                        <!--EndSectDataCompetenze-->
+                        ],
+                    borderWidth: 3,
+                    borderColor: 'rgb({color})',
+                    backgroundColor: 'rgba({color}, 0.2)',
+                },
+                <!--EndSectDatasetTipologie-->
+                ]
+            },
+            options: {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                        min: 0,
+                        max: {valore_massimo},
+                        z: 1,
+                        showLabelBackdrop: false,   
+                        fontSize: 15,                        
+                    },    
+                    pointLabels: {
+                        fontSize: 15,
+                    },                    
+                },    
+                legend: {
+                    labels: {
+                        fontSize: 15,                            
+                    }
+                },
+            },
+        });
+    </script>    
+</div>    
+<!--EndSectChartCanvas-->
+<!--BeginSectLegenda-->
+<div id="legenda_valori">
+    <table>      
+        <tbody>
+            <tr>
+                <td>Valori</td>
+            <!--BeginSectVoceLegenda-->                
+                <td>{valore} - {descrizione_valore}</td>                        
+            <!--EndSectVoceLegenda-->
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!--EndSectLegenda-->    
+<!--BeginSectValori-->
+<div id="elenco_valori">
+    <table>      
+        <thead>
+            <tr>
+                <th>Competenza</th>
+                <th>Valore Atteso</th>
+                <!--BeginSectValoriIntestazione-->
+                <th>{descrizione_tipologia}</th>
+                <!--EndSectValoriIntestazione-->
+            </tr>
+        </thead>        
+        <tbody>
+            <!--BeginSectValoriTipologie-->
+            <tr class="{classe_tipo_competenza}">
+                <td id="{id_competenza}" class="competenza">{nome_competenza}</td>
+                <td class="valore">{valore_atteso}</td>
+                <!--BeginSectValoreTipologia-->
+                <td class="valore">{valore_tipologia_competenza}</td>
+                <!--EndSectValoreTipologia-->
+            </tr>
+            <!--EndSectValoriTipologie-->
+        </tbody>
+    </table>
+</div>     
+<!--EndSectValori-->   
+<!--BeginSectValutatoPeriodo-->    
+<div id="fields_container">
+    <h3>Note: </h3>   
+    <!--BeginSectNoteTextArea-->             
+        <textarea {disabled} id="note_valutato" name="note_valutato" rows="10">{note_valutato}</textarea>                  
+    <!--EndSectNoteTextArea-->             
+    <!--BeginSectNoteP-->             
+        <p>{note_valutato}</p>
+    <!--EndSectNoteP-->             
+    <!--BeginSectAdminActions-->
+    <label>Data visualizzazione:</label>                    
+    <input id="data_abilitazione_visualizzazione" name="data_abilitazione_visualizzazione" type="text" class="form-control datepicker" value="{data_abilitazione_visualizzazione}">            
+    <script>
+        $( function() {
+            $( "#data_abilitazione_visualizzazione" ).datepicker({ dateFormat: 'dd/mm/yy' });
+        } );
+    </script>             
+    <div id="save_button">
+        <span id="loading_valutato_periodo">
+            <i id="spinner_valutato_periodo" class="fa-spinner fa fa-lg fa-spin" ></i>
+        </span>
+        &nbsp;Salvataggio modifiche
+    </div>
+    <!--EndSectAdminActions-->
+    <div id="notifiche_save"></div>
+</div>
+<!--EndSectValutatoPeriodo-->   
+<script>    
+    $("#save_button").click(function () {           
+        $("#loading_valutato_periodo").modal("show");
+
+        const data = { 
+                    id_periodo: '{id_periodo_select}',
+                    matricola_valutato: '{matricola_valutato}',
+                    note: $("#note_valutato").val(),
+                    data_abilitazione_visualizzazione: $("#data_abilitazione_visualizzazione").val(),
+        };
+
+        const request = $.ajax({
+            url: window.location.pathname + '/individuali/save_valutato_periodo?{globals}',
+            type: 'GET',
+            data: data,
+            cache: false,
+            contentType: false
+        });
+
+        request.done(function (data) {
+            $("#notifiche_save").html(data);
+        });
+
+        request.fail(function () {
+            $("#notifiche_save").html("Errore durante il salvataggio");
+        });
+
+        request.always(function(){
+            $("#notifiche_save").show("blind");       
+            $("#loading_valutato_periodo").modal("hide");
+            $("#notifiche_save").delay(5000).hide("blind"); 
+        });
+    });   
+</script>    

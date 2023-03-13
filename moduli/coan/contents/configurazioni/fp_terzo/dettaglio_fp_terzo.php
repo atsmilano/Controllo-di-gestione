@@ -16,7 +16,7 @@ $oRecord->id = "fp-terzo-modify";
 $oRecord->title = ($isEdit ? "Modifica" : "Nuovo") . " Fp terzo livello";
 $oRecord->resources[] = "fp-terzo";
 $oRecord->src_table  = "coan_fp_terzo";
-$oRecord->allow_delete = !$isEdit || ($isEdit && $fp_terzo->canDelete());
+$oRecord->allow_delete = !$isEdit || ($isEdit && $fp_terzo->isDeletable());
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_fp_terzo";
@@ -98,8 +98,11 @@ function validateInput($oRecord, $frmAction) {
             $id_fp_terzo = $oRecord->key_fields["ID_fp_terzo"]->value->getValue();
             $fp_terzo = new CoanFpTerzo($id_fp_terzo);
             
-            if (!$fp_terzo->delete()) {
+            if (!$fp_terzo->isDeletable()) {
                 CoreHelper::setError($oRecord, "Fp associato ad un fp utilizzato in un conto: impossibile eliminare.");
+            }
+            else {
+                $fp_terzo->delete();
             }
             
             $oRecord->skip_action = true; //Si bypassa l'esecuzione della query di delete del record

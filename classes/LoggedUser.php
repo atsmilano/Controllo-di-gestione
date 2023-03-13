@@ -111,13 +111,16 @@ final class LoggedUser extends Singleton
             if (!array_search("delega_accesso", $this->user_privileges, true)) {
                 $this->user_privileges[] = "delega_accesso";
             }
+            $dipendente_selezionato = $cm->oPage->globals["dipendente"]["value"];
             foreach ($deleghe as $delega) {
-                foreach ($delega->getModuliDelega() as $modulo_delega) {
-                    $moduli_delegati[] = $modulo_delega;
+                if ($dipendente_selezionato->matricola == $delega->matricola_utente) {
+                    foreach ($delega->getModuliDelega() as $modulo_delega) {
+                        $moduli_delegati[] = $modulo_delega;
+                    }
                 }
                 $this->deleghe_accesso[] = array("matricola_utente" => $delega->matricola_utente,
                     "moduli_delega" => $moduli_delegati,
-                );
+                );                
             }
         }
 
@@ -163,7 +166,7 @@ final class LoggedUser extends Singleton
     }
 
     //viene verificato se è presente una delega dell'utente per il modulo
-    public function hasDelegaModuloAnno(Modulo $modulo)
+    public function hasDelegaModuloAnno(core\Modulo $modulo)
     {
         $cm = cm::getInstance();
         $delega_modulo = false;

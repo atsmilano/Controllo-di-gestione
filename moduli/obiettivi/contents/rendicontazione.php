@@ -1,5 +1,5 @@
 <?php
-$cm->oPage->widgetLoad("dialog");
+       $cm->oPage->widgetLoad("dialog");
 $tmp2 = $cm->oPage->widgets["dialog"]->process(
     "view_storico_dialog" // id del dialog
     , array( // proprietà  del dialog
@@ -211,6 +211,17 @@ else if ($user_privileges["edit_nucleo"]) {
 else {
     $oRecord->allow_insert = false;
     $oRecord->allow_update = false;
+}
+//istanza della struttura dati per gli allegati (global per utilizzo in showhtmlinfo)
+if (!isset($cm->oPage->globals["allegati_permissions"]["value"])) {
+    $allegati_permissions = array(
+                            'user_id' => $user->matricola_utente_selezionato,
+                            'allegati_permissions' => array(
+                                'canDownload' => array(),
+                                'canDelete' => array()
+                            )
+                        ); 
+    $cm->oPage->register_globals("allegati_permissions", $allegati_permissions);
 }
 
 //*****************************************************************************
@@ -597,23 +608,18 @@ if ($periodo_rendicontazione->allegati == 1) {
     }
 
     //START GRANT PERMISSIONS
-    $allegati_permissions = array(
-        'user_id' => $user->matricola_utente_selezionato,
-        'allegati_permissions' => array(
-            'canDownload' => array(),
-            'canDelete' => array()
-        )
-    );
-    foreach ($allegati as $allegato) {
-        $allegati_permissions['allegati_permissions']['canDownload'][] = $allegato->filename_md5;
-        $allegati_permissions['allegati_permissions']['canDelete'][] = $allegato->filename_md5;
+    $allegati_permissions = $cm->oPage->globals["allegati_permissions"]["value"];
+    if ($allegati_permissions['user_id'] == $user->matricola_utente_selezionato) {
+        foreach ($allegati as $allegato) {
+            $allegati_permissions['allegati_permissions']['canDownload'][] = $allegato->filename_md5;
+            if ($user_privileges["edit_responsabile"]) {         
+                $allegati_permissions['allegati_permissions']['canDelete'][] = $allegato->filename_md5;
+            }   
+        }
     }
+    $cm->oPage->register_globals("allegati_permissions", $allegati_permissions);   
     $allegati_helper = new AllegatoHelper();
-    $permission_cookie = $allegati_helper->encodePermissions($allegati_permissions);
-    //Call before every output or will not work!!! IMPORTANT
-    setcookie('p_2_#', $permission_cookie, time() + 600, '/');
-    //END GRANT PERMISSIONS
-        
+    
     //in fase di inserimento non è possibile allegare file        
     if ($rendicontazione_allegati == null) {
         $html .= '<p id="no_allegati_user_friendly">Gli allegati possono essere caricati successivamente al salvataggio della rendicontazione</p><br />';
@@ -634,26 +640,27 @@ if ($periodo_rendicontazione->allegati == 1) {
             ';
             $html .= "<tbody>";
             $key_allegato = 0;
-            foreach ($allegati as $allegato) {
-                $txt_elimina = $allegati_helper->getDeleteLink($allegato->filename_md5, "Elimina");
-                $txt_download = $allegati_helper->getDownloadLink($allegato->filename_md5, $allegato->filename_plain);
-
-                if ($user_privileges["view"] && !$user_privileges["edit_responsabile"]) {
-                    $html .= '<tr id="al-' . $key_allegato . '" >';
-                    $html .= "<td>" . $txt_download . "</td><td>-</td>";
-                    $html .= '</tr>';
-                }
-
-                if ($user_privileges["edit_responsabile"]) {
-                    // Se il periodo non è quello finale NON è possibile eliminare
-                    if (($periodo_rendicontazione->allegati == 0)) {
-                        $txt_elimina = "-";
+            foreach ($allegati as $allegato) {               
+                if ($user_privileges["view"]) {
+                    if ($user_privileges["edit_responsabile"]) {
+                        $txt_elimina = $allegati_helper->getDeleteLink($allegato->filename_md5, "Elimina");
                     }
+                    else {
+                        $txt_elmina = "-";
+                    }
+                    $txt_download = $allegati_helper->getDownloadLink($allegato->filename_md5, $allegato->filename_plain);
+                    
                     $html .= '<tr id="al-' . $key_allegato . '" >';
-                    $html .= "<td>" . $txt_download . "</td><td class=\"delete\">" . $txt_elimina . "</td>";
+                    $html .= "<td>" . $txt_download . "</td>";                        
+                    if(!$user_privileges["edit_responsabile"]) {                    
+                        $html .= "<td>-</td>";
+                    }
+                    else {
+                        $html .= "<td class=\"delete\">" . $txt_elimina . "</td>";
+                    }
                     $html .= '</tr>';
+                    $key_allegato++;
                 }
-                $key_allegato++;
             }
         }
         $html .= "</tbody>";
@@ -823,7 +830,7 @@ if ($show_rendicontazione_figli == true){
     $cdr_figli = $cdr->getFigli();
     if (count($cdr_figli) && !$obiettivo_cdr->isCoreferenza()) {                        
         //viene caricato il template specifico per le rendicontazioni dei cdr afferenti
-        $modulo = Modulo::getCurrentModule();
+        $modulo = core\Modulo::getCurrentModule();
         $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
         $tpl->load_file("rendicontazioni_cdr_afferenti.html", "main");   
         $show_rendicontazione_figli = false;
@@ -838,7 +845,7 @@ if ($show_rendicontazione_figli == true){
                 $rendicontazione_figlio_periodo = $obiettivo_cdr_figlio->getRendicontazionePeriodo($periodo_rendicontazione);                
                 if ($rendicontazione_figlio_periodo !== null) {
                     $cdr_figlio_desc .= " - ".$rendicontazione_figlio_periodo->perc_raggiungimento."%";
-                    $rendicontazione_figlio = $rendicontazione_figlio_periodo->showHtmlInfo();                     
+                    $rendicontazione_figlio = $rendicontazione_figlio_periodo->showHtmlInfo();                    
                 } 
                 else {
                     $cdr_figlio_desc .= " - NC";
@@ -873,8 +880,14 @@ $oRecord->insert_additional_fields["ID_periodo_rendicontazione"] = new ffData($p
 if ($user_privileges["edit_responsabile"]) {
     $oRecord->additional_fields["time_ultima_modifica_referente"] = new ffData(date("Y-m-d H:i:s"), "DateTime", "ISO9075");
 }
-
 // *********** ADDING TO PAGE ****************
+if ($periodo_rendicontazione->allegati == 1) {      
+    $permission_cookie = $allegati_helper->encodePermissions($cm->oPage->globals["allegati_permissions"]["value"]);
+    //Call before every output or will not work!!! IMPORTANT
+    setcookie('p_2_#', $permission_cookie, time() + 600, '/');
+    //END GRANT PERMISSIONS
+}
+    
 $cm->oPage->addContent($oRecord);
 
 $cm->oPage->addContent(

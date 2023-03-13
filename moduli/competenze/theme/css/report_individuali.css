@@ -1,0 +1,148 @@
+#competenze #tabs {
+    min-height: 120px;
+}
+
+/*premessa metodologica*/
+#premessa_metodologica {
+    page-break-after: always;
+}
+
+/*selezione parametri*/
+#report_individuali .selezione_parametri, #report_individuali #estrazione_pdf {
+    border: none;
+    width: 45%;
+    float: left;
+    margin-right: 1%;
+    padding: 1%;
+    text-align: center;
+    color: #0E2C48;
+    background-color: #6CAAE2;
+}
+
+#report_individuali #estrazione_pdf {
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    width: 3%;       
+}
+
+/*chart container*/
+#report_individuale #chart_container {    
+    border: solid 3px #6CAAE2;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    padding: 1%;
+}
+
+/*table*/
+#report_individuale #elenco_valori, #report_individuale #legenda_valori {         
+    border: solid 3px #6CAAE2;    
+    display: inline-block;
+    margin-top: 1%;
+}
+
+#report_individuale #elenco_valori {             
+    width: 100%;    
+}
+
+#report_individuale table, #report_individuale #legenda_valori table {    
+    width: 100%;
+    vertical-align: middle;    
+    border: none;
+    table-layout:fixed;
+}
+
+#report_individuale #elenco_valori thead, #report_individuale #legenda_valori thead {
+    background-color: #6CAAE2;
+    color: #0E2C48;
+}
+
+#report_individuale #elenco_valori thead tr th, #report_individuale #legenda_valori thead tr th {      
+    text-align: center;
+    padding: 3px;
+}
+
+#report_individuale #elenco_valori tbody, #report_individuale #legenda_valori tbody {
+    border: solid 1px #6CAAE2;
+}
+
+#report_individuale #elenco_valori tbody td, #report_individuale #legenda_valori tbody td {
+    text-align: center;
+    vertical-align: middle;
+    border: solid 1px #6CAAE2;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+#report_individuale #elenco_valori tbody td.competenza{    
+    width: 30%;
+}
+
+#report_individuale #elenco_valori tbody tr.specifica{    
+    background-color: #e3f2ff;
+}
+
+#report_individuale #elenco_valori tbody td.valore{        
+    width: auto;
+}
+
+#report_individuale #radar_mappatura_individuale {
+    
+}
+
+/*legenda valori*/
+#report_individuale #legenda_valori {            
+    width: 100%;
+    vertical-align: top;
+    margin-top: 1%;
+}
+
+/*fields container*/
+#report_individuale #fields_container  {     
+    border: solid 3px #6CAAE2;
+    width: 100%;    
+    display: inline-block;
+    vertical-align: top;
+    padding: 1%;
+    margin-top: 1%;
+    overflow: auto;
+}
+
+#report_individuale #fields_container #note_valutato {     
+    width: 100%;
+    resize: vertical;
+}
+
+#report_individuale #fields_container #data_abilitazione_visualizzazione {     
+    margin-top: 3px;
+    width: 100%;
+}
+
+/*save_button*/
+#report_individuale #save_button {
+    text-align: center;
+    width: 100%;
+    background-color: #0E2C48;
+    margin-top: 3%;
+    padding: 1%;
+    font-weight: bold;
+    color: #6CAAE2;
+}
+
+#report_individuale #save_button:hover {
+    background-color: #6CAAE2;
+    color: #0E2C48;
+    cursor: pointer;
+}
+
+#report_individuale #loading_valutato_periodo {
+    display: none;
+}
+
+#report_individuale #notifiche_save {
+    display: none;
+    background-color: #6CAAE2;
+    color: #0E2C48;
+    padding: 1%;
+}

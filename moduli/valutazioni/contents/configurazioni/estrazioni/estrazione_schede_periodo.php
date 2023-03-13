@@ -37,7 +37,7 @@ else {
     }
 }
 //path della pagina attuale
-$module = Modulo::getCurrentModule();
+$module = core\Modulo::getCurrentModule();
 $self_path = FF_SITE_PATH."/area_riservata".$module->site_path."/configurazioni/estrazioni/estrazione_schede_periodo?periodo=".$periodo_valutazione->id."&".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST);
 
 //per ogni scheda di valutazione del periodo

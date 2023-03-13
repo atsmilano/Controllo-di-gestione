@@ -19,7 +19,7 @@ $cm->oPage->tplAddCss("jquery.jqplot.min.css", array("file" => "jquery.jqplot.mi
 $cm->oPage->tplAddCss("Chart.min.css", array("file" => "Chart.min.css", "path" => FF_THEME_DIR . "/library/chartjs"));
 
 CoreHelper::includeJqueryUi();
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");

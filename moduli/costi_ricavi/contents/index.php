@@ -133,7 +133,7 @@ if (count($periodi)>0){
 	$oGrid->use_paging = false;
 
 	//definizione di un template personalizzato per la grid
-	$modulo = Modulo::getCurrentModule();
+	$modulo = core\Modulo::getCurrentModule();
 
 	//viene caricato il template specifico per la pagina
 	$oGrid->template_dir = $modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl";

@@ -1,5 +1,5 @@
 <?php
-$module = Modulo::getCurrentModule();
+$module = core\Modulo::getCurrentModule();
 $anno = $cm->oPage->globals["anno"]["value"];
 //******************************************************************************
 //Validazione e selezione parametro periodo
@@ -287,8 +287,6 @@ if (count($periodi) > 0) {
 
     //conti in evidenza
     function recordInit($oGrid) {
-        $cm = cm::getInstance();
-
         $conto = new CostiRicaviConto($oGrid->key_fields["ID_conto"]->getValue());
         if ($conto->evidenza == true) {
             $oGrid->row_class = "conto_evidenza";

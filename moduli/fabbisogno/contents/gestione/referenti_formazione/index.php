@@ -7,9 +7,7 @@ if (!$user->hasPrivilege("fabbisogno_admin") && !$user->hasPrivilege("fabbisogno
 
 //recupero dei parametri
 $anno = $cm->oPage->globals["anno"]["value"];	
-$date = $cm->oPage->globals["data_riferimento"]["value"];
 $tipo_piano_cdr = $cm->oPage->globals["tipo_piano_cdr"]["value"];
-$piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date->format("Y-m-d"));
 
 $grid_fields = array(
     "ID", 
@@ -21,12 +19,13 @@ $grid_fields = array(
 $grid_recordset = array();
 foreach (FabbisognoFormazione\ReferenteCdr::getAll() as $referente_cdr) {
     $personale = Personale::factoryFromMatricola($referente_cdr->matricola_personale);
-    $cdr = Cdr::factoryFromCodice($referente_cdr->codice_cdr, $piano_cdr);
+    $date = new DateTime($referente_cdr->data_introduzione);
+    $cdr = AnagraficaCdr::factoryFromCodice($referente_cdr->codice_cdr, $date);
     $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);
     $grid_recordset[] = array(
         $referente_cdr->id,
         $personale->cognome." ".$personale->nome." (matr.".$personale->matricola.")",
-        $cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
+        $referente_cdr->codice_cdr . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione,
         $referente_cdr->data_introduzione,
         $referente_cdr->data_termine,
     );

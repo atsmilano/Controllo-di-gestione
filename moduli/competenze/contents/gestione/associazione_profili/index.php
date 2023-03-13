@@ -5,7 +5,7 @@ $cdr = $cm->oPage->globals["cdr"]["value"]->cloneAttributesToNewObject("Mappatur
 if (!$user->hasPrivilege("competenze_admin") && !$user->hasPrivilege("competenze_cdr_gestione")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione dell'associazione dei profili per il CdR.");	
 }
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("matrice_associazione_profili_personale.html", "main");
 

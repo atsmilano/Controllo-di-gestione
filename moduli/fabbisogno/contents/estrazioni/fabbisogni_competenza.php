@@ -1,5 +1,6 @@
 <?php
 $user = LoggedUser::getInstance();
+
 //verifica privilegi utente
 if ($user->hasPrivilege("fabbisogno_operatore_formazione") || $user->hasPrivilege("fabbisogno_admin")) {
     $view_all = true;
@@ -9,7 +10,7 @@ else if ($user->hasPrivilege("fabbisogno_referente_cdr")
         || $user->hasPrivilege("fabbisogno_responsabile_scientifico_anno") 
         || $user->hasPrivilege("fabbisogno_segreteria_organizzativa_anno")
         || $user->hasPrivilege("fabbisogno_responsabile_cdr")
-        ) {
+        ) {    
     $view_all = false;    	
 }
 else {
@@ -27,6 +28,17 @@ $piano_cdr = PianoCdr::getAttivoInData(TipoPianoCdr::getPrioritaMassima(), $date
 $cdr_radice_piano = $piano_cdr->getCdrRadice();
 $cdr_anno = $cdr_radice_piano->getGerarchia();
     
+if ($user->hasPrivilege("fabbisogno_referente_cdr")) {
+    $personale = \FabbisognoFormazione\Personale::factoryFromMatricola($user->matricola_utente_selezionato);
+    $cdr_richiesta_competenza_anno = $personale->getCdrReferenzaAnno($date);
+}
+if ($user->hasPrivilege("fabbisogno_responsabile_cdr_referente")) {
+    if (!isset($personale)) {
+        $personale = \FabbisognoFormazione\Personale::factoryFromMatricola($user->matricola_utente_selezionato);
+    }
+    $ramo_cdr_competenza_anno = $personale->getCdrResponsbileReferenzaAnno($date);
+}
+
 if (isset($_REQUEST["cdr_select"])) {
     if (count($cdr_anno) > 0) {
         foreach ($cdr_anno as $cdr_associato) {
@@ -77,8 +89,9 @@ $intestazione = array(
 $fogli["Fabbisogno"] = array($intestazione);
 
 $fabbisogni_anno = FabbisognoFormazione\Richiesta::getAll(array("ID_anno_budget"=>$anno->id));
-if (count($fabbisogni_anno)) {    
-    foreach ($fabbisogni_anno as $richiesta) {
+
+if (count($fabbisogni_anno)) {
+    foreach ($fabbisogni_anno as $richiesta) {   
         $show = false;
         foreach($gerarchia_cdr_selezionato as $cdr_gerarchia_selezionata) {
             if ($richiesta->codice_cdr == $cdr_gerarchia_selezionata["cdr"]->codice){
@@ -196,46 +209,39 @@ if (count($fabbisogni_anno)) {
             if ($view_all == true) {            
                 $fogli["Fabbisogno"][] = $record;
             }
-            else {            
-                if ($user->hasPrivilege("fabbisogno_referente_cdr")) {
-                    $found = false;                
-                    foreach ($cdr_richiesta_competenza_anno as $cdr_richiesta_competenza) {                                                
-                        if ($richiesta->codice_cdr == $cdr_richiesta_competenza->codice) {                
+            else {     
+                $found = false;
+                if ($user->hasPrivilege("fabbisogno_referente_cdr")) {                    
+                    foreach ($cdr_richiesta_competenza_anno as $cdr_richiesta_competenza) {  
+                        if ($richiesta->codice_cdr == $cdr_richiesta_competenza->codice) {                               
                             $fogli["Fabbisogno"][] = $record;
                             $found = true;
                             break;
                         }
-                    }   
-                    if ($found == true){
-                        break;
                     }
                 }
-                if ($user->hasPrivilege("fabbisogno_responsabile_cdr_referente")) {
-                    $found = false;
+                if ($found == false && $user->hasPrivilege("fabbisogno_responsabile_cdr_referente")) {                    
                     foreach ($ramo_cdr_competenza_anno as $cdr_richiesta_competenza) {                                                
                         if ($richiesta->codice_cdr == $cdr_richiesta_competenza->codice) {                
                             $fogli["Fabbisogno"][] = $record;
                             $found = true;
                             break;
                         }
-                    }   
-                    if ($found == true){
-                        break;
                     }
                 }
                 //per responsabile scientifico e per segreteria organizzativa le verifiche sono ridondanti ma vengono introdotte per robustezza
-                if ($user->hasPrivilege("fabbisogno_responsabile_scientifico_anno") && $richiesta->matricola_responsabile_scientifico == $user->matricola_utente_selezionato) {
+                if ($found == false && $user->hasPrivilege("fabbisogno_responsabile_scientifico_anno") && $richiesta->matricola_responsabile_scientifico == $user->matricola_utente_selezionato) {                    
                     $fogli["Fabbisogno"][] = $record;
-                    break;
+                    $found = true;
                 }
-                if ($user->hasPrivilege("fabbisogno_segreteria_organizzativa_anno") && $richiesta->matricola_referente_segreteria == $user->matricola_utente_selezionato) {
+                if ($found == false && $user->hasPrivilege("fabbisogno_segreteria_organizzativa_anno") && $richiesta->matricola_referente_segreteria == $user->matricola_utente_selezionato) {
                     $fogli["Fabbisogno"][] = $record;
-                    break;
+                    $found = true;
                 }
                 //verifica su esistenza $cdr_richiesta ridondante (privilegio fabbisogno_responsabile_cdr garantito se cdr selezionato) ma introdotta per robustezza
-                if ($user->hasPrivilege("fabbisogno_responsabile_cdr") && $cdr_richiesta!== null && $richiesta->codice_cdr == $cdr->codice) {
+                if ($found == false && $user->hasPrivilege("fabbisogno_responsabile_cdr") && $cdr_richiesta!== null && $richiesta->codice_cdr == $cdr->codice) {
                     $fogli["Fabbisogno"][] = $record;
-                    break;
+                    $found = true;
                 }
             }
         }

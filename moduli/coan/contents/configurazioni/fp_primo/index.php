@@ -59,5 +59,5 @@ $cm->oPage->addContent($oGrid);
 function checkRelations($oGrid) {
     $id = $oGrid->key_fields["ID_fp_primo"]->value->getValue();
     $item = new CoanFpPrimo($id);
-    $oGrid->display_delete_bt = $item->canDelete();
+    $oGrid->display_delete_bt = $item->isDeletable();
 }

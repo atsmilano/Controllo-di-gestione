@@ -29,7 +29,7 @@ else {
     ffErrorHandler::raise("Errore nel passaggio dei parametri.");
 }
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");
 $tpl->load_file("tabella_mappatura.html", "main");
 

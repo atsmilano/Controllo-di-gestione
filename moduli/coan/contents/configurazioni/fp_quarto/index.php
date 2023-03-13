@@ -1,4 +1,5 @@
 <?php
+
 $grid_fields = array(
     "ID_fp_quarto",
     "codice",
@@ -9,12 +10,12 @@ $grid_fields = array(
 $grid_recordset = array();
 foreach (CoanFpQuarto::getAll() as $item) {
     $fp = new CoanFpTerzo($item->id_fp_terzo);
-    
+
     $grid_recordset[] = array(
         $item->id,
         $item->codice,
         $item->descrizione,
-        $fp->codice." - ".$fp->descrizione
+        $fp->codice . " - " . $fp->descrizione
     );
 }
 
@@ -23,8 +24,8 @@ $oGrid->id = "fp-quarto";
 $oGrid->title = "Fp quarto livello";
 $oGrid->resources[] = "fp-quarto";
 $oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
-    $grid_fields, $grid_recordset, 
-    "coan_fp_quarto"
+                $grid_fields, $grid_recordset,
+                "coan_fp_quarto"
 );
 $oGrid->order_default = "ID_fp_quarto";
 $oGrid->record_id = "fp-quarto-modify";
@@ -34,7 +35,7 @@ $oGrid->full_ajax = true;
 $oGrid->display_new = true;
 $oGrid->display_search = true;
 $oGrid->use_search = true;
-$oGrid->fixed_post_content = '<script>jQuery("#'.$oGrid->id.'").jTableFullClick();</script>';
+$oGrid->fixed_post_content = '<script>jQuery("#' . $oGrid->id . '").jTableFullClick();</script>';
 
 //**************************************************************************
 // *********** FIELDS ****************
@@ -66,8 +67,9 @@ $oGrid->addEvent("on_before_parse_row", "checkRelations");
 // *********** ADDING TO PAGE ****************
 $cm->oPage->addContent($oGrid);
 
-function checkRelations($oGrid) {
+function checkRelations($oGrid)
+{
     $id = $oGrid->key_fields["ID_fp_quarto"]->value->getValue();
     $item = new CoanFpQuarto($id);
-    $oGrid->display_delete_bt = $item->canDelete();
+    $oGrid->display_delete_bt = $item->isDeletable();
 }

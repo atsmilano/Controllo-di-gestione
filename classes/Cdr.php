@@ -162,6 +162,12 @@ class Cdr extends Entity{
 
         return $all_cdr;
     }
+    
+    //restituisce la descrizione estesa del cdr
+    public function getDescrizioneEstesa() {
+        $tipo_cdr = new Cdr($this->id_tipo_cdr);
+        return $this->codice . " - " . $tipo_cdr->abbreviazione . " " . $this->descrizione;
+    }
 
     //estrazione di tutti gli oggetti cdr con codice dei piani cdr attivi in una data specifica   
     //$date è una stringa

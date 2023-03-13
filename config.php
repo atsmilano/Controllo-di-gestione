@@ -8,7 +8,14 @@ $enviroments = array(
                     "FF_ENV_TEST" => "test.domain.it",
                     );
 
-define("FF_ENV", array_search($_SERVER["HTTP_HOST"], $enviroments));
+if(php_sapi_name() == "cli") {
+    //in caso di esecuzione da riga di comando viene richiesto il nome dell'enviroment come parametro
+    define("FF_ENV", getopt(null, ["env:"])["env"]);
+    $_SERVER['SERVER_NAME'] = $enviroments[FF_ENV];
+}
+else {
+    define("FF_ENV", array_search($_SERVER["HTTP_HOST"], $enviroments));    
+}
 require_once(__DIR__.DIRECTORY_SEPARATOR."conf".DIRECTORY_SEPARATOR."enviroments".DIRECTORY_SEPARATOR.FF_ENV.".php");
 
 //parametri per la gestione dei loghi di default

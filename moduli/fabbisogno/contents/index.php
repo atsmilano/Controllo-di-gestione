@@ -8,7 +8,7 @@ if (!$user->hasPrivilege("fabbisogno_referente_cdr")
         && !$user->hasPrivilege("fabbisogno_responsabile_cdr")
         ) {
     if ($user->hasPrivilege("fabbisogno_operatore_formazione") || $user->hasPrivilege("fabbisogno_admin")) {
-        $modulo = Modulo::getCurrentModule();
+        $modulo = core\Modulo::getCurrentModule();
         ffRedirect(FF_SITE_PATH . "/area_riservata".$modulo->site_path."/gestione?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST));
     } else {
         ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione delle schede.");
@@ -48,7 +48,7 @@ if ($user->hasPrivilege("fabbisogno_responsabile_cdr_referente")) {
     $ramo_cdr_competenza_anno = $personale->getCdrResponsbileReferenzaAnno($date);
 }
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $cm->oPage->addContent("<a id='fabbisogni_estrazione_link' class='link_estrazione' href='".FF_SITE_PATH . "/area_riservata" . $modulo->site_path."/estrazioni/fabbisogni_competenza.php?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."'>"
             . "<div id='fabbisogni_estrazione' class='estrazione link_estrazione'>Estrazione fabbisogni competenza .xls</div></a><br>");
 
@@ -128,7 +128,7 @@ if(count($grid_recordset)) {
         );
         $oGrid->order_default = "titolo";
         $oGrid->record_id = "dettaglio-richiesta";
-        $module = Modulo::getCurrentModule();
+        $module = core\Modulo::getCurrentModule();
         $oGrid->record_url = FF_SITE_PATH . "/area_riservata" . $module->site_path . "/dettaglio_richiesta";
         $oGrid->order_method = "labels";
         //$oGrid->full_ajax = true;

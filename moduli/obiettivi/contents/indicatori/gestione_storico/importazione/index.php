@@ -4,7 +4,7 @@ $path_info = substr($cm->path_info, 0, (-1 * strlen(end($path_info_parts))))."im
 $download_url = FF_SITE_PATH . $path_info . "/download_tracciato?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST);
 $upload_url = FF_SITE_PATH . $path_info . "/upload_tracciato?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST);
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory($modulo->module_theme_dir . "/tpl");

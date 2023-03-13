@@ -1,4 +1,5 @@
 <?php
+
 $grid_fields = array(
     "ID_cdc_standard_regionale",
     "codice",
@@ -19,7 +20,7 @@ $oGrid->id = "cdc-standard-regionale";
 $oGrid->title = "Cdc standard regionale";
 $oGrid->resources[] = "cdc-standard-regionale";
 $oGrid->source_SQL = CoreHelper::getGridSqlFromArray(
-    $grid_fields, $grid_recordset, "coan_cdc_standard_regionale"
+                $grid_fields, $grid_recordset, "coan_cdc_standard_regionale"
 );
 $oGrid->order_default = "codice";
 $oGrid->record_id = "cdc-standard-regionale-modify";
@@ -29,7 +30,7 @@ $oGrid->full_ajax = true;
 $oGrid->display_new = true;
 $oGrid->display_search = true;
 $oGrid->use_search = true;
-$oGrid->fixed_post_content = '<script>jQuery("#'.$oGrid->id.'").jTableFullClick();</script>';
+$oGrid->fixed_post_content = '<script>jQuery("#' . $oGrid->id . '").jTableFullClick();</script>';
 
 //**************************************************************************
 // *********** FIELDS ****************
@@ -55,8 +56,9 @@ $oGrid->addEvent("on_before_parse_row", "checkRelations");
 // *********** ADDING TO PAGE ****************
 $cm->oPage->addContent($oGrid);
 
-function checkRelations($oGrid) {
+function checkRelations($oGrid)
+{
     $id = $oGrid->key_fields["ID_cdc_standard_regionale"]->value->getValue();
     $item = new CoanCdcStandardRegionale($id);
-    $oGrid->display_delete_bt = $item->canDelete();
+    $oGrid->display_delete_bt = $item->isDeletable();
 }

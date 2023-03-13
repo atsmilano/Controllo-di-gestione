@@ -1,5 +1,5 @@
 <?php
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 $user = LoggedUser::getInstance();
 $anno = $cm->oPage->globals["anno"]["value"];
 $date = $cm->oPage->globals["data_riferimento"]["value"];
@@ -54,8 +54,8 @@ switch($richiesta->id_tipologia){
     break;
     //Formazione sul campo
     case 5:
-    case 8:
     case 6:
+    case 7:
         $nome_tpl_modello = "A037-MD003 Progetto Formazione sul campo.docx";
     break;
     //Formazione a distanza
@@ -120,13 +120,13 @@ switch($richiesta->id_tipologia){
         $templateProcessor->setValue('checkBoxFSC3',$unCheckedBox);
         $templateProcessor->setValue('checkBoxBlended',$unCheckedBox);
     break;
-    case 8:
+    case 6:
         $templateProcessor->setValue('checkBoxFSC2',$checkedBox);
         $templateProcessor->setValue('checkBoxFSC1',$unCheckedBox);     
         $templateProcessor->setValue('checkBoxFSC3',$unCheckedBox);
         $templateProcessor->setValue('checkBoxBlended',$unCheckedBox);
     break;
-    case 6:
+    case 7:
         $templateProcessor->setValue('checkBoxFSC3',$checkedBox);
         $templateProcessor->setValue('checkBoxFSC1',$unCheckedBox);    
         $templateProcessor->setValue('checkBoxFSC2',$unCheckedBox);

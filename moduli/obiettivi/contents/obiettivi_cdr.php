@@ -95,7 +95,7 @@ $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_records
 $oGrid->order_default = "codice";
 $oGrid->record_id = "obiettivo-modify";
 $oGrid->order_method = "labels";
-$currentModule = Modulo::getCurrentModule();
+$currentModule = core\Modulo::getCurrentModule();
 $oGrid->record_url = MODULES_SITE_PATH . $currentModule->site_path . "/dettagli_obiettivo";
 $oGrid->use_paging = false;
 

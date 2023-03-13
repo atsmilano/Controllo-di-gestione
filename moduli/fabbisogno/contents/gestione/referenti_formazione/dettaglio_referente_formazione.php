@@ -58,14 +58,22 @@ $oField->label = "Cdr";
 $oField->required = true;
 $oField->default_value = new ffData($referente_cdr->codice_cdr, "Text");
 $cdrs = array();
-foreach (AnagraficaCdr::getAll() as $cdr) {
-    //if ($dipendente->isAttivoInData($date->format("Y-m-d"))) {
+$found = false;
+foreach (AnagraficaCdr::getAnagraficaInData($date) as $cdr) {
+    if ($referente_cdr->codice_cdr == $cdr->codice){
+        $found = true;
+    }
     $tipo_cdr = new TipoCdr($cdr->id_tipo_cdr);    
     $cdrs[] = array(
             new ffData($cdr->codice, "Text"),
             new ffData($cdr->codice . " - " . $tipo_cdr->abbreviazione . " " . $cdr->descrizione, "Text"),
         );
-    //}
+}
+if ($isEdit && $found == false) {
+    $cdrs[] = array(
+        new ffData($referente_cdr->codice_cdr, "Text"),
+        new ffData($referente_cdr->codice_cdr . " - Cdr non attivo alla data attuale", "Text"),
+    );
 }
 $oField->extended_type = "Selection";
 $oField->multi_pairs = $cdrs;

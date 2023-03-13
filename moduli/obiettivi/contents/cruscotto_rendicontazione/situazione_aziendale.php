@@ -5,7 +5,7 @@ $user = LoggedUser::getInstance();
 //anno***********
 $anno = $cm->oPage->globals["anno"]["value"];
 
-$modulo = Modulo::getCurrentModule();
+$modulo = core\Modulo::getCurrentModule();
 
 //viene caricato il template specifico per la pagina
 $tpl = ffTemplate::factory($modulo->module_theme_dir . DIRECTORY_SEPARATOR . "tpl");

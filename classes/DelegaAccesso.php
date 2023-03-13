@@ -6,7 +6,7 @@ class DelegaAccesso extends Entity{
     public function getModuliDelega() {
         $moduli_delega = array();
         
-        $moduli = Modulo::getActiveModulesFromDisk();
+        $moduli = \core\Modulo::getActiveModulesFromDisk();
         
         $db = ffDb_Sql::factory();
         $sql = "
