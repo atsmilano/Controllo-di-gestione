@@ -172,9 +172,12 @@ class ResponsabileCdr {
     }
     
     //restituisce tutti i record dell'anagrafica attivi in un anno specifico
-    public static function getResponsabiliCdrAnno (AnnoBudget $anno) {
-        $responsabile_cdr = array();        
-        foreach(ResponsabileCdr::getAll() AS $item){
+    public static function getResponsabiliCdrAnno (AnnoBudget $anno, Cdr $cdr=null) {
+        $responsabile_cdr = array(); 
+        if ($cdr !== null) {
+            $filters = array("codice_cdr" => $cdr->codice);
+        }       
+        foreach(ResponsabileCdr::getAll($filters) AS $item){
             //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
             if (strtotime($item->data_inizio) <= strtotime($anno->descrizione."-12-31") 
                 && ($item->data_fine == null || strtotime($item->data_fine) >= strtotime($anno->descrizione."-01-01"))){               

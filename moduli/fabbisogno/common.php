@@ -21,6 +21,7 @@ foreach ($user->user_groups as $group) {
 }
 
 $personale = Personale::factoryFromMatricola($user->matricola_utente_selezionato)->cloneAttributesToNewObject("FabbisognoFormazione\Personale");
+
 //fabbisogno operatore formazione
 if ($personale->isOperatoreFormazioneInData($data_riferimento)) {
     if (!$user->hasPrivilege("fabbisogno_operatore_formazione")) {

@@ -470,11 +470,18 @@ class ObiettiviObiettivoCdr extends Entity{
                         <label>Peso obiettivo / peso totale obiettivi CDR</label>
                         <span class='form-control readonly'>" . $this->peso . "/"
             . $tot_peso_obiettivi . " (" . number_format(CoreHelper::percentuale($this->peso, $tot_peso_obiettivi), 2) . "%)</span>
-                    </div>
-                    <div class='form-group clearfix padding'>
+                    </div>";
+
+        return $html;
+    }
+
+    public function showHtmlInfoAssegnazioni(DateTime $date) {
+        $obiettivo = new ObiettiviObiettivo($this->id_obiettivo);
+        $anno = new AnnoBudget($obiettivo->id_anno_budget);
+
+        $html = "<div class='form-group clearfix padding'>
                         <label>Dipendenti associati all&acute;obiettivo</label>
                         ";
-
         $obiettivi_cdr_personale_associati = $this->getObiettivoCdrPersonaleAssociati();
         if (count($obiettivi_cdr_personale_associati) > 0) {
             $html .= "<span class='form-control readonly'><ul>";

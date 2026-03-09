@@ -14,7 +14,7 @@ if (isset($_REQUEST["keys[ID]"])) {
 }
     
 $oRecord = ffRecord::factory($cm->oPage);
-$oRecord->id = "dettaglio-referente";
+$oRecord->id = "referente-modify";
 $oRecord->title = $referente !== null ? "Modifica ": "Nuovo "."referente CdR";
 $oRecord->resources[] = "referente";
 $oRecord->src_table  = "scadenze_referente_cdr";

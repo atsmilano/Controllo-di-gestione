@@ -26,7 +26,7 @@ spl_autoload_register(function ($class) {
 
     if(!(defined("COMPOSER_PATH") && COMPOSER_PATH)) {
         switch ($class) {
-            case "PHPMailer":
+            /*case "PHPMailer":
             case "phpmailer":
                 require(__TOP_DIR__ . "/library/phpmailer/class.phpmailer" . $php_ext);
                 require(__TOP_DIR__ . "/library/phpmailer/class.phpmaileroauth" . $php_ext);
@@ -35,7 +35,7 @@ spl_autoload_register(function ($class) {
                 require(__TOP_DIR__ . "/library/phpmailer/class.pop3" . $php_ext);
                 require(__TOP_DIR__ . "/library/phpmailer/extras/EasyPeasyICS" . $php_ext);
                 require(__TOP_DIR__ . "/library/phpmailer/extras/ntlm_sasl_client" . $php_ext);
-                break;
+                break;*/
             case "PHPExcel":
                 require(__TOP_DIR__ . "/library/PHPexcel/class.PHPexcel" . $php_ext);
                 break;

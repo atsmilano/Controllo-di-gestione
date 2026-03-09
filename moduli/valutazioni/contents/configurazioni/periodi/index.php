@@ -8,6 +8,7 @@ $grid_fields = array(
     "inibizione_visualizzazione_ambiti_totali",
     "inibizione_visualizzazione_data_colloquio",
     "visualizzazione_obiettivi",
+    "valutatore_anonimo",
     "descrizione",
     "data_inizio",
     "data_fine",
@@ -21,11 +22,13 @@ foreach (ValutazioniPeriodo::getAll() as $periodo) {
         $periodo->inibizione_visualizzazione_ambiti_totali==true?"Si":"No",
         $periodo->inibizione_visualizzazione_data_colloquio==true?"Si":"No",
         $periodo->visualizzazione_obiettivi==true?"Si":"No",
+        $periodo->valutatore_anonimo==true?"Si":"No",
         $periodo->descrizione,
         $periodo->data_inizio,
         $periodo->data_fine,
     );
 }
+
 
 $oGrid = ffGrid::factory($cm->oPage);
 $oGrid->id = "periodi";
@@ -78,6 +81,12 @@ $oField = ffField::factory($cm->oPage);
 $oField->id = "visualizzazione_obiettivi";
 $oField->base_type = "Text";
 $oField->label = "Visualizzazione obiettivi";
+$oGrid->addContent($oField);
+
+$oField = ffField::factory($cm->oPage);
+$oField->id = "valutatore_anonimo";
+$oField->base_type = "Text";
+$oField->label = "Anonimato valutatore";
 $oGrid->addContent($oField);
 
 $oField = ffField::factory($cm->oPage);

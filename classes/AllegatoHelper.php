@@ -1,6 +1,6 @@
 <?php
 class AllegatoHelper {
-    protected $error_operazione_vietata = "Permessi insufficienti per compiere l'operazione di ";
+    protected $error_operazione_vietata = "Permessi insufficienti per compiere l'operazione: ";
     protected $error_md5 = "Il file non è valido";
     
     public function getErrorMD5() {
@@ -8,10 +8,11 @@ class AllegatoHelper {
     }
     
     public function downloadFile($filename_md5){
-        if($this->isValidMd5($filename_md5)){
-            if($this->canDownload($filename_md5)){
+        if($this->isValidMd5($filename_md5)){            
+            if($this->canDownload($filename_md5)){                
                 return $this->renderFile($filename_md5);
             }else{
+                $this->error_operazione_vietata .= "impossibile effettuare il download";
                 echo $this->error_operazione_vietata;
                 return false;
             }               
@@ -26,7 +27,7 @@ class AllegatoHelper {
                 $allegato = new Allegato();
                 return $allegato->delete($filename_md5, $use_hard_delete);
             }else{
-                echo $this->error_operazione_vietata;
+                $this->error_operazione_vietata .= "impossibile effettuare l'eliminazione";
                 return false;
             }               
         }else{

@@ -30,25 +30,37 @@ class Personale extends Entity{
     //restituisce un array con i cdc d'afferenza di un dipendente alla data per un tipo piano
     //viene restituito un array di array contententi PersonaleCdc e Cdc    
     public function getCdcAfferenzaInData(TipoPianoCdr $tipo_piano_cdr, $date){
-            $afferenza = array();
-            $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date);	
-            //vengono estratti tutti i cdc associati alla matricola personale
-            $cdc_personale = CdcPersonale::getAll(array("matricola_personale" => $this->matricola));
-            foreach($cdc_personale AS $cdc_dipendente){
-                    //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
-                    if (strtotime($cdc_dipendente->data_inizio) <= strtotime($date) && ($cdc_dipendente->data_fine == null || strtotime($cdc_dipendente->data_fine) >= strtotime($date))){
-                            try {
-                                    $cdc = Cdc::factoryFromCodice($cdc_dipendente->codice_cdc, $piano_cdr);
-                                    $afferenza[] = array("cdc_personale" => $cdc_dipendente, 
-                                                                            "cdc" => $cdc);
-                            } 				
-                            catch (Exception $ex) {
-                                  
-                            }
-                    }
-            }			
-            return $afferenza;
+        $afferenza = array();
+        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $date);	
+        //vengono estratti tutti i cdc associati alla matricola personale
+        $cdc_personale = CdcPersonale::getAll(array("matricola_personale" => $this->matricola));
+        foreach($cdc_personale AS $cdc_dipendente){
+                //se la data inizio è precedente alla data corrente inclusa e la data fine è successiva alla data corrente inclusa)
+                if (strtotime($cdc_dipendente->data_inizio) <= strtotime($date) && ($cdc_dipendente->data_fine == null || strtotime($cdc_dipendente->data_fine) >= strtotime($date))){
+                        try {
+                                $cdc = Cdc::factoryFromCodice($cdc_dipendente->codice_cdc, $piano_cdr);
+                                $afferenza[] = array("cdc_personale" => $cdc_dipendente, 
+                                                                        "cdc" => $cdc);
+                        } 				
+                        catch (Exception $ex) {
+                            
+                        }
+                }
+        }			
+        return $afferenza;
     }	
+
+    //restituisce il cdc di assegnazione prevalente in una data specifica
+    //(percentuale più alta o in caso di percentuale identica il primo trovato)
+    public function getCdcAfferenzaPrevalenteInData (TipoPianoCdr $tipo_piano_cdr, $date) {        
+        $cdc_prevalente = null;
+        foreach ($this->getCdcAfferenzaInData($tipo_piano_cdr, $date->format("Y-m-d")) as $afferenza) {
+            if ($cdc_prevalente == null || $afferenza["cdc_personale"]->percentuale > $cdc_prevalente["cdc_personale"]->percentuale) {
+                $cdc_prevalente = $afferenza;
+            }
+        }
+        return $cdc_prevalente;
+    }
     
     //restituisce un array con i cdr d'afferenza di un dipendente alla data per un tipo piano
     //viene restituito un array di array contententi cdr e peso totale su cdr
@@ -87,6 +99,18 @@ class Personale extends Entity{
             }
         }           
         return $cdr_afferenza;
+    }   
+    
+    //restituisce il cdr di assegnazione prevalente in una data specifica
+    //(percentuale più alta o in caso di percentuale identica il primo trovato)
+    public function getCdrAfferenzaPrevalenteInData (TipoPianoCdr $tipo_piano_cdr, $date) {        
+        $cdr_prevalente = null;        
+        foreach ($this->getCdrAfferenzaInData($tipo_piano_cdr, $date->format("Y-m-d")) as $afferenza) {            
+            if ($cdr_prevalente == null || $afferenza["peso_cdr"] > $cdr_prevalente["peso_cdr"]) {
+                $cdr_prevalente = $afferenza;
+            }
+        }
+        return $cdr_prevalente;
     }
     
     //restituisce gli ultimi cdr delle posizioni chiuse (non attive) al quale il dipendente risulta afferente
@@ -271,6 +295,14 @@ class Personale extends Entity{
             }
         }                
         return $attivo;
+    }
+
+    public function isCessatoInAnnoAllaData (DateTime $date) {
+        $anno = AnnoBudget::getByFields(["descrizione" => $date->format("Y")]);             
+        if ($anno !== null && $this->isAttivoAnno($anno) && !$this->isAttivoInData($date->format("Y-m-d"))) {
+            return true;
+        }
+        return false;
     }
 }
 

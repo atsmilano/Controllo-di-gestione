@@ -52,7 +52,7 @@ foreach($sezioni as $sezione) {
             $peso = "";
         }
         try {
-            $sezione_peso_anno = ValutazioniSezionePesoAnno::factoryFromSezioneCategoriaAnno($sezione->id, $categoria->id, $valutazioneAnnoBudget->id);
+            $sezione_peso_anno = ValutazioniSezionePesoAnno::factoryFromSezioneCategoriaAnno($sezione->id, $categoria->id, $valutazioneAnnoBudget);
             $modificabile_class = $sezione_peso_anno->canUpdate() ? "categoria_sezione_modificabile" : "categoria_sezione_non_modificabile";
         } catch (Exception $ex) {
             $modificabile_class = "categoria_sezione_modificabile";
@@ -138,7 +138,7 @@ foreach($ambiti as $ambito) {
             break;
         }
     }
-
+    
     $tpl->set_var("codice_y", $codice_sezione . "." . $ambito->codice);
     $tpl->set_var("descr_y", $ambito->descrizione);
     $tpl->set_var("riga", $riga++);

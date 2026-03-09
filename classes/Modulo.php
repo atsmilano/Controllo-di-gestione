@@ -41,7 +41,7 @@ class Modulo
           
             //se è presente una configurazione specifica per la distribuzione viene utilizzata quella altrimenti quella generica
             $env = FF_ENV;
-            //viene verificato che esistano configurazione specifiche per l'enviroment
+            //viene verificato che esistano configurazione specifiche per l'environment
             if (defined("MODULI_CONF")) {
                 foreach (MODULI_CONF as $modulo_conf) {
                     if ($this->id == $modulo_conf["id_modulo"]) {
@@ -51,7 +51,7 @@ class Modulo
                         if (isset($modulo_conf["anno_fine"])) {
                             $anno_fine = (int) $modulo_conf["anno_fine"];
                         }
-                        //impostazione dei parametri dell'enviroment          
+                        //impostazione dei parametri dell'environment          
                         foreach ($modulo_conf["constants"] as $constant => $value) {
                             $this->env_constants[$constant] = $value;
                         }
@@ -74,6 +74,16 @@ class Modulo
         } else {
             throw new Exception("File '" . $mod_config_file . "' non trovato.");
         }
+    }
+
+    public static function getActiveModuleById($id) {
+        $cm = \Cm::getInstance();
+        foreach ($cm->oPage->globals["modules"]["value"] as $modulo) {
+            if ($modulo->id == $id) {
+                return $modulo;
+            }
+        }
+        return null;
     }
     
     public function getEnvConstants() {

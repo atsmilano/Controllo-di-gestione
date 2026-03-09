@@ -173,8 +173,7 @@ if ($cdr->id_padre !== 0) {
         foreach ($prospettive_anno as $prospettiva) {
             //viene selezionata la strategia per l'anno e il cdr per la prospettiva (univoca)
             $strategia = Strategia::getAll(array("ID_anno_budget" => $anno->id, "codice_cdr" => $cdr_padre_strategico->codice, "ID_prospettiva" => $prospettiva->id));
-
-            //viene visualizzato il dipendente solamente nel caso in cui abbia un'afferenza ad almeno un cdc di quelli attivi per il periodo e il piano	
+            
             if (strlen($source_sql))
                 $source_sql .= "UNION ";
             if (strlen($strategia[0]->descrizione) > 0) {

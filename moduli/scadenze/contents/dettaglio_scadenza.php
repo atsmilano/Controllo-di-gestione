@@ -9,7 +9,7 @@ $user = LoggedUser::getInstance();
 if ($user->hasPrivilege("scadenze_admin")) {
     $edit = true;    
 }
-else if ($user->hasPrivilege("scadenze_referente_cdr")) {    
+else if ($user->hasPrivilege("scadenze_responsabile_cdr") || $user->hasPrivilege("scadenze_referente_cdr")) {    
     $edit = false;       
 }
 else {    

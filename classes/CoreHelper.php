@@ -84,13 +84,17 @@ class CoreHelper {
     }
 
     //metodo per inclusione di jquery-ui nelle pagine che lo utilizzano
-    public static function includeJqueryUi() {
+    public static function includeJqueryUi($html = false) {
         $cm = cm::getInstance();        
-        $cm->oPage->addContent('
-				<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-                                <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"</script>
-				<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>                                
-            ');
+        $cm->oPage->addContent(CoreHelper::getJqueryIncludeHtml());
+    }
+
+    public static function getJqueryIncludeHtml() {
+        return '
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+                            <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"</script>
+            <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>                                
+        ';
     }
 
     //restituisce il calcolo percentuale
@@ -176,7 +180,7 @@ class CoreHelper {
             }
         }        
         $objPHPExcel->setActiveSheetIndex(0);
-                                                                        
+                                                                       
         if ($json == false){
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'); //mime type
             header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"');
@@ -184,7 +188,7 @@ class CoreHelper {
         }
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');                                                 
         
-        //download del file        
+        //download del file                
         if ($json == true ){
             ob_start();
         }
@@ -193,7 +197,7 @@ class CoreHelper {
         $objPHPExcel->disconnectWorksheets();
         unset($objPHPExcel);   
         
-        if ($json == true ){            
+        if ($json == true ){   
             $xlsData = ob_get_contents();
             ob_end_clean();
             $response =  array(
@@ -443,36 +447,39 @@ class CoreHelper {
     }
     
     //aggiunge ala pagina un elemento tab
-    //l'array tabs contiene le ifnormazioni dei singoli tabs
-    //ogni tab è rappresentato da un array associativo con 4 variabili identificate dalle chiavi: tab_id, tab_link, tab_params, tab_name
-    //hide_ret_url = true se si intende non includere ret_url nel lijnk del tab
+    //il metodo viene mantenuto solamente per retrocompatibilità per le funzionalità
+    //sviluppate precedentemente all'introduzione delle componenti UI
     public static function showTabsPage ($tabs_id, $tabs = array()) {
         $cm = cm::getInstance();
         
-        CoreHelper::includeJqueryUi();
-        
-        $tpl = ffTemplate::factory(FF_DISK_PATH.DIRECTORY_SEPARATOR.FF_THEME_DIR.DIRECTORY_SEPARATOR.$cm->oPage->getTheme().DIRECTORY_SEPARATOR."layouts");
-        $tpl->load_file("tabs.html", "main");
-        
-        $tpl->set_var("tabs_id", $tabs_id);
-                
+        $tabs_ui = new UIComponents\Tabs ($tabs_id);
         foreach($tabs as $tab) {
-            $tpl->set_var("tab_id", $tab["tab_id"]);
-            $tpl->set_var("tab_link", $tab["tab_link"]); 
-            if (isset($tab["hide_ret_url"]) && $tab["hide_ret_url"]==true) {
-                $ret_url = "";
-            }
-            else {                
-                $ret_url = "ret_url=".urlencode($tab["tab_link"]."?".$tab["tab_params"]);
-            }
-            $tpl->set_var("tab_params", $tab["tab_params"].(strlen($tab["tab_params"])?(substr($tab["tab_params"], -1)=="&"?"":"&"):"").$ret_url);
-            $tpl->set_var("tab_name", $tab["tab_name"]);
-            $tpl->parse("SectTab", true);
-        }
-        $tpl->set_var("active_tab", isset($_REQUEST["gotab"]) ? $_REQUEST["gotab"] : 0);
-
+            $tab_ui = new \UIComponents\Tab ($tab["tab_id"],$tab["tab_name"],$tab["tab_link"],$tab["tab_params"],$tab["hide_ret_url"]);
+            $tabs_ui->addTab($tab_ui);
+        }        
         //***********************
         //Adding contents to page
-        $cm->oPage->addContent($tpl);
+        $cm->oPage->addContent($tabs_ui->getHtml());
+    }   
+    
+    //include (require_once) tutti i file php di una directory e sottodirectory
+    public static function requireDirectoryFiles ($dir_path) {
+        if(is_dir($dir_path)) {
+            $class = static::class;
+            $scan = scandir($dir_path);
+            unset($scan[0], $scan[1]); //unset . and ..
+            foreach($scan as $file) {
+                if(is_dir($dir_path."/".$file)) {
+                    $class::requireDirectoryFiles($dir_path."/".$file);
+                } else {
+                    if(strpos($file, '.php') !== false) {
+                        include_once($dir_path."/".$file);
+                    }
+                }
+            }
+        }
+        else {
+            throw new Exception("'".$dir_path."' non è una directory valida");
+        }
     }
 }

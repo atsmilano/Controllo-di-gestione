@@ -15,7 +15,7 @@ if (isset($_GET["pesi"])){
         }
 
         try {
-            $sezione_categoria_anno = ValutazioniSezionePesoAnno::factoryFromSezioneCategoriaAnno($id_sezione, $id_categoria, $anno->id);
+            $sezione_categoria_anno = ValutazioniSezionePesoAnno::factoryFromSezioneCategoriaAnno($id_sezione, $id_categoria, $anno);
             if($peso != "") { // update
                 if(!$sezione_categoria_anno->update()) {
                     ValutazioniHelper::setSavePesoError(sprintf(ValutazioniHelper::ERROR_ACTION_PESO, "modificato"));

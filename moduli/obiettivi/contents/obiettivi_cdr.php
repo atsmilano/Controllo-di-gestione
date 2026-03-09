@@ -1,4 +1,6 @@
 <?php
+use core\Modulo;
+
 CoreHelper::includeJqueryUi();
 $user = LoggedUser::getInstance();
 
@@ -25,7 +27,6 @@ $grid_fields = array(
     "titolo",
     "tipo",
     "area_risultato",
-    "area",
     "peso",
 );
 $grid_recordset = array();
@@ -51,7 +52,6 @@ foreach ($obiettivi_cdr as $obiettivo_cdr) {
     //vengono recuperate le descrizioni delle chiavi esterne
     $tipo = new ObiettiviTipo($obiettivo->id_tipo);
     $area_risultato = new ObiettiviAreaRisultato($obiettivo->id_area_risultato);
-    $area = new ObiettiviArea($obiettivo->id_area);
     $peso = $obiettivo_cdr->peso;
     if ($peso_tot_obiettivi !== 0) {
         $peso_perc = 100 / $peso_tot_obiettivi * $peso;
@@ -82,7 +82,6 @@ foreach ($obiettivi_cdr as $obiettivo_cdr) {
         $obiettivo->titolo,
         $tipo->descrizione,
         $area_risultato->descrizione,
-        $area->descrizione,
         $peso . " (" . number_format($peso_perc, 2) . "% su peso obiettivi cdr)",
     );
 }
@@ -105,121 +104,135 @@ $oGrid->display_delete_bt = false;
 
 $oGrid->addEvent("on_before_parse_row", "initGrid");
 
+$html_gestione_stato_avanzamento = ("
+                    <div id='loading_page'>
+                        <img src=\"..\..\\themes\ats\images\loader.gif\">	
+                        <span>Aggiornamento...</span>			
+                    </div>    
+                    <script>
+                        function loadingPage(){	
+                            $('.stato_chiusura_obiettivi').hide();
+                            $('.riapertura_button').hide();
+                            $('.chiusura_button').hide();
+                            $('#obiettivo-cdr').hide();
+                            $('#loading_page').show();
+                            window.location.href = '".$_SERVER['REQUEST_URI']."'
+                        }
+                    </script>
+                    ");
+
 //******************************************************************************
 //pulsante per la chiusura delle modifiche da parte del responsabile
 if (count($obiettivi_cdr)){    
     if ($chiusura_obiettivi == true) {
-        $cm->oPage->addContent('<div class="stato_chiusura_obiettivi"><h4>Tutti gli obiettivi risultano chiusi</h4>');
-        $cm->oPage->addContent('</div>');
-
-    } else if (!$user->hasPrivilege("resp_cdr_selezionato")) {
-        $cm->oPage->addContent('<div class="stato_chiusura_obiettivi"><h4>Obiettivi in attesa di chiusura</h4></div>');
-    }
-    //TODO percorso tema assoluto in dialog
+        $stato_avanzamento_obiettivi_cdr = "Tutti gli obiettivi del CdR risultano chiusi";        
+    } 
     else {
-        $cm->oPage->addContent("
-            <div id='chiusura_obiettivi' class='chiusura_button'>
-                <h4>Confermare chiusura obiettivi</h4>
-            </div>
-            <div id='chiusura_obiettivi_confirm_dialog'>
-                <p id='dialog_desc'>
-                    Chiudere tutti gli obiettivi? Una volta confermata l'operazione non sarà più possibile modificare azioni ed assegnazioni
-                    ed il personale associato potrà visualizzare gli obiettivi di propria competenza.
-                </p>
-                <div id='loading'>
-                    <img src=\"..\..\\themes\ats\images\loader.gif\">
-                    <span>Chiusura obiettivi in corso...</span>					
+        $stato_avanzamento_obiettivi_cdr = "Obiettivi CdR in attesa di chiusura";
+        if ($user->hasPrivilege("resp_cdr_selezionato")) {
+            $html_gestione_stato_avanzamento .=  ("
+                <div id='chiusura_obiettivi' class='chiusura_button'>
+                    <h4>Confermare chiusura obiettivi</h4>
                 </div>
-            </div>
-            <script>
-                $( '#loading' ).hide();
-                $('#chiusura_obiettivi').on('click', function(e) {
-                    e.preventDefault();
-                    $('#chiusura_obiettivi_confirm_dialog').dialog('open');
-                });
+                <div id='chiusura_obiettivi_confirm_dialog'>
+                    <p id='dialog_desc'>
+                        Chiudere tutti gli obiettivi? Una volta confermata l'operazione non sarà più possibile modificare azioni ed assegnazioni
+                        ed il personale associato potrà visualizzare gli obiettivi di propria competenza.
+                    </p>
+                    <div id='loading_chiusura'>
+                        <img src=\"..\..\\themes\ats\images\loader.gif\"><br>
+                        <span>Chiusura obiettivi in corso...</span>					
+                    </div>
+                </div>
+                <script>
+                    $( '#loading_chiusura' ).hide();
+                    $('#chiusura_obiettivi').on('click', function(e) {
+                        e.preventDefault();
+                        $('#chiusura_obiettivi_confirm_dialog').dialog('open');
+                    });
 
-                $('#chiusura_obiettivi_confirm_dialog').dialog({
-                    autoOpen: false,
-                    modal: true,
-                    title: 'Chiusura obiettivi',
-                    buttons : {
-                        'Conferma chiusura' : function() {
-                            chiudiObiettivi();            
+                    $('#chiusura_obiettivi_confirm_dialog').dialog({
+                        autoOpen: false,
+                        modal: true,
+                        title: 'Chiusura obiettivi',
+                        buttons : {
+                            'Conferma chiusura' : function() {
+                                chiudiObiettivi();            
+                            },
+                            'Annulla' : function() {
+                                $(this).dialog('close');
+                            }
                         },
-                        'Annulla' : function() {
-                            $(this).dialog('close');
+                        dialogClass: 'chiusura_obiettivi_confirm_dialog',
+                        close: function() {                        
+                            loadingPage();
                         }
-                    },
-                    dialogClass: 'chiusura_obiettivi_confirm_dialog',
-                    close: function() {
-                        window.location.href = '".$_SERVER['REQUEST_URI']."'
-                    }
-                });
+                    });
 
-                function chiudiObiettivi(){		
-                    $('#chiusura_obiettivi_confirm_dialog').dialog('option', 'buttons', {});	
-                    $('#dialog_desc').empty();
-                    $( '#loading' ).show();
+                    function chiudiObiettivi(){		
+                        $('#chiusura_obiettivi_confirm_dialog').dialog('option', 'buttons', {});	
+                        $('#dialog_desc').empty();
+                        $( '#loading_chiusura' ).show();
 
-                    var locationPathname = window.location.pathname;
-                    var lastSlashPos = locationPathname.lastIndexOf('/')+1;
-                    var url = locationPathname.substr(0, lastSlashPos) + 'chiusura_obiettivi';
+                        var locationPathname = window.location.pathname;
+                        var lastSlashPos = locationPathname.lastIndexOf('/')+1;
+                        var url = '".MODULES_SITE_PATH . $currentModule->site_path."/chiusura_obiettivi?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."';
 
-                    // Invio richiesta in post								
-                    var posting = $.post( url, {
-                        cdr: " . $cdr->id . ",
-                        anno: " . $anno->id . ","
-        );
-        if ($cm->oPage->globals["dipendente"]["value"] !== null) {
-            $dipendente_selezionato = $cm->oPage->globals["dipendente"]["value"];
-            $cm->oPage->addContent("dipendente: " . $dipendente_selezionato->id . ",");
-        }
-        $cm->oPage->addContent("
+                        // Invio richiesta in post								
+                        var posting = $.post( url, {
+                            cdr: " . $cdr->id . ",
+                            anno: " . $anno->id . ","
+            );
+            if ($cm->oPage->globals["dipendente"]["value"] !== null) {
+                $dipendente_selezionato = $cm->oPage->globals["dipendente"]["value"];
+                $html_gestione_stato_avanzamento .= ("dipendente: " . $dipendente_selezionato->id . ",");
+            }
+            $html_gestione_stato_avanzamento .= ("
+                            });
+                        posting.done(function( data ) {				
+                            response = JSON.parse(data);
+                            $('#dialog_desc').empty().append(response.messaggio);
+                            if (response.esito === 'success'){
+                                $('#chiusura_obiettivi').empty().append('<h4>Tutti gli obiettivi risultano chiusi</h4>');
+                                $('#chiusura_obiettivi').addClass('stato_chiusura_obiettivi');
+                                $('#chiusura_obiettivi').removeClass('chiusura_button');
+                                $('#riapertura_obiettivi').show();
+                            }
+                        });		
+
+                        posting.fail(function() {	
+                            $('#dialog_desc').empty().append('Errore durante la chiusura degli obiettivi');
                         });
 
-                    posting.done(function( data ) {				
-                        response = JSON.parse(data);
-                        $('#dialog_desc').empty().append(response.messaggio);
-                        if (response.esito === 'success'){
-                            $('#chiusura_obiettivi').empty().append('<h4>Tutti gli obiettivi risultano chiusi</h4>');
-                            $('#chiusura_obiettivi').addClass('stato_chiusura_obiettivi');
-                            $('#chiusura_obiettivi').removeClass('chiusura_button');
-                            $('#riapertura_obiettivi').show();
-                        }
-                    });		
-
-                    posting.fail(function() {	
-                        $('#dialog_desc').empty().append('Errore durante la chiusura degli obiettivi');
-                    });
-
-                    posting.always(function() { 
-                        $( '#loading' ).hide();
-                    });
-                }
-            </script>
-        ");
+                        posting.always(function() { 
+                            $( '#loading_chiusura' ).hide();
+                        });
+                    }
+                </script>
+            ");
+        }
     }
 }
 else {
-    $cm->oPage->addContent('<div class="stato_chiusura_obiettivi"><h4>Nessun obiettivo assegnato al CdR nell\'anno</h4></div>');
+    $stato_avanzamento_obiettivi_cdr = "Nessun obiettivo assegnato al CdR nell'anno";
 }
 
 if($mostra_riapertura_obiettivi && $user->hasPrivilege("obiettivi_aziendali_edit")) {
-    $cm->oPage->addContent("
+    $html_gestione_stato_avanzamento .= ("
         <div id='riapertura_obiettivi' class='riapertura_button'>
             <h4>Riapertura obiettivi per il CdR</h4>
         </div>
         <div id='riapertura_obiettivi_confirm_dialog'>
-            <p id='dialog_desc'>
+            <p id='dialog_riapertura_desc'>
                 Confermare la riapertura degli obiettivi per il CdR?
             </p>
-            <div id='loading'>
-                <img src=\"..\..\\themes\ats\images\loader.gif\">
+            <div id='loading_riapertura'>
+                <img src=\"..\..\\themes\ats\images\loader.gif\"><br>
                 <span>Riapertura obiettivi in corso...</span>					
             </div>
         </div>
         <script>
-            $( '#loading' ).hide();
+            $( '#loading_riapertura' ).hide();
             $('#riapertura_obiettivi').on('click', function(e) {
                 e.preventDefault();
                 $('#riapertura_obiettivi_confirm_dialog').dialog('open');
@@ -237,19 +250,19 @@ if($mostra_riapertura_obiettivi && $user->hasPrivilege("obiettivi_aziendali_edit
                     }
                 },
                 dialogClass: 'riapertura_obiettivi_confirm_dialog',
-                close: function() {
-                    window.location.href = '".$_SERVER['REQUEST_URI']."'
+                close: function() { 
+                    loadingPage();
                 }
             });
             
             function riapriObiettivi() {		
                 $('#riapertura_obiettivi_confirm_dialog').dialog('option', 'buttons', {});
-                $('#dialog_desc').empty();
-                $('#loading').show();
+                $('#dialog_riapertura_desc').empty();
+                $('#loading_riapertura').show();
 
                 var locationPathname = window.location.pathname;
                 var lastSlashPos = locationPathname.lastIndexOf('/')+1;
-                var url = locationPathname.substr(0, lastSlashPos) + 'riapertura_obiettivi';
+                var url = '".MODULES_SITE_PATH . $currentModule->site_path."/riapertura_obiettivi?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."';
                 
                 var posting = $.post(url, {
                     cdr: " . $cdr->id . ",
@@ -258,22 +271,207 @@ if($mostra_riapertura_obiettivi && $user->hasPrivilege("obiettivi_aziendali_edit
                 
                 posting.done(function( data ) {				
                     response = JSON.parse(data);
-                    $('#dialog_desc').empty().append(response.messaggio);
+                    $('#dialog_riapertura_desc').empty().append(response.messaggio);
                     if (response.esito === 'success'){
                         $('#riapertura_obiettivi').hide();
                     }
                 });		
 
                 posting.fail(function() {	
-                    $('#dialog_desc').empty().append('Errore durante la riapertura degli obiettivi');
+                    $('#dialog_riapertura_desc').empty().append('Errore durante la riapertura degli obiettivi');
                 });
 
                 posting.always(function() { 
-                    $( '#loading' ).hide();
+                    $( '#loading_riapertura' ).hide();
                 });
             }
         </script> 
     ");
+}
+
+if (OBIETTIVI_MODULO_ASSEGNAZIONE_INDIVIDUALE_ATTIVO == true 
+    && ($user->hasPrivilege("resp_cdr_selezionato") || $user->hasPrivilege("obiettivi_individuali_admin"))) {
+    $modulo_obiettivi_individuali = Modulo::getActiveModuleById(19);
+
+    if ($user->hasPrivilege("resp_cdr_selezionato")) {
+        $chiusura_obiettivi_individuali = false;
+        $obiettivi_assegnati = ObiettiviIndividuali\AssegnazioneIndividuale::getAssegnazioniCdr ($cdr, $date, [$user->matricola_utente_selezionato]);
+        $obiettivi_chiudibili = ObiettiviIndividuali\AssegnazioneIndividuale::getAssegnazioniChiudibiliCdr ($cdr, $date, [$user->matricola_utente_selezionato]);
+        $n_obiettivi_assegnabili = ObiettiviIndividuali\AssegnazioneIndividuale::nAssegnazioniAssegnabiliCdr ($cdr, $date, [$user->matricola_utente_selezionato]);                
+        
+        if(count($obiettivi_assegnati) !== $n_obiettivi_assegnabili) {  
+            $chiusura_obiettivi_individuali = true;                                                                     
+            $stato_avanzamento_obiettivi_individuali = "Obiettivi individuali non ancora assegnati (".count($obiettivi_assegnati)." assegnati / ".$n_obiettivi_assegnabili." assegnabili)";
+        }      
+        else if (count($obiettivi_chiudibili)) {
+            $chiusura_obiettivi_individuali = true;     
+            $stato_avanzamento_obiettivi_individuali = "Obiettivi assegnati e non chiusi (".count($obiettivi_chiudibili)." da chiudere / ".count($obiettivi_assegnati)." assegnati)";     
+        }
+        else {
+            $stato_avanzamento_obiettivi_individuali = "Tutti gli obiettivi individuali (".$n_obiettivi_assegnabili.") risultano assegnati e chiusi";
+        }
+
+        if ($chiusura_obiettivi_individuali == true) {
+            //Chiusura obiettivi individuali
+            //*********************************************************************************************************
+            $html_gestione_stato_avanzamento .= ("
+                        <div id='chiusura_obiettivi_individuali' class='chiusura_button'>
+                            <h4>Confermare chiusura obiettivi individuali</h4>
+                        </div>                        
+                        <div id='chiusura_obiettivi_individuali_confirm_dialog'>
+                            <p id='dialog_individuali_desc'>
+                                Chiudere tutti gli obiettivi individuali? Una volta confermata l'operazione non sarà più possibile modificare azioni ed assegnazioni
+                                ed il personale associato potrà visualizzare gli obiettivi individuali di propria competenza.
+                            </p>
+                            <div id='loading_chiusura_individuali'>
+                                <img src=\"..\..\\themes\ats\images\loader.gif\"><br>
+                                <span>Chiusura obiettivi individuali in corso...</span>					
+                            </div>
+                        </div>
+                        <script>
+                            $( '#loading_chiusura_individuali' ).hide();
+                            $('#chiusura_obiettivi_individuali').on('click', function(e) {
+                                e.preventDefault();
+                                $('#chiusura_obiettivi_individuali_confirm_dialog').dialog('open');
+                            });
+
+                            $('#chiusura_obiettivi_individuali_confirm_dialog').dialog({
+                                autoOpen: false,
+                                modal: true,
+                                title: 'Chiusura obiettivi individuali',
+                                buttons : {
+                                    'Conferma chiusura' : function() {
+                                        chiudiObiettiviIndividuali();            
+                                    },
+                                    'Annulla' : function() {
+                                        $(this).dialog('close');
+                                    }
+                                },
+                                dialogClass: 'chiusura_obiettivi_confirm_dialog',
+                                close: function() {                                    
+                                    loadingPage();
+                                }
+                            });
+
+                            function chiudiObiettiviIndividuali(){		
+                                $('#chiusura_obiettivi_individuali_confirm_dialog').dialog('option', 'buttons', {});	
+                                $('#dialog_individuali_desc').empty();
+                                $( '#loading_chiusura_individuali' ).show();
+
+                                var locationPathname = window.location.pathname;
+                                var lastSlashPos = locationPathname.lastIndexOf('/')+1;
+                                var url = '".MODULES_SITE_PATH.$modulo_obiettivi_individuali->site_path."/chiusura_obiettivi_individuali?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."';            
+                                // Invio richiesta in post								
+                                var posting = $.post( url, {
+                                    cdr: " . $cdr->id . ",
+                                    anno: " . $anno->id . ","
+            );
+            if ($cm->oPage->globals["dipendente"]["value"] !== null) {
+                $dipendente_selezionato = $cm->oPage->globals["dipendente"]["value"];
+                $html_gestione_stato_avanzamento .= ("dipendente: " . $dipendente_selezionato->id . ",");
+            }
+            $html_gestione_stato_avanzamento .= ("
+                                    });
+
+                                posting.done(function( data ) {				
+                                    response = JSON.parse(data);
+                                    $('#dialog_individuali_desc').empty().append(response.messaggio);
+                                    if (response.esito === 'success'){
+                                        $('#chiusura_obiettivi').empty().append('<h4>Tutti gli obiettivi individuali risultano chiusi</h4>');
+                                        $('#chiusura_obiettivi').addClass('stato_chiusura_obiettivi');
+                                        $('#chiusura_obiettivi').removeClass('chiusura_button');
+                                        $('#riapertura_obiettivi').show();
+                                    }
+                                });		
+
+                                posting.fail(function() {	
+                                    $('#dialog_individuali_desc').empty().append('Errore durante la chiusura degli obiettivi individuali');
+                                });
+
+                                posting.always(function() { 
+                                    $( '#loading_chiusura_individuali' ).hide();
+                                });
+                            }
+                        </script>
+            ");
+        }
+    }
+
+    if ($user->hasPrivilege("obiettivi_individuali_admin") ) {            
+        $obiettivi_riapribili = ObiettiviIndividuali\AssegnazioneIndividuale::getAssegnazioniRiapribiliCdr ($cdr, $date, [$user->matricola_utente_selezionato]);                       
+        
+        if (count($obiettivi_riapribili) == true) {
+            $html_gestione_stato_avanzamento .= ("
+                <div id='riapertura_obiettivi_individuali' class='riapertura_button'>
+                    <h4>Riapertura obiettivi individuali per il CdR</h4>
+                </div>
+                <div id='riapertura_obiettivi_individuali_confirm_dialog'>
+                    <p id='dialog_riapertura_individuali_desc'>
+                        Confermare la riapertura degli obiettivi individuali per il CdR?
+                    </p>
+                    <div id='loading_riapertura_individuali'>
+                        <img src=\"..\..\\themes\ats\images\loader.gif\"><br>
+                        <span>Riapertura obiettivi individuali in corso...</span>					
+                    </div>
+                </div>
+                <script>
+                    $( '#loading_riapertura_individuali' ).hide();
+                    $('#riapertura_obiettivi_individuali').on('click', function(e) {
+                        e.preventDefault();
+                        $('#riapertura_obiettivi_individuali_confirm_dialog').dialog('open');
+                    });
+                    $('#riapertura_obiettivi_individuali_confirm_dialog').dialog({
+                        autoOpen: false,
+                        modal: true,
+                        title: 'Riapertura obiettivi individuali',
+                        buttons : {
+                            'Conferma riapertura' : function() {
+                                riapriObiettiviIndividuali();            
+                            },
+                            'Annulla' : function() {
+                                $(this).dialog('close');
+                            }
+                        },
+                        dialogClass: 'riapertura_obiettivi_confirm_dialog',
+                        close: function() {
+                            loadingPage();
+                        }
+                    });
+                    
+                    function riapriObiettiviIndividuali() {		
+                        $('#riapertura_obiettivi_individuali_confirm_dialog').dialog('option', 'buttons', {});
+                        $('#dialog_riapertura_individuali_desc').empty();
+                        $('#loading_riapertura_individuali').show();
+        
+                        var locationPathname = window.location.pathname;
+                        var lastSlashPos = locationPathname.lastIndexOf('/')+1;
+                        var url = '".MODULES_SITE_PATH.$modulo_obiettivi_individuali->site_path."/riapertura_obiettivi_individuali?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."';            
+                        
+                        var posting = $.post(url, {
+                            cdr: " . $cdr->id . ",
+                            anno: " . $anno->id . "
+                        });
+                        
+                        posting.done(function( data ) {				
+                            response = JSON.parse(data);
+                            $('#dialog_riapertura_individuali_desc').empty().append(response.messaggio);
+                            if (response.esito === 'success'){
+                                $('#riapertura_obiettivi_individuali').hide();
+                            }
+                        });		
+        
+                        posting.fail(function() {	
+                            $('#dialog_riapertura_individuali_desc').empty().append('Errore durante la riapertura degli obiettivi individuali');
+                        });
+        
+                        posting.always(function() { 
+                            $( '#loading_riapertura_individuali' ).hide();
+                        });
+                    }
+                </script> 
+            ");
+        }
+    }
 }
 
 //******************************************************************************
@@ -310,18 +508,20 @@ $oField->label = "Area Risultato";
 $oGrid->addContent($oField);
 
 $oField = ffField::factory($cm->oPage);
-$oField->id = "area";
-$oField->base_type = "Text";
-$oField->label = "Area";
-$oGrid->addContent($oField);
-
-$oField = ffField::factory($cm->oPage);
 $oField->id = "peso";
 $oField->base_type = "Text";
 $oField->label = "Peso";
 $oGrid->addContent($oField);
 
 // *********** ADDING TO PAGE ****************
+$cm->oPage->addContent("<div class='stato_chiusura_obiettivi'>
+                            <h4>
+                            ".$stato_avanzamento_obiettivi_cdr
+                            .(strlen($stato_avanzamento_obiettivi_individuali)?'&nbsp; | &nbsp;'.$stato_avanzamento_obiettivi_individuali:'')
+                            ."
+                            </h4>
+                        </div>");
+$cm->oPage->addContent($html_gestione_stato_avanzamento);
 $cm->oPage->addContent($oGrid);
 
 function initGrid($oGrid) {

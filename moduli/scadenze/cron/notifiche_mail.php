@@ -31,9 +31,9 @@ if (count($invio_scadenza)) {
     }
   
     //costruzione delle mail per i cdr abilitati ed invio
-    foreach ($invio_scadenza as $scadenze_cdr) {
-        //recupero del cdr
-        $abilitazione_cdr = new scadenze\AbilitazioneCdr($scadenza->id_abilitazione_cdr);
+    foreach ($invio_scadenza as $id_abilitazione_cdr => $scadenze_cdr) {
+        //recupero del cdr     
+        $abilitazione_cdr = new scadenze\AbilitazioneCdr($id_abilitazione_cdr);
         $anagrafica_cdr = AnagraficaCdr::factoryFromCodice($abilitazione_cdr->codice_cdr, new DateTime());        
         if ($anagrafica_cdr !== null) {        
             $tipo_cdr = new TipoCdr($anagrafica_cdr->id_tipo_cdr);
@@ -70,7 +70,7 @@ if (count($invio_scadenza)) {
                     <td>".$tipologie[$scadenza->id_tipologia]."</td>
                     <td>".$scadenza->oggetto."</td>
                 </tr>               
-                ";
+                ";                
             }            
         }                        
         if (array_key_exists(3, $scadenze_cdr)) {            
@@ -111,7 +111,7 @@ if (count($invio_scadenza)) {
             $mail->toRecipients[] = $recipient->mail;
         }
         
-        //se no sono ritornati errori
+        //se no sono ritornati errori viene flaggato l'invio effettuato sulle mail in scadenza
         if (strlen ($mail->send()) == 0) {
             if (array_key_exists(3, $scadenze_cdr)) {
                 foreach($scadenze_cdr[3] as $scadenza) {

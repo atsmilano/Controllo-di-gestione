@@ -57,7 +57,13 @@ if (!$user->hasPrivilege("valutazioni_admin")) {
 //visualizzazione del tasto "aggiorna" in base ai privilegi utente
 if (
     !(
-    ($valutazione->isAutovalutazione() && $privilegi_utente["edit_autovalutazione"] == true) || (!$valutazione->isAutovalutazione() && $privilegi_utente["edit_valutatore"] == true) || (!$valutazione->isAutovalutazione() && $privilegi_utente["edit_valutato"] == true)
+    ($valutazione->isAutovalutazione() && $privilegi_utente["edit_autovalutazione"] == true) 
+    || 
+    (!$valutazione->isAutovalutazione() && $privilegi_utente["edit_proponente"] == true) 
+    || 
+    (!$valutazione->isAutovalutazione() && $privilegi_utente["edit_valutatore"] == true)
+    || 
+    (!$valutazione->isAutovalutazione() && $privilegi_utente["edit_valutato"] == true)
     ) &&
     $admin_user == false
 )
@@ -80,6 +86,33 @@ $oRecord->addContent(null, true, "intestazione");
 $oRecord->groups["intestazione"]["title"] = $periodo->descrizione;
 $anno_valutazione = new ValutazioniAnnoBudget($periodo->id_anno_budget);
 if (!$valutazione->isAutovalutazione()) {
+    if (($valutazione->matricola_proponente !== null && strlen($valutazione->matricola_proponente)) || $admin_user == true) {        
+
+        $oField = ffField::factory($cm->oPage);
+        $oField->id = "matricola_proponente";
+        $oField->base_type = "Text";
+
+        if ($admin_user == false && $valutazione->matricola_proponente != null) {            
+            $proponente = Personale::factoryFromMatricola($valutazione->matricola_proponente);
+
+            $oField->control_type = "label";
+            $oField->store_in_db = false;
+            $oField->display_value = new ffData($proponente->cognome . " " . $proponente->nome . " (matr. " . $proponente->matricola . ")", "Text");                       
+        } else {
+            $proponenti = array();
+            foreach (Personale::getAll() as $dipendente) {
+                $proponenti[] = array(
+                    new ffData($dipendente->matricola, "Number"),
+                    new ffData($dipendente->cognome . " " . $dipendente->nome . " (matr. " . $dipendente->matricola . ")", "Text"),
+                );
+            }
+            $oField->extended_type = "Selection";
+            $oField->multi_pairs = $proponenti;
+        }
+        $oField->label = "Proponente:";
+        $oRecord->addContent($oField, "intestazione");
+    }
+
     $valutatore = Personale::factoryFromMatricola($valutazione->matricola_valutatore);
 
     $oField = ffField::factory($cm->oPage);
@@ -88,7 +121,12 @@ if (!$valutazione->isAutovalutazione()) {
     if ($admin_user == false) {
         $oField->control_type = "label";
         $oField->store_in_db = false;
-        $oField->display_value = new ffData($valutatore->cognome . " " . $valutatore->nome . " (matr. " . $valutatore->matricola . ")", "Text");
+        if ($periodo->valutatore_anonimo) {
+            $oField->display_value = new ffData("***", "Text"); 
+        }		
+        else {
+            $oField->display_value = new ffData($valutatore->cognome . " " . $valutatore->nome . " (matr. " . $valutatore->matricola . ")", "Text");
+        } 
     } else {
         $valutatori = array();
         foreach (Personale::getAll() as $dipendente) {
@@ -101,7 +139,7 @@ if (!$valutazione->isAutovalutazione()) {
         $oField->multi_pairs = $valutatori;
     }
     $oField->label = "Valutatore:";
-    $oRecord->addContent($oField, "intestazione");
+    $oRecord->addContent($oField, "intestazione");    
 }
 
 $valutato = Personale::factoryFromMatricola($valutazione->matricola_valutato);
@@ -137,6 +175,14 @@ if ($admin_user == true) {
     $oField->id = "data_chiusura_autovalutazione";
     $oField->base_type = "Date";
     $oField->label = "Data chiusura autovalutazione";
+    $oField->widget = "datepicker";
+    $oField->addValidator("date");
+    $oRecord->addContent($oField, "intestazione");
+
+    $oField = ffField::factory($cm->oPage);
+    $oField->id = "data_firma_proponente";
+    $oField->base_type = "Date";
+    $oField->label = "Data chiusura proponente";
     $oField->widget = "datepicker";
     $oField->addValidator("date");
     $oRecord->addContent($oField, "intestazione");
@@ -280,7 +326,7 @@ foreach ($periodo->getAmbitiCategoriaPeriodo($categoria) as $ambito) {
     //e verrà permessa la modifica dell'ambito solamente al valutatore
     else {
         $view_ambito = true;
-        if ($privilegi_utente["edit_valutatore"] == true)
+        if ($privilegi_utente["edit_proponente"] == true || $privilegi_utente["edit_valutatore"] == true)
             $edit_ambito = true;
     }
 
@@ -310,11 +356,16 @@ foreach ($periodo->getAmbitiCategoriaPeriodo($categoria) as $ambito) {
             $oRecord->groups["sezione_" . $sezione->id]["hide_title"] = false;
         }
 
-        if ($valutazione->isAutovalutazione()) {
-            $nome_ambito = $sezione->codice . "." . $ambito->codice . ". " . $ambito->descrizione;
-        } else {
+        if (strlen($ambito->codice)){
+            $desc_ambito = $ambito->codice.". ";
+        }
+        else {
+            $desc_ambito = " ";
+        }
+        $nome_ambito = $sezione->codice . "." . $desc_ambito . $ambito->descrizione;
+        if (!$valutazione->isAutovalutazione()) {
             $tot_ambito = $ambito->getPesoAmbitoCategoriaAnno($categoria, $anno_valutazione);
-            $nome_ambito = $sezione->codice . "." . $ambito->codice . ". " . $ambito->descrizione;
+            
             if ($visualizzazione_punteggio_categoria_ambito == true) {
                 $nome_ambito .= " (" . round($valutazione->getTotaleRaggiungimentoAmbito($ambito), 2) . " / " . $tot_ambito . ")";
             }
@@ -490,7 +541,8 @@ if (!$valutazione->isAutovalutazione()) {
     $oField->base_type = "Text";
     $oField->extended_type = "Text";
     $oField->label = "Note";
-    if ($privilegi_utente["edit_valutatore"] == false) {
+    if ($privilegi_utente["edit_valutatore"] == false 
+        && $privilegi_utente["edit_proponente"] == false) {
         $oField->control_type = "label";
         $oField->store_in_db = false;
     }
@@ -551,7 +603,17 @@ if ($valutazione->isAutovalutazione()) {
 						";
     }
 } else {
-    if ($privilegi_utente["edit_valutatore"] == true) {
+    if ($privilegi_utente["edit_proponente"] == true) {
+        $confirm_title = "Conferma chiusura scheda";
+        $label = "Chiusura proponente";
+        $tipo_chiusura = 4;
+        $html_message = "
+							Chiudendo la scheda di pre-valutazione non sar&agrave; pi&ugrave; possibile apportare modifiche 
+							e verr&agrave; fornita la possibilit&agrave al valutatore di visualizzare la scheda.							
+							<br><br>
+							Confermare la chiusura della scheda?
+						";
+    } else if ($privilegi_utente["edit_valutatore"] == true) {
         $confirm_title = "Conferma chiusura scheda e note valutatore";
         $label = "Firma valutatore";
         $tipo_chiusura = 2;
@@ -710,7 +772,7 @@ function myUpdate($oRecord, $frmAction) {
                     $edit_ambito = true;
             }
             //se la valutazione non è autovalutazione verrà permessa la modifica dell'ambito solamente al valutatore
-            else if ($user->hasPrivilege("valutazioni_admin") == true || $privilegi_utente["edit_valutatore"] == true) {
+            else if ($user->hasPrivilege("valutazioni_admin") == true || $privilegi_utente["edit_valutatore"] == true || $privilegi_utente["edit_proponente"] == true) {
                 $edit_ambito = true;
             }
 
@@ -788,7 +850,7 @@ function myUpdate($oRecord, $frmAction) {
                 else if ($admin_user == false && !$valutazione->isAutovalutazione() && $privilegi_utente["view_valutazione"] !== true)
                     ffRedirect($_GET["ret_url"]);
 
-                if (!($tipo_chiusura >= 1 && $tipo_chiusura <= 3)) {
+                if (!($tipo_chiusura >= 1 && $tipo_chiusura <= 4)) {
                     ffErrorHandler::raise("Errore nel passaggio dei parametri");
                 }
 
@@ -805,6 +867,26 @@ function myUpdate($oRecord, $frmAction) {
                                 mod_notifier_add_message_to_queue("Chiusura autovalutazione effettuata con successo", MOD_NOTIFIER_SUCCESS);
                             } catch (Exception $ex) {
                                 mod_notifier_add_message_to_queue("Errore durante la chiusura dell'autovalutazione", MOD_NOTIFIER_ERROR);
+                            }
+                        } else {
+                            ffErrorHandler::raise("Azione non consentita");
+                        }
+                        break;
+                    case 4:
+                        if ($privilegi_utente["edit_proponente"] == true) {                           
+                            $valutazione->data_firma_proponente = date("Y-m-d H:i:s");
+                            $valutazione->note_valutatore = $oRecord->form_fields["note_valutatore"]->value->getValue();
+                            if ($autovalutazione_collegata !== false) {                                
+                                $autovalutazione_collegata->data_firma_proponente = date("Y-m-d H:i:s");                                
+                            }
+                            try {
+                                $valutazione->save();
+                                if ($autovalutazione_collegata !== false) {
+                                    $autovalutazione_collegata->save();
+                                }
+                                mod_notifier_add_message_to_queue("Chiusura proponente effettuata con successo", MOD_NOTIFIER_SUCCESS);
+                            } catch (Exception $ex) {
+                                mod_notifier_add_message_to_queue("Errore durante la chiusura del proponente", MOD_NOTIFIER_ERROR);
                             }
                         } else {
                             ffErrorHandler::raise("Azione non consentita");

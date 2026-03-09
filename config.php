@@ -9,14 +9,14 @@ $enviroments = array(
                     );
 
 if(php_sapi_name() == "cli") {
-    //in caso di esecuzione da riga di comando viene richiesto il nome dell'enviroment come parametro
+    //in caso di esecuzione da riga di comando viene richiesto il nome dell'environment come parametro
     define("FF_ENV", getopt(null, ["env:"])["env"]);
-    $_SERVER['SERVER_NAME'] = $enviroments[FF_ENV];
+    $_SERVER['SERVER_NAME'] = $environments[FF_ENV];
 }
 else {
-    define("FF_ENV", array_search($_SERVER["HTTP_HOST"], $enviroments));    
+    define("FF_ENV", array_search($_SERVER["HTTP_HOST"], $environments));    
 }
-require_once(__DIR__.DIRECTORY_SEPARATOR."conf".DIRECTORY_SEPARATOR."enviroments".DIRECTORY_SEPARATOR.FF_ENV.".php");
+require_once(__DIR__.DIRECTORY_SEPARATOR."conf".DIRECTORY_SEPARATOR."environments".DIRECTORY_SEPARATOR.FF_ENV.".php");
 
 //parametri per la gestione dei loghi di default
 //se i parametri non sono definiti si utilizzano i loghi di default

@@ -112,16 +112,37 @@ if (count($fabbisogni_da_estrarre)) {
         //destinatari
         $xml->startElement("listaDestinatari_2019");
         $xml->writeAttribute('NR_TOT_DESTINATARI', $evento->n_posti);
-        $xml->startElement("destinatario_2019");
-        $xml->writeAttribute('ID_DESTINATARIO', '0');
+        
+        //in caso di scelta "Tutte le professioni sanitarie e Altre figure)
+        //vengono selezionati  "tutte le professioni sanitarie" e "altre figure"                            
         try {
             $destinatari = new \FabbisognoFormazione\Destinatari($evento->id_destinatari);
+            if ($destinatari->id_tabella_riferimento_destinatari_validi !== 154) {
+                $xml->startElement("destinatario_2019");                
+                $xml->writeAttribute('ID_DESTINATARIO', '0');                
+                $xml->writeAttribute('ID_TIPO_DESTINATARIO', $destinatari->id_tabella_riferimento_destinatari_validi);
+                $xml->endElement();
+            }
+            else {
+                $xml->startElement("destinatario_2019");                
+                $xml->writeAttribute('ID_DESTINATARIO', '0');                
+                $xml->writeAttribute('ID_TIPO_DESTINATARIO', 155);
+                $xml->endElement();
+                
+                $xml->startElement("destinatario_2019");                
+                $xml->writeAttribute('ID_DESTINATARIO', '0');                
+                $xml->writeAttribute('ID_TIPO_DESTINATARIO', 156);
+                $xml->endElement();
+            }            
         } catch (Exception $ex) {
+            $xml->startElement("destinatario_2019");                
+            $xml->writeAttribute('ID_DESTINATARIO', '0');
             $destinatari = new \FabbisognoFormazione\Destinatari();
             $destinatari->id_tabella_riferimento_destinatari_validi = 0;
-        }
-        $xml->writeAttribute('ID_TIPO_DESTINATARIO', $destinatari->id_tabella_riferimento_destinatari_validi);
-        $xml->endElement();
+            $xml->writeAttribute('ID_TIPO_DESTINATARIO', $destinatari->id_tabella_riferimento_destinatari_validi);
+            $xml->endElement();
+        }            
+               
         $xml->endElement();
         $xml->startElement("listaAttivita_2019");
         $xml->startElement("attivita_2019");
@@ -158,8 +179,8 @@ if (count($fabbisogni_da_estrarre)) {
             else if ($attivita->id_tabella_riferimento_attivita == 8) {
                 $xml->startElement("gruppi");
                 $xml->startElement("ore_incontro");
-                $xml->writeAttribute('NUM_ORE_INCONTRO', $evento->n_ore);
-                $xml->endElement();
+                $xml->writeAttribute('NUM_ORE_INCONTRO', ($evento->n_ore-2));
+                $xml->endElement();                
                 $xml->startElement("ore_incontro");
                 $xml->writeAttribute('NUM_ORE_INCONTRO', 1);
                 $xml->endElement();
@@ -167,6 +188,7 @@ if (count($fabbisogni_da_estrarre)) {
                 $xml->writeAttribute('NUM_ORE_INCONTRO', 1);
                 $xml->endElement();
                 $xml->endElement();
+                
             }
             else if ($attivita->id_tabella_riferimento_attivita == 9) {
                 $xml->startElement("congresso");

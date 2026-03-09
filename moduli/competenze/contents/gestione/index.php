@@ -2,17 +2,52 @@
 $module = core\Modulo::getCurrentModule();
 $tab_params = $cm->oPage->getUrlParams(array("ret_url"));
 $user = LoggedUser::getInstance();
-$tabs = array();
+
+$tabs_ui = new UIComponents\Tabs ($tabs_id);
+$url_dir = FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione//";
 if ($user->hasPrivilege("competenze_admin")) {
-    $tabs[] = array("tab_id"=>"competenze_trasversali", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/competenze_trasversali", "tab_params"=>$tab_params, "tab_name"=>"Competenze trasversali");
-    $tabs[] = array("tab_id"=>"valori", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/valori", "tab_params"=>$tab_params, "tab_name"=>"Valori");
-    $tabs[] = array("tab_id"=>"periodi", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/periodi", "tab_params"=>$tab_params, "tab_name"=>"Periodi");
+    $tab_ui = new \UIComponents\Tab ("competenze_trasversali",
+                                    "Competenze trasversali",
+                                    $url_dir."competenze_trasversali",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
+    $tab_ui = new \UIComponents\Tab ("valori",
+                                    "Valori",
+                                    $url_dir."valori",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
+    $tab_ui = new \UIComponents\Tab ("periodi",
+                                    "Periodi",
+                                    $url_dir."periodi",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
 }
 if ($user->hasPrivilege("competenze_cdr_gestione") || $user->hasPrivilege("competenze_admin")) {
-    $tabs[] = array("tab_id"=>"profili", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/profili", "tab_params"=>$tab_params, "tab_name"=>"Profili");            
-    $tabs[] = array("tab_id"=>"competenze_specifiche", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/competenze_specifiche", "tab_params"=>$tab_params, "tab_name"=>"Competenze specifiche");
-    $tabs[] = array("tab_id"=>"competenze_profilo", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/competenze_profilo", "tab_params"=>$tab_params, "tab_name"=>"Competenze profilo");    
-    $tabs[] = array("tab_id"=>"valori_attesi_profilo", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/valori_attesi_profilo", "tab_params"=>$tab_params, "tab_name"=>"Valori attesi profilo");
-    $tabs[] = array("tab_id"=>"associazione_profili", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/associazione_profili", "tab_params"=>$tab_params, "tab_name"=>"Associazione profili", "hide_ret_url"=>true);
+    $tab_ui = new \UIComponents\Tab ("profili",
+                                    "Profili",
+                                    $url_dir."profili",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
+    $tab_ui = new \UIComponents\Tab ("competenze_specifiche",
+                                    "Competenze specifiche",
+                                    $url_dir."competenze_specifiche",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
+    $tab_ui = new \UIComponents\Tab ("competenze_profilo",
+                                    "Competenze profilo",
+                                    $url_dir."competenze_profilo",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
+    $tab_ui = new \UIComponents\Tab ("valori_attesi_profilo",
+                                    "Valori attesi profilo",
+                                    $url_dir."valori_attesi_profilo",
+                                    $tab_params);
+    $tabs_ui->addTab($tab_ui);
+    $tab_ui = new \UIComponents\Tab ("associazione_profili",
+                                    "Associazione profili",
+                                    $url_dir."associazione_profili",
+                                    $tab_params,
+                                    true);
+    $tabs_ui->addTab($tab_ui);
 }
-\CoreHelper::showTabsPage("competenze", $tabs);
+$cm->oPage->addContent($tabs_ui->getHtml());

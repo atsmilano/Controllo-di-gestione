@@ -13,4 +13,4 @@ $tabs[] = array("tab_id"=>"referenti", "tab_link"=>FF_SITE_PATH . "/area_riserva
 $tabs[] = array("tab_id"=>"tipologie", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/tipologie", "tab_params"=>$tab_params, "tab_name"=>"Tipologie");    
 $tabs[] = array("tab_id"=>"mail_cdr", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/gestione/abilitazioni_cdr", "tab_params"=>$tab_params, "tab_name"=>"Abilitazioni Cdr");    
 
-CoreHelper::showTabsPage("fabbisogno", $tabs);
+CoreHelper::showTabsPage("scadenze", $tabs);

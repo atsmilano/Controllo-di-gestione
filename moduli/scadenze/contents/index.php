@@ -6,7 +6,7 @@ $user = LoggedUser::getInstance();
 if ($user->hasPrivilege("scadenze_admin")) {
     $edit = true;    
 }
-else if ($user->hasPrivilege("scadenze_referente_cdr")) {    
+else if ($user->hasPrivilege("scadenze_responsabile_cdr") || $user->hasPrivilege("scadenze_referente_cdr")) {    
     $edit = false;
 }
 else {    
@@ -35,7 +35,7 @@ $scadenze = $personale->getScadenzeCompetenzaInData($date);
         
 foreach ($scadenze as $scadenza) {    
     $data_inserimento = new DateTime($scadenza->data_inserimento);
-    $abilitazione_cdr = new AbilitazioneCdr($scadenza->id_abilitazione_cdr);       
+    $abilitazione_cdr = new AbilitazioneCdr($scadenza->id_abilitazione_cdr);    
     $anagrafica_cdr = \AnagraficaCdr::factoryFromCodice($abilitazione_cdr->codice_cdr, $data_inserimento);    
     if ($anagrafica_cdr !== null) {
         $descrizione_cdr = $anagrafica_cdr->getDescrizioneEstesa();            
@@ -122,6 +122,7 @@ if ($edit == false) {
     $oGrid->display_new = false;
     $oGrid->display_delete_bt = false;    
 }
+$oGrid->addEvent("on_before_parse_row", "initGrid");
 
 //**************************************************************************
 // *********** FIELDS ****************
@@ -135,7 +136,7 @@ $oField->id = "stato";
 $oField->base_type = "Number";
 $oField->extended_type = "Selection";
 $oField->multi_pairs = $stati_multipairs;
-$oField->order_SQL = "stato ASC, data_scadenza DESC";
+$oField->order_SQL = "stato ASC, data_scadenza ASC";
 $oField->label = "Stato";
 $oGrid->addContent($oField);
 
@@ -190,3 +191,9 @@ $oGrid->addSearchField($oField);
 $cm->oPage->addContent("<a id='scadenze_estrazione_link' class='link_estrazione' href='".FF_SITE_PATH . $cm->path_info ."/estrazione?".$cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST)."'>"
             . "<div id='scadenze_estrazione' class='estrazione link_estrazione'>Estrazione scadenze .xls</div></a><br>");
 $cm->oPage->addContent($oGrid);
+
+function initGrid($oGrid) {
+    $scadenza = new scadenze\Scadenza($oGrid->key_fields["ID"]->value->getValue());
+    $stato_scadenza = $scadenza->getStato();
+    $oGrid->row_class = $stato_scadenza["class"];    
+}

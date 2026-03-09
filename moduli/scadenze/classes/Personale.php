@@ -25,18 +25,22 @@ class Personale extends \Personale
                     }
                 }
                 if ($found == false){
-                    $cdr = \Cdr::factoryFromCodice($referente_cdr->codice_cdr, $piano_cdr);
-                    foreach($cdr->getGerarchia() as $cdr_gerarchia) {
+                    try {                        
+                        $cdr = \Cdr::factoryFromCodice($referente_cdr->codice_cdr, $piano_cdr);
+                        foreach($cdr->getGerarchia() as $cdr_gerarchia) {
                         $found = false;
                         foreach ($cdr_competenza_anno as $cdr_competenza) {
-                            if ($cdr_gerarchia["cdr"]->codice_cdr == $cdr_competenza->codice) {
-                                $found = true;
+                                if ($cdr_gerarchia["cdr"]->codice_cdr == $cdr_competenza->codice) {
+                                    $found = true;
+                                }
+                            }
+                            if ($found == false) {
+                                $cdr_competenza_anno[] = $cdr_gerarchia["cdr"];
                             }
                         }
-                        if ($found == false) {
-                            $cdr_competenza_anno[] = $cdr_gerarchia["cdr"];
-                        }
-                    }
+                    } catch (\Exception $ex) {
+                        
+                    }                                        
                 }
             }
         }
@@ -51,6 +55,16 @@ class Personale extends \Personale
         }
         return false;
     }
+
+    public function isResponsabileCdrScadenzeInData (\DateTime $date) {    
+        $piano_cdr = \PianoCdr::getAttivoInData(\TipoPianoCdr::getPrioritaMassima(), $date->format("d-m-Y"));                   
+        foreach ($this->getCdrVisibiliPianoCdr($piano_cdr, $date) as $cdr_resp) {
+            if (count(AbilitazioneCdr::getAll(array("codice_cdr"=>$cdr_resp["cdr"]->codice)))) {                
+                return true;
+            }                                                                               
+        }        
+        return false;
+    }
     
     public function getScadenzeCompetenzaInData(\DateTime $date) {
         $user = \LoggedUser::getInstance();
@@ -58,13 +72,25 @@ class Personale extends \Personale
         if ($user->hasPrivilege("scadenze_admin")) {
             return Scadenza::getAll();
         }
-        else if ($user->hasPrivilege("scadenze_referente_cdr")) {
-            foreach ($this->getCdrReferenzaAnno($date) as $cdr_referenza_anno) {
-                $abilitazione_cdr = AbilitazioneCdr::getAll(array("codice_cdr"=>$cdr_referenza_anno->codice));
-                foreach($abilitazione_cdr as $abilitazione) {
-                    $scadenze = array_merge($scadenze, Scadenza::getAll(array("ID_abilitazione_cdr"=>$abilitazione->id)));
-                }                                                                                
+        else {
+            if ($user->hasPrivilege("scadenze_responsabile_cdr")) {
+                $tipo_piano = \TipoPianoCdr::getPrioritaMassima();
+                $piano_cdr = \PianoCdr::getAttivoInData($tipo_piano, $date->format("Y-m-d"));
+                foreach ($this->getCdrVisibiliPianoCdr($piano_cdr, $date) as $cdr_resp) {
+                    $abilitazione_cdr = AbilitazioneCdr::getAll(array("codice_cdr"=>$cdr_resp["cdr"]->codice));
+                    foreach($abilitazione_cdr as $abilitazione) {
+                        $scadenze = array_merge($scadenze, Scadenza::getAll(array("ID_abilitazione_cdr"=>$abilitazione->id)));
+                    }                                                                              
+                }
             }
+            if ($user->hasPrivilege("scadenze_referente_cdr")) {
+                foreach ($this->getCdrReferenzaAnno($date) as $cdr_referenza_anno) {
+                    $abilitazione_cdr = AbilitazioneCdr::getAll(array("codice_cdr"=>$cdr_referenza_anno->codice));
+                    foreach($abilitazione_cdr as $abilitazione) {
+                        $scadenze = array_merge($scadenze, Scadenza::getAll(array("ID_abilitazione_cdr"=>$abilitazione->id)));
+                    }                                                                                
+                }
+            }        
         }
         return $scadenze;
     }

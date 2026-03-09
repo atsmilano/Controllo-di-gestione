@@ -52,8 +52,11 @@ if (count($periodi_valutazione) > 0) {
     //viene recuperata la matricola dell'utente per la visualizzazione delle schede di competenza
     $user = LoggedUser::getInstance();
     $periodo_valutazione = new ValutazioniPeriodo($periodo);
+    $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo_valutazione->data_fine);
 
-    //vengono estratte tutte le valutazioni per cui l'utente è 
+    //vengono estratte tutte le valutazioni per cui l'utente è proponente
+    $valutazioni_proponente = $periodo_valutazione->getValutazioniProponentePeriodo($user->matricola_utente_selezionato);
+    //vengono estratte tutte le valutazioni per cui l'utente è valutato
     $valutazioni_valutato = $periodo_valutazione->getValutazioniValutatoPeriodo($user->matricola_utente_selezionato);
     //vengono estratte tutte le valutazioni per cui l'utente è valutatore
     $valutazioni_valutatore = $periodo_valutazione->getValutazioniValutatorePeriodo($user->matricola_utente_selezionato);
@@ -74,6 +77,14 @@ if (count($periodi_valutazione) > 0) {
             "ruolo" => "1",
             "ruolo_desc" => "Valutatore",
             "valutazioni" => $valutazioni_valutatore,
+        );
+    }
+    if (count($valutazioni_proponente) > 0) {
+        $valutazioni_coinvolte[] = array(
+            //ruolo 0 = valutato
+            "ruolo" => "2",
+            "ruolo_desc" => "Proponente",
+            "valutazioni" => $valutazioni_proponente,
         );
     }
     if (count($valutazioni_coinvolte) > 0) {
@@ -129,16 +140,20 @@ if (count($periodi_valutazione) > 0) {
                 }
 
                 $tpl->parse("SectModificaAutovalutazione", false);
-                //**************************************************************				
-                $tpl->set_var("valutatore", $valutatore->cognome . " " . $valutatore->nome . " (" . $valutatore->matricola . ")");
+                //**************************************************************	                
+                if ($periodo_valutazione->valutatore_anonimo) {
+                    $tpl->set_var("valutatore", "***");  
+                }		
+                else {
+                    $tpl->set_var("valutatore", $valutatore->cognome . " " . $valutatore->nome . " (" . $valutatore->matricola . ")");
+                }            
                 $tpl->set_var("valutato", $valutato->cognome . " " . $valutato->nome . " (" . $valutato->matricola . ")");
                 try {
                     //cdr afferenza
                     $cdr_commento = "";
                     $cdr_afferenza = $valutato->getCdrAfferenzaInData($tipo_piano_cdr, $periodo_valutazione->data_fine);
                     if (count($cdr_afferenza) == 0) {
-                        $cdr_commento = " (ultima afferenza - dipendente cessato nell'anno)";
-                        $piano_cdr = PianoCdr::getAttivoInData($tipo_piano_cdr, $periodo_valutazione->data_fine);
+                        $cdr_commento = " (ultima afferenza - dipendente cessato nell'anno)";                        
                         $ultimi_cdr_afferenza = $valutato->getCdrUltimaAfferenza($tipo_piano_cdr);
                         if (count($ultimi_cdr_afferenza) > 0) {
                             foreach ($ultimi_cdr_afferenza as $cdr_aff) {
@@ -163,8 +178,20 @@ if (count($periodi_valutazione) > 0) {
                 } catch (Exception $ex) {
                     $tpl->set_var("cdr", "Non definito");
                 }
-
-                if ($valutazione_coinvolta["ruolo"] == 0) {
+                
+                if ($valutazione_coinvolta["ruolo"] == 2) {
+                    if ($privilegi_utente_valutazione["edit_proponente"] === true) {
+                        $tpl->set_var("edit_view_valutazione", "Proposta della valutazione");
+                        $show_totals = true;
+                    }
+                    else {
+                        $tpl->set_var("edit_view_valutazione", "");
+                    }
+                    $tpl->parse("SectValutatoTh", false);
+                    $tpl->set_var("SectValutatoreTh", "");
+                    $tpl->parse("SectValutato", false);
+                    $tpl->set_var("SectValutatore", "");
+                } else if ($valutazione_coinvolta["ruolo"] == 0) {
                     if ($privilegi_utente_valutazione["edit_valutato"] === true) {
                         $tpl->set_var("edit_view_valutazione", "Presa visione della valutazione");
                         $show_totals = true;
@@ -175,10 +202,15 @@ if (count($periodi_valutazione) > 0) {
                         $show_totals = true;
                         $show_stampa = true;
                     }
+                    else {
+                        $tpl->set_var("edit_view_valutazione", "");
+                        $show_totals = false;
+                        $show_stampa = false;
+                    }
                     $tpl->parse("SectValutatoreTh", false);
                     $tpl->set_var("SectValutatoTh", "");
                     $tpl->parse("SectValutatore", false);
-                    $tpl->set_var("SectValutato", "");
+                    $tpl->set_var("SectValutato", "");                    
                 }
                 else if ($valutazione_coinvolta["ruolo"] == 1) {
                     if ($privilegi_utente_valutazione["edit_valutatore"] === true) {
@@ -191,6 +223,11 @@ if (count($periodi_valutazione) > 0) {
                         $show_totals = true;
                         $show_stampa = true;
                     }
+                    else {
+                        $tpl->set_var("edit_view_valutazione", "");
+                        $show_totals = false;
+                        $show_stampa = false;
+                    }
                     $tpl->parse("SectValutatoTh", false);
                     $tpl->set_var("SectValutatoreTh", "");
                     $tpl->parse("SectValutato", false);
@@ -201,6 +238,11 @@ if (count($periodi_valutazione) > 0) {
                         $tpl->set_var("edit_view_valutazione", "Visualizza");
                         $show_totals = true;
                         $show_stampa = true;
+                    }
+                    else {
+                        $tpl->set_var("edit_view_valutazione", "");
+                        $show_totals = false;
+                        $show_stampa = false;
                     }
                     $tpl->parse("SectValutatoreTh", false);
                     $tpl->parse("SectValutatoTh", false);
@@ -259,7 +301,13 @@ if (count($periodi_valutazione) > 0) {
                                 else
                                     $plus = "";
                                 $sezione = new ValutazioniSezione($ambito_totale->id_sezione);
-                                $ambiti_totale_attivi .= $plus . $sezione->codice . "." . $ambito_totale->codice . "." . $nv;
+                                if (strlen($ambito->codice)){
+                                    $desc_ambito = $ambito->codice.". ";
+                                }
+                                else {
+                                    $desc_ambito = " ";
+                                }
+                                $ambiti_totale_attivi .= $plus . $sezione->codice . "." . $desc_ambito . $nv;
                             }
                         }
                         if ($show_totals == true) {
@@ -295,5 +343,4 @@ if (count($periodi_valutazione) > 0) {
 else {
     $tpl->parse("SectNoPeriodi", true);
 }
-
 $cm->oPage->addContent($tpl);

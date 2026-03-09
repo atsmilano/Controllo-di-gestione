@@ -25,6 +25,7 @@ if (isset ($_GET["periodo"]) && $periodo_valutazione = new ValutazioniPeriodo($_
             "Ambito peso",
             "Area Item",
             "Item",
+            "Descrizione Item",
             "Item peso",
             "Punteggio",
         )
@@ -72,36 +73,37 @@ if (isset ($_GET["periodo"]) && $periodo_valutazione = new ValutazioniPeriodo($_
             $peso_ambito = $amb["peso_ambito"];
             $metodo_valutazione = $amb["metodo_valutazione"];
             $sezione = $amb["sezione"];
-            $peso_sezione = $amb["peso_sezione_anno"];
-            $items_valutazione = $amb["items_valutazione"];
+            $peso_sezione = $amb["peso_sezione_anno"];            
 
             //metodo valutazione: Items
             //neppure gli admin possono modificare il metodo di valutazione
-            if ($metodo_valutazione == 2){					
+            if ($metodo_valutazione == 2){			
+                $items_valutazione = $amb["items_valutazione"];		
                 if(count($items_valutazione) > 0){								
                     foreach($items_valutazione as $item_valutazione){	
                         $record[] = $valutazione->id;
-                        $record[] = $periodo_valutazione->descrizione;
-                        $record[] = $categoria->descrizione;											
+                        $record[] = $periodo_valutazione->descrizione.(string)$valutazione->getPunteggioItem($item_valutazione);
+                        $record[] = $categoria->descrizione;									
                         $record[] = $valutazione->matricola_valutato;
                         $record[] = $valutazione->matricola_valutatore;
                         $record[] = $sezione->codice;
                         $record[] = $sezione->descrizione;
-                        $record[] = $peso_sezione;				
+                        $record[] = $peso_sezione;	
                         $record[] = $ambito->codice;
                         $record[] = $ambito->descrizione;
-                        $record[] = $peso_ambito;				
+                        $record[] = $peso_ambito;
                         $area_item = new ValutazioniAreaItem($item_valutazione->id_area_item);
                         $record[] = $area_item->descrizione;
+                        $record[] = $item_valutazione->nome;
                         $record[] = $item_valutazione->descrizione;
                         $record[] = $item_valutazione->peso;
-                        $record[] = $valutazione->getPunteggioItem($item_valutazione);
+                        $record[] = $valutazione->getPunteggioItem($item_valutazione)!==false?(float)$valutazione->getPunteggioItem($item_valutazione):"NC";
                         
                         $matrice_dati[] = $record;
                         $record = array();
                     }
                 }                    
-            }         
+            }        
             //metodo valutazione: Ins. backoffice
             //il valore è sempre un raggiungimento percentuale
             else if ($metodo_valutazione == 1){
@@ -116,15 +118,19 @@ if (isset ($_GET["periodo"]) && $periodo_valutazione = new ValutazioniPeriodo($_
                 $record[] = $ambito->codice;
                 $record[] = $ambito->descrizione;
                 $record[] = $peso_ambito;
-                $record[] = $valutazione->getPunteggioAmbito($ambito);
+                $record[] = "";
+                $record[] = "";
+                $record[] = "";
+                $record[] = "";
+                $record[] = (float)$valutazione->getPunteggioAmbito($ambito);
                 
                 $matrice_dati[] = $record;
-                unset($record);
+                $record = array();
             }						
             else{
                 //se nessun metodo specificato ($metodo = 0 casistica che non dovrebbe presentarsi)		
                 die("Errore di configurazione ambito " . $nome_ambito);
-            }            
+            }         
         }
     } 			
     CoreHelper::simpleExcelWriter($xls_file, array($nome_foglio_lavoro => $matrice_dati));

@@ -453,6 +453,95 @@ class Cdr extends Entity{
         return $personale_cdc_afferenti;
     }
 
+    public function getPersonaleCdrAfferentiInData(DateTime $date) {
+        $personale_cdr_afferenti = array();
+        foreach ($this->getCdc() as $cdc) {
+            foreach ($cdc->getPersonaleCdcInData($date) as $cdc_personale) {
+                $found = false;
+                foreach ($personale_cdr_afferenti as $key=>$afferenza_cdr) {
+                    if ($afferenza_cdr->matricola_personale == $cdc_personale->matricola_personale) {
+                        $found = true;
+                        $personale_cdr_afferenti[$key]->percentuale += $cdc_personale->percentuale;
+                        break;
+                    }
+                }
+                if ($found == false) {
+                    $personale_cdr_afferenti[] = $cdc_personale;
+                }
+            }
+        }
+        return $personale_cdr_afferenti;
+    }
+
+    public function getPersonaleCdrAfferentiInAnno(AnnoBudget $anno) {
+        $personale_cdr_afferenti = array();
+        foreach ($this->getCdc() as $cdc) {
+            foreach ($cdc->getPersonaleCdcInAnno($anno) as $cdc_personale) {
+                $found = false;
+                foreach ($personale_cdr_afferenti as $key=>$afferenza_cdr) {
+                    if ($afferenza_cdr->matricola_personale == $cdc_personale->matricola_personale) {
+                        $found = true;
+                        $personale_cdr_afferenti[$key]->percentuale += $afferenza_cdr->percentuale;
+                        break;
+                    }
+                }
+                if ($found == false) {
+                    $personale_cdr_afferenti[] = $cdc_personale;
+                }
+            }
+        }
+        return $personale_cdr_afferenti;
+    }
+
+    //personale afferente al CdR durante l'anno che si è trasferito (e cessati se specificato in parametro) alla data
+    public function getPersonaleCdrTrasferitoInAnnoAllaData (DateTime $date = null, $include_cessati = false) {
+        $personale_trasferito = array();
+        if ($date == null) {
+            $cm = \Cm::getInstance();
+            $date = $cm->oPage->globals["data_riferimento"]["value"];
+        }
+        $anno = AnnoBudget::getByFields(["descrizione" => $date->format("Y")]);   
+        
+        $personale_cdr_afferente_data = Cdr::getPersonaleCdrAfferentiInData($date);
+        foreach (Cdr::getPersonaleCdrAfferentiInAnno($anno) as $personale_afferente_anno) {            
+            $found = false;            
+            foreach ($personale_cdr_afferente_data as $personale_afferente_data) {               
+                if ($personale_afferente_anno->matricola_personale == $personale_afferente_data->matricola_personale) {
+                    $found = true;
+                    break;
+                }                
+            }
+            if ($found == false) {
+                if ($include_cessati == false) {
+                    $personale = Personale::factoryFromMatricola($personale_afferente_anno->matricola_personale);
+                    if (!$personale->isCessatoInAnnoAllaData($date)) {
+                        $personale_trasferito[] = $personale_afferente_anno;
+                    }                
+                }
+                else {
+                    $personale_trasferito[] = $personale_afferente_anno;
+                }                
+            }
+        }        
+        return $personale_trasferito;
+    }
+
+    public function getPersonaleCdrCessatoInAnnoAllaData (DateTime $date = null) {
+        $personale_cessato = [];
+        if ($date == null) {
+            $cm = \Cm::getInstance();
+            $date = $cm->oPage->globals["data_riferimento"]["value"];
+        }
+        $anno = AnnoBudget::getByFields(["descrizione" => $date->format("Y")]);
+        foreach($this->getPersonaleCdrAfferentiInAnno($anno) as $personale_cdr) {
+            $personale = Personale::factoryFromMatricola($personale_cdr->matricola_personale);
+            if ($personale->isCessatoInAnnoAllaData($date)) {                
+                $personale_cessato[] = $personale_cdr;
+            }
+        }
+        return $personale_cessato;
+    }
+
     //resituisce il primo responsabile su cdr padre differente dal responsabile del cdr
     //null se non si riesce ad istanziare il responsabile superiore (es cdr radice)
     //$primo_cdr_padre determina se forzare la restituzione del responsabile del primo cdr padre

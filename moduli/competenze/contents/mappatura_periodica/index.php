@@ -88,50 +88,53 @@ $tpl->parse("SectSezione", true);
 $tpl->set_var("SectCompetenza", null);
 
 //competenze specifiche
-foreach ($profilo->getCompetenzeSpecificheProfilo() as $competenza_specifica_profilo) {
-    $competenza_specifica = new \MappaturaCompetenze\CompetenzaSpecifica($competenza_specifica_profilo->id_competenza_specifica);
-    $tpl->set_var("id_competenza", "competenza_specifica_".$competenza_specifica_profilo->id_competenza_specifica);
-    $tpl->set_var("nome_competenza", $competenza_specifica->nome);
-    $tpl->set_var("descrizione_competenza", $competenza_specifica->descrizione);
-    $tpl->set_var("tipo_competenza", "specifica");
-    
-    foreach ($valori as $valore_atteso) {        
-        if ($competenza_specifica_profilo->id_valore_atteso == $valore_atteso->id ) {
-            $tpl->set_var("valore_atteso_valore", $valore_atteso->valore);
-            $tpl->set_var("valore_atteso_descrizione", $valore_atteso->descrizione);
-            break;
-        }
-    } 
-    $tpl->parse("SectValoriAttesiView", true);
-    
-    foreach ($valori as $valore_mappatura) {
-        $tpl->set_var("valore_mappatura_id", $valore_mappatura->id);
+$competenze_specifiche_profilo = $profilo->getCompetenzeSpecificheProfilo();
+if (count($competenze_specifiche_profilo)) {
+    foreach ($competenze_specifiche_profilo as $competenza_specifica_profilo) {
+        $competenza_specifica = new \MappaturaCompetenze\CompetenzaSpecifica($competenza_specifica_profilo->id_competenza_specifica);
+        $tpl->set_var("id_competenza", "competenza_specifica_".$competenza_specifica_profilo->id_competenza_specifica);
+        $tpl->set_var("nome_competenza", $competenza_specifica->nome);
+        $tpl->set_var("descrizione_competenza", $competenza_specifica->descrizione);
+        $tpl->set_var("tipo_competenza", "specifica");
         
-        $filters = array(                     
-                        "ID_mappatura_periodo" => $mappatura_periodo->id,
-                        "ID_tipo_competenza" => 2,
-                        "ID_competenza" => $competenza_specifica_profilo->id_competenza_specifica,
-                        );
-        $mappatura_competenza_specifica = \MappaturaCompetenze\ProfiloMappaturaCompetenzaPeriodo::getByFields($filters);        
-        if ($mappatura_competenza_specifica->id_valore == $valore_mappatura->id ) {
-            $tpl->set_var("valore_mappatura_selected", "selected");
-        }
-        else {
-            $tpl->set_var("valore_mappatura_selected", "");
-        }
-        $tpl->set_var("valore_mappatura_valore", $valore_mappatura->valore);
-        $tpl->set_var("valore_mappatura_descrizione", $valore_mappatura->descrizione);
-        $tpl->parse("SectOptionsValoriMappatura", true);        
-    }        
-    
-    $tpl->parse("SectValoriMappaturaEdit", true);
-    $tpl->parse("SectCompetenza", true);
-    $tpl->set_var("SectValoriMappaturaEdit", null);
-    $tpl->set_var("SectOptionsValoriMappatura", null);
-    $tpl->set_var("SectValoriAttesiView", null);
+        foreach ($valori as $valore_atteso) {        
+            if ($competenza_specifica_profilo->id_valore_atteso == $valore_atteso->id ) {
+                $tpl->set_var("valore_atteso_valore", $valore_atteso->valore);
+                $tpl->set_var("valore_atteso_descrizione", $valore_atteso->descrizione);
+                break;
+            }
+        } 
+        $tpl->parse("SectValoriAttesiView", true);
+        
+        foreach ($valori as $valore_mappatura) {
+            $tpl->set_var("valore_mappatura_id", $valore_mappatura->id);
+            
+            $filters = array(                     
+                            "ID_mappatura_periodo" => $mappatura_periodo->id,
+                            "ID_tipo_competenza" => 2,
+                            "ID_competenza" => $competenza_specifica_profilo->id_competenza_specifica,
+                            );
+            $mappatura_competenza_specifica = \MappaturaCompetenze\ProfiloMappaturaCompetenzaPeriodo::getByFields($filters);        
+            if ($mappatura_competenza_specifica->id_valore == $valore_mappatura->id ) {
+                $tpl->set_var("valore_mappatura_selected", "selected");
+            }
+            else {
+                $tpl->set_var("valore_mappatura_selected", "");
+            }
+            $tpl->set_var("valore_mappatura_valore", $valore_mappatura->valore);
+            $tpl->set_var("valore_mappatura_descrizione", $valore_mappatura->descrizione);
+            $tpl->parse("SectOptionsValoriMappatura", true);        
+        }        
+        
+        $tpl->parse("SectValoriMappaturaEdit", true);
+        $tpl->parse("SectCompetenza", true);
+        $tpl->set_var("SectValoriMappaturaEdit", null);
+        $tpl->set_var("SectOptionsValoriMappatura", null);
+        $tpl->set_var("SectValoriAttesiView", null);
+    }
+    $tpl->set_var("nome_sezione", "Competenze specifiche");
+    $tpl->parse("SectSezione", true);
 }
-$tpl->set_var("nome_sezione", "Competenze specifiche");
-$tpl->parse("SectSezione", true);
 $tpl->set_var("SectCompetenza", null);
 
 $tpl->parse("SectMappaturaActions", true);

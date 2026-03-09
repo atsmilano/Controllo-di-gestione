@@ -33,7 +33,8 @@ class ValutazioniPeriodo extends Entity{
                 $periodo->inibizione_visualizzazione_totali = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_totali", "Text", true));
                 $periodo->inibizione_visualizzazione_ambiti_totali = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_ambiti_totali", "Text", true));
                 $periodo->inibizione_visualizzazione_data_colloquio = CoreHelper::getBooleanValueFromDB($db->getField("inibizione_visualizzazione_data_colloquio", "Text", true));                
-                $periodo->visualizzazione_obiettivi = CoreHelper::getBooleanValueFromDB($db->getField("visualizzazione_obiettivi", "Text", true));                
+                $periodo->visualizzazione_obiettivi = CoreHelper::getBooleanValueFromDB($db->getField("visualizzazione_obiettivi", "Text", true)); 
+                $periodo->valutatore_anonimo = CoreHelper::getBooleanValueFromDB($db->getField("valutatore_anonimo", "Text", true));                
                 $periodo->data_inizio = $db->getField("data_inizio", "Date", true);
                 $periodo->data_fine = CoreHelper::getDateValueFromDB($db->getField("data_fine", "Date", true));
                 $periodo->data_apertura_compilazione = CoreHelper::getDateValueFromDB($db->getField("data_apertura_compilazione", "Date", true));
@@ -327,6 +328,34 @@ class ValutazioniPeriodo extends Entity{
         return $personale_non_valutato;
     }
 
+    //viene restituito un array con tutte le schede valutazioni nel periodo per le quali un dipendente risulta proponente
+    public function getValutazioniProponentePeriodo($matricola) {
+        $schede_valutazione = array();
+
+        $db = ffDb_Sql::factory();
+
+        $sql = "
+            SELECT 
+                    valutazioni_valutazione_periodica.ID
+            FROM
+                    valutazioni_valutazione_periodica
+                    INNER JOIN personale ON valutazioni_valutazione_periodica.matricola_valutato = personale.matricola
+            WHERE
+                    valutazioni_valutazione_periodica.ID_periodo = " . $db->toSql($this->id) . "
+                    AND valutazioni_valutazione_periodica.matricola_proponente = " . $db->toSql($matricola) . "
+                    AND valutazioni_valutazione_periodica.matricola_valutatore <> valutazioni_valutazione_periodica.matricola_valutato                    
+            ORDER BY
+                    valutazioni_valutazione_periodica.ID_categoria ASC, personale.cognome, personale.nome
+        ";
+        $db->query($sql);
+        if ($db->nextRecord()) {
+            do
+                $schede_valutazione[] = $db->getField("ID", "Number", true);
+            while ($db->nextRecord());
+        }
+        return $schede_valutazione;
+    }
+
     //viene restituito un array con tutte le schede valutazioni nel periodo per le quali un dipendente risulta valutatore
     public function getValutazioniValutatorePeriodo($matricola) {
         $schede_valutazione = array();
@@ -344,7 +373,7 @@ class ValutazioniPeriodo extends Entity{
                     AND valutazioni_valutazione_periodica.matricola_valutatore = " . $db->toSql($matricola) . "
                     AND valutazioni_valutazione_periodica.matricola_valutatore <> valutazioni_valutazione_periodica.matricola_valutato                    
             ORDER BY
-                    valutazioni_valutazione_periodica.ID_categoria DESC, personale.cognome, personale.nome
+                    valutazioni_valutazione_periodica.ID_categoria ASC, personale.cognome, personale.nome
         ";
         $db->query($sql);
         if ($db->nextRecord()) {

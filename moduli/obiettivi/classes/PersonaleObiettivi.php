@@ -22,7 +22,7 @@ class PersonaleObiettivi extends Personale {
                 $ob_personale_associato->id = $db->getField("ID", "Number", true);
                 $ob_personale_associato->id_obiettivo_cdr = $db->getField("ID_obiettivo_cdr", "Number", true);
                 $ob_personale_associato->matricola_personale = $db->getField("matricola_personale", "Text", true);
-                $ob_personale_associato->peso = $db->getField("peso", "Text", true);
+                $ob_personale_associato->peso = $db->getField("peso", "Text", true);                
                 //ultima_modifica
                 $ob_personale_associato->data_ultima_modifica = CoreHelper::getDateValueFromDB($db->getField("data_ultima_modifica", "Date", true));
                 $ob_personale_associato->data_accettazione = CoreHelper::getDateValueFromDB($db->getField("data_accettazione", "Date", true));
@@ -54,14 +54,14 @@ class PersonaleObiettivi extends Personale {
     }
     
     //restituisce tutti gli obiettivi nell'anno dei cdr di competenza alla data
-    public function getObiettiviCdrReponsabilitaData (AnnoBudget $anno, DateTime $date, TipoPianoCdr $tipo_piano) {
+    public function getObiettiviCdrReponsabilitaData (AnnoBudget $anno, DateTime $date, TipoPianoCdr $tipo_piano, $estrai_chiusi = false) {
         $obiettivi_responsabilità = array();            
         $piano_cdr = PianoCdr::getAttivoInData($tipo_piano, $date->format("Y-m-d"));
         foreach ($this->getCdrResponsabilitaPiano($piano_cdr, $date) as $cdr_resp) {     
             $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $date);            
             foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {											                
                 //viene verificato che l'obiettivo sia già stato accettato dal dipendente
-                if ($obiettivo_cdr->data_eliminazione == null && $ob_cdr_resp->data_chiusura_modifiche !== null && strtotime(date("Y-m-d")) >= strtotime($ob_cdr_resp->data_chiusura_modifiche)) {
+                if ($ob_cdr_resp->data_eliminazione == null && ($estrai_chiusi || $ob_cdr_resp->data_chiusura_modifiche !== null) && strtotime(date("Y-m-d")) >= strtotime($ob_cdr_resp->data_chiusura_modifiche)) {
                     $obiettivi_responsabilità[] = array(
                                                         "obiettivo" => new ObiettiviObiettivo($ob_cdr_resp->id_obiettivo),
                                                         "obiettivo_cdr" => $ob_cdr_resp,
@@ -81,7 +81,7 @@ class PersonaleObiettivi extends Personale {
             $cdr_resp_anno = AnagraficaCdrObiettivi::factoryFromCodice($cdr_resp["cdr"]->codice, $date);            
             foreach ($cdr_resp_anno->getObiettiviCdrAnno($anno) as $ob_cdr_resp) {											                
                 //vengono considerati solamente gli obiettivi confermati da parte del cdr                
-                if ($obiettivo_cdr->data_eliminazione == null) {
+                if ($ob_cdr_resp->data_eliminazione == null) {
                     $found = false;
                     foreach ($obiettivi_responsabilità as $obiettivo_responsabilità) {
                         if ($ob_cdr_resp->id_obiettivo == $obiettivo_responsabilità->id) {

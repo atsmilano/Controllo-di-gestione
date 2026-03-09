@@ -61,7 +61,7 @@ foreach (AnagraficaCdrObiettivi::getCdrObiettiviAziendali($anno) as $anagrafica_
             if ($rendicontazione !== null) {
                 $rendicontazione->perc_nucleo = $rendicontazione->perc_raggiungimento;
                 $rendicontazione->raggiungibile = true;
-                $n_obiettivi_azienda++;
+                //$n_obiettivi_azienda++;
             }
         }
         if ($rendicontazione == null) {            
@@ -87,22 +87,38 @@ foreach (AnagraficaCdrObiettivi::getCdrObiettiviAziendali($anno) as $anagrafica_
             
         if ($rendicontazione !== null) {    
             if (!$obiettivo_cdr->isCoreferenza()) {
-                $n_rendicontazioni_azienda++;
+                if ($rendicontazione->perc_raggiungimento !== null) {
+                    $n_rendicontazioni_azienda++;
+                }
                 $raggiungimento_nucleo_azienda += $rendicontazione->perc_nucleo;
                 if ($rendicontazione->raggiungibile != true){
                     $n_obiettivi_non_raggiungibili_azienda++;
                 }
             }
-            $cdr_rendicontazione["n_rendicontazioni_cdr"]++;            
+            if ($rendicontazione->perc_raggiungimento !== null) {
+                $cdr_rendicontazione["n_rendicontazioni_cdr"]++;
+            }             
+            /*           
             $cdr_rendicontazione["raggiungimento_cdr"] += $rendicontazione->perc_raggiungimento;
-            $cdr_rendicontazione["raggiungimento_nucleo"] += $rendicontazione->perc_nucleo;                        
+            $cdr_rendicontazione["raggiungimento_nucleo"] += $rendicontazione->perc_nucleo;      
+            */                  
         }
     }
     $cdr_obiettivi_aziendali[] = $cdr_rendicontazione; 
 }
 
 //ordinamento degli obiettivi aziendali
-function raggCdrCmp ($cdr1, $cdr2) {
+function raggCdrCmp ($cdr1, $cdr2) { 
+    if (($cdr1["n_rendicontazioni_cdr"] / $cdr1["n_obiettivi_cdr"])>($cdr2["n_rendicontazioni_cdr"] / $cdr2["n_obiettivi_cdr"])){
+        return 1;
+    }
+    //*********
+    else if(($cdr1["n_rendicontazioni_cdr"] / $cdr1["n_obiettivi_cdr"])==($cdr2["n_rendicontazioni_cdr"] / $cdr2["n_obiettivi_cdr"])
+        && strcmp($cdr2["descrizione_cdr"], $cdr1["descrizione_cdr"]) > 0) {
+        return 1;
+    }
+    //*********
+    /*   
     if ($cdr1["n_rendicontazioni_cdr"]>0) {
         $cdr1_ragg_medio_nucleo = $cdr1["raggiungimento_nucleo"]/$cdr1["n_rendicontazioni_cdr"];
         $cdr1_ragg_medio_cdr = $cdr1["raggiungimento_cdr"]/$cdr1["n_rendicontazioni_cdr"];
@@ -119,7 +135,6 @@ function raggCdrCmp ($cdr1, $cdr2) {
         $cdr2_ragg_medio_nucleo = 0;
         $cdr2_ragg_medio_cdr = 0;
     }    
-    
     if ($cdr1_ragg_medio_nucleo == $cdr2_ragg_medio_nucleo) {
         if ($cdr1_ragg_medio_cdr == $cdr2_ragg_medio_cdr) {
             if ($cdr1["n_obiettivi_cdr"] == $cdr2["n_obiettivi_cdr"]) {
@@ -137,17 +152,19 @@ function raggCdrCmp ($cdr1, $cdr2) {
     }         
     else if ($cdr1_ragg_medio_nucleo > $cdr2_ragg_medio_nucleo){
         return 1;
-    }
+    }*/
 }			
 usort($cdr_obiettivi_aziendali, "raggCdrCmp");
     
 //visualizzazione dei dati nel template
 //variabili per la visualizzazione
 $label_cdr = false;
+/*
 $value_raggiungimento_cdr = false;
 $label_raggiungimento_cdr = false;
 $value_raggiungimento_nucleo = false;
 $label_raggiungimento_nucleo = false;
+*/
 $label_completamento_rendicontazione = false;
 $value_completamento_rendicontazione = false;
 foreach($cdr_obiettivi_aziendali as $cdr) {                
@@ -162,7 +179,7 @@ foreach($cdr_obiettivi_aziendali as $cdr) {
     if ($cdr["n_rendicontazioni_cdr"] > 0) {
         $raggiungimento_medio_cdr = $cdr["raggiungimento_cdr"]/$cdr["n_rendicontazioni_cdr"];
         $raggiungimento_medio_nucleo = $cdr["raggiungimento_nucleo"]/$cdr["n_rendicontazioni_cdr"];
-    }
+    }/*
     else {
         $raggiungimento_medio_cdr = 0;
         $raggiungimento_medio_nucleo = 0;
@@ -179,7 +196,7 @@ foreach($cdr_obiettivi_aziendali as $cdr) {
     }
     $value_raggiungimento_nucleo .= number_format($raggiungimento_medio_nucleo);
     $label_raggiungimento_nucleo .= "'".number_format($raggiungimento_medio_nucleo)."%'";
-
+*/
     //numero di rendicontazioni
     if ($value_completamento_rendicontazione !== false)
         $value_completamento_rendicontazione .= ", ";	        
@@ -187,17 +204,17 @@ foreach($cdr_obiettivi_aziendali as $cdr) {
     $value_completamento_rendicontazione .= number_format($completamento_rendicontazione);
     if ($label_completamento_rendicontazione !== false)
         $label_completamento_rendicontazione .= ", ";
-    $label_completamento_rendicontazione .= "'" . $cdr["n_rendicontazioni_cdr"]."/".$cdr["n_obiettivi_cdr"] ."(".$cdr["n_obiettivi_trasversali"].")-".$completamento_rendicontazione . "%'";
+    $label_completamento_rendicontazione .= "'" . $cdr["n_rendicontazioni_cdr"]."/".$cdr["n_obiettivi_cdr"] ." (".$cdr["n_obiettivi_trasversali"].")-".$completamento_rendicontazione . "%'";
 }       
 
 //valorizzazione delle variabili nel template
 //altezza del grafico aree (200 per legenda e titolo + 50 per area)
 $tpl->set_var("grafico_medio_aree_height", 200+(50*count($cdr_obiettivi_aziendali)));
-$tpl->set_var("cdr_label", $label_cdr);
+$tpl->set_var("cdr_label", $label_cdr);/*
 $tpl->set_var("perc_ragg_cdr", $value_raggiungimento_cdr);
 $tpl->set_var("point_label_ragg_cdr", $label_raggiungimento_cdr);
 $tpl->set_var("perc_ragg_nucleo", $value_raggiungimento_nucleo);
-$tpl->set_var("point_label_ragg_nucleo", $label_raggiungimento_nucleo);        
+$tpl->set_var("point_label_ragg_nucleo", $label_raggiungimento_nucleo);   */     
 $tpl->set_var("completamento_rendicontazione", $value_completamento_rendicontazione);    
 $tpl->set_var("point_label_n_ob", $label_completamento_rendicontazione);
 $label_completamento_rendicontazione = false;

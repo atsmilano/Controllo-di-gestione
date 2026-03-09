@@ -4,7 +4,7 @@ use scadenze\Personale;
 use scadenze\Tipologia;
 
 $user = LoggedUser::getInstance();
-if (!($user->hasPrivilege("scadenze_admin") || $user->hasPrivilege("scadenze_referente_cdr"))) {           
+if (!($user->hasPrivilege("scadenze_admin") || $user->hasPrivilege("scadenze_responsabile_cdr") || $user->hasPrivilege("scadenze_referente_cdr"))) {           
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter visualizzare le scadenze");
 }
 

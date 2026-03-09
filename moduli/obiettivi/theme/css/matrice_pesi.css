@@ -38,13 +38,17 @@
 	padding: 6px 0;
 }
 
+#matrice_pesi table tbody tr, #matrice_pesi table tbody tr td{
+	vertical-align: middle;
+}
+
 #matrice_pesi table tbody td{
 	border: solid 1px;
 	border-color: #2888E5;
 	text-align: center;
 	background-color: white;
 	color: black;
-	height: 21px;
+	/*height: 21px;	*/
 }
 
 #matrice_pesi #legenda {
@@ -90,7 +94,7 @@
 	text-decoration: none;
 }
 
-#matrice_pesi table tbody td.modificabile a:hover {
+#matrice_pesi table tbody td.assegnato a:hover {
 	font-weight: bold;
 	cursor: pointer;
 	color: #2888E5;

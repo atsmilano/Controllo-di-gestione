@@ -248,7 +248,7 @@
             $("#coan_conto_dialog").empty();
             $("#coan_conto_dialog").append("<div id='loader'><img src='{module_img_path}/loader.gif' alt='Loading...'></div>");
             $("#coan_conto_dialog").dialog("open");
-            $("div#coan_conto_dialog").load("./coan/conto.php?ID_conto=" + $(this).attr("id").substr(6) + "&ID_periodo=" + {periodo_selezionato});
+            $("div#coan_conto_dialog").load("./coan/conto.php?{globals}&ID_conto=" + $(this).attr("id").substr(6) + "&ID_periodo=" + {periodo_selezionato});
         });
     });
 

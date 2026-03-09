@@ -1,10 +1,11 @@
 <?php
 $user = LoggedUser::getInstance();
+/*
 //solamente il responsabile del cdr ha la possibilità di visualizzare e modificare l'obiettivo se il periodo è aperto
 if (!$user->hasPrivilege("resp_cdr_selezionato") ) {
 	ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla pagina dell'obiettivo.");
 }	
-	
+*/	
 //recupero parametri
 $anno = $cm->oPage->globals["anno"]["value"];
 $dateTimeObject = $cm->oPage->globals["data_riferimento"]["value"];
@@ -35,17 +36,21 @@ else {
 }
 				
 //modifica permessa solo nei periodi abilitati
-if ($obiettivo_cdr->isChiuso()){
-	ffErrorHandler::raise("Errore: non è possibile modificare l''assegnazione dalla data ".$obiettivo_cdr->data_chiusura_modifiche.".");
+$edit = false;
+if ($user->hasPrivilege("resp_cdr_selezionato") && !$obiettivo_cdr->isChiuso()){
+	$edit = true;
 }
 else {
-    if ($obiettivo_cdr->id_tipo_piano_cdr != 0) {
-        $tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano_cdr);
-    }
-    //se l'obiettivo è aziendale viene considerato come tipologia il piano di priorità massima in cui il codice_cdr è presente
-    else {
-        $tipo_piano_cdr = Cdr::getTipoPianoPriorita($obiettivo_cdr->codice_cdr, $date);        
-    }
+	//ffErrorHandler::raise("Errore: non è possibile modificare l''assegnazione dalla data ".$obiettivo_cdr->data_chiusura_modifiche.".");
+}
+
+
+if ($obiettivo_cdr->id_tipo_piano_cdr != 0) {
+	$tipo_piano_cdr = new TipoPianoCdr($obiettivo_cdr->id_tipo_piano_cdr);
+}
+//se l'obiettivo è aziendale viene considerato come tipologia il piano di priorità massima in cui il codice_cdr è presente
+else {
+	$tipo_piano_cdr = Cdr::getTipoPianoPriorita($obiettivo_cdr->codice_cdr, $date);        
 }
 
 $obiettivo = new ObiettiviObiettivo($obiettivo_cdr->id_obiettivo);
@@ -63,13 +68,19 @@ $db = ffDb_Sql::factory();
 //definizione del record
 $oRecord = ffRecord::factory($cm->oPage);
 $oRecord->id = "obiettivo-cdr-personale-modify";
-$oRecord->title = "Assegnazione personale";
+$oRecord->title = "Assegnazione personale".(string)
 $oRecord->resources[] = "obiettivo-cdr-personale";
 $oRecord->src_table = "obiettivi_obiettivo_cdr_personale";
 
 //viene definita sul record l'eliminazione logica del record piuttosto che quella fisica
 $oRecord->del_action = "update";
 $oRecord->del_update = "data_eliminazione=".$db->toSql(date("Y-m-d H:i:s"));
+
+if (!$edit){
+	$oRecord->allow_insert = false;
+	$oRecord->allow_update = false;
+    $oRecord->allow_delete = false;
+}
 
 $oField = ffField::factory($cm->oPage);
 $oField->id = "ID_obiettivo_cdr_personale";
@@ -158,9 +169,15 @@ $oField = ffField::factory($cm->oPage);
 $oField->id = "peso";
 $oField->base_type = "Number";		
 $oField->label = "Peso";
-$oField->addValidator("number", array(true, OBIETTIVI_MIN_PESO, OBIETTIVI_MAX_PESO, true, true, true));
 if (isset($tot_peso_personale)) {
 	$oField->label .= " (tot. peso obiettivi cdr escluso l'obiettivo corrente: " . $tot_peso_personale . ")";
+}
+if (!$edit) {
+    $oField->control_type = "label";
+    $oField->store_in_db = false;
+} else {
+    $oField->required = true;
+	$oField->addValidator("number", array(true, OBIETTIVI_MIN_PESO, OBIETTIVI_MAX_PESO, true, true, true));
 }
 $oRecord->addContent($oField);
 

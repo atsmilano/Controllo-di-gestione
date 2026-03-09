@@ -93,7 +93,13 @@ foreach($ambiti as $ambito) {
     $sezione = new ValutazioniSezione($ambito->id_sezione);
     $oField = ffField::factory($cm->oPage);
     $oField->id = "ambito_".$ambito->id;
-    $oField->label = $sezione->codice . "." . $ambito->codice . ". " . $ambito->descrizione;
+    if (strlen($ambito->codice)){
+        $desc_ambito = $ambito->codice.". ";
+    }
+    else {
+        $desc_ambito = " ";
+    }
+    $oField->label = $sezione->codice . "." . $desc_ambito . $ambito->descrizione;
     $oField->base_type = "Number";
     $oField->extended_type = "Boolean";
     $oField->control_type = "checkbox";
