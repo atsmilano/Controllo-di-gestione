@@ -55,7 +55,13 @@ class ValutazioniHelper {
         $descrizioni = array();
         foreach($ambiti as $ambito) {
             $sezione = new ValutazioniSezione($ambito->id_sezione);
-            $descrizioni[] = $sezione->codice . "." . $ambito->codice . ". " . $ambito->descrizione;
+            if (strlen($ambito->codice)) {
+                $point = ".";
+            }
+            else {
+                $point = "";
+            }
+            $descrizioni[] = $sezione->codice . "." . $ambito->codice . $point . " " . $ambito->descrizione;
         }
         return implode($separator, $descrizioni);
     }

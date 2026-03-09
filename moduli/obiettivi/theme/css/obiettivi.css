@@ -1,40 +1,99 @@
+/*In questo cdss sono anche presenti gli elementi del modulo obiettivi_individuali
+(attivo solamente se attivo modulo obiettivi)
+per coerenza fra gli stili degli elementi simili (ad esempio pulsanti di chiusura)*/
+
+/*loader*/
+div#loading_page {
+    display: none;
+}
+
+div#loading_page span {
+    font-size: 21px;
+    vertical-align: super;
+    padding-left: 9px;
+    color: #2888E5;
+}
+
 /*Obiettivi-cdr*/
 .stato_chiusura_obiettivi {
-	background-color: #c7d4e2;
-	color: #2888E5;
-	border: solid 1px #2888E5;
+	background-color: #333;	
+	border: solid 1px #333;
 	-webkit-border-radius: 9px;
 	-moz-border-radius: 9px;
-	padding: 3px 0px 3px 12px;
+	padding: 6px 6px 6px 12px;
+    height: 33px;
+    margin-bottom: 9px;    
 }
+
+.stato_chiusura_obiettivi h4{
+	margin-top: 0;
+    font-weight: 500;
+    font-size: 15px;
+    color: #2888E5;
+}
+
+#obiettivo-cdr .search:not(a) {
+    margin-bottom: 0;
+}
+
 /*Chiusura obiettivi button*/
 #chiusura_obiettivi.chiusura_button,
-#riapertura_obiettivi.riapertura_button {
+#chiusura_obiettivi_individuali.chiusura_button,
+#riapertura_obiettivi.riapertura_button,
+#riapertura_obiettivi_individuali.riapertura_button {
 	border: solid 1px #2888E5;
 	-webkit-border-radius: 9px;
 	-moz-border-radius: 9px;
 	border-radius: 9px;
-	width: 300px;
+	width: 180px;
 	margin: auto;
-	text-align: center;
-	background-color: #c7d4e2;
-	color: #2888E5;
+	text-align: center;	
+    background-color: #2888E5;
+	color: white;
 	float: right;
     margin-left: 10px;
+    height: 25 px
 }
 
 #chiusura_obiettivi.chiusura_button:hover,
-#riapertura_obiettivi.riapertura_button:hover {
+#chiusura_obiettivi_individuali.chiusura_button:hover,
+#riapertura_obiettivi.riapertura_button:hover,
+#riapertura_obiettivi_individuali.riapertura_button:hover {
 	cursor: pointer;
-	background-color: #2888E5;
-	color: white;
+	background-color: #8fbfee;
+	color: #2888E5;
+}
+
+#chiusura_obiettivi.chiusura_button h4,
+#chiusura_obiettivi_individuali.chiusura_button h4,
+#riapertura_obiettivi.riapertura_button h4,
+#riapertura_obiettivi_individuali.riapertura_button h4 {
+    margin: 3px;
 }
 
 /*Chiusura obiettivi dialog*/
 div#chiusura_obiettivi_confirm_dialog,
-div#riapertura_obiettivi_confirm_dialog {
+div#chiusura_obiettivi_individuali_confirm_dialog,
+div#riapertura_obiettivi_confirm_dialog,
+div#riapertura_obiettivi_individuali_confirm_dialog {
 	padding: 15px;
-        width: 500px;
+    width: 500px;
+}
+
+#obiettivo-cdr .col-xs-12 .col-md-5 .search {
+    width: auto;
+}
+
+#obiettivo-cdr .col-xs-12 {
+    float: none;
+}
+
+#obiettivo-cdr .actions.pull-right {
+    display: none;
+}
+
+#obiettivo-cdr .ffGrid .search:not(a) {
+    clear: left;
 }
 
 .ui-dialog.chiusura_obiettivi_confirm_dialog  .ui-dialog-titlebar,
@@ -132,6 +191,21 @@ div#riapertura_obiettivi_confirm_dialog {
 
 #rendicontazione_obiettivo .nucleo_non_favorevole, #riepilogo_obiettivo .nucleo_non_favorevole{
     color: red;
+}
+
+.riepilogo_obiettivo table td {
+    border-top: solid 1px #ddd;
+    padding: 2px 6px;
+    vertical-align: middle;
+}
+
+.riepilogo_obiettivo table tr.first-row td {
+    border: none;
+}
+
+.riepilogo_obiettivo table td.nome-campo {
+    text-align: center;
+    color: #1976d2;
 }
 
 #periodo-rendicontazione-modify {

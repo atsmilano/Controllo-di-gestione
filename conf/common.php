@@ -68,7 +68,7 @@ function routingRulesGen()
     
     //******************************************************************************************************************************************
     //******************************************************************************************************************************************
-    //generazione dellle regole di routing per ogni modulo e valorizzazione delle costanti dall'enviroment
+    //generazione dellle regole di routing per ogni modulo e valorizzazione delle costanti dall'environment
     //******************************************************************************************************************************************		
     foreach ($cm->oPage->globals["modules"]["value"] as $module) {
         //regola routing

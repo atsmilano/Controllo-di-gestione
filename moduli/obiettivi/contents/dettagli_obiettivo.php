@@ -124,6 +124,7 @@ $user_privileges = array(
     //eliminazione obiettivo cdr
     "delete_obiettivo_cdr" => false,
 );
+
 //in aggiunta solamente l'utente amministratore degli obiettivi e il responsabile dell'obiettivo cdr di origine possono effettuare operazioni
 if ($edit == true) {
     //l'ordine di assegnazione privilegi è incrementale
@@ -142,26 +143,26 @@ if ($edit == true) {
     if ($user->hasPrivilege("cdr_view_all")) {
         $user_privileges["view"] = true;
         $user_privileges["view_assegnazioni_cdr"] = true;
-        if ($obiettivo_cdr->isCoreferenza()) {
+        //if ($obiettivo_cdr->isCoreferenza()) {
             $user_privileges["view_coreferenti_associati"] = true;
-        }        
+        //}        
     }
     //privilegi per il responsabile del cdr padre gerarchico
     if ($resp_padre_ramo_cdr_selezionato) {
         $user_privileges["view"] = true;
         $user_privileges["view_assegnazioni_cdr"] = true;
-        if ($obiettivo_cdr->isCoreferenza()) {
+        //if ($obiettivo_cdr->isCoreferenza()) {
             $user_privileges["view_coreferenti_associati"] = true;
-        }
+        //}
     }
     //privilegi per il responsabile del cdr padre
     if ($resp_padre_cdr_selezionato) {
         $user_privileges["view"] = true;
         //assegnazioni visualizzabili solamente in modifica        
         $user_privileges["view_assegnazioni_cdr"] = true;
-        if ($obiettivo_cdr->isCoreferenza()) {
+        //if ($obiettivo_cdr->isCoreferenza()) {
             $user_privileges["view_coreferenti_associati"] = true;
-        }
+        //}
         //se l'obiettivo non è aziendale si permette la modifuca di assegnazione e peso
         if (!$obiettivo_cdr->isObiettivoCdrAziendale()) {
             //il parere sulle azioni può essere espresso solamente se sono definite azioni
@@ -190,9 +191,9 @@ if ($resp_cdr_selezionato) {
         if (!$obiettivo_cdr->isChiuso()) {
             $user_privileges["edit_assegnazioni_cdr_personale"] = true;
         }
-        if ($obiettivo_cdr->isCoreferenza() || $obiettivo_cdr->isReferenteObiettivoTrasversale()){
+        //if ($obiettivo_cdr->isCoreferenza() || $obiettivo_cdr->isReferenteObiettivoTrasversale()){
             $user_privileges["view_coreferenti_associati"] = true;
-        }
+        //}
         //privilegi aggiuntivi referente coreferente
         if (!$obiettivo_cdr->isCoreferenza()) {
             //le azioni possono essere modificate solamente per gli obiettivi non ancora chiusi e se non è stato ancora espresso un parere su di esse
@@ -208,10 +209,13 @@ if ($user->hasPrivilege("obiettivi_aziendali_edit")) {
     //assegnazioni visualizzabili solamente in modifica
     if ($edit == true) {
         $user_privileges["view_assegnazioni_cdr"] = true;
+        //**********************************************************
+        $user_privileges["view_coreferenti_associati"] = true;
+        //**********************************************************
         //se l'obiettivo è aziendale si permette la modifuca di assegnazione e peso
         if ($obiettivo_cdr->isObiettivoCdrAziendale()) {
             $user_privileges["edit_peso_assegnazione_obiettivo_cdr"] = true;
-            $user_privileges["view_coreferenti_associati"] = true;
+            //$user_privileges["view_coreferenti_associati"] = true;
             $user_privileges["edit_coreferenti_associati"] = true;
             $user_privileges["delete_obiettivo_cdr"] = true;
             //il parere sulle azioni può essere espresso solamente se sono definite azioni
@@ -510,19 +514,28 @@ if ($user_privileges["view_obiettivo_cdr_dipendente"] && $obiettivo_cdr_personal
 
 //*************************************
 //Grid assegnazione obiettivo_coreferenti
-if ($edit == true && $user_privileges["view_coreferenti_associati"]) {
+if ($edit == true && $user_privileges["view_coreferenti_associati"]) {    
+    $ob_cdr_aziendale = $obiettivo_cdr->getObiettivoCdrAziendale();    
+    $coreferenti_associati = $ob_cdr_aziendale->getObiettiviCdrCoreferentiAssociati();
+    if (count($coreferenti_associati)) {
+        $coreferenti_associati[] = $ob_cdr_aziendale;
+    }
+
+    /*
     //in caso di coreferenza vengono estratti i coreferenti dell'obiettivo_cdr_padri, in caso contrario gli eventuali coreferenti dell'obiettivo_cdr
     if ($cdr_padre_obiettivo == null) {
         $coreferenti_associati = $obiettivo_cdr->getObiettiviCdrCoreferentiAssociati();
     } else {
         $coreferenti_associati = $obiettivo_cdr_padre->getObiettiviCdrCoreferentiAssociati();
-    }
+    }    
     //in caso di obiettivo di coreferenza viene aggiunto anche il cdr padre in visualizzazione 
     if ($cdr_padre_obiettivo !== null && !$user_privileges["edit_coreferenti_associati"]) {
         $coreferenti_associati[] = $obiettivo_cdr_padre;
     }
+    */
+
     //se non esistono coreferenti assocaiti e non è possibile modificarli la grid non viene visualizzati
-    if (count($coreferenti_associati) > 0 || $user_privileges["edit_coreferenti_associati"]) {
+    if (count($coreferenti_associati) || $user_privileges["edit_coreferenti_associati"]) {
         $oRecord->addContent(null, true, "obiettivo_cdr_coreferente");
         $oRecord->groups["obiettivo_cdr_coreferente"]["title"] = "CDR coreferenti obiettivo aziendale";
 
@@ -541,7 +554,7 @@ if ($edit == true && $user_privileges["view_coreferenti_associati"]) {
                 $tipo_cdr = new TipoCdr($anagrafica_cdr_coreferente->id_tipo_cdr);
                 $cdr_coreferente_desc = $anagrafica_cdr_coreferente->codice . " - " . $tipo_cdr->abbreviazione . " " . $anagrafica_cdr_coreferente->descrizione;
                 //nel caso in cui il cdr sia referente per l'obiettivo viene specificato                
-                if ($obiettivo_cdr_padre == $obiettivo_cdr_coreferente) {
+                if (/*$obiettivo_cdr_padre*/$ob_cdr_aziendale == $obiettivo_cdr_coreferente) {
                     $cdr_coreferente_desc .= " (referente)";
                 }
             } catch (Exception $ex) {
@@ -644,7 +657,7 @@ if (
                     $cdr_figlio->codice,
                     $tipo_cdr->abbreviazione . " " . $cdr_figlio->descrizione,
                     $responsabile_cdr_figlio->cognome . " " . $responsabile_cdr_figlio->nome . " (matr. " . $responsabile_cdr_figlio->matricola_responsabile . ")",
-                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
+                    number_format($obiettivo_cdr_figlio->peso) . " / " . $peso_totale_obiettivi . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",                
                 );    
                 $obiettivi_cdr_figli[$tipo_piano_corrente->id]["data"][$obiettivo_cdr_figlio->id]["cdr"] = $cdr_figlio;
                 $obiettivi_cdr_figli[$tipo_piano_corrente->id]["data"][$obiettivo_cdr_figlio->id]["responsabile_cdr"] = $responsabile_cdr_figlio;
@@ -877,7 +890,7 @@ if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
     }
 }
 
-if ($edit == true) {
+if ($edit == true && $user_privileges["view_assegnazioni_cdr"]) {
     //**************************************************************************
     //Grid associazione a personale    
     $oRecord->addContent(null, true, "personale_assegnato");
@@ -900,12 +913,14 @@ if ($edit == true) {
                 $peso_tot_personale = $personale->getPesoTotaleObiettivi($anno);
                 $perc_peso = CoreHelper::percentuale($ob_cdr_per->peso, $peso_tot_personale);
                 //costruzione record
+                $peso = number_format($ob_cdr_per->peso) . " / " . $peso_tot_personale . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)";
+                
                 $grid_recordset[] = array(
                     $ob_cdr_per->id,
                     $personale->cognome,
                     $personale->nome,
                     $personale->matricola,
-                    number_format($ob_cdr_per->peso) . " / " . $peso_tot_personale . " (" . (fmod($perc_peso, 1) !== 0.00?number_format($perc_peso, 2):number_format($perc_peso, 0)) . "%)",
+                    $peso,
                 );
             } catch (Exception $ex) {
                 
@@ -935,7 +950,7 @@ if ($edit == true) {
         //operazioni consentite in base ai privilegi dell'utente
         if (!$user_privileges["edit_assegnazioni_cdr_personale"]) {
             $oGrid->display_new = false;
-            $oGrid->display_edit_url = false;
+            //$oGrid->display_edit_url = false;
             $oGrid->display_delete_bt = false;
         }
 
@@ -975,7 +990,8 @@ if ($edit == true) {
         $oRecord->addContent($oGrid, "personale_assegnato");
         $cm->oPage->addContent($oGrid);
     }
-
+}
+if ($edit == true) {
     //**************************************************************************
     //Grid rendicontazione
     $oRecord->addContent(null, true, "rendicontazione");
@@ -1049,6 +1065,7 @@ if ($edit == true) {
             $periodo_rendicontazione->ordinamento_anno
         );
     }
+    
     if (count($grid_recordset) > 0) {   
         $cm->oPage->addContent("<div id='rendicontazioni_obiettivo'>");
         //visualizzazione della grid dei cdr associati all'obiettivo

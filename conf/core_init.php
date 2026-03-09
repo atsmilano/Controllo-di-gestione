@@ -10,6 +10,9 @@ foreach (glob(FF_DISK_PATH . "/classes/*.php") as $filename) {
         require($filename);
     }
 }
+//vengono caricate le classi dei componenti UI
+CoreHelper::requireDirectoryFiles(FF_DISK_PATH . "/classes/UIComponents");
+
 //parametro per l'esclusione dei globals da escludere nella costruzione della query string dell'url nel metodo get_globals
 //stringa con il nome dei parametri separati da virgola "parametro1,parametro2,parametro3"
 define(GET_GLOBALS_EXCLUDE_LIST, "data_riferimento,cdr_visibili,modules");
@@ -26,3 +29,5 @@ define(MODULES_CSS_DIR, MODULES_THEME_DIR . DIRECTORY_SEPARATOR . "css");
 define(MODULES_CSS_PATH, MODULES_THEME_DIR . "/css");
 define(MODULES_CRON_DIR, "cron");
 define(MODULES_ICONHIDE, "ICONHIDE");
+//UI components
+define(COMPONENTS_TPL_DIR, FF_DISK_PATH.DIRECTORY_SEPARATOR.FF_THEME_DIR.DIRECTORY_SEPARATOR."ats".DIRECTORY_SEPARATOR."components");

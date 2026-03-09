@@ -163,6 +163,35 @@ class Cdc {
         return $cdc_personale;
     }
 
+    public function getPersonaleCdcInAnno(AnnoBudget $anno) {
+        $cdc_personale = array();
+        $filters = array(
+            "codice_cdc" => $this->codice,
+        );
+        foreach (CdcPersonale::getAll($filters) as $cdc_pers) {
+            $attivo = false;
+            if ($anno !== null) {
+                if (
+                    (
+                    strtotime($cdc_pers->data_inizio) <= strtotime($anno->descrizione."-12-31")) &&
+                    (
+                    strtotime($cdc_pers->data_fine) >= strtotime($anno->descrizione."-01-01") ||
+                    $cdc_pers->data_fine == null
+                    )
+                ) {
+                    $attivo = true;
+                }
+            } else {
+                $attivo = true;
+            }
+
+            if ($attivo == true) {
+                $cdc_personale[] = $cdc_pers;
+            }
+        }
+        return $cdc_personale;
+    }
+
     public function save() {
         $db = ffDB_Sql::factory();
         if ($this->id != null) {

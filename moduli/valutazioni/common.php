@@ -4,7 +4,7 @@ define("VALUTAZIONI_IDENTIFICATORE_PARAMETRO_FORMULA", "@");
 define("VALUTAZIONI_MAX_EXECUTION_TIME", 180);
 define("VALUTAZIONI_DIFF_ORA_RICALCOLO", "24 hours");
 define("VALUTAZIONI_LABEL_GRAFICO_MAX_LEN", 25);
-//directory in download/enviroment di destinazione delle schede di valutazione
+//directory in download/environment di destinazione delle schede di valutazione
 define("VALUTAZIONI_DOWNLOADABLE_EXTRACTIONS_DIR", "schede_valutazione");
 //visibilità del cruscotto per i dipendenti
 define("VALUTAZIONI_CRUSCOTTO_VIEW_DIPENDENTI", true);

@@ -44,11 +44,15 @@ if ($user->hasPrivilege("scadenze_admin")) {
     $view_scadenze = true;
 }
 else {
+    if ($personale->isResponsabileCdrScadenzeInData($data_riferimento)){
+        $user->user_privileges[] = "scadenze_responsabile_cdr";
+        $view_scadenze = true;
+    }
     if ($personale->isReferenteCdrInData($data_riferimento)) {
         if (!$user->hasPrivilege("scadenze_referente_cdr")) {
             $user->user_privileges[] = "scadenze_referente_cdr";
             $view_scadenze = true;
-        }
+        }        
     }
 }
 

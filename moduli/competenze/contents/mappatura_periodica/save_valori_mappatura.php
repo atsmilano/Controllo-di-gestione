@@ -16,7 +16,7 @@ else {
 }
 
 //per ogni variazione dei valori attesi, se l'utente ha i privilegi per effettuarla viene salvato un record su db
-if (isset($_GET["ct"]) && isset($_GET["cs"])){
+if (isset($_GET["ct"])){
     //recupero dei valori attesi ammessi
     $valori_attesi_ammessi = $profilo->getValoriAssegnabili();
     foreach ($_GET["ct"] as $id_competenza_trasversale) {
@@ -46,32 +46,34 @@ if (isset($_GET["ct"]) && isset($_GET["cs"])){
             $mappatura_competenza_trasversale->save($fields_to_save);
         }
     }
-    foreach ($_GET["cs"] as $id_competenza_specifica) {
-        //selezione competenza specifica per il profilo
-        $mappatura_competenza_specifica = \MappaturaCompetenze\ProfiloMappaturaCompetenzaPeriodo::getByFields(array("ID_mappatura_periodo"=>$mappatura_periodo->id, "ID_tipo_competenza"=>2, "ID_competenza"=>$id_competenza_specifica["idc"]));
-        $fields_to_save = array("ID_valore");
-        if ($mappatura_competenza_specifica == null) {
-            $mappatura_competenza_specifica = new \MappaturaCompetenze\ProfiloMappaturaCompetenzaPeriodo();
-            $mappatura_competenza_specifica->id_mappatura_periodo = $mappatura_periodo->id;
-            $mappatura_competenza_specifica->id_tipo_competenza = 2;
-            $mappatura_competenza_specifica->id_competenza = $id_competenza_specifica["idc"];
-            $fields_to_save = array_merge($fields_to_save,array("ID_mappatura_periodo", "ID_tipo_competenza", "ID_competenza"));
-        }           
-        $found = false;
-        foreach ($valori_attesi_ammessi as $valore_mappatura_ammesso) {
-            if ($valore_mappatura_ammesso->id == $id_competenza_specifica["idva"]) {
-                $found = true;
-                break;
+    if (isset($_GET["cs"])) {
+        foreach ($_GET["cs"] as $id_competenza_specifica) {
+            //selezione competenza specifica per il profilo
+            $mappatura_competenza_specifica = \MappaturaCompetenze\ProfiloMappaturaCompetenzaPeriodo::getByFields(array("ID_mappatura_periodo"=>$mappatura_periodo->id, "ID_tipo_competenza"=>2, "ID_competenza"=>$id_competenza_specifica["idc"]));
+            $fields_to_save = array("ID_valore");
+            if ($mappatura_competenza_specifica == null) {
+                $mappatura_competenza_specifica = new \MappaturaCompetenze\ProfiloMappaturaCompetenzaPeriodo();
+                $mappatura_competenza_specifica->id_mappatura_periodo = $mappatura_periodo->id;
+                $mappatura_competenza_specifica->id_tipo_competenza = 2;
+                $mappatura_competenza_specifica->id_competenza = $id_competenza_specifica["idc"];
+                $fields_to_save = array_merge($fields_to_save,array("ID_mappatura_periodo", "ID_tipo_competenza", "ID_competenza"));
+            }           
+            $found = false;
+            foreach ($valori_attesi_ammessi as $valore_mappatura_ammesso) {
+                if ($valore_mappatura_ammesso->id == $id_competenza_specifica["idva"]) {
+                    $found = true;
+                    break;
+                }
             }
-        }
-        if ($found == false) {
-            die(json_encode(array('messaggio' => "Errore nel passaggio dei parametri: valore", 'esito' => "error")));
-        }
-        //verifica eventuale variazione della competenza specifica
-        if ($mappatura_competenza_specifica->id_valore !== $id_competenza_specifica["idva"]) {
-            $mappatura_competenza_specifica->id_valore = $id_competenza_specifica["idva"];
-            $mappatura_competenza_specifica->save($fields_to_save);
-        }
+            if ($found == false) {
+                die(json_encode(array('messaggio' => "Errore nel passaggio dei parametri: valore", 'esito' => "error")));
+            }
+            //verifica eventuale variazione della competenza specifica
+            if ($mappatura_competenza_specifica->id_valore !== $id_competenza_specifica["idva"]) {
+                $mappatura_competenza_specifica->id_valore = $id_competenza_specifica["idva"];
+                $mappatura_competenza_specifica->save($fields_to_save);
+            }
+        }        
     }
     //salvatagigo dell'ora ultima modifica
     $mappatura_periodo->datetime_ultimo_salvataggio = date("Y-m-d H:i:s");

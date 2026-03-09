@@ -13,7 +13,13 @@ if (isset($_REQUEST["keys[ID_ambito]"])) {
 
 if($isEdit) {
     $sezione = new ValutazioniSezione($ambito->id_sezione);
-    $title = "Modifica ambito " . $sezione->codice . "." . $ambito->codice . ". " . $ambito->descrizione;
+    if (strlen($ambito->codice)){
+        $desc_ambito = $ambito->codice.". ";
+    }
+    else {
+        $desc_ambito = " ";
+    }
+    $title = "Modifica ambito " . $sezione->codice . "." . $desc_ambito . $ambito->descrizione;
 } else {
     $title = "Nuovo ambito";
 }

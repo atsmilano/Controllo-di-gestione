@@ -1,16 +1,13 @@
-#cruscotto_obiettivi #introduzione ol li {
-	margin-top: 9px;
+#cruscotto_obiettivi #introduzione ol li {	
+	margin-top: 6px;
 	margin-left: 12px;
+	padding-left: 9px;
 }
 
-#cruscotto_obiettivi #introduzione ul {
-	list-style-type: disc;
-}
-
-#cruscotto_obiettivi #introduzione ul li{
-	margin-left: 24px;
+#cruscotto_obiettivi #introduzione ol {		
+	padding-left: 3px;
 }
 
 .ui-tooltip {
-        opacity: 1;
+	opacity: 1;
 }

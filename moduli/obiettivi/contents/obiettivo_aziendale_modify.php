@@ -293,7 +293,7 @@ if (isset($obiettivo)) {
 
     //visualizzazione della grid dei cdr associati all'obiettivo
     $oGrid = ffGrid::factory($cm->oPage);
-    $oGrid->id = "obiettivo-cdr";
+    $oGrid->id = "obiettivo-cdr-aziendale";
     $oGrid->title = "Cdr";
     $oGrid->resources[] = "obiettivo-cdr";
     $oGrid->source_SQL = CoreHelper::getGridSqlFromArray($grid_fields, $grid_recordset, "obiettivi_obiettivo_cdr");

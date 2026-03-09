@@ -679,17 +679,18 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
             
             $require_token = true;
             //se è presente in sessione un access_token ne viene verificatra la scadenza 
-            if (get_session('access_token')){                 
+            if (get_session('access_token')){ 				
                 $require_token = false;
                 //recupero del token
                 $token = get_session('access_token');                
                 //verifica sulla scadenza del token
                 //nel caso in cui il token sia scaduto viene richiesto un nuovo token                
-                if ($token->expire_datetime - time() < 0) {                  
+				//var_dump($token).die;
+				if ($token->expire_datetime - time() < 0) {                  
                     unset_session('access_token');
                     $require_token = true;
                 }                                                  
-                else {
+                else {					
                     //vengono recuperati i nomi dei campi utilizzati per il nome utente e per la matricola
                     if (defined("AD_USER_NAME_FIELD")) {
                         $user_name_field =  AD_USER_NAME_FIELD;
@@ -763,7 +764,7 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
             //nel caso in cui non sia definito l'access token o non sia valido viene richiesto un nuovo access token
             if ($require_token == true) {
                 //se non è stato ricevuto un codice di autorizzazione viene effettuato un redirect alla pagina di accesso
-                if (!isset($_GET['code'])) {
+                if (!isset($_GET['code'])) {					
                     //generazione casuale dello stato e salvataggio come variabile di sessione
                     set_session('state', hash('sha256', microtime(TRUE).rand().$_SERVER['REMOTE_ADDR']));
                     unset_session($_SESSION['access_token']);
@@ -780,7 +781,7 @@ function mod_security_check_session($prompt_login = true, $path = null, $just_ex
                     die();                      
                 }
                 //se è stato ricevuto un codice di autorizzazione si procede con il recuperare l'access token
-                else {
+                else {					
                     //se è presente il codice vengono verificati gli altri parametri. In caso di errore si ritorna alla pagina per riefettuare il login
                     if(!isset($_GET['state']) || get_session('state') != $_GET['state']) {
                         header('Location: ' . MS_LOGIN_REDIRECT_URL);

@@ -150,7 +150,7 @@ function validateAction($oRecord, $frmAction) {
                     }
                     $cdc_personale->data_fine = $data_fine->format("Y-m-d");
                     //Viene aggiornata l'allocazione al CdC
-                    $cdc_personale->update();
+                    $cdc_personale->save(array("codice_cdc", "percentuale", "data_inizio", "data_fine"));
                 } catch (Exception $ex) {
                     ffErrorHandler::raise($ex->getMessage());
                 }

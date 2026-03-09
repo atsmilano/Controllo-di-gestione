@@ -23,8 +23,41 @@ else {
 //verifica privilegi utente
 $personale = \FabbisognoFormazione\Personale::factoryFromMatricola($user->matricola_utente_selezionato);
 
-if (!($user->hasPrivilege("fabbisogno_admin") || $user->hasPrivilege("fabbisogno_operatore_formazione"))) {
-    ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla richiesta di fabbisogno.");
+if (!($user->hasPrivilege("fabbisogno_admin") 
+    || $user->hasPrivilege("fabbisogno_operatore_formazione")
+    || $richiesta->matricola_responsabile_scientifico == $personale->matricola
+    || $richiesta->matricola_referente_segreteria == $personale->matricola
+    )) {    
+    $view = false;
+    //verifica su eventuali CdR di responsabilità
+    foreach ($personale->getCodiciCdrResponsabilitaAnno($anno) as $cdr_resp) {
+        if ($richiesta->codice_cdr == $cdr_resp->codice) {
+            $view = true;
+            break;
+        }
+    }
+    //verifica su eventuali CdR di referenza
+    if ($view == false) {       
+        foreach ($personale->getCdrReferenzaAnno($date) as $cdr_resp) {
+            if ($richiesta->codice_cdr == $cdr_resp->codice) {
+                $view = true;
+                break;
+            }
+        }
+    }
+    //verifica su responsabilità di eventuali CdR con referenza
+    if ($view == false) {
+        //verifica su eventuali CdR centri di referenza
+        foreach ($personale->getCdrResponsbileReferenzaAnno($date) as $cdr_resp) {
+            if ($richiesta->codice_cdr == $cdr_resp->codice) {
+                $view = true;
+                break;
+            }
+        }
+    }
+    if ($view ==false) {
+        ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla richiesta di fabbisogno.");
+    }
 }
 
 //inclusione PhpWord
@@ -177,9 +210,10 @@ switch($richiesta->id_tipologia){
         }
     break;
 }
-$templateProcessor->setValue('titolo', $richiesta->titolo);
-$templateProcessor->setValue('descrizione', $richiesta->descrizione);
-$templateProcessor->setValue('obiettivi_specifici', $richiesta->obiettivi_formativi);
+
+$templateProcessor->setValue('titolo', ffCommon_specialchars($richiesta->titolo));
+$templateProcessor->setValue('descrizione', ffCommon_specialchars($richiesta->descrizione));
+$templateProcessor->setValue('obiettivi_specifici', ffCommon_specialchars($richiesta->obiettivi_formativi));
 
 //obiettivi formativi
 $obiettivo_formativo = new \FabbisognoFormazione\ObiettivoRiferimento($richiesta->id_obiettivo_riferimento);

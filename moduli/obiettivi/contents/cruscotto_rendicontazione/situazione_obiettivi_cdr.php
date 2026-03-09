@@ -10,7 +10,7 @@ $cdr = $cm->oPage->globals["cdr"]["value"];
 $anagrafica_cdr = AnagraficaCdrObiettivi::factoryFromCodice($cdr->codice, $date);
 
 if ($anagrafica_cdr == null) {
-    ffErrorHandler::raise("Errore: non si dispone deiprivilegi per l'accesso alla pagina.");
+    ffErrorHandler::raise("Errore: non si dispone dei privilegi per l'accesso alla pagina.");
 }
 
 $periodo = null;

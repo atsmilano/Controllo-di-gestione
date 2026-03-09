@@ -2,23 +2,24 @@
 	<!--BeginSectRendicontazioni-->
 	<div id='left'>
 		<div id='raggiungimento_medio_aree'>
-			<h2>Stato Rendicontazioni ATS</h2>
+			<h2>Completamento rendicontazioni ATS</h2>
 			<div id='grafico_raggiungimento_medio_aree'></div>
 			<script>
 				$(document).ready(function(){
 					$("#grafico_raggiungimento_medio_aree").height({grafico_medio_aree_height});                                        
-										
+					/*						
 					var perc_ragg_nucleo = [{perc_ragg_nucleo}];
 					var point_label_ragg_nucleo = [{point_label_ragg_nucleo}];
-                                        var perc_ragg_cdr = [{perc_ragg_cdr}];
+					var perc_ragg_cdr = [{perc_ragg_cdr}];
 					var point_label_ragg_cdr = [{point_label_ragg_cdr}];
+					*/
 					var completamento_rendicontazione = [{completamento_rendicontazione}];
 					var point_label_n_ob = [{point_label_n_ob}];
 					var ticks = [{cdr_label}];
 
-					grafico_medio_aree = $.jqplot('grafico_raggiungimento_medio_aree', [perc_ragg_nucleo, perc_ragg_cdr, completamento_rendicontazione], {
+					grafico_medio_aree = $.jqplot('grafico_raggiungimento_medio_aree', [/*perc_ragg_nucleo, perc_ragg_cdr,*/ completamento_rendicontazione], {
 						animate: !$.jqplot.use_excanvas,
-						seriesColors:['#2D8215', '#C1DD81', '#CC6666'],
+						seriesColors:['#1e88e5'/*'#2D8215', '#C1DD81', '#CC6666'*/],
 						seriesDefaults: {
 							renderer:$.jqplot.BarRenderer,
 							pointLabels: { 
@@ -29,17 +30,17 @@
 								barDirection: 'horizontal',	
 								barPadding: 0,
 								rendererOptions: {
-									barMargin: 10,
+									barMargin: 5,
 								},
 							}
 						},
-						series: [
+						series: [/*
 							{pointLabels:{
 								labels:point_label_ragg_nucleo}
 							},
 							{pointLabels:{
 								labels:point_label_ragg_cdr}
-							},
+							},*/
 							{pointLabels:{
 								labels:point_label_n_ob}
 							}
@@ -50,7 +51,7 @@
 								min: 0,
 								max: 120,
 								tickInterval: 10,
-								label: "% Raggiungimento",
+								label: "% Completamento",
 								tickOptions: {
 									fontSize: '9pt'
 								}
@@ -62,13 +63,13 @@
 									fontSize: '9pt'
 								  }
 							}
-						},
+						},/*
 						legend: {
 							show: true,
 							location: 's',
 							placement: 'outsideGrid',
 							labels: ['% Raggiungimento validata', '% Raggiungimento referente', '% Completamento valutazione']
-						},
+						},*/
 					});		
 				});
 				

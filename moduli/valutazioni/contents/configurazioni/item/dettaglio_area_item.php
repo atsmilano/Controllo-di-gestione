@@ -39,9 +39,15 @@ $ambiti = ValutazioniAmbito::getAll();
 $ambiti_menu = array();
 foreach($ambiti as $ambito) {
     $sezione = new ValutazioniSezione($ambito->id_sezione);
+    if (strlen($ambito->codice)){
+        $desc_ambito = $ambito->codice.". ";
+    }
+    else {
+        $desc_ambito = " ";
+    }
     $ambiti_menu[] = array(
         new ffData($ambito->id, "Number"),
-        new ffData($sezione->codice . "." . $ambito->codice . ". " .$ambito->descrizione, "Text"),
+        new ffData($sezione->codice . "." . $desc_ambito .$ambito->descrizione, "Text"),
     );
 }
 
@@ -71,8 +77,8 @@ $oRecord->groups["item_group"]["title"] = "Item";
 if($isEdit) {
     $grid_fields = array(
         "ID_item",
-        "descrizione",
-        "area_item",
+        "nome",
+        "descrizione",        
         "categorie",
         "peso",
         "anno_introduzione",
@@ -83,8 +89,8 @@ if($isEdit) {
     foreach (ValutazioniItem::getAll(array("ID_area_item" => $area_item->id)) as $item) {
         $grid_recordset[] = array(
             $item->id,
+            $item->nome,            
             $item->descrizione,
-            $area_item->descrizione,
             ValutazioniHelper::glueDescrizioni($item->getCategorieAssociate(), "\n", "abbreviazione"),
             $item->peso,
             $item->anno_introduzione,
@@ -118,16 +124,16 @@ if($isEdit) {
     $oGrid->addKeyField($oField);
 
     $oField = ffField::factory($cm->oPage);
-    $oField->id = "descrizione";
+    $oField->id = "nome";
     $oField->base_type = "Text";
-    $oField->label = "Descrizione";
+    $oField->label = "Nome";
     $oGrid->addContent($oField);
 
     $oField = ffField::factory($cm->oPage);
-    $oField->id = "area_item";
+    $oField->id = "descrizione";
     $oField->base_type = "Text";
-    $oField->label = "Area item";
-    $oGrid->addContent($oField);
+    $oField->label = "Descrizione";
+    $oGrid->addContent($oField);    
 
     $oField = ffField::factory($cm->oPage);
     $oField->id = "categorie";

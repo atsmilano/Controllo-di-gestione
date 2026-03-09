@@ -1,4 +1,6 @@
 <?php
+use \core\Modulo;
+
 $user = LoggedUser::getInstance();
 if (!$user->hasPrivilege("obiettivi_aziendali_edit")) {
     ffErrorHandler::raise("Errore: l'utente non ha i privilegi per poter accedere alla gestione degli obiettivi aziendali.");
@@ -58,6 +60,15 @@ foreach (ObiettiviObiettivo::getAll(array("ID_anno_budget" => $anno->id)) as $ob
 //visualizzazione link estrazioni dati
 $cm->oPage->addContent("<a class='estrazione link_estrazione' href='estrazioni\obiettivi_cdr_azienda.php?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST) . "'>Estrazione obiettivi-cdr .xls</a>");
 $cm->oPage->addContent("<a class='estrazione link_estrazione' href='estrazioni\obiettivi_cdr_personale.php?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST) . "'>Estrazione obiettivi-cdr-personale .xls</a>");
+
+if (OBIETTIVI_MODULO_ASSEGNAZIONE_INDIVIDUALE_ATTIVO == true) {      
+    if ($user->hasPrivilege("obiettivi_individuali_admin")
+    ) {  
+        $modulo_obiettivi_individuali = Modulo::getActiveModuleById(19);     
+        $cm->oPage->addContent("<a class='estrazione link_estrazione' href='".FF_SITE_PATH . "/area_riservata".$modulo_obiettivi_individuali->site_path."estrazione.php?" . $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST) . "'>Estrazione obiettivi individuali.xls</a>");    
+    }
+}
+
 
 //visualizzazione della grid (nel caso in cui ci siano obiettivi per l'anno)
 $oGrid = ffGrid::factory($cm->oPage);

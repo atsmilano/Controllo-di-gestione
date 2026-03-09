@@ -1,4 +1,5 @@
 <?php
+use ObiettiviIndividuali\AssegnazioneIndividuale;
 $user = LoggedUser::getInstance();
 
 //recupero dei parametri
@@ -126,13 +127,31 @@ if (count($obiettivi_cdr_anno)>0) {
 				$found = null;					
 				foreach($obiettivi_cdr_personale_anno as $key => $obiettivo_cdr_personale_anno){
 					if ($obiettivo_cdr_personale_anno->data_eliminazione == null) {
-						if ($obiettivo_cdr->id == $obiettivo_cdr_personale_anno->id_obiettivo_cdr){
+						if ($obiettivo_cdr->id == $obiettivo_cdr_personale_anno->id_obiettivo_cdr){		
+							
+
+
+
+
+
+							if (OBIETTIVI_MODULO_ASSEGNAZIONE_INDIVIDUALE_ATTIVO == true) {
+								$filters = array(
+									"ID_anno_budget" => $anno->id,
+									"matricola_personale" => $dipendente_peso["personale"]->matricola,
+								);
+								$assegnazione_individuale = AssegnazioneIndividuale::getByFields ($filters);
+							}
+
+
+
+
 							$found = array(
 											"id" => $obiettivo_cdr_personale_anno->id,
 											"peso_obiettivo_personale" => $obiettivo_cdr_personale_anno->peso,
 											"data_accettazione" => $obiettivo_cdr_personale_anno->data_accettazione,
 											"chiuso" => $obiettivo_cdr->isChiuso(),
-									);
+											"note_assegnazione_obiettivo_associato" => $assegnazione_individuale->descrizione,
+									);									
 							$totale_obiettivi += $obiettivo_cdr_personale_anno->peso;
 							unset($obiettivi_cdr_personale_anno[$key]);
 							break;
@@ -146,8 +165,11 @@ if (count($obiettivi_cdr_anno)>0) {
                     }
                     else {                                         
                         $tpl->set_var("modificabile_class", "non_modificabile");
-                    }                                                      
+                    }                                                   
 					$tpl->set_var("presa_visione_class", false);
+					$tpl->set_var("assegnato_class", "");
+					$tpl->set_var("note_assegnazione_obiettivo_associato_mark", "");
+					$tpl->set_var("note_assegnazione_obiettivo_associato", "");
 				}
 				else {								
 					if (!$found["chiuso"] && $found["data_accettazione"] == null && $user->hasPrivilege("resp_cdr_selezionato")){
@@ -163,7 +185,16 @@ if (count($obiettivi_cdr_anno)>0) {
 					}
 					else {
 						$tpl->set_var("presa_visione_class", "azioni_non_definite");
-					}						
+					}
+					if (strlen($found["note_assegnazione_obiettivo_associato"]) > 0) {
+						$tpl->set_var("note_assegnazione_obiettivo_associato_mark", "*");
+						$tpl->set_var("note_assegnazione_obiettivo_associato", "Contributo individuale atteso: " . $found["note_assegnazione_obiettivo_associato"]);
+					}
+					else {
+						$tpl->set_var("note_assegnazione_obiettivo_associato_mark", "");
+						$tpl->set_var("note_assegnazione_obiettivo_associato", "");
+					}
+					$tpl->set_var("assegnato_class", "assegnato");										
 				}
                 $tpl->set_var("id_obiettivo_cdr_personale", $found["id"]);
                 $tpl->set_var("id_obiettivo_cdr", $obiettivo_cdr->id);
@@ -172,7 +203,7 @@ if (count($obiettivi_cdr_anno)>0) {
                 $tpl->parse ("PesoObiettivoCdrPersonale", false);									
 				$tpl->parse ("ObiettivoCdrPersonale", true);		
 			}
-		}	
+		}
 		$tpl->set_var("nome_dipendente", $dipendente_peso["personale"]->cognome." ".$dipendente_peso["personale"]->nome); 
 		
 		$dettagli_dipendente = $dipendente_peso["personale"]->cognome." ".$dipendente_peso["personale"]->nome 
@@ -217,4 +248,4 @@ else {
 
 //***********************
 //Adding contents to page
-die($tpl->rpparse("main", true));
+$cm->oPage->addContent($tpl);

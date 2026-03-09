@@ -1,11 +1,13 @@
 <?php
 class ValutazioniValutazionePeriodica {
     public $id;
+    public $matricola_proponente;
     public $matricola_valutatore;
     public $matricola_valutato;
     public $data_chiusura_autovalutazione;
     public $note_valutatore;
     public $data_ultimo_colloquio;
+    public $data_firma_proponente;
     public $data_firma_valutatore;
     public $note_valutato;
     public $data_firma_valutato;
@@ -21,6 +23,10 @@ class ValutazioniValutazionePeriodica {
         array(
             "ID" => 1,
             "descrizione" => "Non ancora compilabile",
+        ),
+        array(
+            "ID" => 2,
+            "descrizione" => "Attesa compilazione del proponente",
         ),
         array(
             "ID" => 3,
@@ -43,11 +49,13 @@ class ValutazioniValutazionePeriodica {
             $sql = "
                 SELECT 
                     valutazioni_valutazione_periodica.ID,
+                    valutazioni_valutazione_periodica.matricola_proponente,
                     valutazioni_valutazione_periodica.matricola_valutatore,
                     valutazioni_valutazione_periodica.matricola_valutato,
                     valutazioni_valutazione_periodica.data_chiusura_autovalutazione,
                     valutazioni_valutazione_periodica.note_valutatore,
                     valutazioni_valutazione_periodica.data_ultimo_colloquio,
+                    valutazioni_valutazione_periodica.data_firma_proponente,
                     valutazioni_valutazione_periodica.data_firma_valutatore,
                     valutazioni_valutazione_periodica.note_valutato,
                     valutazioni_valutazione_periodica.data_firma_valutato,
@@ -78,11 +86,13 @@ class ValutazioniValutazionePeriodica {
             $db->query($sql);
             if ($db->nextRecord()) {
                 $this->id = $db->getField("ID", "Number", true);
+                $this->matricola_proponente = $db->getField("matricola_proponente", "Text", true);
                 $this->matricola_valutatore = $db->getField("matricola_valutatore", "Text", true);
                 $this->matricola_valutato = $db->getField("matricola_valutato", "Text", true);
                 $this->data_chiusura_autovalutazione = CoreHelper::getDateValueFromDB($db->getField("data_chiusura_autovalutazione", "Date", true));
                 $this->note_valutatore = $db->getField("note_valutatore", "Text", true);
                 $this->data_ultimo_colloquio = CoreHelper::getDateValueFromDB($db->getField("data_ultimo_colloquio", "Date", true));
+                $this->data_firma_proponente = CoreHelper::getDateValueFromDB($db->getField("data_firma_proponente", "Date", true));
                 $this->data_firma_valutatore = CoreHelper::getDateValueFromDB($db->getField("data_firma_valutatore", "Date", true));
                 $this->note_valutato = $db->getField("note_valutato", "Text", true);
                 $this->data_firma_valutato = CoreHelper::getDateValueFromDB($db->getField("data_firma_valutato", "Date", true));
@@ -128,11 +138,13 @@ class ValutazioniValutazionePeriodica {
         if ($this->id == null) {
             $sql = "
                 INSERT INTO valutazioni_valutazione_periodica ( 
+                    matricola_proponente,
                     matricola_valutatore,
                     matricola_valutato,
                     data_chiusura_autovalutazione,
                     note_valutatore,
                     data_ultimo_colloquio,
+                    data_firma_proponente,
                     data_firma_valutatore,
                     note_valutato,
                     data_firma_valutato,
@@ -140,11 +152,13 @@ class ValutazioniValutazionePeriodica {
                     ID_categoria
                 )
                 VALUES ("
-                . $db->toSql($this->matricola_valutatore)
+                . $db->toSql($this->matricola_proponente)
+                . "," . $db->toSql($this->matricola_valutatore)
                 . "," . $db->toSql($this->matricola_valutato)
                 . "," . ($this->data_chiusura_autovalutazione == null ? "NULL" : $db->toSql($this->data_chiusura_autovalutazione))
                 . "," . ($this->note_valutatore == null ? "NULL" : $db->toSql($this->note_valutatore))
                 . "," . ($this->data_ultimo_colloquio == null ? "NULL" : $db->toSql($this->data_ultimo_colloquio))
+                . "," . ($this->data_firma_proponente == null ? "NULL" : $db->toSql($this->data_firma_proponente))
                 . "," . ($this->data_firma_valutatore == null ? "NULL" : $db->toSql($this->data_firma_valutatore))
                 . "," . ($this->note_valutato == null ? "NULL" : $db->toSql($this->note_valutato))
                 . "," . ($this->data_firma_valutato == null ? "NULL" : $db->toSql($this->data_firma_valutato))
@@ -159,11 +173,13 @@ class ValutazioniValutazionePeriodica {
             $sql = "
                 UPDATE valutazioni_valutazione_periodica
                 SET
+                    matricola_proponente=" . $db->toSql($this->matricola_proponente) . ",
                     matricola_valutatore=" . $db->toSql($this->matricola_valutatore) . ",
                     matricola_valutato=" . $db->toSql($this->matricola_valutato) . ",
                     data_chiusura_autovalutazione=" . $db->toSql($this->data_chiusura_autovalutazione) . ",
                     note_valutatore=" . $db->toSql($this->note_valutatore) . ",
                     data_ultimo_colloquio=" . $db->toSql($this->data_ultimo_colloquio) . ",
+                    data_firma_proponente=" . $db->toSql($this->data_firma_proponente) . ",
                     data_firma_valutatore=" . $db->toSql($this->data_firma_valutatore) . ",
                     note_valutato=" . $db->toSql($this->note_valutato) . ",
                     data_firma_valutato=" . $db->toSql($this->data_firma_valutato) . ",
@@ -192,11 +208,21 @@ class ValutazioniValutazionePeriodica {
                 $firma_valutatore = true;
             else
                 $firma_valutatore = false;
+            //verifica presenza proponente ed eventuale firma
+            $valutazione_proponente = false;
+            $firma_proponente = false;     
+            if (strlen($this->matricola_proponente)) {
+                $valutazione_proponente = true;
+            }            
+            if ($this->data_firma_proponente !== null && $this->data_firma_proponente !== '0000-00-00')
+                $firma_proponente = true;
+            else
+                $firma_proponente = false;
             //firma valutato
             if ($this->data_firma_valutato !== null && $this->data_firma_valutato !== '0000-00-00')
                 $firma_valutato = true;
             else
-                $firma_valutato = false;
+                $firma_valutato = false;                
 
             //verifica dello stato avanzamento ed eventuali anomalie
             if ($firma_valutato && $firma_valutatore)
@@ -204,9 +230,19 @@ class ValutazioniValutazionePeriodica {
             elseif ($firma_valutatore)
                 $stato = 4;
             //prima condizione non dovrebbe mai verificarsi (data_apertura_compilazione obbligatoria)
-            elseif ($periodo->data_apertura_compilazione !== null && (strtotime(date("Y-m-d")) >= strtotime($periodo->data_apertura_compilazione)))
-            //$stato = 2;						
-                $stato = 3;
+            elseif ($periodo->data_apertura_compilazione !== null && (strtotime(date("Y-m-d")) >= strtotime($periodo->data_apertura_compilazione))) {
+                if ($valutazione_proponente == true) {
+                    if ($firma_proponente == true) {
+                        $stato = 3;
+                    }
+                    else {
+                        $stato = 2;
+                    }
+                }
+                else {
+                    $stato = 3;
+                }                                
+            }
             else
                 $stato = 1;
         }
@@ -280,11 +316,13 @@ class ValutazioniValutazionePeriodica {
             "view_autovalutazione" => false,
             "edit_autovalutazione" => false,
             "view_valutazione" => false,
+            "edit_proponente" => false,
             "edit_valutatore" => false,
             "edit_valutato" => false,
         );
 
         $stato_avanzamento = $this->getIdStatoAvanzamento();
+        $current_date_time = new \DateTime();                        
 
         //autovalutazione
         if ($this->isAutovalutazione()) {
@@ -306,7 +344,14 @@ class ValutazioniValutazionePeriodica {
                 //1 Attesa compilazione autovalutazione
                 //se la valutazione è un'autovalutazione e l'utente è il valutatore e l'autovalutazione non è chiusa
                 if ($this->isAutovalutazione() && $stato_avanzamento > 1 && $autovalutazione_completata == false) {
-                    $privilegi["edit_autovalutazione"] = true;
+                    $data_chiusura_autovalutazione_date_time = null;
+                    if ($this->periodo->data_chiusura_autovalutazione !== null) {
+                        $data_chiusura_autovalutazione_date_time = new \DateTime($this->periodo->data_chiusura_autovalutazione);
+                    }                    
+                    //sarà possibile l'autovalutazione solamente nel caso in cui la data di riferimento non superi la scadenza definita
+                    if ($data_chiusura_autovalutazione_date_time == null || date_diff($current_date_time, $data_chiusura_autovalutazione_date_time)->format("%r%a") >= 0) {
+                        $privilegi["edit_autovalutazione"] = true;
+                    }
                 }
             }
             //in tutti gli altri casi viene recuperato il valutatore tramite la valutazione collegata che potrà sempre visualizzare l'autovalutazione
@@ -319,23 +364,46 @@ class ValutazioniValutazionePeriodica {
             }
         }
         //nel caso in cui la valutazione non sia autovalutazione
-        else {
-            if ($this->matricola_valutatore == $matricola) {
+        else {   
+            $data_chiusura_valutatore_date_time = null;                              
+            if ($this->periodo->data_chiusura_valutatore !== null) {                           
+                $data_chiusura_valutatore_date_time = new \DateTime($this->periodo->data_chiusura_valutatore);    
+            }
+            if ($this->matricola_proponente !== null && $this->matricola_proponente == $matricola) {
+                if ($stato_avanzamento == 2) {
+                    $privilegi["view_valutazione"] = true;                    
+                    //sarà possibile la modifica del proponente solamente nel caso in cui la data di riferimento non superi la scadenza definita
+                    if ($data_chiusura_valutatore_date_time == null || date_diff($current_date_time, $data_chiusura_valutatore_date_time)->format("%r%a") >= 0) {                        
+                        $privilegi["edit_proponente"] = true;
+                    }                    
+                }
+            }
+            if ($this->matricola_valutatore == $matricola) {                
                 //il valutatore potrà sempre vedere la valutazione (lo stato 1 viene utilizzato solo per l'autovalutazione)
-                if ($stato_avanzamento >= 3) {
+                if ($stato_avanzamento >= 3) {                    
                     $privilegi["view_valutazione"] = true;
                     //potrà inoltre modificarla nel caso ci si trovi nel caso dell'attesa della compilazione da parte del valutatore
-                    if ($stato_avanzamento == 3) {
-                        $privilegi["edit_valutatore"] = true;
+                    if ($stato_avanzamento == 3) {      
+                        //sarà possibile la modifica del valutatore solamente nel caso in cui la data di riferimento non superi la scadenza definita
+                        if ($data_chiusura_valutatore_date_time == null || date_diff($current_date_time, $data_chiusura_valutatore_date_time)->format("%r%a") >= 0) {                            
+                            $privilegi["edit_valutatore"] = true;
+                        }                        
                     }
                 }
             } else if ($this->matricola_valutato == $matricola) {
+                $data_chiusura_valutato_date_time = null;
+                if ($this->periodo->data_chiusura_valutato !== null) {
+                    $data_chiusura_valutato_date_time = new \DateTime($this->periodo->data_chiusura_valutato);
+                }
                 //il valutato potrà sempre vedere la valutazione una volta approvata dal valutatore
                 if ($stato_avanzamento >= 4) {
                     $privilegi["view_valutazione"] = true;
                     //potrà inoltre modificarla nel caso ci si trovi nel caso dell'attesa della compilazione da parte del valutato
                     if ($stato_avanzamento == 4) {
-                        $privilegi["edit_valutato"] = true;
+                        //sarà possibile la modifica del valutatore solamente nel caso in cui la data di riferimento non superi la scadenza definita
+                        if ($data_chiusura_valutato_date_time == null || date_diff($current_date_time, $data_chiusura_valutato_date_time)->format("%r%a") >= 0) {
+                            $privilegi["edit_valutato"] = true;
+                        }                        
                     }
                 }
             }
@@ -383,7 +451,8 @@ class ValutazioniValutazionePeriodica {
         if (
             $user->hasPrivilege("valutazioni_admin") == true ||
             ($this->isAutovalutazione() && $privilegi_utente["edit_autovalutazione"] == true) ||
-            (!$this->isAutovalutazione() && $privilegi_utente["edit_valutatore"] == true)
+            (!$this->isAutovalutazione() && $privilegi_utente["edit_valutatore"] == true) ||
+            (!$this->isAutovalutazione() && $privilegi_utente["edit_proponente"] == true)
         ) {
             $db = ffDb_Sql::factory();
             //viene verificato che esista già una valutazione per l'ambito
@@ -444,7 +513,8 @@ class ValutazioniValutazionePeriodica {
         if (
             $user->hasPrivilege("valutazioni_admin") == true ||
             ($this->isAutovalutazione() && $privilegi_utente["edit_autovalutazione"] == true) ||
-            (!$this->isAutovalutazione() && $privilegi_utente["edit_valutatore"] == true)
+            (!$this->isAutovalutazione() && $privilegi_utente["edit_valutatore"] == true) ||
+            (!$this->isAutovalutazione() && $privilegi_utente["edit_proponente"] == true)
         ) {
             $db = ffDb_Sql::factory();
             //viene verificato che esista già una valutazione per l'ambito
@@ -1007,11 +1077,13 @@ class ValutazioniValutazionePeriodica {
                 $scheda_valutazione = new ValutazioniValutazionePeriodica();
 
                 $scheda_valutazione->id = $db->getField("ID", "Number", true);
+                $scheda_valutazione->matricola_proponente = $db->getField("matricola_proponente", "Text", true);
                 $scheda_valutazione->matricola_valutatore = $db->getField("matricola_valutatore", "Text", true);
                 $scheda_valutazione->matricola_valutato = $db->getField("matricola_valutato", "Text", true);
                 $scheda_valutazione->data_chiusura_autovalutazione = CoreHelper::getDateValueFromDB($db->getField("data_chiusura_autovalutazione", "Date", true));
                 $scheda_valutazione->note_valutatore = $db->getField("note_valutatore", "Text", true);
                 $scheda_valutazione->data_ultimo_colloquio = CoreHelper::getDateValueFromDB($db->getField("data_ultimo_colloquio", "Date", true));
+                $scheda_valutazione->data_firma_proponente = CoreHelper::getDateValueFromDB($db->getField("data_firma_proponente", "Date", true));
                 $scheda_valutazione->data_firma_valutatore = CoreHelper::getDateValueFromDB($db->getField("data_firma_valutatore", "Date", true));
                 $scheda_valutazione->note_valutato = $db->getField("note_valutato", "Text", true);
                 $scheda_valutazione->data_firma_valutato = CoreHelper::getDateValueFromDB($db->getField("data_firma_valutato", "Date", true));
@@ -1077,7 +1149,13 @@ class ValutazioniValutazionePeriodica {
               
         if (!$this->isAutovalutazione()){
             $valutatore = Personale::factoryFromMatricola($this->matricola_valutatore);
-            $tpl->set_var("valutatore", $valutatore->cognome." ".$valutatore->nome." (matr. ".$valutatore->matricola.")");
+            
+            if ($periodo->valutatore_anonimo) {
+                $tpl->set_var("valutatore", "***");
+            }		
+            else {
+                $tpl->set_var("valutatore", $valutatore->cognome." ".$valutatore->nome." (matr. ".$valutatore->matricola.")");
+            }             
         }
 
         $valutato = Personale::factoryFromMatricola($this->matricola_valutato);
@@ -1248,11 +1326,23 @@ class ValutazioniValutazionePeriodica {
                 }
 
                 if ($this->isAutovalutazione()){
-                    $nome_ambito = $sezione->codice.".".$ambito->codice. ". ".$ambito->descrizione;
+                    if (strlen($ambito->codice)){
+                        $desc_ambito = $ambito->codice.". ";
+                    }
+                    else {
+                        $desc_ambito = " ";
+                    }
+                    $nome_ambito = $sezione->codice.".".$desc_ambito.$ambito->descrizione;
                 }
                 else {
+                    if (strlen($ambito->codice)){
+                        $desc_ambito = $ambito->codice.". ";
+                    }
+                    else {
+                        $desc_ambito = " ";
+                    }
                     $tot_ambito = $ambito->getPesoAmbitoCategoriaAnno($categoria, $anno_valutazione);
-                    $nome_ambito = $sezione->codice.".".$ambito->codice. ". ".$ambito->descrizione;
+                    $nome_ambito = $sezione->codice.".".$desc_ambito.$ambito->descrizione;
                     if ($visualizzazione_punteggio_categoria_ambito == true) {
                         $nome_ambito .= " (".round($this->getTotaleRaggiungimentoAmbito($ambito),2)." / ".$tot_ambito.")";
                     }			
@@ -1416,7 +1506,13 @@ class ValutazioniValutazionePeriodica {
                             else
                                 $plus = "";
                             $sezione = new ValutazioniSezione($ambito_totale->id_sezione);
-                            $ambiti_totale_attivi .= $plus . $sezione->codice . "." . $ambito_totale->codice . "." . $nv;
+                            if (strlen($ambito_totale->codice)){
+                                $desc_ambito = $ambito_totale->codice.". ";
+                            }
+                            else {
+                                $desc_ambito = " ";
+                            }
+                            $ambiti_totale_attivi .= $plus . $sezione->codice . ".".$desc_ambito. $nv;
                         }
                     }
                 }    

@@ -49,9 +49,15 @@ foreach(ValutazioniAmbito::getAll() as $ambito) {
     $relationExists = count(ValutazioniPeriodoCategoriaAmbito::getAll($filters)) > 0;
     if((!$relationExists || ($isEdit && $ambito->id == $ambito_selected->id)) && $ambito->isValutatoCategoriaAnno($categoria, $annoBudget)) {
         $sezione = new ValutazioniSezione($ambito->id_sezione);
+        if (strlen($ambito->codice)){
+            $desc_ambito = $ambito->codice.". ";
+        }
+        else {
+            $desc_ambito = " ";
+        }
         $ambito_select[] = array(
             new ffData($ambito->id, "Number"),
-            new ffData($sezione->codice . "." . $ambito->codice.". ".$ambito->descrizione, "Text")
+            new ffData($sezione->codice . "." . $desc_ambito.$ambito->descrizione, "Text")
         );
     }
 }

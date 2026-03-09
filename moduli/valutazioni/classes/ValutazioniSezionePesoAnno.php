@@ -2,14 +2,14 @@
 class ValutazioniSezionePesoAnno extends Entity {
     protected static $tablename = "valutazioni_sezione_peso_anno";
 
-    public static function factoryFromSezioneCategoriaAnno($id_sezione, $id_categoria, $id_anno) {
+    public static function factoryFromSezioneCategoriaAnno($id_sezione, $id_categoria, AnnoBudget $anno) {
         $db = ffDb_Sql::factory();
         $sql = "
             SELECT * FROM ".self::$tablename."
             WHERE 
               ".self::$tablename.".ID_categoria = ".$db->toSql($id_categoria)." AND
               ".self::$tablename.".ID_sezione = ".$db->toSql($id_sezione)." AND
-              ".self::$tablename.".ID_anno_budget = ".$db->toSql($id_anno)."
+              ".self::$tablename.".ID_anno_budget = ".$db->toSql($anno->id)."
         ";
 
         $db->query($sql);

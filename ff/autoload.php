@@ -22,10 +22,10 @@ spl_autoload_register(function ($class) {
         case "ffDb_Sql":
             require(__DIR__ . "/classes/ffDb_Sql/ffDb_Sql_" . FF_DB_INTERFACE . $php_ext);
             break;
-        case "ffDB_MongoDB":
+        /*case "ffDB_MongoDB":
         case "ffDb_MongoDB":
             require(__DIR__ . "/classes/ffDB_Mongo/ffDb_MongoDB" . $php_ext);
-            break;
+            break;*/
         case "ffEvent":
             require(__DIR__ . "/classes/ffEvents/ffEvent" . $php_ext);
             break;
@@ -81,11 +81,11 @@ spl_autoload_register(function ($class) {
             require(__DIR__ . "/library/PHP-SQL-Parser/src/PHPSQLParser" . $php_ext);
             require(__DIR__ . "/library/PHP-SQL-Parser/src/PHPSQLCreator" . $php_ext);
             break;
-        case "ffXmlElement":
+        /*case "ffXmlElement":
         case "ffXmlParser":
             require(__DIR__ . "/classes/ffXml/ffXmlParser" . $php_ext); // UNDER DEVELOPMENT
             require(__DIR__ . "/classes/ffXml/ffXmlElement" . $php_ext); // UNDER DEVELOPMENT
-            break;
+            break;*/
         case "ffMedia":
             require(__DIR__ . "/classes/ffMedia" . $php_ext);
             break;
@@ -183,20 +183,4 @@ function ffRewritePathInfo($env = "_ffq_") {
             unset($fftmp_requri_parts);
         }
     }
-
-    // now check presence of server redirect to fix something
-    /*if (isset($_SERVER["HTTP_HOST"]))
-    {
-        if (!$fftmp_ffq && isset($_SERVER["REDIRECT_URL"]))
-        {
-            if(strpos($_SERVER["REDIRECT_URL"], $_SERVER["SCRIPT_NAME"]) === 0)
-                $_SERVER["PATH_INFO"] = substr($_SERVER["REDIRECT_URL"], strlen($_SERVER["SCRIPT_NAME"]));
-            else if (FF_SITE_PATH !== "")
-                $_SERVER["PATH_INFO"] = substr($_SERVER["REDIRECT_URL"], strlen(FF_SITE_PATH));
-            else
-                $_SERVER["PATH_INFO"] = $_SERVER["REDIRECT_URL"];
-            $_SERVER["ORIG_PATH_INFO"] = $_SERVER["PATH_INFO"];
-        }
-        unset($fftmp_ffq);
-    }*/
 }

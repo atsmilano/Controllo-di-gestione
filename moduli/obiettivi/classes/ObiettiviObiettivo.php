@@ -61,11 +61,9 @@ class ObiettiviObiettivo extends Entity{
     //metodo per la visualizzazione delle informazioni dell'obiettivo_cdr in html
     public function showHtmlInfo() {
         //visualizzazione delle informazioni dell'obiettivo
-        $origine = new ObiettiviOrigine($this->id_origine);
         $tipo = new ObiettiviTipo($this->id_tipo);
         $area_risultato = new ObiettiviAreaRisultato($this->id_area_risultato);
-        $area = new ObiettiviArea($this->id_area);
-        $html = "
+        /*$html = "
                 <div class='form-group clearfix padding'>
                     <label>Codice</label>
                     <span class='form-control readonly'>" . $this->codice . "</span>
@@ -98,7 +96,37 @@ class ObiettiviObiettivo extends Entity{
                     <label>Indicatori</label>
                     <span class='form-control readonly'>" . $this->indicatori . "</span>
                 </div>                
-                ";
+                ";*/
+        $html = "
+        <table>
+            <tbody>
+                <tr class='first-row'>
+                    <td class='nome-campo'>Codice</td>
+                    <td>" . $this->codice . "</td>
+                </tr>
+                <tr>
+                    <td class='nome-campo'>Titolo</td>
+                    <td>" . $this->titolo . "</td>
+                </tr>
+                <tr>
+                    <td class='nome-campo'>Descrizione</td>
+                    <td>" . $this->descrizione . "</td>
+                </tr>   
+                <tr>
+                    <td class='nome-campo'>Tipo</td>
+                    <td>" . $tipo->descrizione . "</td>
+                </tr>
+                <tr>
+                    <td class='nome-campo'>Area Risultato</td>
+                    <td>" . $area_risultato->descrizione . "</td>
+                </tr>
+                <tr>
+                    <td class='nome-campo'>Indicatori</td>
+                    <td>" . $this->indicatori . "</td>
+                </tr>   
+            </tbody>
+        </table>             
+        ";
         return $html;
     }
     

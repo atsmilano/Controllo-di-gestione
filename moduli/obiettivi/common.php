@@ -1,6 +1,7 @@
 <?php
+use \core\Modulo; 
 /*
- * Inizializzazione del paraemtro hide sulla base dei permessi dell'utente.
+ * Inizializzazione del parametro hide sulla base dei permessi dell'utente.
  * hide = true, utente non ha i permessi.
  * Utilizzo del valore MODULES_ICONHIDE per nascondere le icone del menu nel caso in cui non vi siano i permessi adeguati.
  */
@@ -14,6 +15,15 @@ define("OBIETTIVI_MAX_PESO", 1000);
 define("OBIETTIVI_NOTE_NUCLEO_DEFAULT", "Si conferma il grado di raggiungimento espresso dal referente per il periodo di rendicontazione.");
 define("OBIETTIVI_LABEL_GRAFICO_MAX_LEN", 25);
 define("OBIETTIVI_IDENTIFICATORE_PARAMETRO_FORMULA", "@");
+
+//verifica presenza del modulo dell'assegnazione dei pesi individuali
+$modulo_obiettivi_individuali = Modulo::getActiveModuleById(19);
+if ($modulo_obiettivi_individuali !== null) {    
+    define("OBIETTIVI_MODULO_ASSEGNAZIONE_INDIVIDUALE_ATTIVO", true);
+}
+else {
+    define("OBIETTIVI_MODULO_ASSEGNAZIONE_INDIVIDUALE_ATTIVO", false);
+}
 
 foreach ($user->user_groups as $group) {
     if ($group == 1 || $group == 2 || $group == 3) {
@@ -123,7 +133,7 @@ $menu["controllo"]["obiettivi_individuali"] = array(
     "subkey"  => "obiettivi_individuali",
     "label"   => "Rendicontazione<br>obiettivi individuali",
     "icon"	  => "",
-    "path"    => "/area_riservata".$module->site_path."?menu_key=controllo&",
+    "path"    => "/area_riservata".$module->site_path,
     "actions" => $allowed_actions,
     "acl"     => "1,2,3",
     "hide"    => 0,    
@@ -131,20 +141,17 @@ $menu["controllo"]["obiettivi_individuali"] = array(
 mod_restricted_add_menu_sub_element($menu["controllo"]["obiettivi_individuali"]);
 
 //nel caso di utente semplice vengono visualizzate due voci di menu (con riferimento alla stessa pagina) in programmazione e in controllo
-if(!$cdr_resp_view) {
-    $menu["programmazione"]["assegnazione_obiettivi"] = array(
-        "key" => "programmazione",
-        "subkey" => "assegnazione_obiettivi",
-        "label" => "Obiettivi individuali",
-        "icon" => "",
-        "path"    => "/area_riservata".$module->site_path."?menu_key=programmazione&",
-        "actions" => $allowed_actions,
-        "acl" => "1,2,3",
-        "hide" => 0,
-    );
-
-    mod_restricted_add_menu_sub_element($menu["programmazione"]["assegnazione_obiettivi"]);
-}
+$menu["programmazione"]["accettazione_obiettivi"] = array(
+    "key" => "programmazione",
+    "subkey" => "accettazione_obiettivi",
+    "label" => "Accettazione obiettivi individuali",
+    "icon" => "",
+    "path"    => "/area_riservata".$module->site_path."/accettazione_obiettivi_individuali",
+    "actions" => array(),
+    "acl" => "1,2,3",
+    "hide" => 0,
+);
+mod_restricted_add_menu_sub_element($menu["programmazione"]["accettazione_obiettivi"]);
 
 $allowed_actions = array();
 $allowed_actions["gestione_storico"] = array(

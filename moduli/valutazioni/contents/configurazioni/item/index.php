@@ -12,10 +12,16 @@ $grid_recordset = array();
 foreach (ValutazioniAreaItem::getAll() as $area_item) {
     $ambito = new ValutazioniAmbito($area_item->id_ambito);
     $sezione = new ValutazioniSezione($ambito->id_sezione);
+    if (strlen($ambito->codice)){
+        $desc_ambito = $ambito->codice.". ";
+    }
+    else {
+        $desc_ambito = " ";
+    }
     $grid_recordset[] = array(
         $area_item->id,
         $area_item->descrizione,
-        $sezione->codice . "." . $ambito->codice. ". ".$ambito->descrizione,      
+        $sezione->codice . "." . $desc_ambito .$ambito->descrizione,      
     );
 }
 

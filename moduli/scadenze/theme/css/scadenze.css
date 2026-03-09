@@ -1,0 +1,19 @@
+#scadenza .stato_scaduto .cel-1, #scadenza .stato_scaduto .cel-2{
+    color: red;
+    font-weight: bold;
+}
+
+#scadenza .stato_scadenza_settimana .cel-1{
+    color: #Ff6300;
+    font-weight: bold;
+}
+
+#scadenza .stato_in_scadenza .cel-1{
+    color: #Ffa100;
+    font-weight: bold;
+}
+
+#scadenza .stato_evasa .cel-1{
+    color: #54aec3;
+    font-weight: bold;
+}

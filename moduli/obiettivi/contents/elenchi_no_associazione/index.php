@@ -1,11 +1,14 @@
 <?php
-CoreHelper::includeJqueryUi();
-$modulo = core\Modulo::getCurrentModule();
-$tpl = ffTemplate::factory($modulo->module_theme_dir.DIRECTORY_SEPARATOR."tpl");
-$tpl->load_file("elenchi_no_associazione.html", "main");
+use \core\Modulo;
+use \LoggedUser;
+use \CoreHelper;
 
-$tpl->set_var("globals", $cm->oPage->get_globals(GET_GLOBALS_EXCLUDE_LIST));
+$module = Modulo::getCurrentModule();
+$tab_params = $cm->oPage->getUrlParams(array("ret_url"));
 
-//***********************
-//Adding contents to page
-$cm->oPage->addContent($tpl);
+$user = LoggedUser::getInstance();
+$tabs = array();
+$tabs[] = array("tab_id"=>"amministratori", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/elenchi_no_associazione/obiettivi_individuali", "tab_params"=>$tab_params, "tab_name"=>"Obiettivi individuali", "hide_ret_url"=>true);
+$tabs[] = array("tab_id"=>"referenti", "tab_link"=>FF_SITE_PATH . "/area_riservata".$module->site_path."/elenchi_no_associazione/responsabili_cessati", "tab_params"=>$tab_params, "tab_name"=>"Responsabili cessati", "hide_ret_url"=>true);
+
+CoreHelper::showTabsPage("obiettivi_report", $tabs);

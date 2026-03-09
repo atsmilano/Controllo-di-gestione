@@ -2,7 +2,6 @@
 
 class ffWidget_fullclick extends ffCommon
 {
-
 	// ---------------------------------------------------------------
 	//  PRIVATE VARS (used by code, don't touch or may be explode! :-)
 
@@ -66,11 +65,10 @@ class ffWidget_fullclick extends ffCommon
 			$this->prepare_template($tpl_id);
 		
 		$this->tpl[$tpl_id]->set_var("component", $grid->getIDIF());
-        
         //$this->tpl[$tpl_id]->parse("SectIstance", true);
         //ADDED-ATS ************************************************************
-        if (!isset($_REQUEST["XHR_COMPONENT"])) {
-            $this->tpl[$tpl_id]->parse("SectIstance", true);            
+        if (!isset($_REQUEST["XHR_COMPONENT"])) {				
+			$this->tpl[$tpl_id]->parse("SectIstance", true);									            
         }
         //**********************************************************************    		
 	}

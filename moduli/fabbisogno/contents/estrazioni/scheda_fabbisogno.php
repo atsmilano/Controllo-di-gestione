@@ -252,6 +252,6 @@ $module = core\Modulo::getCurrentModule();
 $stylesheet = file_get_contents($module->module_theme_dir.DIRECTORY_SEPARATOR ."css".DIRECTORY_SEPARATOR."fabbisogno.css");
 $mpdf->WriteHTML($stylesheet,1);
 $mpdf->WriteHTML($tpl->rpparse("main", false),2);
-$filename = "Scheda Fabbisogno";
+$filename = "Scheda Fabbisogno.pdf";
 $mpdf->Output($filename, "I");
 die();

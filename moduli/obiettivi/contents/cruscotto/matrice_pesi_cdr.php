@@ -115,6 +115,7 @@ if (count($obiettivi_cdr_anno) > 0) {
                 } else {
                     $tpl->set_var("modificabile_class", "non_modificabile");
                 }
+                $tpl->set_var("assegnato_class", "");
                 $tpl->set_var("peso_obiettivo_cdr", "");
                 $tpl->set_var("azioni_class", "");
             } else {
@@ -179,6 +180,7 @@ if (count($obiettivi_cdr_anno) > 0) {
                     $tpl->set_var("azioni_class", "obiettivo_non_assegnato_da_cdr");
                 }
                 $tpl->set_var("peso_obiettivo_cdr", $peso_obiettivo_cdr);
+                $tpl->set_var("assegnato_class", "assegnato");
             }
             //vengono passati id_obiettivo e codice_cdr
             $tpl->set_var("id_obiettivo", $obiettivo_cdr->id_obiettivo);
@@ -208,4 +210,4 @@ if (count($obiettivi_cdr_anno) > 0) {
 
 //***********************
 //Adding contents to page
-die($tpl->rpparse("main", true));
+$cm->oPage->addContent($tpl);
