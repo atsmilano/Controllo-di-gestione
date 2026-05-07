@@ -64,13 +64,6 @@ intendedAudience:
     - local-authorities
     - welfare
     - finance-and-economic-development
-IT:
-  countryExtensionVersion: '0.2'
-  piattaforme:
-    anpr: false
-    cie: false
-    pagopa: false
-    spid: false
 organisation:
   name: ATS Città Metropolitana di Milano
   uri: 'urn:x-italian-pa:atsmetmi'
