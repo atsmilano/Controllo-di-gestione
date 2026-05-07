@@ -1,8 +1,8 @@
-# This repository adheres to the publiccode.yml standard by including this 
+# This repository adheres to the publiccode.yml standard by including this
 # metadata file that makes public software easily discoverable.
-# More info at https://github.com/italia/publiccode.yml
+# More info at https://github.com/publiccodeyml/publiccode.yml
 
-publiccodeYmlVersion: '0.2'
+publiccodeYmlVersion: '0'
 categories:
   - budgeting
   - business-process-management
@@ -16,7 +16,6 @@ description:
         Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
 
         controllo e valutazione
-    genericName: Piattaforma di P&C
     longDescription: |
       La Piattaforma di Programmazione e Controllo, interamente informatizzata e
 
@@ -42,17 +41,17 @@ description:
 
       della scheda di programmazione che propone le seguenti sezioni: -
 
-      Programmazione 
-          - Strategia 
-          - Obiettivi 
-          - Progetti 
-          - Programmazione e Controllo Costi e Ricavi 
-          - Investimenti 
-      - Controllo 
-          - Rendicontazione obiettivi 
-          - Report di Contabilità  analitica 
-          - Cruscotto indicatori 
-      - Valutazioni 
+      Programmazione
+          - Strategia
+          - Obiettivi
+          - Progetti
+          - Programmazione e Controllo Costi e Ricavi
+          - Investimenti
+      - Controllo
+          - Rendicontazione obiettivi
+          - Report di Contabilità analitica
+          - Cruscotto indicatori
+      - Valutazioni
           - Valutazione della performance individuale
     shortDescription: |-
       Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
@@ -65,24 +64,19 @@ intendedAudience:
     - local-authorities
     - welfare
     - finance-and-economic-development
-it:
-  conforme:
-    gdpr: true
-    lineeGuidaDesign: true
-    misureMinimeSicurezza: true
-    modelloInteroperabilita: true
+IT:
   countryExtensionVersion: '0.2'
   piattaforme:
     anpr: false
     cie: false
     pagopa: false
     spid: false
-  riuso:
-    codiceIPA: atsmetmi
+organisation:
+  name: ATS Città Metropolitana di Milano
+  uri: 'urn:x-italian-pa:atsmetmi'
 legal:
   license: LGPL-3.0-or-later
-  mainCopyrightOwner: ATS Città  Metropolitana di Milano
-  repoOwner: ATS Città Metropolitana di Milano
+  mainCopyrightOwner: ATS Città Metropolitana di Milano
 localisation:
   availableLanguages:
     - it
@@ -96,11 +90,8 @@ maintenance:
         Antonio Nava, Giovandomenico Violante, Matteo Bonvini, Pasquale
 
         Logiacco, Veronica Apruzzese
-  contractors:
-    - name: Invisible Farm
-      until: '2023-06-10'
   type: internal
-name: PP&C- Piattaforma di Programmazione e Controllo  (N.V.B.L.A.)
+name: PP&C- Piattaforma di Programmazione e Controllo (N.V.B.L.A.)
 platforms:
   - web
 releaseDate: '2020-09-15'
