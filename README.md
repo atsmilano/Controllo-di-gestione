@@ -4,7 +4,7 @@ Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
 controllo e valutazione della performance aziendale ed individuale.
 
 Ultima versione: 5 Ottobre 2020
-Documentazione tecnica: https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Man_Tecnico:Manuale_Tecnico
+Documentazione tecnica: https://atsmilano.github.io/Controllo-di-gestione/
 
 Prodotto da ATS Milano - Città Metropolitana
 controllodigestione@ats-milano.it
