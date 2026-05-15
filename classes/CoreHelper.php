@@ -12,7 +12,8 @@ class CoreHelper {
                 FROM 
                     information_schema.tables 
                 WHERE
-                    table_schema = " . $db->toSql(FF_DATABASE_NAME);
+                    table_schema = " . $db->toSql(FF_DATABASE_NAME) . "
+                    ORDER BY table_name ASC";
         $db->query($sql);
         if ($db->nextRecord()){
             do {
