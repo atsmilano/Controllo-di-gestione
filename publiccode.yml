@@ -38,12 +38,12 @@ intendedAudience:
 
 description:
   it:
-    shortDescription: >
+    shortDescription:
       Piattaforma a supporto dell'intero ciclo aziendale di
       programmazione, controllo e valutazione della performance
       aziendale ed individuale.
 
-    longDescription: |
+    longDescription:
       La Piattaforma di Programmazione e Controllo, interamente
       informatizzata e resa disponibile via web mediante accessi
       profilati, supporta l'intero processo aziendale di
@@ -75,11 +75,9 @@ description:
       - Valutazioni
         - Valutazione della performance individuale
 
-    documentation: >
-      https://atsmilano.github.io/Controllo-di-gestione/manuale-utente.html
+    documentation: https://atsmilano.github.io/Controllo-di-gestione/manuale-utente.html
 
-    apiDocumentation: >
-      https://atsmilano.github.io/Controllo-di-gestione/man-tecnico-manuale-tecnico.html
+    apiDocumentation: https://atsmilano.github.io/Controllo-di-gestione/man-tecnico-manuale-tecnico.html
 
     features:
       - Gestione del ciclo di programmazione aziendale
@@ -97,7 +95,7 @@ maintenance:
   type: internal
 
   contacts:
-    - name: >
+    - name:
         Antonio Nava, Giovandomenico Violante,
         Matteo Bonvini, Pasquale Logiacco,
         Veronica Apruzzese
