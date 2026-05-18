@@ -76,10 +76,10 @@ description:
         - Valutazione della performance individuale
 
     documentation: >
-      https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Manuale_Utente
+      https://atsmilano.github.io/Controllo-di-gestione/manuale-utente.html
 
     apiDocumentation: >
-      https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Man_Tecnico:Manuale_Tecnico
+      https://atsmilano.github.io/Controllo-di-gestione/man-tecnico-manuale-tecnico.html
 
     features:
       - Gestione del ciclo di programmazione aziendale
