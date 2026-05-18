@@ -93,12 +93,18 @@ legal:
 
 maintenance:
   type: internal
+  
+  contacts: 
+    - name: "Giovandomenico Violante"
+      email: "controllodigestione@ats-milano.it"
+      
+    - name: "Matteo Bonvini"
+      email: "controllodigestione@ats-milano.it"
 
-  contacts:
-    - name:
-        Antonio Nava, Giovandomenico Violante,
-        Matteo Bonvini, Pasquale Logiacco,
-        Veronica Apruzzese
+    - name: "Pasquale Logiacco"
+      email: "controllodigestione@ats-milano.it"
+
+    - name: "Veronica Apruzzese"
       email: "controllodigestione@ats-milano.it"
 
 organisation:
