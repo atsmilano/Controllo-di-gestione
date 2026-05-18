@@ -2,93 +2,126 @@
 # metadata file that makes public software easily discoverable.
 # More info at https://github.com/publiccodeyml/publiccode.yml
 
-publiccodeYmlVersion: '0'
+publiccodeYmlVersion: "0.5"
+
+name: "PP&C - Piattaforma di Programmazione e Controllo (N.V.B.L.A.)"
+
+url: "https://github.com/atsmilano/Controllo-di-gestione"
+
+softwareType: "standalone/web"
+
+platforms:
+  - web
+
 categories:
   - budgeting
   - business-process-management
-description:
-  it:
-    apiDocumentation: |-
-      https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Man_Tecnico:Manuale_Tecnico
-    documentation: 'https://cdgwiki.ats-milano.it/mediawiki/index.php?title=Manuale_Utente'
-    features:
-      - |-
-        Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
 
-        controllo e valutazione
-    longDescription: |
-      La Piattaforma di Programmazione e Controllo, interamente informatizzata e
-
-      resa disponibile via web mediante accessi profilati a tutti gli utenti che
-
-      a vario titolo partecipano al processo di programmazione, rappresenta lo
-
-      strumento tecnico di comunicazione a disposizione della Direzione
-
-      Strategica e del personale per la gestione del processo di programmazione
-
-      e controllo. Sulla base del profilo dell'utente (ad es. Direzione,
-
-      Responsabile di CDR, Dirigente, Comparto, ecc.), vengono resi disponibili
-
-      i moduli abilitati ciascuno dei quali rappresenta uno strumento a supporto
-
-      delle singole fasi del processo di programmazione e controllo aziendale.
-
-      La predisposizione delle proposte di programmazione da parte dei Centri di
-
-      Responsabilità (CDR) segue un percorso logico guidato dalla struttura
-
-      della scheda di programmazione che propone le seguenti sezioni: -
-
-      Programmazione
-          - Strategia
-          - Obiettivi
-          - Progetti
-          - Programmazione e Controllo Costi e Ricavi
-          - Investimenti
-      - Controllo
-          - Rendicontazione obiettivi
-          - Report di Contabilità analitica
-          - Cruscotto indicatori
-      - Valutazioni
-          - Valutazione della performance individuale
-    shortDescription: |-
-      Piattaforma a supporto dell'intero ciclo aziendale di programmazione,
-
-      controllo e valutazione della performance aziendale ed individuale
 developmentStatus: stable
+
+releaseDate: "2020-09-15"
+
+logo: "https://raw.githubusercontent.com/atsmilano/Controllo-di-gestione/master/themes/ats/images/logo/login.png"
+
+usedBy:
+  - Azienda Regionale Diritto allo Studio Universitario della Toscana
+  - ATS Insubria
+  - ATS Valpadana
+  - ASST Gaetano Pini CTO
+
 intendedAudience:
   scope:
     - healthcare
     - local-authorities
     - welfare
     - finance-and-economic-development
-organisation:
-  name: ATS Città Metropolitana di Milano
-  uri: 'urn:x-italian-pa:atsmetmi'
+
+description:
+  it:
+    shortDescription: >
+      Piattaforma a supporto dell'intero ciclo aziendale di
+      programmazione, controllo e valutazione della performance
+      aziendale ed individuale.
+
+    longDescription: |
+      La Piattaforma di Programmazione e Controllo, interamente
+      informatizzata e resa disponibile via web mediante accessi
+      profilati, supporta l'intero processo aziendale di
+      programmazione, controllo e valutazione.
+
+      La piattaforma rappresenta uno strumento di comunicazione
+      e gestione a disposizione della Direzione Strategica e
+      del personale coinvolto nel processo di programmazione
+      e controllo aziendale.
+
+      In base al profilo utente (Direzione, Responsabile di CDR,
+      Dirigente, Comparto, ecc.) vengono resi disponibili specifici
+      moduli applicativi a supporto delle varie fasi operative.
+
+      Le principali aree funzionali comprendono:
+
+      - Programmazione
+        - Strategia
+        - Obiettivi
+        - Progetti
+        - Programmazione e controllo costi e ricavi
+        - Investimenti
+
+      - Controllo
+        - Rendicontazione obiettivi
+        - Report di contabilità analitica
+        - Cruscotto indicatori
+
+      - Valutazioni
+        - Valutazione della performance individuale
+
+    documentation: https://atsmilano.github.io/Controllo-di-gestione/manuale-utente.html
+
+    apiDocumentation: https://atsmilano.github.io/Controllo-di-gestione/man-tecnico-manuale-tecnico.html
+
+    features:
+      - Gestione del ciclo di programmazione aziendale
+      - Controllo e monitoraggio degli obiettivi
+      - Gestione di costi, ricavi e investimenti
+      - Rendicontazione e reporting
+      - Valutazione della performance individuale
+      - Cruscotti e indicatori direzionali
+
 legal:
-  license: LGPL-3.0-or-later
-  mainCopyrightOwner: ATS Città Metropolitana di Milano
+  license: "LGPL-3.0-or-later"
+  mainCopyrightOwner: "ATS Città Metropolitana di Milano"
+
+maintenance:
+  type: internal
+  
+  contacts: 
+    - name: "Giovandomenico Violante"
+      email: "controllodigestione@ats-milano.it"
+      
+    - name: "Matteo Bonvini"
+      email: "controllodigestione@ats-milano.it"
+
+    - name: "Pasquale Logiacco"
+      email: "controllodigestione@ats-milano.it"
+
+    - name: "Veronica Apruzzese"
+      email: "controllodigestione@ats-milano.it"
+
+organisation:
+  name: "ATS Città Metropolitana di Milano"
+  uri: "urn:x-italian-pa:atsmetmi"
+
 localisation:
+  localisationReady: true
+
   availableLanguages:
     - it
-  localisationReady: true
-logo: |-
-  https://raw.githubusercontent.com/atsmilano/Controllo-di-gestione/master/themes/ats/images/logo/login.png
-maintenance:
-  contacts:
-    - email: controllodigestione@ats-milano.it
-      name: |-
-        Antonio Nava, Giovandomenico Violante, Matteo Bonvini, Pasquale
 
-        Logiacco, Veronica Apruzzese
-  type: internal
-name: PP&C- Piattaforma di Programmazione e Controllo (N.V.B.L.A.)
-platforms:
-  - web
-releaseDate: '2020-09-15'
-softwareType: standalone/web
-url: 'https://github.com/atsmilano/Controllo-di-gestione'
-usedBy:
-  - Azienda Regionale Diritto allo Studio Universitario della Toscana
+IT:
+  countryExtensionVersion: "0.2"
+
+  piattaforme:
+    spid: false
+    cie: false
+    anpr: false
+    pagopa: false
