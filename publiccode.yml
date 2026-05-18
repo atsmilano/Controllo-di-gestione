@@ -38,12 +38,12 @@ intendedAudience:
 
 description:
   it:
-    shortDescription:
+    shortDescription: >
       Piattaforma a supporto dell'intero ciclo aziendale di
       programmazione, controllo e valutazione della performance
       aziendale ed individuale.
 
-    longDescription:
+    longDescription: |
       La Piattaforma di Programmazione e Controllo, interamente
       informatizzata e resa disponibile via web mediante accessi
       profilati, supporta l'intero processo aziendale di
